@@ -1,0 +1,176 @@
+
+<div id="cd" style="width:100%;overflow-x:auto;padding:8px 0"></div>
+<script type="module">
+import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+await document.fonts.ready;
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  fontFamily: '"Anthropic Sans", sans-serif',
+  themeVariables: {
+    darkMode: dark,
+    fontSize: '13px',
+    fontFamily: '"Anthropic Sans", sans-serif',
+    lineColor: dark ? '#9c9a92' : '#73726c',
+    textColor: dark ? '#c2c0b6' : '#3d3d3a',
+    classText: dark ? '#c2c0b6' : '#3d3d3a',
+    primaryColor: dark ? '#1e3a5f' : '#E6F1FB',
+    primaryBorderColor: dark ? '#378ADD' : '#185FA5',
+    primaryTextColor: dark ? '#c2c0b6' : '#0C447C',
+    secondaryColor: dark ? '#2a2a28' : '#F1EFE8',
+    tertiaryColor: dark ? '#1a2e1a' : '#EAF3DE',
+  },
+});
+const diagram = `classDiagram
+  class Users {
+    +int id_user
+    +string username
+    +string email
+    +string password
+    +enum role
+    +string no_hp
+    +bool status_login
+    +login() void
+    +logout() void
+    +register() void
+    +updateProfile() void
+  }
+  class Petani {
+    +int id_petani
+    +int id_user
+    +string nama_petani
+    +string nik
+    +string alamat
+    +string no_telp
+    +enum status_verifikasi
+    +getPetani() Petani
+    +updateData() void
+    +verifikasi() void
+    +getLahan() array
+    +getPanen() array
+  }
+  class Admin {
+    +int id_admin
+    +int id_user
+    +string nama_admin
+    +string email
+    +getAdmin() Admin
+    +kelolaData() void
+    +verifikasiPetani() void
+    +buatLaporan() Laporan
+    +lihatTransaksi() array
+  }
+  class Pembeli {
+    +int id_pembeli
+    +int id_user
+    +string nama_pembeli
+    +string alamat
+    +string no_telp
+    +getPembeli() Pembeli
+    +updateData() void
+    +lihatProduk() array
+    +buatTransaksi() Transaksi
+  }
+  class MitraCafe {
+    +int id_cafe
+    +int id_user
+    +string nama_cafe
+    +string lokasi
+    +string no_telp
+    +getMitra() MitraCafe
+    +updateData() void
+    +lihatProduk() array
+    +buatTransaksi() Transaksi
+  }
+  class Lahan {
+    +int id_lahan
+    +int id_petani
+    +string nama_lahan
+    +string koordinat
+    +float luas_lahan
+    +float mdpl
+    +string keterangan
+    +getLahan() Lahan
+    +tambahLahan() void
+    +updateLahan() void
+    +hapusLahan() void
+  }
+  class Panen {
+    +int id_panen
+    +int id_petani
+    +int id_lahan
+    +date tanggal_panen
+    +string komoditas
+    +string fase_kopi
+    +string metode_proses
+    +float berat_panen_kg
+    +string keterangan
+    +getPanen() Panen
+    +tambahPanen() void
+    +updatePanen() void
+    +hapusPanen() void
+  }
+  class Produk {
+    +int id_produk
+    +int id_panen
+    +string nama_produk
+    +string deskripsi
+    +decimal harga_per_kg
+    +float stok_kg
+    +datetime tanggal_update
+    +getProduk() Produk
+    +tambahProduk() void
+    +updateStok() void
+    +updateHarga() void
+    +hapusProduk() void
+  }
+  class Transaksi {
+    +int id_transaksi
+    +int id_petani
+    +int id_pembeli
+    +int id_produk
+    +date tanggal_transaksi
+    +float berat_kg
+    +decimal total_harga
+    +enum status_transaksi
+    +enum status_distribusi
+    +text data_penjualan
+    +getTransaksi() Transaksi
+    +buatTransaksi() void
+    +updateStatus() void
+    +hitungTotal() decimal
+  }
+  class Laporan {
+    +int id_laporan
+    +int id_admin
+    +int id_transaksi
+    +string jenis_laporan
+    +date periode_mulai
+    +date periode_selesai
+    +datetime tanggal_buat
+    +text isi_laporan
+    +getLaporan() Laporan
+    +buatLaporan() void
+    +exportLaporan() file
+    +deleteLaporan() void
+  }
+
+  Users "1" --> "1" Petani : memiliki
+  Users "1" --> "1" Admin : memiliki
+  Users "1" --> "1" Pembeli : memiliki
+  Users "1" --> "1" MitraCafe : memiliki
+  Petani "1" --> "0..*" Lahan : memiliki
+  Petani "1" --> "0..*" Panen : mencatat
+  Lahan "1" --> "0..*" Panen : digunakan
+  Panen "1" --> "0..*" Produk : menghasilkan
+  Produk "1" --> "0..*" Transaksi : terlibat
+  Petani "1" --> "0..*" Transaksi : melakukan
+  Pembeli "1" --> "0..*" Transaksi : melakukan
+  MitraCafe "1" --> "0..*" Transaksi : melakukan
+  Admin "1" --> "0..*" Laporan : membuat
+  Transaksi "1" --> "0..*" Laporan : menghasilkan
+`;
+const { svg } = await mermaid.render('cd-svg', diagram);
+document.getElementById('cd').innerHTML = svg;
+</script>
