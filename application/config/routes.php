@@ -49,6 +49,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'welcome';
-$route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
+#$route['default_controller'] = 'welcome';
+#$route['404_override'] = '';
+#$route['translate_uri_dashes'] = FALSE;
+
+$route['admin/dashboard'] = 'admin/dashboard/index';
+$route['petani/dashboard'] = 'petani/dashboard/index';
+$route['pembeli/dashboard'] = 'pembeli/dashboard/index';
+
+// Halaman Notifikasi
+$route['notifikasi/history'] = 'Notifikasi/history';
+$route['notifikasi/setting'] = 'Notifikasi/setting';
+$route['notifikasi/read/(:num)'] = 'Notifikasi/read/$1';
+
+// API Notifikasi (untuk AJAX)
+$route['api/notifikasi/get'] = 'api/Notifikasi/get';
+$route['api/notifikasi/mark_read'] = 'api/Notifikasi/mark_read';
+$route['api/notifikasi/mark_all_read'] = 'api/Notifikasi/mark_all_read';
+$route['api/notifikasi/update_setting'] = 'api/Notifikasi/update_setting';
+$route['api/notifikasi/get_settings'] = 'api/Notifikasi/get_settings';
