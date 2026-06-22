@@ -219,9 +219,7 @@ class Laporan_model extends CI_Model {
         if (empty($mitra)) {
             return $this->_get_dummy_mitra();
         }
-        $nama_mitra = ['Cafe Merapi', 'Toko Kopi Nusantara', 'CV. Aroma Kopi'];
         foreach ($mitra as $i => &$m) {
-            $m['nama_mitra']      = $nama_mitra[$i] ?? 'Mitra #' . $m['id_mitra'];
             $m['total_order']     = rand(10, 50);
             $m['total_pembelian'] = rand(5000000, 25000000);
             $m['produk_favorit']  = ['Liberika Grade A', 'Arabika Grade A', 'Robusta Grade A'][rand(0,2)];
