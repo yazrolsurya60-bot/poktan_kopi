@@ -49,7 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'auth/login';
+$route['default_controller'] = 'Landing';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
@@ -99,3 +99,13 @@ $route['admin/user/edit/(:num)'] = 'admin/Users/edit/$1';
 $route['admin/user/delete/(:num)'] = 'admin/Users/delete/$1';
 $route['admin/user/toggle/(:num)'] = 'admin/Users/toggle/$1';
 
+// ============================================
+// MODUL 9: MANAJEMEN MITRA & LANDING PAGE MITRA
+// ============================================
+$route['admin/mitra'] = 'admin/Mitra/index';
+$route['admin/mitra/add'] = 'admin/Mitra/add';
+$route['admin/mitra/edit/(:num)'] = 'admin/Mitra/edit/$1';
+$route['admin/mitra/delete/(:num)'] = 'admin/Mitra/delete/$1';
+$route['admin/mitra/toggle/(:num)'] = 'admin/Mitra/toggle/$1';
+
+$route['landing'] = 'Landing/index';
