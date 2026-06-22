@@ -118,12 +118,12 @@ class Mitra extends CI_Controller {
     }
 
     public function update_urutan($id) {
-        $urutan = $this->input->post('urutan_tampil');
-        if ($urutan !== null) {
+        $urutan = (int)$this->input->post('urutan_tampil');
+        if ($urutan > 0) {
             $this->Mitra_model->update_mitra($id, ['urutan_tampil' => $urutan]);
             echo json_encode(['success' => true]);
         } else {
-            echo json_encode(['success' => false]);
+            echo json_encode(['success' => false, 'message' => 'Nilai tidak valid']);
         }
     }
 

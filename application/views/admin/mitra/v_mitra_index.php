@@ -460,7 +460,7 @@
                                     </td>
                                     <td><?= htmlspecialchars($m['kategori_mitra']); ?></td>
                                     <td>
-                                        <input type="number" class="form-control form-control-sm urutan-input" data-id="<?= $m['id_mitra']; ?>" value="<?= $m['urutan_tampil']; ?>" style="width: 70px; display: inline-block; padding: 4px 8px; height: auto;">
+                                        <input type="number" class="form-control form-control-sm urutan-input" data-id="<?= $m['id_mitra']; ?>" value="<?= $m['urutan_tampil']; ?>" min="1" style="width: 70px; display: inline-block; padding: 4px 8px; height: auto;">
                                     </td>
                                     <td>
                                         <?php if($m['status_mitra'] == 'Active'): ?>
@@ -527,7 +527,13 @@
             // Update Urutan via AJAX
             $('.urutan-input').change(function() {
                 let id = $(this).data('id');
-                let urutan = $(this).val();
+                let urutan = parseInt($(this).val());
+                
+                if (urutan < 1 || isNaN(urutan)) {
+                    alert("Urutan tampil tidak boleh berupa angka minus atau nol!");
+                    $(this).val(1);
+                    urutan = 1;
+                }
                 
                 $.ajax({
                     url: "<?= base_url('admin/mitra/update_urutan/') ?>" + id,
@@ -539,7 +545,7 @@
                             // Flash a small green background to indicate success
                             $('.urutan-input[data-id="'+id+'"]').css('background-color', '#d4edda');
                             setTimeout(() => {
-                                $('.urutan-input[data-id="'+id+'"]').css('background-color', '');
+                                $('.urutan-input[data-id="'+id+'"]').css('background-color', 'white');
                             }, 1000);
                         }
                     }
