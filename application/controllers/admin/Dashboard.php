@@ -3,10 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends CI_Controller
 {
-<<<<<<< HEAD
-
-=======
->>>>>>> e80c21351261f363836da1f9526a6b107ecd0da3
     public function __construct()
     {
         parent::__construct();
