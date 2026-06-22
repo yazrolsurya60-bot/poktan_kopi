@@ -30,3 +30,13 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-project
 /tests/tests/
 /tests/results/
+
+# Blokir folder konfigurasi Antigravity IDE
+.antigravity/
+*.sistem_shortcut
+
+# Blokir folder lokal atau vendor lain (opsional)
+.idea/
+.vscode/
+node_modules/
+vendor/
