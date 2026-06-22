@@ -246,93 +246,58 @@
 
         .status-badge.active {
             background: rgba(16, 185, 129, 0.15);
-            color: #065F46;
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.2);
         }
 
         .status-badge.inactive {
-            background: rgba(239, 68, 68, 0.15);
-            color: #991B1B;
-        }
-
-        /* --- BUTTONS --- */
-        .btn-custom-primary {
-            background: var(--roasted-brown);
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            padding: 8px 18px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: var(--transition-smooth);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(74, 44, 17, 0.2);
-        }
-
-        .btn-custom-primary:hover {
-            background: var(--dark-coffee);
-            color: #ffffff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(74, 44, 17, 0.3);
-        }
-
-        .btn-custom-outline {
-            border: 1px solid rgba(74, 44, 17, 0.2);
-            border-radius: 10px;
-            padding: 6px 14px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            transition: var(--transition-smooth);
-            background: transparent;
-            color: var(--text-secondary);
-        }
-
-        .btn-custom-outline:hover {
-            background: var(--bg-cream);
-            border-color: var(--roasted-brown);
-            color: var(--roasted-brown);
-            text-decoration: none;
-        }
-
-        .btn-custom-outline-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
             border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .status-badge.active:hover { background: rgba(34, 197, 94, 0.2); box-shadow: 0 0 15px rgba(34, 197, 94, 0.2); }
+        .status-badge.inactive:hover { background: rgba(239, 68, 68, 0.2); box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+
+        .btn-action-group {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
             border-radius: 10px;
-            padding: 6px 14px;
-            font-size: 0.75rem;
-            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: var(--transition-smooth);
-            background: transparent;
-            color: #EF4444;
-        }
-
-        .btn-custom-outline-danger:hover {
-            background: #FEE2E2;
-            border-color: #EF4444;
-            color: #991B1B;
-            text-decoration: none;
-        }
-
-        /* --- ALERT --- */
-        .alert-custom {
-            border-radius: var(--radius-card);
             border: none;
-            padding: 16px 20px;
-            margin-bottom: 24px;
+            font-size: 1rem;
         }
 
-        .alert-custom.alert-success {
-            background: #D1FAE5;
-            color: #065F46;
-        }
+        .btn-edit { background: rgba(230, 161, 92, 0.1); color: var(--amber-cream); }
+        .btn-edit:hover { background: var(--amber-cream); color: white; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(230, 161, 92, 0.3); }
 
-        .status-toggle {
-            cursor: pointer;
+        .btn-delete { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
+        .btn-delete:hover { background: #dc2626; color: white; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3); }
+
+        .urutan-input {
+            text-align: center;
+            font-weight: 700;
+            color: var(--dark-coffee);
+            background: rgba(250, 246, 240, 0.5);
+            border: 1px solid rgba(230, 161, 92, 0.3);
+            border-radius: 8px;
             transition: var(--transition-smooth);
         }
-        .status-toggle:hover {
-            opacity: 0.8;
-            transform: scale(1.05);
+
+        .urutan-input:focus {
+            background: white;
+            border-color: var(--amber-cream);
+            box-shadow: 0 0 0 3px rgba(230, 161, 92, 0.15);
         }
     </style>
 </head>
@@ -433,6 +398,7 @@
         <!-- CUSTOM CARD -->
         <div class="custom-card">
             <div class="card-header-custom">
+                <h5 class="mb-0"><i class="bi bi-list-stars mr-2" style="color: var(--amber-cream);"></i> Daftar Mitra Terdaftar</h5>
                 <!-- Filters -->
                 <form action="<?= base_url('admin/mitra'); ?>" method="GET" class="form-inline mb-0">
                     <div class="input-group mr-2">
@@ -460,7 +426,7 @@
                 </a>
             </div>
             
-            <div class="card-body-custom p-0">
+            <div class="card-body-custom pt-3 pb-4">
                 <div class="table-responsive">
                     <table class="table table-custom table-hover">
                         <thead>
@@ -487,29 +453,31 @@
                                 <tr>
                                     <td><?= $no++; ?></td>
                                     <td>
-                                        <img src="<?= base_url('assets/uploads/mitra/'.$m['logo_mitra']); ?>" alt="Logo" style="width: 40px; height: 40px; object-fit: contain; border-radius: 8px; background:#f8f9fa;">
+                                        <img src="<?= base_url('assets/uploads/mitra/'.$m['logo_mitra']); ?>" alt="Logo" class="mitra-logo-thumb">
                                     </td>
                                     <td>
                                         <span class="d-block font-weight-bold"><?= htmlspecialchars($m['nama_mitra']); ?></span>
                                     </td>
                                     <td><?= htmlspecialchars($m['kategori_mitra']); ?></td>
                                     <td>
-                                        <input type="number" class="form-control form-control-sm urutan-input" data-id="<?= $m['id_mitra']; ?>" value="<?= $m['urutan_tampil']; ?>" style="width: 70px; display: inline-block;">
+                                        <input type="number" class="form-control form-control-sm urutan-input" data-id="<?= $m['id_mitra']; ?>" value="<?= $m['urutan_tampil']; ?>" style="width: 70px; display: inline-block; padding: 4px 8px; height: auto;">
                                     </td>
                                     <td>
                                         <?php if($m['status_mitra'] == 'Active'): ?>
-                                            <span class="status-badge active status-toggle" data-id="<?= $m['id_mitra']; ?>"><i class="bi bi-check2-circle"></i> Active</span>
+                                            <span class="status-badge active status-toggle" data-id="<?= $m['id_mitra']; ?>" title="Klik untuk nonaktifkan"><i class="bi bi-check-circle-fill"></i> Active</span>
                                         <?php else: ?>
-                                            <span class="status-badge inactive status-toggle" data-id="<?= $m['id_mitra']; ?>"><i class="bi bi-x-circle"></i> Inactive</span>
+                                            <span class="status-badge inactive status-toggle" data-id="<?= $m['id_mitra']; ?>" title="Klik untuk aktifkan"><i class="bi bi-x-circle-fill"></i> Inactive</span>
                                         <?php endif; ?>
                                     </td>
-                                    <td class="text-right">
-                                        <a href="<?= base_url('admin/mitra/edit/'.$m['id_mitra']); ?>" class="btn-custom-outline d-inline-flex mr-1" title="Edit">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <a href="<?= base_url('admin/mitra/delete/'.$m['id_mitra']); ?>" class="btn-custom-outline-danger d-inline-flex" title="Hapus" onclick="return confirm('Yakin ingin menghapus mitra ini?');">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
+                                    <td>
+                                        <div class="btn-action-group">
+                                            <a href="<?= base_url('admin/mitra/edit/'.$m['id_mitra']); ?>" class="btn-icon btn-edit" title="Edit">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <a href="<?= base_url('admin/mitra/delete/'.$m['id_mitra']); ?>" class="btn-icon btn-delete" title="Hapus" onclick="return confirm('Yakin ingin menghapus mitra ini secara Soft Delete?');">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
