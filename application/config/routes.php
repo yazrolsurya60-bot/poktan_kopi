@@ -68,3 +68,25 @@ $route['api/notifikasi/mark_read'] = 'api/Notifikasi/mark_read';
 $route['api/notifikasi/mark_all_read'] = 'api/Notifikasi/mark_all_read';
 $route['api/notifikasi/update_setting'] = 'api/Notifikasi/update_setting';
 $route['api/notifikasi/get_settings'] = 'api/Notifikasi/get_settings';
+
+// Authentication Routes
+$route['auth/login'] = 'Auth/login';
+$route['auth/register'] = 'Auth/register';
+$route['auth/logout'] = 'Auth/logout';
+$route['auth/forgot_password'] = 'Auth/forgot_password';
+$route['auth/reset_password/(:any)'] = 'Auth/reset_password/$1';
+$route['auth/verify/(:any)'] = 'Auth/verify/$1';
+$route['auth/change_password'] = 'Auth/change_password';
+$route['auth/profile'] = 'Auth/profile';
+
+// User Profile Redirections for farmers & buyers
+$route['petani/profil'] = 'Auth/profile';
+$route['pembeli/profil'] = 'Auth/profile';
+
+// Admin User Management Routes
+$route['admin/user'] = 'admin/Users/index';
+$route['admin/user/add'] = 'admin/Users/add';
+$route['admin/user/edit/(:num)'] = 'admin/Users/edit/$1';
+$route['admin/user/delete/(:num)'] = 'admin/Users/delete/$1';
+$route['admin/user/toggle/(:num)'] = 'admin/Users/toggle/$1';
+
