@@ -49,13 +49,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-#$route['default_controller'] = 'welcome';
-#$route['404_override'] = '';
-#$route['translate_uri_dashes'] = FALSE;
+$route['default_controller'] = 'auth/login';
+$route['404_override'] = '';
+$route['translate_uri_dashes'] = FALSE;
 
 $route['admin/dashboard'] = 'admin/dashboard/index';
 $route['petani/dashboard'] = 'petani/dashboard/index';
 $route['pembeli/dashboard'] = 'pembeli/dashboard/index';
+
+// ============================================
+// MODUL 10: LAPORAN & ANALYTICS
+// ============================================
+$route['admin/laporan'] = 'admin/laporan/index';
+$route['admin/laporan/filter'] = 'admin/laporan/filter';
+$route['admin/laporan/export_excel'] = 'admin/laporan/export_excel';
+$route['admin/laporan/print_pdf'] = 'admin/laporan/print_pdf';
+$route['admin/laporan/get_chart_data'] = 'admin/laporan/get_chart_data';
 
 // Halaman Notifikasi
 $route['notifikasi/history'] = 'Notifikasi/history';

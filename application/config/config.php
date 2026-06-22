@@ -23,8 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-#$config['base_url'] = '';
-$config['base_url'] = 'http://localhost/poktan_kopi/';
+$config['base_url'] = 'http://localhost/poktan_kopi_merged/';
 
 /*
 |--------------------------------------------------------------------------
