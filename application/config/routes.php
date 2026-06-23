@@ -68,3 +68,5 @@ $route['api/notifikasi/mark_read'] = 'api/Notifikasi/mark_read';
 $route['api/notifikasi/mark_all_read'] = 'api/Notifikasi/mark_all_read';
 $route['api/notifikasi/update_setting'] = 'api/Notifikasi/update_setting';
 $route['api/notifikasi/get_settings'] = 'api/Notifikasi/get_settings';
+
+
