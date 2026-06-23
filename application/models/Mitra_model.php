@@ -51,8 +51,8 @@ class Mitra_model extends CI_Model {
     }
 
     public function delete_mitra($id) {
-        // Soft delete implementation: set status to Inactive
-        return $this->db->where('id_mitra', $id)->update('tb_mitra', ['status_mitra' => 'Inactive']);
+        // Hard delete: hapus permanen dari database
+        return $this->db->where('id_mitra', $id)->delete('tb_mitra');
     }
 
     public function toggle_status($id) {

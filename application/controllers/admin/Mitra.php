@@ -107,8 +107,19 @@ class Mitra extends CI_Controller {
     }
 
     public function delete($id) {
+        $mitra = $this->Mitra_model->get_by_id($id);
+        if (!$mitra) show_404();
+
+        // Hapus file logo fisik dari server jika bukan default
+        if (!empty($mitra['logo_mitra']) && $mitra['logo_mitra'] !== 'default.png') {
+            $logo_path = './assets/uploads/mitra/' . $mitra['logo_mitra'];
+            if (file_exists($logo_path)) {
+                @unlink($logo_path);
+            }
+        }
+
         $this->Mitra_model->delete_mitra($id);
-        $this->session->set_flashdata('success', 'Mitra telah dinonaktifkan (Soft Delete).');
+        $this->session->set_flashdata('success', 'Mitra telah dihapus permanen dari database.');
         redirect('admin/mitra');
     }
 

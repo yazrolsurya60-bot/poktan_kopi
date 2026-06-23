@@ -347,12 +347,12 @@
                 <div class="info-card-body" style="padding:10px 14px;">
                     <a href="<?= base_url('admin/mitra'); ?>" class="quick-link"><i class="bi bi-arrow-left-circle" style="color:var(--amber-cream);"></i> Kembali ke Daftar</a>
                     <a href="<?= base_url('admin/mitra/add'); ?>" class="quick-link"><i class="bi bi-plus-circle" style="color:var(--forest-green);"></i> Tambah Mitra Lain</a>
-                    <!-- Hapus via modal -->
+                    <!-- Hapus Permanen via modal -->
                     <button type="button" class="quick-link danger w-100 text-left" style="border:none;background:transparent;font-family:inherit;cursor:pointer;"
                             id="btnHapusSidebar"
                             data-id="<?= $mitra['id_mitra']; ?>"
                             data-nama="<?= htmlspecialchars($mitra['nama_mitra']); ?>">
-                        <i class="bi bi-trash3" style="font-size:1rem;margin-right:10px;"></i> Nonaktifkan Mitra
+                        <i class="bi bi-trash3" style="font-size:1rem;margin-right:10px;"></i> Hapus Mitra Permanen
                     </button>
                 </div>
             </div>
@@ -363,7 +363,7 @@
                 <div class="info-card-body" style="padding:14px 18px;">
                     <p style="font-size:0.77rem;color:var(--text-secondary);margin-bottom:8px;">Kosongkan kolom logo jika tidak ingin menggantinya.</p>
                     <p style="font-size:0.77rem;color:var(--text-secondary);margin-bottom:8px;">Perubahan urutan tampil langsung berlaku di Landing Page.</p>
-                    <p style="font-size:0.77rem;color:var(--text-secondary);margin:0;">Untuk mengubah status, gunakan toggle di halaman daftar mitra.</p>
+                    <p style="font-size:0.77rem;color:var(--text-secondary);margin:0;">Untuk mengubah status aktif/nonaktif, gunakan toggle di halaman daftar mitra. Menghapus mitra bersifat permanen dan tidak dapat dibatalkan.</p>
                 </div>
             </div>
 
@@ -371,29 +371,33 @@
     </div>
 </div>
 
-<!-- MODAL HAPUS -->
+<!-- MODAL HAPUS PERMANEN -->
 <div class="modal fade" id="modalHapus" tabindex="-1" role="dialog" aria-labelledby="modalHapusLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:400px;">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:420px;">
         <div class="modal-content" style="border-radius:16px;border:none;box-shadow:var(--shadow-hover);">
             <div class="modal-header" style="border-bottom:1px solid rgba(74,44,17,0.06);padding:18px 22px 14px;">
-                <h5 class="modal-title font-weight-bold" style="font-size:0.9rem;">Konfirmasi Nonaktifkan</h5>
+                <h5 class="modal-title font-weight-bold" style="font-size:0.9rem;">Hapus Mitra Permanen</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
             <div class="modal-body text-center" style="padding:22px 22px 16px;">
                 <div style="width:56px;height:56px;background:rgba(239,68,68,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.5rem;color:#dc2626;">
-                    <i class="bi bi-trash3-fill"></i>
+                    <i class="bi bi-exclamation-triangle-fill"></i>
                 </div>
                 <p style="font-size:0.875rem;color:var(--text-secondary);margin:0;">
-                    Nonaktifkan mitra <strong id="modalNamaMitra" style="color:var(--dark-coffee);"></strong>?
+                    Anda akan menghapus mitra <strong id="modalNamaMitra" style="color:var(--dark-coffee);"></strong> secara permanen.
                 </p>
-                <p style="font-size:0.75rem;color:var(--text-secondary);margin:8px 0 0;">
-                    <i class="bi bi-info-circle"></i> Data tidak dihapus permanen (Soft Delete).
+                <p style="font-size:0.78rem;color:#dc2626;font-weight:600;margin:8px 0 0;">
+                    <i class="bi bi-info-circle"></i> Tindakan ini TIDAK BISA dibatalkan.
                 </p>
+                <div class="mt-3 text-left">
+                    <label style="font-size:0.7rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.4px;">Ketik nama mitra untuk konfirmasi</label>
+                    <input type="text" id="inputKonfirmHapus" style="width:100%;padding:9px 13px;border:1px solid rgba(74,44,17,0.18);border-radius:9px;font-size:0.85rem;font-family:inherit;margin-top:6px;" placeholder="Ketik nama mitra di sini...">
+                </div>
             </div>
             <div class="modal-footer d-flex justify-content-end" style="gap:8px;border-top:1px solid rgba(74,44,17,0.06);padding:14px 22px;">
                 <button type="button" data-dismiss="modal" style="border:1px solid rgba(74,44,17,0.15);border-radius:9px;padding:8px 16px;background:transparent;color:var(--text-secondary);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:inherit;">Batal</button>
-                <a href="#" id="btnKonfirmHapus" style="background:#dc2626;color:#fff;border:none;border-radius:9px;padding:8px 18px;font-weight:700;font-size:0.85rem;display:inline-flex;align-items:center;gap:6px;text-decoration:none;">
-                    <i class="bi bi-trash3-fill"></i> Nonaktifkan
+                <a href="#" id="btnKonfirmHapus" style="background:#dc2626;color:#fff;border:none;border-radius:9px;padding:8px 18px;font-weight:700;font-size:0.85rem;display:inline-flex;align-items:center;gap:6px;text-decoration:none;pointer-events:none;opacity:0.5;">
+                    <i class="bi bi-trash3-fill"></i> Ya, Hapus Permanen
                 </a>
             </div>
         </div>
@@ -452,11 +456,25 @@ $(function () {
     }
 
     /* Modal hapus dari sidebar */
+    var namaMitraAktif = '';
     $('#btnHapusSidebar').click(function(){
         var id=$(this).data('id'), nama=$(this).data('nama');
+        namaMitraAktif = nama;
         $('#modalNamaMitra').text('"'+nama+'"');
-        $('#btnKonfirmHapus').attr('href',"<?= base_url('admin/mitra/delete/'); ?>"+id);
+        $('#inputKonfirmHapus').val('');
+        $('#btnKonfirmHapus').attr('href',"<?= base_url('admin/mitra/delete/'); ?>"+id)
+            .css({'pointer-events':'none','opacity':'0.5'});
         $('#modalHapus').modal('show');
+    });
+
+    $('#inputKonfirmHapus').on('input', function(){
+        var match = ($(this).val().trim() === namaMitraAktif.trim());
+        $('#btnKonfirmHapus').css(match ? {'pointer-events':'auto','opacity':'1'} : {'pointer-events':'none','opacity':'0.5'});
+    });
+
+    $('#modalHapus').on('hidden.bs.modal', function(){
+        $('#inputKonfirmHapus').val('');
+        $('#btnKonfirmHapus').css({'pointer-events':'none','opacity':'0.5'});
     });
 
     /* Flash dismiss */

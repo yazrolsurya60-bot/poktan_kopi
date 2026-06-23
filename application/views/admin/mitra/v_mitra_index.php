@@ -177,7 +177,7 @@
 <div class="sidebar" id="sidebarMenu">
     <div class="sidebar-brand">
         <div class="brand-icon"><i class="bi bi-patch-check-fill"></i></div>
-        <span>ADMIN <br><small style="font-weight:400;font-size:0.7rem;color:#A8988A;">Liberchain</small></span>
+        <span>POKTAN <br><small style="font-weight:400;font-size:0.7rem;color:#A8988A;">Liberchain</small></span>
     </div>
     <div class="sidebar-menu-wrapper">
         <ul class="sidebar-menu">
@@ -267,7 +267,6 @@
                 <i class="bi bi-person-circle" style="font-size:1.4rem;color:var(--amber-cream);"></i>
                 <div>
                     <div style="font-size:0.82rem;font-weight:600;line-height:1.2;">Admin</div>
-                    <span class="role-pill">Administrator</span>
                 </div>
             </div>
         </div>
@@ -407,7 +406,7 @@
                                 <button type="button" class="btn-icon btn-delete btn-hapus-trigger"
                                         data-id="<?= $m['id_mitra']; ?>"
                                         data-nama="<?= htmlspecialchars($m['nama_mitra']); ?>"
-                                        title="Nonaktifkan (Soft Delete)">
+                                        title="Hapus Permanen">
                                     <i class="bi bi-trash3"></i>
                                 </button>
                             </div>
@@ -430,27 +429,31 @@
 
 </div><!-- /.main-content -->
 
-<!-- ========== MODAL KONFIRMASI HAPUS ========== -->
+<!-- ========== MODAL KONFIRMASI HAPUS PERMANEN ========== -->
 <div class="modal fade modal-hapus" id="modalHapus" tabindex="-1" role="dialog" aria-labelledby="modalHapusLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:420px;">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:440px;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title font-weight-bold" id="modalHapusLabel" style="font-size:0.95rem;">Konfirmasi Nonaktifkan Mitra</h5>
+                <h5 class="modal-title font-weight-bold" id="modalHapusLabel" style="font-size:0.95rem;">Hapus Mitra Permanen</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
             <div class="modal-body text-center">
-                <div class="hapus-icon-wrap"><i class="bi bi-trash3-fill"></i></div>
+                <div class="hapus-icon-wrap"><i class="bi bi-exclamation-triangle-fill"></i></div>
                 <p style="font-size:0.875rem;color:var(--text-secondary);margin:0;">
-                    Apakah Anda yakin ingin menonaktifkan mitra<br>
-                    <strong id="modalNamaMitra" style="color:var(--dark-coffee);"></strong>?
+                    Anda akan menghapus mitra<br>
+                    <strong id="modalNamaMitra" style="color:var(--dark-coffee);"></strong> secara permanen.
                 </p>
-                <p class="mt-2" style="font-size:0.75rem;color:var(--text-secondary);">
-                    <i class="bi bi-info-circle"></i> Data tidak dihapus permanen (Soft Delete). Status akan berubah menjadi <strong>Nonaktif</strong>.
+                <p class="mt-2" style="font-size:0.78rem;color:#dc2626;font-weight:600;">
+                    <i class="bi bi-info-circle"></i> Tindakan ini TIDAK BISA dibatalkan. Data dan logo akan dihapus selamanya dari database.
                 </p>
+                <div class="mt-3 text-left">
+                    <label style="font-size:0.72rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.4px;">Ketik nama mitra untuk konfirmasi</label>
+                    <input type="text" id="inputKonfirmHapus" style="width:100%;padding:9px 13px;border:1px solid rgba(74,44,17,0.18);border-radius:9px;font-size:0.85rem;font-family:inherit;margin-top:6px;" placeholder="Ketik nama mitra di sini...">
+                </div>
             </div>
             <div class="modal-footer d-flex justify-content-end" style="gap:8px;">
                 <button type="button" class="btn-batal-hapus" data-dismiss="modal"><i class="bi bi-x-lg"></i> Batal</button>
-                <a href="#" id="btnKonfirmHapus" class="btn-konfirm-hapus"><i class="bi bi-trash3-fill"></i> Ya, Nonaktifkan</a>
+                <a href="#" id="btnKonfirmHapus" class="btn-konfirm-hapus" style="pointer-events:none;opacity:0.5;"><i class="bi bi-trash3-fill"></i> Ya, Hapus Permanen</a>
             </div>
         </div>
     </div>
@@ -530,12 +533,27 @@ $(document).ready(function () {
     });
 
     /* --- Modal Hapus --- */
+    var namaMitraAktif = '';
     $(document).on('click', '.btn-hapus-trigger', function () {
         var id   = $(this).data('id');
         var nama = $(this).data('nama');
+        namaMitraAktif = nama;
         $('#modalNamaMitra').text('"' + nama + '"');
-        $('#btnKonfirmHapus').attr('href', "<?= base_url('admin/mitra/delete/'); ?>" + id);
+        $('#inputKonfirmHapus').val('');
+        $('#btnKonfirmHapus')
+            .attr('href', "<?= base_url('admin/mitra/delete/'); ?>" + id)
+            .css({'pointer-events':'none','opacity':'0.5'});
         $('#modalHapus').modal('show');
+    });
+
+    $('#inputKonfirmHapus').on('input', function () {
+        var match = ($(this).val().trim() === namaMitraAktif.trim());
+        $('#btnKonfirmHapus').css(match ? {'pointer-events':'auto','opacity':'1'} : {'pointer-events':'none','opacity':'0.5'});
+    });
+
+    $('#modalHapus').on('hidden.bs.modal', function () {
+        $('#inputKonfirmHapus').val('');
+        $('#btnKonfirmHapus').css({'pointer-events':'none','opacity':'0.5'});
     });
 
     /* --- Auto-dismiss flash --- */
