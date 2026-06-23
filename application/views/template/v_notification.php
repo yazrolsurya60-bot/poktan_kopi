@@ -6,7 +6,7 @@
         $unread_count = 0;
         if(!empty($notifikasi)) {
             foreach($notifikasi as $n) {
-                if(isset($n['is_read']) && $n['is_read'] == 0) {
+                if(isset($n->status_baca) && $n->status_baca == 0) {
                     $unread_count++;
                 }
             }
@@ -32,12 +32,12 @@
         <div style="max-height: 300px; overflow-y: auto; background-color: var(--card-white);">
             <?php if(!empty($notifikasi)): ?>
                 <?php foreach($notifikasi as $n): ?>
-                    <a class="dropdown-item p-3 border-bottom d-flex align-items-start <?= (isset($n['is_read']) && $n['is_read'] == 0) ? 'bg-light' : ''; ?>" 
-                       href="<?= base_url('notifikasi/read/'.$n['id_notifikasi']); ?>" 
-                       style="white-space: normal; transition: background 0.2s; <?= (isset($n['is_read']) && $n['is_read'] == 0) ? 'border-left: 3px solid var(--amber-cream);' : ''; ?>">
+                    <a class="dropdown-item p-3 border-bottom d-flex align-items-start <?= (isset($n->status_baca) && $n->status_baca == 0) ? 'bg-light' : ''; ?>" 
+                       href="<?= base_url('notifikasi/read/'.$n->id_notifikasi); ?>" 
+                       style="white-space: normal; transition: background 0.2s; <?= (isset($n->status_baca) && $n->status_baca == 0) ? 'border-left: 3px solid var(--amber-cream);' : ''; ?>">
                         
                         <!-- Icon berdasarkan tipe notifikasi -->
-                        <div class="mr-3 mt-1 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; min-width: 36px; border-radius: 10px; <?= $n['icon'] ?? 'info'; ?>">
+                        <div class="mr-3 mt-1 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; min-width: 36px; border-radius: 10px;">
                             <?php 
                             $icon_map = [
                                 'success' => 'bi-check-circle-fill',
@@ -46,7 +46,8 @@
                                 'info' => 'bi-info-circle-fill',
                                 'primary' => 'bi-star-fill'
                             ];
-                            $icon_class = isset($n['icon']) && isset($icon_map[$n['icon']]) ? $icon_map[$n['icon']] : 'bi-info-circle-fill';
+                            $icon_type = $n->icon ?? 'info';
+                            $icon_class = isset($icon_map[$icon_type]) ? $icon_map[$icon_type] : 'bi-info-circle-fill';
                             
                             $bg_color = [
                                 'success' => '#D1FAE5',
@@ -55,7 +56,7 @@
                                 'info' => '#DBEAFE',
                                 'primary' => '#EDE9FE'
                             ];
-                            $bg = isset($n['icon']) && isset($bg_color[$n['icon']]) ? $bg_color[$n['icon']] : '#FDF5ED';
+                            $bg = isset($bg_color[$icon_type]) ? $bg_color[$icon_type] : '#FDF5ED';
                             
                             $text_color = [
                                 'success' => '#065F46',
@@ -64,7 +65,7 @@
                                 'info' => '#1E40AF',
                                 'primary' => '#5B21B6'
                             ];
-                            $color = isset($n['icon']) && isset($text_color[$n['icon']]) ? $text_color[$n['icon']] : 'var(--amber-cream)';
+                            $color = isset($text_color[$icon_type]) ? $text_color[$icon_type] : 'var(--amber-cream)';
                             ?>
                             <div style="width: 36px; height: 36px; border-radius: 10px; background: <?= $bg; ?>; display: flex; align-items: center; justify-content: center; color: <?= $color; ?>;">
                                 <i class="bi <?= $icon_class; ?>" style="font-size: 1rem;"></i>
@@ -72,19 +73,19 @@
                         </div>
                         
                         <div style="flex: 1; min-width: 0;">
-                            <?php if(isset($n['judul']) && !empty($n['judul'])): ?>
-                                <p class="mb-1 small text-dark font-weight-bold" style="line-height: 1.3;"><?= htmlspecialchars($n['judul']); ?></p>
+                            <?php if(isset($n->judul) && !empty($n->judul)): ?>
+                                <p class="mb-1 small text-dark font-weight-bold" style="line-height: 1.3;"><?= htmlspecialchars($n->judul); ?></p>
                             <?php endif; ?>
-                            <p class="mb-1 small text-dark <?= (isset($n['is_read']) && $n['is_read'] == 0) ? 'font-weight-semibold' : ''; ?>" style="line-height: 1.4;">
-                                <?= htmlspecialchars($n['pesan'] ?? $n['isi_notifikasi']); ?>
+                            <p class="mb-1 small text-dark <?= (isset($n->status_baca) && $n->status_baca == 0) ? 'font-weight-semibold' : ''; ?>" style="line-height: 1.4;">
+                                <?= htmlspecialchars($n->isi_notifikasi); ?>
                             </p>
                             <small class="text-muted d-block" style="font-size: 0.65rem;">
                                 <i class="bi bi-clock mr-1"></i>
-                                <?= isset($n['created_at']) ? date('d M Y, H:i', strtotime($n['created_at'])) : (isset($n['tanggal_buat']) ? date('d M Y, H:i', strtotime($n['tanggal_buat'])) : ''); ?>
+                                <?= isset($n->tanggal_buat) ? date('d M Y, H:i', strtotime($n->tanggal_buat)) : ''; ?>
                             </small>
                         </div>
                         
-                        <?php if(isset($n['is_read']) && $n['is_read'] == 0): ?>
+                        <?php if(isset($n->status_baca) && $n->status_baca == 0): ?>
                             <span class="badge badge-pill" style="background: var(--amber-cream); color: white; font-size: 0.55rem; padding: 3px 8px; align-self: center;">Baru</span>
                         <?php endif; ?>
                     </a>
