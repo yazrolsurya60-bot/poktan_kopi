@@ -51,6 +51,7 @@
     <div class="sidebar-menu-wrapper">
         <ul class="sidebar-menu">
             <li class="menu-item"><a href="<?= base_url('admin/dashboard'); ?>"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a></li>
+            <li class="menu-item"><a href="<?= base_url('admin/mitra'); ?>"><i class="bi bi-shop"></i>Manajemen Mitra</a></li>
             <li class="menu-item active"><a href="<?= base_url('admin/panen'); ?>"><i class="bi bi-textarea-rose"></i>Rekap Panen</a></li>
         </ul>
     </div>
