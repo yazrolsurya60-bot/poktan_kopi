@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 #$config['base_url'] = '';
-$config['base_url'] = 'http://localhost/app_coffee/';
+$config['base_url'] = 'http://localhost/poktan_kopi/';
 
 /*
 |--------------------------------------------------------------------------
