@@ -7,7 +7,7 @@ Aplikasi **LiberChain** adalah platform berbasis web yang dirancang untuk mengel
 LiberChain membantu mengoptimalkan rantai pasokan kopi dengan menyediakan fitur-fitur seperti pelacakan produksi, manajemen stok, laporan penjualan, serta integrasi data real-time antara petani, mitra, kurir, dan pembeli. Sistem ini memanfaatkan arsitektur MVC CodeIgniter untuk memisahkan logika bisnis, data, dan tampilan, memastikan pemeliharaan yang mudah dan skalabilitas.
 
 Dengan antarmuka yang responsif dan desain modern, pengguna dapat mengakses dashboard melalui perangkat desktop maupun mobile, memantau status order, notifikasi, serta melihat statistik performa secara visual menggunakan Chart.js.
-## Fitur Utama
+
 ## Fitur Utama
 - **Dashboard Admin**: Sidebar premium, statistik ringkas, notifikasi real‑time, dan grafik Chart.js.
 - **Manajemen User** (CRUD): Tambah, edit, hapus, serta aktivasi/non‑aktivasi pengguna dengan peran *Admin*, *Petani*, *Pembeli*, atau *Guest*.
