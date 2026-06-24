@@ -127,6 +127,24 @@
                 </div>
             <?php endif; ?>
         </div>
+<<<<<<< HEAD
+=======
+        
+        <!-- Pagination (jika diperlukan) -->
+        <?php if(!empty($history) && count($history) >= 50): ?>
+            <div class="mt-4 text-center">
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled"><span class="page-link">Sebelumnya</span></li>
+                        <li class="page-item active"><span class="page-link" style="background-color: var(--roasted-brown); border-color: var(--roasted-brown);">1</span></li>
+                        <li class="page-item"><a class="page-link" href="#" style="color: var(--roasted-brown);">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#" style="color: var(--roasted-brown);">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#" style="color: var(--roasted-brown);">Selanjutnya</a></li>
+                    </ul>
+                </nav>
+            </div>
+        <?php endif; ?>
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
     </div>
 </div>
 
@@ -134,6 +152,10 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 $(document).ready(function() {
+<<<<<<< HEAD
+=======
+    // Mark all as read
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
     $('#markAllReadBtn').on('click', function() {
         if(confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
             $.ajax({
@@ -154,4 +176,8 @@ $(document).ready(function() {
 });
 </script>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
