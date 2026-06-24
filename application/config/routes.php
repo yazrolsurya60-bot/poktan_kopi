@@ -70,7 +70,6 @@ $route['admin/laporan/export_excel'] = 'admin/laporan/export_excel';
 $route['admin/laporan/print_pdf'] = 'admin/laporan/print_pdf';
 $route['admin/laporan/get_chart_data'] = 'admin/laporan/get_chart_data';
 
-
 // Halaman Notifikasi
 $route['notifikasi/history'] = 'Notifikasi/history';
 $route['notifikasi/setting'] = 'Notifikasi/setting';
@@ -95,7 +94,6 @@ $route['admin/produk/edit/(:num)'] = 'petani/Produk/edit/$1';
 $route['admin/produk/update/(:num)'] = 'petani/Produk/update/$1';
 
 $route['admin/produk/hapus/(:num)'] = 'petani/Produk/hapus/$1';
-
 // Authentication Routes
 $route['auth/login'] = 'Auth/login';
 $route['auth/register'] = 'Auth/register';
@@ -117,7 +115,6 @@ $route['admin/user/edit/(:num)'] = 'admin/Users/edit/$1';
 $route['admin/user/delete/(:num)'] = 'admin/Users/delete/$1';
 $route['admin/user/toggle/(:num)'] = 'admin/Users/toggle/$1';
 
-
 // ============================================
 // MODUL 9: MANAJEMEN MITRA & LANDING PAGE MITRA
 // ============================================
@@ -129,9 +126,43 @@ $route['admin/mitra/toggle/(:num)'] = 'admin/Mitra/toggle/$1';
 
 $route['landing'] = 'Landing/index';
 
+
+// ============================================================
+// MODUL 6: TRANSAKSI
+// ============================================================
+
+// Guest/Public
+$route['transaksi/keranjang'] = 'transaksi/keranjang';
+$route['transaksi/checkout'] = 'transaksi/checkout';
+$route['transaksi/detail/(:num)'] = 'transaksi/detail/$1';
+$route['transaksi/invoice/(:num)'] = 'transaksi/invoice/$1';
+$route['transaksi/proses_checkout'] = 'transaksi/proses_checkout';
+$route['transaksi/tambah_keranjang'] = 'transaksi/tambah_keranjang';
+$route['transaksi/update_keranjang'] = 'transaksi/update_keranjang';
+$route['transaksi/hapus_keranjang'] = 'transaksi/hapus_keranjang';
+$route['transaksi/hitung_ongkir'] = 'transaksi/hitung_ongkir';
+$route['transaksi/upload_bukti'] = 'transaksi/upload_bukti';
+$route['transaksi/batalkan/(:num)'] = 'transaksi/batalkan/$1';
+
+// Admin Transaksi
+$route['admin/transaksi'] = 'admin/transaksi/index';
+$route['admin/transaksi/detail/(:num)'] = 'admin/transaksi/detail/$1';
+$route['admin/transaksi/konfirmasi_bayar'] = 'admin/transaksi/konfirmasi_bayar';
+$route['admin/transaksi/update_status/(:num)'] = 'admin/transaksi/update_status/$1';
+$route['admin/transaksi/export_excel'] = 'admin/transaksi/export_excel';
+$route['admin/transaksi/export_pdf'] = 'admin/transaksi/export_pdf';
+$route['admin/invoice/(:num)'] = 'admin/transaksi/invoice/$1';
+
+// Pembeli Transaksi
+$route['pembeli/transaksi/history'] = 'pembeli/transaksi/history';
+$route['pembeli/transaksi/detail/(:num)'] = 'pembeli/transaksi/detail/$1';
+$route['pembeli/transaksi/batalkan/(:num)'] = 'pembeli/transaksi/batalkan/$1';
+$route['pembeli/transaksi/upload_bukti'] = 'pembeli/transaksi/upload_bukti';
+
 // ============================================
-// MODUL 7: TRACKING PENGIRIMAN
+// LANDING PRODUK - TAMBAHKAN INI!
 // ============================================
+$route['landing/produk'] = 'Landing/produk';
 
 // Pembeli Tracking (M07-F01, M07-F04, M07-F05, M07-F07)
 $route['pembeli/tracking'] = 'pembeli/Tracking/index';
@@ -160,4 +191,3 @@ $route['admin/kurir/hapus/(:num)']       = 'admin/Kurir/hapus/$1';
 $route['admin/kurir/toggle/(:num)']      = 'admin/Kurir/toggle/$1';
 $route['admin/kurir/assign']             = 'admin/Kurir/assign';
 $route['admin/kurir/proses_assign']      = 'admin/Kurir/proses_assign';
-
