@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -874,7 +874,7 @@
 		</div>
 		<div class="sidebar-menu-wrapper">
 			<ul class="sidebar-menu">
-				<li class="menu-item">
+				<li class="menu-item active">
 					<a href="<?= base_url('admin/dashboard'); ?>">
 						<i class="bi bi-grid-1x2-fill"></i>Dashboard
 					</a>
@@ -885,7 +885,7 @@
 						<span class="menu-badge">12</span>
 					</a>
 				</li>
-				<li class="menu-item active">
+				<li class="menu-item">
 					<a href="<?= base_url('admin/petani'); ?>">
 						<i class="bi bi-person-badge-fill"></i>Data Petani
 					</a>
@@ -1042,32 +1042,47 @@
         </div>
     </div>
 
+    <!-- Flash Message -->
+    <?php if ($this->session->flashdata('pesan')): ?>
+    <div class="alert alert-success rounded-3 mb-3"><?= $this->session->flashdata('pesan'); ?></div>
+    <?php endif; ?>
+
     <!-- KARTU EXPORT -->
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-5 text-center">
-            <i class="bi bi-file-earmark-spreadsheet text-success mb-3" style="font-size: 3rem;"></i>
+            <div class="mb-3" style="font-size: 3rem; color: #4CAF50;">
+                <i class="bi bi-file-earmark-spreadsheet"></i>
+            </div>
             <h5 class="fw-bold">Export Data Petani</h5>
-            <p class="text-muted small mb-4">Pilih format file yang ingin di export</p>
+            <p class="text-muted small mb-4">Pilih format file yang ingin di-export</p>
             
-            <form action="#" method="POST" class="text-start">
+            <form action="<?= base_url('admin/petani/export_process'); ?>" method="POST" class="text-start">
                 <div class="mb-3">
-                    <label class="border rounded-3 p-3 w-100 d-flex align-items-center gap-3 cursor-pointer shadow-sm" style="cursor: pointer;">
+                    <label class="border rounded-3 p-3 w-100 d-flex align-items-center gap-3" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#f0faf0'" onmouseout="this.style.backgroundColor=''">
                         <input type="radio" name="format" value="excel" checked class="form-check-input mt-0" style="transform: scale(1.2);">
                         <i class="bi bi-file-earmark-excel-fill text-success fs-4"></i>
-                        <span class="fw-bold">Excel (.xlsx)</span>
+                        <div>
+                            <span class="fw-bold d-block">Excel (.xls)</span>
+                            <small class="text-muted">Download spreadsheet yang bisa dibuka di Microsoft Excel</small>
+                        </div>
                     </label>
                 </div>
                 <div class="mb-4">
-                    <label class="border rounded-3 p-3 w-100 d-flex align-items-center gap-3 cursor-pointer" style="cursor: pointer;">
+                    <label class="border rounded-3 p-3 w-100 d-flex align-items-center gap-3" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#fff5f5'" onmouseout="this.style.backgroundColor=''">
                         <input type="radio" name="format" value="pdf" class="form-check-input mt-0" style="transform: scale(1.2);">
                         <i class="bi bi-file-earmark-pdf-fill text-danger fs-4"></i>
-                        <span class="fw-bold">PDF (.pdf)</span>
+                        <div>
+                            <span class="fw-bold d-block">PDF (.pdf)</span>
+                            <small class="text-muted">Buka halaman cetak PDF di tab baru</small>
+                        </div>
                     </label>
                 </div>
 
-                <div class="d-flex justify-content-end gap-3 mt-5">
+                <div class="d-flex gap-3 mt-4">
                     <a href="<?= base_url('admin/petani'); ?>" class="btn btn-light px-4 py-2 rounded-3 border fw-bold w-50" style="color: #6c757d;">Batal</a>
-                    <button type="button" onclick="alert('Fitur export sedang dalam pengembangan!')" class="btn px-4 py-2 rounded-3 fw-bold text-white shadow-sm w-50" style="background-color: #6d4c41;">Export</button>
+                    <button type="submit" class="btn px-4 py-2 rounded-3 fw-bold text-white shadow-sm w-50" style="background-color: #6d4c41;">
+                        <i class="bi bi-download me-2"></i>Export
+                    </button>
                 </div>
             </form>
         </div>
@@ -1317,8 +1332,8 @@
 		// Refresh setiap 60 detik
 		// setInterval(refreshNotifications, 60000);
 
-		console.log('âœ… Modul 11: Dashboard f& Notifikasi siap digunakan!');
-		console.log('ðŸ“‹ Fitur yang tersedia:');
+		console.log('✅ Modul 11: Dashboard f& Notifikasi siap digunakan!');
+		console.log('📋 Fitur yang tersedia:');
 		console.log('   - KPI Cards (M11-F01)');
 		console.log('   - Grafik Penjualan (M10-F02)');
 		console.log('   - Produk Terlaris (M10-F04)');

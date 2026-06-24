@@ -195,4 +195,45 @@ class Petani extends CI_Controller {
     public function export_page() {
         $this->load->view('admin/Petani_export');
     }
+
+    // ── 11. EXPORT PROCESS ───────────────────────────────────────────
+    public function export_process() {
+        $format = $this->input->post('format');
+        $data['daftar_petani'] = $this->Petani_model->get_daftar_petani();
+
+        if ($format == 'excel') {
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=Data_Petani_" . date('Y-m-d') . ".xls");
+            echo "<table border='1'>";
+            echo "<tr>
+                    <th>No</th>
+                    <th>Nama Petani</th>
+                    <th>NIK</th>
+                    <th>No HP</th>
+                    <th>Email</th>
+                    <th>Alamat</th>
+                    <th>Status Petani</th>
+                    <th>Tanggal Daftar</th>
+                  </tr>";
+            $no = 1;
+            foreach ($data['daftar_petani'] as $p) {
+                echo "<tr>
+                        <td>{$no}</td>
+                        <td>{$p['nama_petani']}</td>
+                        <td>{$p['nik']}</td>
+                        <td>{$p['no_hp']}</td>
+                        <td>{$p['email']}</td>
+                        <td>{$p['alamat']}</td>
+                        <td>{$p['status_petani']}</td>
+                        <td>{$p['tanggal_daftar']}</td>
+                      </tr>";
+                $no++;
+            }
+            echo "</table>";
+        } else if ($format == 'pdf') {
+            $this->load->view('admin/Petani_export_pdf', $data);
+        } else {
+            redirect('admin/petani/export_page');
+        }
+    }
 }
