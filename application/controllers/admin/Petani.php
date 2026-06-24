@@ -172,15 +172,59 @@ class Petani extends CI_Controller {
         $this->load->view('admin/Petani_verifikasi', $data);
     }
 
-    // ── 8. VERIFIKASI Dokumen Spesifik (Opsional, tapi dibiarkan) ──
-    public function verifikasi_dokumen($id, $jenis_dokumen) {
-        $allowed = ['status_ktp', 'status_npwp', 'status_sertifikat'];
-        if (in_array($jenis_dokumen, $allowed)) {
-            $this->Petani_model->update_petani($id, [$jenis_dokumen => 'Terverifikasi']);
-            $this->session->set_flashdata('pesan', 'Dokumen berhasil diverifikasi!');
+    // ── 8. VERIFIKASI Dokumen Spesifik (Approve / Reject) ────────────
+    // URL: admin/petani/verifikasi_dokumen/{id}/{jenis}/{status}
+    public function verifikasi_dokumen($id, $jenis_dokumen, $status_baru = 'Terverifikasi') {
+        $allowed_jenis  = ['status_ktp', 'status_npwp', 'status_sertifikat'];
+        $allowed_status = ['Terverifikasi', 'Ditolak'];
+        if (in_array($jenis_dokumen, $allowed_jenis) && in_array($status_baru, $allowed_status)) {
+            $this->Petani_model->update_petani($id, [$jenis_dokumen => $status_baru]);
+            $msg = ($status_baru === 'Terverifikasi') ? 'Dokumen berhasil di-approve!' : 'Dokumen berhasil di-reject!';
+            $this->session->set_flashdata('pesan', $msg);
         } else {
-            $this->session->set_flashdata('error', 'Jenis dokumen tidak valid!');
+            $this->session->set_flashdata('error', 'Parameter tidak valid!');
         }
+        redirect('admin/petani/detail/' . $id);
+    }
+
+    // ── 8b. UPLOAD Dokumen Petani oleh Admin ─────────────────────────
+    public function upload_dokumen($id) {
+        $petani = $this->Petani_model->get_petani_by_id($id);
+        if (!$petani) { show_404(); }
+
+        $jenis_dokumen = $this->input->post('jenis_dokumen');
+        $allowed_jenis = ['file_ktp', 'file_npwp', 'file_sertifikat'];
+
+        if (!in_array($jenis_dokumen, $allowed_jenis)) {
+            $this->session->set_flashdata('error', 'Jenis dokumen tidak valid!');
+            redirect('admin/petani/detail/' . $id);
+            return;
+        }
+
+        $upload_path = './uploads/dokumen/';
+        if (!is_dir($upload_path)) {
+            mkdir($upload_path, 0755, true);
+        }
+
+        $config['upload_path']   = $upload_path;
+        $config['allowed_types'] = 'jpg|jpeg|png|pdf';
+        $config['max_size']      = 5120; // 5MB
+        $config['file_name']     = $jenis_dokumen . '_petani_' . $id . '_' . time();
+        $this->upload->initialize($config);
+
+        if ($this->upload->do_upload('file_dokumen')) {
+            $file_name = $this->upload->data('file_name');
+            // Juga reset status dokumen ke Menunggu agar admin perlu review ulang
+            $status_key = 'status_' . str_replace('file_', '', $jenis_dokumen);
+            $this->Petani_model->update_petani($id, [
+                $jenis_dokumen => $file_name,
+                $status_key    => 'Menunggu'
+            ]);
+            $this->session->set_flashdata('pesan', 'Dokumen berhasil diupload!');
+        } else {
+            $this->session->set_flashdata('error', 'Upload gagal: ' . $this->upload->display_errors('', ''));
+        }
+
         redirect('admin/petani/detail/' . $id);
     }
 
