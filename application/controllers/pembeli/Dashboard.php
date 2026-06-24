@@ -12,6 +12,7 @@ class Dashboard extends CI_Controller
         // 🔴 CEK LOGIN - MENGGUNAKAN SESSION DARI MODUL 1
         // ============================================
         
+<<<<<<< HEAD
         if (!$this->session->userdata('id_user')) {
             $this->session->set_userdata([
                 'id_user' => 3,
@@ -19,6 +20,11 @@ class Dashboard extends CI_Controller
                 'nama' => 'Test Pembeli'
             ]);
             // redirect('auth/login');
+=======
+        // Jika belum login, redirect ke halaman login
+        if (!$this->session->userdata('id_user')) {
+            redirect('auth/login');
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
 
         // ============================================
