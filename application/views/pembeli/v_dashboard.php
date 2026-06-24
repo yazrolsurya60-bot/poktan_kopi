@@ -280,20 +280,14 @@
             gap: 12px;
             transition: var(--transition-smooth);
             cursor: pointer;
-<<<<<<< HEAD
+
             text-decoration: none;
             color: inherit;
-=======
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
 
         .notif-item:hover {
             background: var(--bg-cream);
-<<<<<<< HEAD
-            text-decoration: none;
-            color: inherit;
-=======
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
+
         }
 
         .notif-item .notif-icon {
@@ -333,7 +327,6 @@
             font-weight: 600;
         }
 
-<<<<<<< HEAD
         .notif-badge-new {
             background: var(--amber-cream);
             color: white;
@@ -343,8 +336,6 @@
             align-self: center;
         }
 
-=======
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         /* --- ACTION CARDS --- */
         .action-card { 
             background: var(--card-white); 
@@ -834,7 +825,6 @@
                 <i class="bi bi-list"></i>
             </button>
             <h2 class="d-inline-block align-middle mb-0">Ruang Belanja Member</h2>
-<<<<<<< HEAD
             <p class="subtitle mb-0 mt-1">Selamat datang, <span id="memberName" style="color: var(--amber-cream); font-weight:600;"><?= $this->session->userdata('nama') ?? 'Pembeli' ?></span>! <span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span></p>
         </div>
         <div class="d-flex align-items-center gap-3" style="gap: 12px;">
@@ -945,18 +935,14 @@
                                 <span class="notif-time">5 jam lalu</span>
                             </div>
                         </div>
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
                     </div>
                 </div>
             </div>
             <!-- USER AVATAR -->
             <div class="d-flex align-items-center gap-2" style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
                 <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-<<<<<<< HEAD
                 <span style="font-weight:500; font-size:0.85rem;"><?= $this->session->userdata('nama') ?? 'Pembeli' ?></span>
-=======
                 <span style="font-weight:500; font-size:0.85rem;">Pembeli</span>
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
             </div>
         </div>
     </div>
@@ -1290,7 +1276,6 @@
     // 3. MARK ALL READ (M11-F03)
     // ============================================
     function markAllRead() {
-<<<<<<< HEAD
         if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
             $.ajax({
                 url: '<?= base_url('pembeli/dashboard/mark_all_read'); ?>',
@@ -1310,7 +1295,6 @@
         }
     }
 
-=======
         document.querySelectorAll('.notif-item.unread').forEach(item => {
             item.classList.remove('unread');
         });
@@ -1493,11 +1477,8 @@
         // Set member name from session
         const memberNameEl = document.getElementById('memberName');
         if (memberNameEl) {
-<<<<<<< HEAD
             memberNameEl.textContent = '<?= $this->session->userdata('nama') ?? 'Pembeli' ?>';
-=======
             // memberNameEl.textContent = '<?= $this->session->userdata('nama'); ?>';
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
     });
 
@@ -1521,8 +1502,4 @@
     console.log('   - Setting Notifikasi (M11-F03)');
 </script>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
