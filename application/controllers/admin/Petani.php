@@ -21,10 +21,7 @@ class Petani extends CI_Controller {
         $data['daftar_petani'] = $this->Petani_model->get_daftar_petani($status);
         $data['status_filter'] = $status;
 
-        $this->load->view('admin/v_header');
-        $this->load->view('admin/v_sidebar');
         $this->load->view('admin/Petani_list', $data);
-        $this->load->view('admin/v_foother');
     }
 
     // ── 2. DETAIL Petani ─────────────────────────────────────────────
@@ -32,18 +29,12 @@ class Petani extends CI_Controller {
         $data['petani'] = $this->Petani_model->get_petani_by_id($id);
         if (!$data['petani']) { show_404(); }
 
-        $this->load->view('admin/v_header');
-        $this->load->view('admin/v_sidebar');
         $this->load->view('admin/Petani_detail', $data);
-        $this->load->view('admin/v_foother');
     }
 
     // ── 3. FORM Tambah ───────────────────────────────────────────────
     public function tambah() {
-        $this->load->view('admin/v_header');
-        $this->load->view('admin/v_sidebar');
         $this->load->view('admin/Petani_form');
-        $this->load->view('admin/v_foother');
     }
 
     // ── 4. PROSES Tambah ─────────────────────────────────────────────
@@ -54,10 +45,7 @@ class Petani extends CI_Controller {
         $this->form_validation->set_rules('alamat',      'Alamat',      'required|trim');
 
         if ($this->form_validation->run() === FALSE) {
-            $this->load->view('admin/v_header');
-            $this->load->view('admin/v_sidebar');
             $this->load->view('admin/Petani_form');
-            $this->load->view('admin/v_foother');
             return;
         }
 
@@ -81,10 +69,7 @@ class Petani extends CI_Controller {
         $data['petani'] = $this->Petani_model->get_petani_by_id($id);
         if (!$data['petani']) { show_404(); }
 
-        $this->load->view('admin/v_header');
-        $this->load->view('admin/v_sidebar');
         $this->load->view('admin/Petani_edit', $data);
-        $this->load->view('admin/v_foother');
     }
 
     // ── 6. PROSES Update ─────────────────────────────────────────────
@@ -159,9 +144,6 @@ class Petani extends CI_Controller {
     // ── 10. EXPORT PAGE ──────────────────────────────────────────────
     public function export_page() {
         $data['daftar_petani'] = $this->Petani_model->get_daftar_petani();
-        $this->load->view('admin/v_header');
-        $this->load->view('admin/v_sidebar');
         $this->load->view('admin/Petani_list', $data);
-        $this->load->view('admin/v_foother');
     }
 }
