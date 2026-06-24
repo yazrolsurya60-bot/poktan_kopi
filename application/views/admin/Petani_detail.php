@@ -88,5 +88,4 @@ function get_badge($status) {
         </section>
     </main>
 </div>
-
-<?php $this->load->view('admin/v_foother'); ?>
+

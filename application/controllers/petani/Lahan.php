@@ -97,18 +97,33 @@ public function update() {
         'lokasi'       => $this->input->post('lokasi'),
         'latitude'     => $this->input->post('latitude'),
         'longitude'    => $this->input->post('longitude'),
-        'status_lahan' => $this->input->post('status_lahan')
+        'status_lahan' => $this->input->post('status_lahan'),
+        'catatan'      => $this->input->post('catatan')
     );
 
-    // 3. (Opsional) Jika ada file foto, proses upload di sini
-    // ... logic upload foto ...
+    // 3. Proses Upload Foto jika ada file baru
+    if (!empty($_FILES['foto_lahan']['name'])) {
+        $config['upload_path']   = './assets/uploads/lahan/';
+        $config['allowed_types'] = 'jpg|jpeg|png|gif';
+        $config['max_size']      = 2048;
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+
+        if ($this->upload->do_upload('foto_lahan')) {
+            $data['foto_lahan'] = $this->upload->data('file_name');
+        } else {
+            $this->session->set_flashdata('error', $this->upload->display_errors());
+            redirect('petani/lahan/edit/' . $id);
+            return;
+        }
+    }
 
     // 4. Lakukan update ke database
     $this->db->where('id_lahan', $id);
-    $this->db->update('tb_lahan', $data); // Sesuaikan dengan nama tabel Anda
+    $this->db->update('tb_lahan', $data);
 
     // 5. Redirect kembali ke halaman daftar lahan
-    $this->session->set_flashdata('message', 'Data berhasil diupdate!');
+    $this->session->set_flashdata('success', 'Data lahan berhasil diperbarui!');
     redirect('petani/lahan');
 }
 public function detail($id) {

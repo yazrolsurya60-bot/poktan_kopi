@@ -1,7 +1,4 @@
-<?php 
-$this->load->view('admin/v_header'); 
-$this->load->view('admin/v_sidebar'); 
-?>
+
 
 <div class="content-wrapper" style="min-height: 100vh; padding: 25px; background-color: #fcfaf7;">
     <main id="main" class="main">
@@ -99,5 +96,4 @@ $this->load->view('admin/v_sidebar');
         </div>
     </main>
 </div>
-
-<?php $this->load->view('admin/v_foother'); ?>
+

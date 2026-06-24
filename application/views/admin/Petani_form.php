@@ -1,8 +1,4 @@
-<?php 
-// Memanggil template yang sudah ada di folder admin/
-$this->load->view('admin/v_header'); 
-$this->load->view('admin/v_sidebar'); 
-?>
+
 
 <div class="content-wrapper" style="padding: 30px; background-color: #fcfaf7; min-height: 100vh;">
     <main id="main" class="main">
@@ -71,7 +67,4 @@ $this->load->view('admin/v_sidebar');
         </div>
     </main>
 </div>
-
-<?php 
-$this->load->view('admin/v_foother'); 
-?>
+
