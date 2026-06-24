@@ -44,17 +44,16 @@ class Panen_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 
-    public function check_unrecorded_harvest($id_user) {
-        // M04-F09: Cek lahan aktif yang belum dipanen > 30 hari
+   public function check_unrecorded_harvest($id_user) {
+        // M04-F09: Cek lahan aktif yang belum dipanen > 30 hari menggunakan LEFT JOIN (Lebih aman dari bug alias MySQL)
         $query = "
             SELECT l.id_lahan, l.nama_lahan 
             FROM tb_lahan l 
-            WHERE l.id_user = ? AND l.status_lahan = 'Active' 
-            AND NOT EXISTS (
-                SELECT 1 FROM tb_panen p 
-                WHERE p.id_lahan = l.id_lahan 
+            LEFT JOIN tb_panen p ON p.id_lahan = l.id_lahan 
                 AND p.tanggal_panen >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-            )
+            WHERE l.id_user = ? 
+              AND l.status_lahan = 'Active' 
+              AND p.id_lahan IS NULL
         ";
         return $this->db->query($query, [$id_user])->result_array();
     }
