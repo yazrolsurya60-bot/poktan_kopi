@@ -49,22 +49,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-<<<<<<< HEAD
 $route['default_controller'] = 'Landing';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-=======
-<<<<<<< HEAD
-#$route['default_controller'] = 'welcome';
-#$route['404_override'] = '';
-#$route['translate_uri_dashes'] = FALSE;
-=======
-$route['default_controller'] = 'auth/login';
-$route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
->>>>>>> 5e259f91ac99edad6eba8d6d12534512a79b1062
-
 $route['admin/dashboard'] = 'admin/dashboard/index';
 $route['petani/dashboard'] = 'petani/dashboard/index';
 $route['pembeli/dashboard'] = 'pembeli/dashboard/index';
@@ -171,7 +158,7 @@ $route['pembeli/transaksi/upload_bukti'] = 'pembeli/transaksi/upload_bukti';
 // LANDING PRODUK - TAMBAHKAN INI!
 // ============================================
 $route['landing/produk'] = 'Landing/produk';
-=======
+
 $route['admin/kurir']                    = 'admin/Kurir/index';
 $route['admin/kurir/tambah']             = 'admin/Kurir/tambah';
 $route['admin/kurir/edit/(:num)']        = 'admin/Kurir/edit/$1';
@@ -179,5 +166,3 @@ $route['admin/kurir/hapus/(:num)']       = 'admin/Kurir/hapus/$1';
 $route['admin/kurir/toggle/(:num)']      = 'admin/Kurir/toggle/$1';
 $route['admin/kurir/assign']             = 'admin/Kurir/assign';
 $route['admin/kurir/proses_assign']      = 'admin/Kurir/proses_assign';
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
->>>>>>> 5e259f91ac99edad6eba8d6d12534512a79b1062
