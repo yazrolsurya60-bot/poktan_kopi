@@ -730,7 +730,7 @@
             </li>
             <li class="menu-item">
                 <a href="<?= base_url('petani/panen'); ?>">
-                    <i class="bi bi-textarea-rose"></i>Catatan Panen
+                    <i class="bi bi-tree-fill"></i>Manajemen Panen
                 </a>
             </li>
             <li class="menu-item">

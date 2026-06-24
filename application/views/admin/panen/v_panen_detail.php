@@ -95,6 +95,10 @@
             color: #fff;
         }
 
+        .sidebar-footer { position: absolute; bottom: 0; width: 100%; padding: 16px 20px; border-top: 1px solid rgba(250, 246, 240, 0.06); }
+        .sidebar-footer .btn-logout { width: 100%; padding: 10px 16px; border: 1px solid rgba(250, 246, 240, 0.1); border-radius: 10px; background: transparent; color: #A8988A; font-weight: 500; font-size: 0.85rem; transition: var(--transition-smooth); display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
+        .sidebar-footer .btn-logout:hover { background: rgba(230, 161, 92, 0.1); color: #ffffff; border-color: rgba(230, 161, 92, 0.2); }
+
         .main-content {
             margin-left: var(--sidebar-width);
             padding: 30px 40px;
@@ -226,6 +230,11 @@
                     </a>
                 </li>
             </ul>
+        </div>
+        <div class="sidebar-footer">
+            <button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
+                <i class="bi bi-box-arrow-right"></i> Keluar
+            </button>
         </div>
     </div>
 
