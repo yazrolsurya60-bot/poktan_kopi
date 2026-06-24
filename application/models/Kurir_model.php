@@ -4,9 +4,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Kurir_model
  * ============================================
- * Modul 08: Manajemen Kurir — (Anisya)
+ * Model ini dipakai BERSAMA oleh 2 modul karena keduanya butuh akses
+ * ke tabel `tb_kurir`:
+ *   - Modul 07: Tracking Pengiriman (Acep)
+ *   - Modul 08: Manajemen Kurir (Anisya)
+ *
+ * Supaya tidak saling menimpa lagi saat git pull, SEMUA method dari
+ * kedua modul digabung di SATU file ini. Kalau salah satu modul butuh
+ * method tambahan, tambahkan di file ini juga, jangan buat file baru
+ * dengan nama yang sama.
  * ============================================
- * Kolom mengikuti struktur resmi tb_kurir di database `liberchain`:
+ * Kolom tb_kurir (sesuai liberchain.sql):
  * id_kurir, nama_kurir, no_telepon, email, status (Active/Inactive/Offline),
  * lokasi_terakhir, lat_terakhir, lng_terakhir, created_at, updated_at
  */
@@ -20,9 +28,49 @@ class Kurir_model extends CI_Model
         $this->load->database();
     }
 
-    // ============================================
+    // ============================================================
+    // ============ MILIK MODUL 07 (Acep — Tracking) ===============
+    // ============================================================
+
+    public function get_kurir_by_id($id_kurir)
+    {
+        $this->db->where('id_kurir', $id_kurir);
+        return $this->db->get($this->table)->row();
+    }
+
+    public function get_available_kurir()
+    {
+        $this->db->where('status', 'Active');
+        $this->db->order_by('nama_kurir');
+        return $this->db->get($this->table)->result();
+    }
+
+    public function get_kurir_by_tracking($id_tracking)
+    {
+        $this->db->select('k.*');
+        $this->db->from('tb_kurir k');
+        $this->db->join('tb_tracking t', 't.id_kurir = k.id_kurir');
+        $this->db->where('t.id_tracking', $id_tracking);
+        return $this->db->get()->row();
+    }
+
+    public function update_location($id_kurir, $lat, $lng, $lokasi = null)
+    {
+        $data = [
+            'lat_terakhir'    => $lat,
+            'lng_terakhir'    => $lng,
+            'lokasi_terakhir' => $lokasi,
+            'updated_at'      => date('Y-m-d H:i:s'),
+        ];
+        $this->db->where('id_kurir', $id_kurir);
+        return $this->db->update($this->table, $data);
+    }
+
+    // ============================================================
+    // ======== MILIK MODUL 08 (Anisya — Manajemen Kurir) ==========
+    // ============================================================
+
     // M08-F01: Ambil semua kurir, bisa difilter status & dicari keyword
-    // ============================================
     public function get_all($status = null, $keyword = null)
     {
         if ($status && in_array($status, ['Active', 'Inactive', 'Offline'])) {
@@ -41,42 +89,32 @@ class Kurir_model extends CI_Model
         return $this->db->get($this->table)->result_array();
     }
 
-    // ============================================
-    // Ambil satu kurir berdasarkan ID
-    // ============================================
+    // Ambil satu kurir berdasarkan ID (versi array, dipakai Controller Modul 08)
     public function get_by_id($id_kurir)
     {
         return $this->db->get_where($this->table, ['id_kurir' => $id_kurir])->row_array();
     }
 
-    // ============================================
     // M08-F02: Tambah kurir baru
-    // ============================================
     public function insert($data)
     {
         return $this->db->insert($this->table, $data);
     }
 
-    // ============================================
     // M08-F03: Update data kurir
-    // ============================================
     public function update($id_kurir, $data)
     {
         $this->db->where('id_kurir', $id_kurir);
         return $this->db->update($this->table, $data);
     }
 
-    // ============================================
     // M08-F04: Hapus kurir
-    // ============================================
     public function delete($id_kurir)
     {
         return $this->db->delete($this->table, ['id_kurir' => $id_kurir]);
     }
 
-    // ============================================
     // M08-F01: Hitung jumlah kurir per status (summary card)
-    // ============================================
     public function count_by_status($status)
     {
         return $this->db->where('status', $status)->count_all_results($this->table);
@@ -87,10 +125,7 @@ class Kurir_model extends CI_Model
         return $this->db->count_all_results($this->table);
     }
 
-    // ============================================
-    // M08-F04: Cek apakah kurir masih punya pengiriman aktif
-    // (dipakai sebelum hapus, supaya kurir yang masih bertugas tidak terhapus)
-    // ============================================
+    // M08-F04: Cek apakah kurir masih punya pengiriman aktif (sebelum hapus)
     public function is_in_use($id_kurir)
     {
         $status_aktif = ['diproses', 'dikirim', 'dalam_perjalanan', 'tiba_di_kota_tujuan', 'out_for_delivery'];
@@ -102,9 +137,7 @@ class Kurir_model extends CI_Model
         return $count > 0;
     }
 
-    // ============================================
     // M08-F06: Daftar kurir berstatus Active (untuk dropdown assign)
-    // ============================================
     public function get_kurir_aktif()
     {
         return $this->db->where('status', 'Active')
@@ -113,9 +146,7 @@ class Kurir_model extends CI_Model
             ->result_array();
     }
 
-    // ============================================
     // M08-F06: Daftar pengiriman yang belum ada kurirnya
-    // ============================================
     public function get_pengiriman_belum_assign()
     {
         $this->db->select('
@@ -139,9 +170,7 @@ class Kurir_model extends CI_Model
         return $this->db->get()->result_array();
     }
 
-    // ============================================
     // M08-F06: Proses assign kurir ke 1 pengiriman + catat riwayat
-    // ============================================
     public function assign_kurir($id_tracking, $id_kurir)
     {
         $this->db->trans_start();

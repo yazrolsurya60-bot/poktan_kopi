@@ -1,11 +1,14 @@
-<<<<<<< HEAD
 # poktan_kopi
 Seluruh perubahan kode yang di lakukan, di push di repositori ini. 
-=======
 # LiberChain – Sistem Manajemen Supply Chain Kopi
 
 ## Deskripsi Singkat
 Aplikasi **LiberChain** adalah platform berbasis web yang dirancang untuk mengelola seluruh proses rantai pasokan kopi, mulai dari petani, produsen, hingga pembeli. Sistem ini menyediakan dashboard admin premium dengan tampilan modern (tema premium, warna hangat, tipografi *Plus Jakarta Sans*) serta modul manajemen pengguna lengkap.
+
+## Penjelasan Aplikasi
+LiberChain membantu mengoptimalkan rantai pasokan kopi dengan menyediakan fitur-fitur seperti pelacakan produksi, manajemen stok, laporan penjualan, serta integrasi data real-time antara petani, mitra, kurir, dan pembeli. Sistem ini memanfaatkan arsitektur MVC CodeIgniter untuk memisahkan logika bisnis, data, dan tampilan, memastikan pemeliharaan yang mudah dan skalabilitas.
+
+Dengan antarmuka yang responsif dan desain modern, pengguna dapat mengakses dashboard melalui perangkat desktop maupun mobile, memantau status order, notifikasi, serta melihat statistik performa secara visual menggunakan Chart.js.
 
 ## Fitur Utama
 - **Dashboard Admin**: Sidebar premium, statistik ringkas, notifikasi real‑time, dan grafik Chart.js.
@@ -14,6 +17,11 @@ Aplikasi **LiberChain** adalah platform berbasis web yang dirancang untuk mengel
 - **Role‑Based Access Control**: Hanya admin yang dapat mengakses modul manajemen.
 - **Responsive Design**: Tata letak menyesuaikan layar desktop hingga mobile.
 - **Styling Premium**: Menggunakan variabel CSS (`--roasted-brown`, `--dark-coffee`, dll.) untuk konsistensi visual.
+- **Tracking**: Real‑time pelacakan status order untuk petani, mitra, kurir, dan pembeli.
+- **Laporan**: Generate laporan penjualan & produksi, dukungan ekspor Excel & PDF.
+- **Manajemen Mitra & Panen**: CRUD lengkap untuk data mitra dan data panen, termasuk pencatatan volume panen, kualitas, tanggal, serta integrasi stok real‑time yang memungkinkan petani memperbarui hasil panen dan admin memantau ketersediaan stok.
+- **API Endpoints**: Penyediaan API untuk integrasi dengan aplikasi pihak ketiga.
+
 
 ## Teknologi yang Digunakan
 - **Backend**: CodeIgniter 3 (PHP) – MVC pattern, routing, model `User_model`.
@@ -50,4 +58,9 @@ application/
 
 ---
 *Repository ini mencatat semua perubahan kode yang dipush ke Git. Pastikan commit secara teratur untuk melacak evolusi aplikasi.*
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+=======
+>>>>>>> d8b8a835a631ab58188cf94e9aa651830be1c284

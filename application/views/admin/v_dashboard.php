@@ -6,7 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Dashboard - Sistem Supply Chain Kopi</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+		rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 	<!-- Chart.js -->
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -793,74 +794,73 @@
 </head>
 
 <body>
+	<!-- KONDISI MENU: JIKA YANG DIKLIK ADALAH KURIR -->
 	<!-- ================================================================= -->
-<!-- KONDISI MENU: JIKA YANG DIKLIK ADALAH KURIR -->
-<!-- ================================================================= -->
-<?php if (isset($active_menu) && $active_menu === 'kurir'): ?>
+	<?php if (isset($active_menu) && $active_menu === 'kurir'): ?>
 
-    <!-- TAMPILKAN TABEL KURIR DI SINI -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">Daftar Kurir Kelompok Kopi</h6>
-                    <a href="<?= base_url('admin/kurir/tambah') ?>" class="btn btn-primary btn-sm">
-                        <i class="bi bi-plus-circle mr-2"></i>Tambah Kurir
-                    </a>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Nama Kurir</th>
-                                    <th>No. Telepon</th>
-                                    <th>Kendaraan</th>
-                                    <th>Plat Nomor</th>
-                                    <th>Status</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (empty($kurir)): ?>
-                                    <tr>
-                                        <td colspan="6" class="text-center py-4">Belum ada data kurir.</td>
-                                    </tr>
-                                <?php else: ?>
-                                    <?php foreach ($kurir as $k): ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($k->nama_kurir) ?></td>
-                                            <td><?= htmlspecialchars($k->no_telepon) ?></td>
-                                            <td><?= htmlspecialchars($k->jenis_kendaraan) ?></td>
-                                            <td><?= htmlspecialchars($k->plat_nomor) ?></td>
-                                            <td><?= $k->status_kurir ?></td>
-                                            <td class="text-center">
-                                                <a href="<?= base_url('admin/kurir/edit/' . $k->id_kurir) ?>" class="text-warning mr-2"><i class="bi bi-pencil-fill"></i></a>
-                                                <a href="<?= base_url('admin/kurir/hapus/' . $k->id_kurir) ?>" class="text-danger" onclick="return confirm('Hapus kurir?')"><i class="bi bi-trash-fill"></i></a>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+		<!-- TAMPILKAN TABEL KURIR DI SINI -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card shadow-sm mb-4">
+					<div class="card-header bg-white d-flex justify-content-between align-items-center">
+						<h6 class="m-0 font-weight-bold text-primary">Daftar Kurir Kelompok Kopi</h6>
+						<a href="<?= base_url('admin/kurir/tambah') ?>" class="btn btn-primary btn-sm">
+							<i class="bi bi-plus-circle mr-2"></i>Tambah Kurir
+						</a>
+					</div>
+					<div class="card-body p-0">
+						<div class="table-responsive">
+							<table class="table table-hover mb-0">
+								<thead>
+									<tr>
+										<th>Nama Kurir</th>
+										<th>No. Telepon</th>
+										<th>Kendaraan</th>
+										<th>Plat Nomor</th>
+										<th>Status</th>
+										<th class="text-center">Aksi</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php if (empty($kurir)): ?>
+										<tr>
+											<td colspan="6" class="text-center py-4">Belum ada data kurir.</td>
+										</tr>
+									<?php else: ?>
+										<?php foreach ($kurir as $k): ?>
+											<tr>
+												<td><?= htmlspecialchars($k->nama_kurir) ?></td>
+												<td><?= htmlspecialchars($k->no_telepon) ?></td>
+												<td><?= htmlspecialchars($k->jenis_kendaraan) ?></td>
+												<td><?= htmlspecialchars($k->plat_nomor) ?></td>
+												<td><?= $k->status_kurir ?></td>
+												<td class="text-center">
+													<a href="<?= base_url('admin/kurir/edit/' . $k->id_kurir) ?>"
+														class="text-warning mr-2"><i class="bi bi-pencil-fill"></i></a>
+													<a href="<?= base_url('admin/kurir/hapus/' . $k->id_kurir) ?>"
+														class="text-danger" onclick="return confirm('Hapus kurir?')"><i
+															class="bi bi-trash-fill"></i></a>
+												</td>
+											</tr>
+										<?php endforeach; ?>
+									<?php endif; ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-<!-- ================================================================= -->
-<!-- JIKA YANG DIKLIK BUKAN KURIR (MENU UTAMA), TAMPILKAN DASHBOARD ASLI -->
-<!-- ================================================================= -->
-<?php else: ?>
+		<!-- ================================================================= -->
+		<!-- JIKA YANG DIKLIK BUKAN KURIR (MENU UTAMA), TAMPILKAN DASHBOARD ASLI -->
+		<!-- ================================================================= -->
+	<?php else: ?>
 
-    <!-- Pindahkan / Biarkan seluruh kode isi dashboard asli kelompokmu berada di sini -->
-    <!-- (Mulai dari KPI Card, Grafik, Ringkasan, Form Notif dll milik timmu) -->
+		<!-- Pindahkan / Biarkan seluruh kode isi dashboard asli kelompokmu berada di sini -->
+		<!-- (Mulai dari KPI Card, Grafik, Ringkasan, Form Notif dll milik timmu) -->
 
-<?php endif; ?>
-<!-- ================================================================= -->
-
-
+	<?php endif; ?>
 	<!-- SIDEBAR OVERLAY -->
 	<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -940,11 +940,13 @@
 		<!-- PAGE HEADER -->
 		<div class="page-header d-flex justify-content-between align-items-center flex-wrap">
 			<div>
-				<button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle" style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
+				<button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
+					style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
 					<i class="bi bi-list"></i>
 				</button>
 				<h2 class="d-inline-block align-middle mb-0">Dashboard</h2>
-				<p class="subtitle mb-0 mt-1">Selamat datang, Admin! <span id="currentDateTime" style="color: var(--amber-cream); font-weight:500;"></span></p>
+				<p class="subtitle mb-0 mt-1">Selamat datang, Admin! <span id="currentDateTime"
+						style="color: var(--amber-cream); font-weight:500;"></span></p>
 			</div>
 			<div class="d-flex align-items-center gap-3" style="gap: 12px;">
 				<!-- NOTIFICATION BELL -->
@@ -966,9 +968,11 @@
 							</span>
 							<div>
 								<?php if (isset($unread_count) && $unread_count > 0): ?>
-									<a href="#" id="markAllReadBtn" class="mr-2" style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
+									<a href="#" id="markAllReadBtn" class="mr-2"
+										style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
 								<?php endif; ?>
-								<a href="<?= base_url('admin/dashboard/history'); ?>" style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
+								<a href="<?= base_url('admin/dashboard/history'); ?>"
+									style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
 							</div>
 						</div>
 						<div class="notif-dropdown-list" id="notifList">
@@ -991,7 +995,8 @@
 										</div>
 										<div class="notif-text">
 											<?= htmlspecialchars($n['isi_notifikasi']); ?>
-											<span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+											<span
+												class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
 										</div>
 										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
 											<span class="notif-badge-new">Baru</span>
@@ -1005,15 +1010,18 @@
 								</div>
 							<?php endif; ?>
 						</div>
-						<div class="p-2 text-center border-top" style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
-							<a href="<?= base_url('admin/dashboard/settings'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
+						<div class="p-2 text-center border-top"
+							style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+							<a href="<?= base_url('admin/dashboard/settings'); ?>"
+								class="small text-secondary font-weight-bold text-decoration-none">
 								<i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
 							</a>
 						</div>
 					</div>
 				</div>
 				<!-- USER AVATAR -->
-				<div class="d-flex align-items-center gap-2" style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
+				<div class="d-flex align-items-center gap-2"
+					style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
 					<i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
 					<span style="font-weight:500; font-size:0.85rem;">Admin</span>
 				</div>
@@ -1021,7 +1029,8 @@
 		</div>
 
 		<!-- QUICK ACTION BUTTONS (M11-F04) -->
-		<h5 class="font-weight-bold mb-3" style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
+		<h5 class="font-weight-bold mb-3"
+			style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
 			<i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
 		</h5>
 		<div class="row mb-4">
@@ -1065,7 +1074,8 @@
 					<div class="stat-title">Total Pendapatan</div>
 					<h3 class="stat-num">Rp <?= number_format($kpi_total_revenue ?? 0, 0, ',', '.'); ?></h3>
 					<div class="stat-change up"><i class="bi bi-arrow-up"></i> 12.5% dari bulan lalu</div>
-					<div class="stat-badge" style="background: var(--amber-cream); color: white;"><i class="bi bi-currency-dollar"></i></div>
+					<div class="stat-badge" style="background: var(--amber-cream); color: white;"><i
+							class="bi bi-currency-dollar"></i></div>
 				</div>
 			</div>
 			<div class="col-xl-3 col-md-6 mb-4">
@@ -1092,7 +1102,8 @@
 					<div class="stat-title">Mitra Aktif</div>
 					<h3 class="stat-num"><?= $kpi_mitra_cafe ?? 0; ?></h3>
 					<div class="stat-change up"><i class="bi bi-arrow-up"></i> 2 mitra baru</div>
-					<div class="stat-badge" style="background: var(--dark-coffee); color: white;"><i class="bi bi-shop"></i></div>
+					<div class="stat-badge" style="background: var(--dark-coffee); color: white;"><i
+							class="bi bi-shop"></i></div>
 				</div>
 			</div>
 		</div>
@@ -1105,8 +1116,10 @@
 					<div class="card-header-custom">
 						<h6><i class="bi bi-graph-up-arrow text-warning mr-2"></i> Grafik Penjualan Bulanan</h6>
 						<div>
-							<span class="badge" style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;"><?= date('Y'); ?></span>
-							<button class="btn btn-sm btn-link text-muted" onclick="refreshChart()" style="padding:0 4px;">
+							<span class="badge"
+								style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;"><?= date('Y'); ?></span>
+							<button class="btn btn-sm btn-link text-muted" onclick="refreshChart()"
+								style="padding:0 4px;">
 								<i class="bi bi-arrow-repeat"></i>
 							</button>
 						</div>
@@ -1124,21 +1137,27 @@
 				<div class="custom-card">
 					<div class="card-header-custom">
 						<h6><i class="bi bi-trophy-fill text-warning mr-2"></i> Produk Terlaris</h6>
-						<span class="badge" style="background: #D1FAE5; color: #065F46; font-weight:500;">Top 5</span>
+						<span class="badge" style="background: #D1FAE5; color: #065F46; font-weight:500;">Top
+							5</span>
 					</div>
 					<div class="card-body-custom" style="padding: 16px 20px;">
 						<?php if (!empty($produk_terlaris)): ?>
 							<?php foreach ($produk_terlaris as $index => $product): ?>
-								<div class="d-flex align-items-center justify-content-between py-2 <?= $index < 4 ? 'border-bottom' : ''; ?>" style="border-color: rgba(74,44,17,0.05);">
+								<div class="d-flex align-items-center justify-content-between py-2 <?= $index < 4 ? 'border-bottom' : ''; ?>"
+									style="border-color: rgba(74,44,17,0.05);">
 									<div class="d-flex align-items-center gap-2">
-										<span class="badge" style="background: <?= $index === 0 ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= $index === 0 ? 'white' : 'var(--text-secondary)'; ?>; width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">
+										<span class="badge"
+											style="background: <?= $index === 0 ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= $index === 0 ? 'white' : 'var(--text-secondary)'; ?>; width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">
 											<?= $index + 1; ?>
 										</span>
-										<span style="font-weight:600; font-size:0.85rem;"><?= $product['nama_produk'] ?? $product['nama']; ?></span>
+										<span
+											style="font-weight:600; font-size:0.85rem;"><?= $product['nama_produk'] ?? $product['nama']; ?></span>
 									</div>
 									<div class="text-right">
-										<span style="font-weight:600; font-size:0.85rem;"><?= $product['total_terjual']; ?> kg</span>
-										<small class="d-block text-muted" style="font-size:0.7rem;">Rp <?= number_format($product['pendapatan'], 0, ',', '.'); ?></small>
+										<span style="font-weight:600; font-size:0.85rem;"><?= $product['total_terjual']; ?>
+											kg</span>
+										<small class="d-block text-muted" style="font-size:0.7rem;">Rp
+											<?= number_format($product['pendapatan'], 0, ',', '.'); ?></small>
 									</div>
 								</div>
 							<?php endforeach; ?>
@@ -1157,7 +1176,8 @@
 				<div class="custom-card">
 					<div class="card-header-custom">
 						<h6><i class="bi bi-clock-history text-primary mr-2"></i> Pesanan Terbaru</h6>
-						<a href="<?= base_url('admin/transaksi'); ?>" class="text-muted" style="font-size:0.75rem;">Lihat semua <i class="bi bi-chevron-right"></i></a>
+						<a href="<?= base_url('admin/transaksi'); ?>" class="text-muted"
+							style="font-size:0.75rem;">Lihat semua <i class="bi bi-chevron-right"></i></a>
 					</div>
 					<div class="card-body-custom" style="padding:0;">
 						<div class="table-responsive">
@@ -1175,10 +1195,12 @@
 										<?php foreach ($pesanan_terbaru as $order): ?>
 											<tr>
 												<td><b>#<?= $order['id_transaksi']; ?></b></td>
-												<td><?= $order['metode_bayar'] ?? 'Transfer'; ?></td> <!-- GANTI dengan metode_bayar -->
+												<td><?= $order['metode_bayar'] ?? 'Transfer'; ?></td>
+												<!-- GANTI dengan metode_bayar -->
 												<td>Rp <?= number_format($order['total_harga'] ?? 0, 0, ',', '.'); ?></td>
 												<td>
-													<span class="status-badge <?= strtolower($order['status_pesanan'] ?? 'pending'); ?>">
+													<span
+														class="status-badge <?= strtolower($order['status_pesanan'] ?? 'pending'); ?>">
 														<?= ucfirst($order['status_pesanan'] ?? 'Pending'); ?>
 													</span>
 												</td>
@@ -1201,7 +1223,8 @@
 				<div class="custom-card">
 					<div class="card-header-custom">
 						<h6><i class="bi bi-person-plus-fill text-success mr-2"></i> Petani Baru</h6>
-						<a href="<?= base_url('admin/petani'); ?>" class="text-muted" style="font-size:0.75rem;">Lihat semua <i class="bi bi-chevron-right"></i></a>
+						<a href="<?= base_url('admin/petani'); ?>" class="text-muted" style="font-size:0.75rem;">Lihat
+							semua <i class="bi bi-chevron-right"></i></a>
 					</div>
 					<div class="card-body-custom" style="padding:0;">
 						<div class="table-responsive">
@@ -1219,10 +1242,13 @@
 										<?php foreach ($petani_baru as $farmer): ?>
 											<tr>
 												<td><b><?= $farmer['nama_petani']; ?></b></td>
-												<td><?= $farmer['status_petani'] == 'Active' ? 'Aktif' : 'Menunggu'; ?></td> <!-- GANTI dengan status -->
-												<td><?= date('d-m-Y', strtotime($farmer['tanggal_daftar'] ?? date('Y-m-d'))); ?></td>
+												<td><?= $farmer['status_petani'] == 'Active' ? 'Aktif' : 'Menunggu'; ?></td>
+												<!-- GANTI dengan status -->
+												<td><?= date('d-m-Y', strtotime($farmer['tanggal_daftar'] ?? date('Y-m-d'))); ?>
+												</td>
 												<td>
-													<span class="status-badge <?= $farmer['status_petani'] === 'Active' ? 'complete' : 'pending'; ?>">
+													<span
+														class="status-badge <?= $farmer['status_petani'] === 'Active' ? 'complete' : 'pending'; ?>">
 														<?= $farmer['status_petani'] === 'Active' ? 'Terverifikasi' : 'Review'; ?>
 													</span>
 												</td>
@@ -1230,7 +1256,8 @@
 										<?php endforeach; ?>
 									<?php else: ?>
 										<tr>
-											<td colspan="4" class="text-center py-3 text-muted">Belum ada petani baru</td>
+											<td colspan="4" class="text-center py-3 text-muted">Belum ada petani baru
+											</td>
 										</tr>
 									<?php endif; ?>
 								</tbody>
@@ -1247,7 +1274,8 @@
 				<div class="custom-card">
 					<div class="card-header-custom">
 						<h6><i class="bi bi-gear-fill text-secondary mr-2"></i> Preferensi Notifikasi</h6>
-						<span class="badge" style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;">Pengaturan</span>
+						<span class="badge"
+							style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;">Pengaturan</span>
 					</div>
 					<div class="card-body-custom">
 						<?php
@@ -1276,66 +1304,76 @@
 							<div class="row">
 								<div class="col-md-3 col-6 mb-2">
 									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifTransaksi" name="notifTransaksi"
-											<?= $default_settings['notifTransaksi'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifTransaksi" style="font-size:0.85rem;">Transaksi Baru</label>
+										<input type="checkbox" class="custom-control-input" id="notifTransaksi"
+											name="notifTransaksi" <?= $default_settings['notifTransaksi'] == 1 ? 'checked' : ''; ?>>
+										<label class="custom-control-label" for="notifTransaksi"
+											style="font-size:0.85rem;">Transaksi Baru</label>
 									</div>
 								</div>
 								<div class="col-md-3 col-6 mb-2">
 									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifPembayaran" name="notifPembayaran"
-											<?= $default_settings['notifPembayaran'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifPembayaran" style="font-size:0.85rem;">Konfirmasi Bayar</label>
+										<input type="checkbox" class="custom-control-input" id="notifPembayaran"
+											name="notifPembayaran" <?= $default_settings['notifPembayaran'] == 1 ? 'checked' : ''; ?>>
+										<label class="custom-control-label" for="notifPembayaran"
+											style="font-size:0.85rem;">Konfirmasi Bayar</label>
 									</div>
 								</div>
 								<div class="col-md-3 col-6 mb-2">
 									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifStok" name="notifStok"
-											<?= $default_settings['notifStok'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifStok" style="font-size:0.85rem;">Peringatan Stok</label>
+										<input type="checkbox" class="custom-control-input" id="notifStok"
+											name="notifStok" <?= $default_settings['notifStok'] == 1 ? 'checked' : ''; ?>>
+										<label class="custom-control-label" for="notifStok"
+											style="font-size:0.85rem;">Peringatan Stok</label>
 									</div>
 								</div>
 								<div class="col-md-3 col-6 mb-2">
 									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifLaporan" name="notifLaporan"
-											<?= $default_settings['notifLaporan'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifLaporan" style="font-size:0.85rem;">Laporan Bulanan</label>
+										<input type="checkbox" class="custom-control-input" id="notifLaporan"
+											name="notifLaporan" <?= $default_settings['notifLaporan'] == 1 ? 'checked' : ''; ?>>
+										<label class="custom-control-label" for="notifLaporan"
+											style="font-size:0.85rem;">Laporan Bulanan</label>
 									</div>
 								</div>
 								<div class="col-md-3 col-6 mb-2">
 									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifPetani" name="notifPetani"
-											<?= $default_settings['notifPetani'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifPetani" style="font-size:0.85rem;">Registrasi Petani</label>
+										<input type="checkbox" class="custom-control-input" id="notifPetani"
+											name="notifPetani" <?= $default_settings['notifPetani'] == 1 ? 'checked' : ''; ?>>
+										<label class="custom-control-label" for="notifPetani"
+											style="font-size:0.85rem;">Registrasi Petani</label>
 									</div>
 								</div>
 								<div class="col-md-3 col-6 mb-2">
 									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifKurir" name="notifKurir"
-											<?= $default_settings['notifKurir'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifKurir" style="font-size:0.85rem;">Status Pengiriman</label>
+										<input type="checkbox" class="custom-control-input" id="notifKurir"
+											name="notifKurir" <?= $default_settings['notifKurir'] == 1 ? 'checked' : ''; ?>>
+										<label class="custom-control-label" for="notifKurir"
+											style="font-size:0.85rem;">Status Pengiriman</label>
 									</div>
 								</div>
 								<div class="col-md-3 col-6 mb-2">
 									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifPromo" name="notifPromo"
-											<?= $default_settings['notifPromo'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifPromo" style="font-size:0.85rem;">Promo & Diskon</label>
+										<input type="checkbox" class="custom-control-input" id="notifPromo"
+											name="notifPromo" <?= $default_settings['notifPromo'] == 1 ? 'checked' : ''; ?>>
+										<label class="custom-control-label" for="notifPromo"
+											style="font-size:0.85rem;">Promo & Diskon</label>
 									</div>
 								</div>
 								<div class="col-md-3 col-6 mb-2">
 									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifSistem" name="notifSistem"
-											<?= $default_settings['notifSistem'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifSistem" style="font-size:0.85rem;">Update Sistem</label>
+										<input type="checkbox" class="custom-control-input" id="notifSistem"
+											name="notifSistem" <?= $default_settings['notifSistem'] == 1 ? 'checked' : ''; ?>>
+										<label class="custom-control-label" for="notifSistem"
+											style="font-size:0.85rem;">Update Sistem</label>
 									</div>
 								</div>
 							</div>
 							<div class="mt-3 pt-2 border-top" style="border-color: rgba(74,44,17,0.06);">
-								<button type="submit" class="btn" style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
+								<button type="submit" class="btn"
+									style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
 									<i class="bi bi-save mr-1"></i> Simpan Pengaturan
 								</button>
-								<button type="button" class="btn btn-link text-muted" style="font-size:0.85rem;" onclick="markAllRead()">
+								<button type="button" class="btn btn-link text-muted" style="font-size:0.85rem;"
+									onclick="markAllRead()">
 									<i class="bi bi-check2-all mr-1"></i> Tandai Semua Dibaca
 								</button>
 							</div>
@@ -1369,7 +1407,7 @@
 			overlay.addEventListener('click', toggleSidebar);
 		}
 
-		document.addEventListener('click', function(e) {
+		document.addEventListener('click', function (e) {
 			if (window.innerWidth > 991.98) return;
 			if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
 				if (sidebar.classList.contains('open')) {
@@ -1385,13 +1423,13 @@
 		const notifDropdown = document.getElementById('notifDropdown');
 
 		if (notifToggle) {
-			notifToggle.addEventListener('click', function(e) {
+			notifToggle.addEventListener('click', function (e) {
 				e.stopPropagation();
 				notifDropdown.classList.toggle('show');
 			});
 		}
 
-		document.addEventListener('click', function(e) {
+		document.addEventListener('click', function (e) {
 			if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
 				notifDropdown.classList.remove('show');
 			}
@@ -1406,21 +1444,21 @@
 					url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
 					type: 'POST',
 					dataType: 'json',
-					success: function(response) {
+					success: function (response) {
 						if (response.success) {
 							location.reload();
 						} else {
 							alert('Gagal menandai semua notifikasi.');
 						}
 					},
-					error: function() {
+					error: function () {
 						alert('Terjadi kesalahan. Silakan coba lagi.');
 					}
 				});
 			}
 		}
 
-		$('#markAllReadBtn').on('click', function(e) {
+		$('#markAllReadBtn').on('click', function (e) {
 			e.preventDefault();
 			markAllRead();
 		});
@@ -1470,7 +1508,7 @@
 							cornerRadius: 8,
 							padding: 10,
 							callbacks: {
-								label: function(context) {
+								label: function (context) {
 									return context.parsed.y + ' kg';
 								}
 							}
@@ -1490,7 +1528,7 @@
 								},
 								color: '#70655E',
 								stepSize: 50,
-								callback: function(value) {
+								callback: function (value) {
 									return value + ' kg';
 								}
 							}
@@ -1518,7 +1556,7 @@
 
 		function refreshChart() {
 			if (salesChart) {
-				$.get('<?= base_url('admin/dashboard/get_chart_data'); ?>', function(data) {
+				$.get('<?= base_url('admin/dashboard/get_chart_data'); ?>', function (data) {
 					if (data.success) {
 						salesChart.data.datasets[0].data = data.values;
 						salesChart.update();
@@ -1527,7 +1565,7 @@
 			}
 		}
 
-		document.addEventListener('DOMContentLoaded', function() {
+		document.addEventListener('DOMContentLoaded', function () {
 			initChart();
 		});
 
@@ -1555,8 +1593,8 @@
 		// ============================================
 		// 6. SWITCH HANDLING (M11-F03)
 		// ============================================
-		document.querySelectorAll('.custom-control-input').forEach(function(switchEl) {
-			switchEl.addEventListener('change', function() {
+		document.querySelectorAll('.custom-control-input').forEach(function (switchEl) {
+			switchEl.addEventListener('change', function () {
 				const label = this.closest('.custom-control').querySelector('.custom-control-label');
 				const setting = label ? label.textContent.trim() : 'Unknown';
 				const status = this.checked ? 'diaktifkan' : 'dinonaktifkan';
@@ -1572,7 +1610,7 @@
 				url: '<?= base_url('admin/dashboard/get_notifications_ajax'); ?>',
 				type: 'GET',
 				dataType: 'json',
-				success: function(response) {
+				success: function (response) {
 					if (response.success) {
 						const countEl = document.getElementById('notifCount');
 						if (response.unread > 0) {
@@ -1589,7 +1627,7 @@
 		// Refresh setiap 60 detik
 		// setInterval(refreshNotifications, 60000);
 
-		console.log('✅ Modul 11: Dashboard & Notifikasi siap digunakan!');
+		console.log('✅ Modul 11: Dashboard f& Notifikasi siap digunakan!');
 		console.log('📋 Fitur yang tersedia:');
 		console.log('   - KPI Cards (M11-F01)');
 		console.log('   - Grafik Penjualan (M10-F02)');

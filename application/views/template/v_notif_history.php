@@ -153,7 +153,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 $(document).ready(function() {
-    // Mark all as read
     $('#markAllReadBtn').on('click', function() {
         if(confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
             $.ajax({

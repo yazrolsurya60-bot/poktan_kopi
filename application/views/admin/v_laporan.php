@@ -321,6 +321,10 @@
             box-shadow: var(--shadow-soft);
             transition: var(--transition-smooth);
             overflow: hidden;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .stat-box:hover {
@@ -345,20 +349,23 @@
             text-transform: uppercase;
             color: var(--text-secondary);
             letter-spacing: 0.7px;
+            margin-bottom: 4px;
         }
 
         .stat-num {
             font-size: 1.7rem;
             font-weight: 700;
-            margin-top: 6px;
-            margin-bottom: 0;
+            margin-top: 8px;
+            margin-bottom: 12px;
             color: var(--dark-coffee);
+            line-height: 1.3;
+            word-break: break-word;
         }
 
         .stat-change {
             font-size: 0.75rem;
             font-weight: 600;
-            margin-top: 4px;
+            margin-top: 8px;
         }
 
         .stat-change.up   { color: #10b981; }
@@ -397,7 +404,7 @@
         .custom-card:hover { box-shadow: var(--shadow-hover); }
 
         .custom-card .card-header-custom {
-            padding: 18px 24px;
+            padding: 18px 24px 12px;
             border-bottom: 1px solid rgba(74, 44, 17, 0.06);
             display: flex;
             align-items: center;
@@ -411,12 +418,12 @@
             font-size: 0.85rem;
         }
 
-        .custom-card .card-body-custom { padding: 24px; }
+        .custom-card .card-body-custom { padding: 20px 24px 24px; }
 
         /* --- CHART --- */
         .chart-container {
             position: relative;
-            height: 260px;
+            height: 300px;
             width: 100%;
         }
 
@@ -578,6 +585,7 @@
             border-radius: 10px;
             padding: 18px 20px;
             border-left: 4px solid;
+            margin-bottom: 8px;
         }
 
         .keu-summary-card.pendapatan { border-color: #10b981; background: #F0FDF4; }
@@ -633,7 +641,7 @@
         @media (max-width: 575.98px) {
             .main-content { padding: 16px 12px 20px; }
             .stat-num { font-size: 1.3rem; }
-            .stat-box { padding: 16px 18px; }
+            .stat-box { padding: 16px 18px; min-height: 160px; }
         }
 
         /* SCROLLBAR */
