@@ -49,9 +49,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
+<<<<<<< HEAD
 $route['default_controller'] = 'Landing';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+=======
+<<<<<<< HEAD
+#$route['default_controller'] = 'welcome';
+#$route['404_override'] = '';
+#$route['translate_uri_dashes'] = FALSE;
+=======
+$route['default_controller'] = 'auth/login';
+$route['404_override'] = '';
+$route['translate_uri_dashes'] = FALSE;
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
+>>>>>>> 5e259f91ac99edad6eba8d6d12534512a79b1062
 
 $route['admin/dashboard'] = 'admin/dashboard/index';
 $route['petani/dashboard'] = 'petani/dashboard/index';
@@ -78,6 +90,18 @@ $route['api/notifikasi/mark_all_read'] = 'api/Notifikasi/mark_all_read';
 $route['api/notifikasi/update_setting'] = 'api/Notifikasi/update_setting';
 $route['api/notifikasi/get_settings'] = 'api/Notifikasi/get_settings';
 
+// Modul 5 - Manajemen Produk
+$route['admin/produk'] = 'petani/Produk/index';
+$route['admin/produk/tambah'] = 'petani/Produk/tambah';
+$route['admin/produk/simpan'] = 'petani/Produk/simpan';
+
+$route['admin/produk/detail/(:num)'] = 'petani/Produk/detail/$1';
+
+$route['admin/produk/edit/(:num)'] = 'petani/Produk/edit/$1';
+
+$route['admin/produk/update/(:num)'] = 'petani/Produk/update/$1';
+
+$route['admin/produk/hapus/(:num)'] = 'petani/Produk/hapus/$1';
 // Authentication Routes
 $route['auth/login'] = 'Auth/login';
 $route['auth/register'] = 'Auth/register';
@@ -147,3 +171,13 @@ $route['pembeli/transaksi/upload_bukti'] = 'pembeli/transaksi/upload_bukti';
 // LANDING PRODUK - TAMBAHKAN INI!
 // ============================================
 $route['landing/produk'] = 'Landing/produk';
+=======
+$route['admin/kurir']                    = 'admin/Kurir/index';
+$route['admin/kurir/tambah']             = 'admin/Kurir/tambah';
+$route['admin/kurir/edit/(:num)']        = 'admin/Kurir/edit/$1';
+$route['admin/kurir/hapus/(:num)']       = 'admin/Kurir/hapus/$1';
+$route['admin/kurir/toggle/(:num)']      = 'admin/Kurir/toggle/$1';
+$route['admin/kurir/assign']             = 'admin/Kurir/assign';
+$route['admin/kurir/proses_assign']      = 'admin/Kurir/proses_assign';
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
+>>>>>>> 5e259f91ac99edad6eba8d6d12534512a79b1062
