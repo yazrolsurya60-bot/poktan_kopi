@@ -13,7 +13,9 @@ class Lahan_model extends CI_Model {
             $this->db->where('tb_lahan.id_user', $id_user);
         }
 
-        if (!empty($filters['status_lahan'])) {
+        if (empty($filters['status_lahan'])) {
+            $this->db->where('tb_lahan.status_lahan', 'Active');
+        } else {
             $this->db->where('tb_lahan.status_lahan', $filters['status_lahan']);
         }
 

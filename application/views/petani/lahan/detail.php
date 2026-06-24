@@ -1,186 +1,42 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Lahan Kopi</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-    :root {
-        --roasted-brown: #4A2C11;
-        --dark-coffee: #2C1808;
-        --amber-cream: #E6A15C;
-        --bg-cream: #FAF6F0;
-        --card-white: #FFFFFF;
-        --text-secondary: #70655E;
-        --sidebar-width: 260px;
-        --shadow-soft: 0 8px 30px rgba(44, 24, 8, 0.08);
-        --shadow-hover: 0 12px 40px rgba(44, 24, 8, 0.15);
-        --radius-card: 14px;
-        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
     body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: var(--bg-cream);
-        color: var(--dark-coffee);
-        overflow-x: hidden;
+        font-family: 'Inter', sans-serif;
+        background-color: #f4f7f6;
     }
 
-    /* --- SIDEBAR PREMIUM PREMIUM --- */
-    .sidebar {
-        width: var(--sidebar-width);
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background: linear-gradient(180deg, var(--dark-coffee) 0%, #1a0e04 100%);
-        color: var(--bg-cream);
-        z-index: 100;
-        transition: var(--transition-smooth);
-        box-shadow: 4px 0 25px rgba(44, 24, 8, 0.2);
-        display: flex;
-        flex-direction: column;
+    .detail-container {
+        max-width: 850px;
+        margin: 40px auto;
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
     }
 
-    .sidebar-brand {
-        padding: 28px 24px 20px;
-        font-size: 1.1rem;
-        font-weight: 700;
-        border-bottom: 1px solid rgba(250, 246, 240, 0.08);
-        color: var(--amber-cream);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .sidebar-brand .brand-icon {
-        width: 40px;
-        height: 40px;
-        background: rgba(230, 161, 92, 0.15);
+    .btn-back {
+        display: inline-block;
+        padding: 8px 20px;
+        background: #eef2f3;
+        color: #4a5568;
         border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.3rem;
-    }
-
-    .sidebar-menu-wrapper {
-        flex: 1;
-        overflow-y: auto;
-        padding: 15px 0;
-    }
-
-    .sidebar-menu {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .menu-item a {
-        display: flex;
-        align-items: center;
-        padding: 12px 24px;
-        color: #A8988A;
-        font-weight: 500;
-        font-size: 0.9rem;
         text-decoration: none;
-        transition: var(--transition-smooth);
-        position: relative;
-        margin: 2px 10px;
-        border-radius: 10px;
-    }
-
-    .menu-item a i {
-        font-size: 1.15rem;
-        margin-right: 14px;
-        width: 22px;
-        text-align: center;
-    }
-
-    .menu-item a:hover {
-        color: #ffffff;
-        background: rgba(230, 161, 92, 0.12);
-        text-decoration: none;
-    }
-
-    .menu-item.active a {
-        color: #ffffff;
-        background: rgba(230, 161, 92, 0.18);
-    }
-
-    .menu-item.active a::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 3px;
-        height: 24px;
-        background: var(--amber-cream);
-        border-radius: 0 3px 3px 0;
-    }
-
-    .sidebar-footer {
-        padding: 16px 20px;
-        border-top: 1px solid rgba(250, 246, 240, 0.06);
-        margin-top: auto;
-    }
-
-    .sidebar-footer .btn-logout {
-        width: 100%;
-        padding: 10px 16px;
-        border: 1px solid rgba(250, 246, 240, 0.1);
-        border-radius: 10px;
-        background: transparent;
-        color: #A8988A;
-        font-weight: 500;
-        font-size: 0.85rem;
-        transition: var(--transition-smooth);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        cursor: pointer;
-    }
-
-    .sidebar-footer .btn-logout:hover {
-        background: rgba(230, 161, 92, 0.1);
-        color: #ffffff;
-        border-color: rgba(230, 161, 92, 0.2);
-        text-decoration: none;
-    }
-
-    /* --- STYLING KONTEN UTAMA --- */
-    .main-content {
-        margin-left: var(--sidebar-width);
-        padding: 30px 40px 40px;
-        min-height: 100vh;
-        transition: var(--transition-smooth);
-    }
-
-    .text-coffee-primary { color: #241408; }
-
-    .custom-card {
-        border-radius: var(--radius-card);
-        box-shadow: var(--shadow-soft);
-        border: none;
-        overflow: hidden;
+        font-weight: 600;
+        margin-bottom: 20px;
     }
 
     .image-wrapper {
         width: 100%;
-        height: 300px;
-        border-radius: var(--radius-card);
+        height: 280px;
+        border-radius: 15px;
         overflow: hidden;
-        box-shadow: var(--shadow-soft);
-        position: relative;
+        margin-bottom: 25px;
     }
 
     .image-wrapper img {
@@ -188,283 +44,123 @@
         height: 100%;
         object-fit: cover;
     }
-    
-    .status-pill {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: rgba(255,255,255,0.9);
-        color: #22543d;
-        padding: 6px 16px;
-        border-radius: 20px;
-        font-size: 13px;
-        font-weight: 700;
-        text-transform: uppercase;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    .status-pill.inactive { color: #9b2c2c; }
 
     .info-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 20px;
-        margin-bottom: 25px;
     }
 
     .label-text {
-        color: #8c7e73;
-        font-size: 0.85rem;
+        color: #718096;
+        font-size: 14px;
         display: block;
         margin-bottom: 4px;
-        font-weight: 600;
     }
 
     .value-text {
-        color: #4A2C11;
+        color: #2d3748;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .status-pill {
+        background: #c6f6d5;
+        color: #22543d;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
         font-weight: 700;
-        font-size: 1.1rem;
+        text-transform: uppercase;
     }
 
     #map {
         width: 100%;
-        height: 350px;
-        border-radius: var(--radius-card);
-        border: 2px solid #f0e6dd;
+        height: 300px;
+        border-radius: 15px;
+        border: 1px solid #e2e8f0;
         margin-top: 10px;
-        z-index: 1;
-    }
-
-    /* SIDEBAR OVERLAY UNTUK RESPONSIVE */
-    .sidebar-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.4);
-        z-index: 99;
-    }
-    .sidebar-overlay.active { display: block; }
-
-    @media (max-width: 991.98px) {
-        .sidebar {
-            left: calc(-1 * var(--sidebar-width));
-            box-shadow: none;
-        }
-        .sidebar.open {
-            left: 0;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
-        }
-        .main-content {
-            margin-left: 0;
-            padding: 20px 16px 30px;
-        }
-        .info-grid { grid-template-columns: 1fr; }
     }
     </style>
 </head>
 
 <body>
 
-    <!-- SIDEBAR OVERLAY -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="detail-container">
+        <a href="<?= base_url('petani/lahan') ?>" class="btn-back">← Kembali</a>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar" id="sidebarMenu">
-        <div class="sidebar-brand">
-            <div class="brand-icon"><i class="bi bi-patch-check-fill"></i></div>
-            <span>PETANI <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
+        <div class="image-wrapper">
+            <img src="<?= base_url('assets/uploads/lahan/'.$lahan['foto_lahan']) ?>" alt="Foto Lahan">
         </div>
 
-        <div class="sidebar-menu-wrapper">
-            <ul class="sidebar-menu">
-                <li class="menu-item <?= ($this->uri->segment(2) == 'dashboard' || $this->uri->segment(2) == '') ? 'active' : ''; ?>">
-                    <a href="<?= base_url('petani/dashboard'); ?>"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
-                </li>
-                <li class="menu-item <?= ($this->uri->segment(2) == 'lahan') ? 'active' : ''; ?>">
-                    <a href="<?= base_url('petani/lahan'); ?>"><i class="bi bi-geo-alt-fill"></i> Kelola Lahan</a>
-                </li>
-                <li class="menu-item <?= ($this->uri->segment(2) == 'panen') ? 'active' : ''; ?>">
-                    <a href="<?= base_url('petani/panen'); ?>"><i class="bi bi-textarea-rose"></i> Manajemen Panen</a>
-                </li>
-                <li class="menu-item <?= ($this->uri->segment(2) == 'produk') ? 'active' : ''; ?>">
-                    <a href="<?= base_url('petani/produk'); ?>"><i class="bi bi-box-seam"></i> Katalog Produk</a>
-                </li>
-                <li class="menu-item <?= ($this->uri->segment(2) == 'transaksi') ? 'active' : ''; ?>">
-                    <a href="<?= base_url('petani/transaksi'); ?>"><i class="bi bi-cart-check-fill"></i> Pesanan Masuk</a>
-                </li>
-                <li class="menu-item <?= ($this->uri->segment(2) == 'tracking') ? 'active' : ''; ?>">
-                    <a href="<?= base_url('petani/tracking'); ?>"><i class="bi bi-truck"></i> Tracking Kiriman</a>
-                </li>
-                <li class="menu-item <?= ($this->uri->segment(2) == 'laporan') ? 'active' : ''; ?>">
-                    <a href="<?= base_url('petani/laporan'); ?>"><i class="bi bi-file-earmark-bar-graph-fill"></i> Laporan</a>
-                </li>
-            </ul>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0; color: #1a202c;"><?= $lahan['nama_lahan'] ?></h2>
+            <span class="status-pill"><?= $lahan['status_lahan'] ?></span>
         </div>
 
-        <div class="sidebar-footer">
-            <button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
-                <i class="bi bi-box-arrow-right"></i> Keluar
-            </button>
-        </div>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
-                    style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
-                    <i class="bi bi-list"></i>
-                </button>
-                <h3 class="font-weight-bold text-coffee-primary d-inline-block align-middle mb-1"
-                    style="letter-spacing: -0.5px;">Detail Data Lahan</h3>
-                <p class="text-muted small mb-0">Dashboard / Kelola Lahan / Detail</p>
+        <div class="info-grid">
+            <div><span class="label-text">Jenis Kopi</span><span class="value-text"><?= $lahan['jenis_kopi'] ?></span>
             </div>
-            <div>
-                <a href="<?= base_url('petani/lahan/edit/'.$lahan['id_lahan']); ?>" class="btn btn-sm text-white mr-1" style="border-radius: 8px; background-color: #E6A15C;">
-                    <i class="fas fa-edit mr-1"></i> Edit
-                </a>
-                <a href="<?= base_url('petani/lahan'); ?>" class="btn btn-sm btn-outline-secondary" style="border-radius: 8px;">
-                    <i class="fas fa-arrow-left mr-1"></i> Kembali
-                </a>
+            <div><span class="label-text">Luas Lahan</span><span class="value-text"><?= $lahan['luas'] ?> Ha</span>
             </div>
+            <div><span class="label-text">Lokasi</span><span class="value-text"><?= $lahan['lokasi'] ?></span></div>
+            <div><span class="label-text">Koordinat</span><span class="value-text"><?= $lahan['latitude'] ?>,
+                    <?= $lahan['longitude'] ?></span></div>
         </div>
 
-        <div class="row">
-            <div class="col-lg-5 mb-4">
-                <div class="image-wrapper">
-                    <?php if(!empty($lahan['foto_lahan'])): ?>
-                        <img src="<?= base_url('assets/uploads/lahan/'.$lahan['foto_lahan']) ?>" alt="Foto Lahan">
+        <div style="margin-top: 25px;">
+            <span class="label-text">Peta Lokasi</span>
+            <div id="map"></div>
+        </div>
+
+        <div style="margin-top: 25px; border-top: 1px solid #edf2f7; padding-top: 20px;">
+            <span class="label-text">Catatan Lahan</span>
+            <p style="color: #4a5568; line-height: 1.6;">
+                <?= !empty($lahan['catatan']) ? $lahan['catatan'] : 'Tidak ada catatan tambahan.' ?>
+            </p>
+        </div>
+
+        <div style="margin-top: 30px; border-top: 1px solid #edf2f7; padding-top: 20px;">
+            <h4 style="color: #1a202c; margin-bottom: 15px;">Riwayat Panen</h4>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                <thead>
+                    <tr style="background: #f7fafc; text-align: left;">
+                        <th style="padding: 12px; border: 1px solid #e2e8f0;">Tanggal</th>
+                        <th style="padding: 12px; border: 1px solid #e2e8f0;">Jumlah (Kg)</th>
+                        <th style="padding: 12px; border: 1px solid #e2e8f0;">Kualitas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if(!empty($riwayat_panen)): ?>
+                    <?php foreach($riwayat_panen as $p): ?>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;"><?= $p->tanggal_panen; ?></td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;"><?= $p->jumlah_panen; ?> Kg</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;"><?= $p->kualitas; ?></td>
+                    </tr>
+                    <?php endforeach; ?>
                     <?php else: ?>
-                        <div class="d-flex justify-content-center align-items-center h-100 bg-light text-muted flex-column">
-                            <i class="fas fa-image fa-3x mb-2"></i>
-                            <span>Tidak ada foto lahan</span>
-                        </div>
+                    <tr>
+                        <td colspan="3"
+                            style="padding: 20px; text-align: center; border: 1px solid #e2e8f0; color: #718096;">Belum
+                            ada riwayat panen.</td>
+                    </tr>
                     <?php endif; ?>
-                    <span class="status-pill <?= (strtolower($lahan['status_lahan']) == 'inactive' || $lahan['status_lahan'] == 'nonaktif') ? 'inactive' : '' ?>">
-                        <i class="fas <?= (strtolower($lahan['status_lahan']) == 'inactive') ? 'fa-times-circle text-danger' : 'fa-check-circle text-success' ?>"></i> <?= $lahan['status_lahan'] ?>
-                    </span>
-                </div>
-                
-                <div class="card custom-card p-4 mt-4">
-                    <h5 class="fw-bold mb-3 text-coffee-primary">Catatan Perawatan</h5>
-                    <p style="color: #70655E; line-height: 1.6; font-size: 0.95rem;">
-                        <?= !empty($lahan['catatan']) ? nl2br(htmlspecialchars($lahan['catatan'])) : '<i class="text-muted">Tidak ada catatan tambahan.</i>' ?>
-                    </p>
-                </div>
-            </div>
-
-            <div class="col-lg-7">
-                <div class="card custom-card p-4 mb-4">
-                    <h4 class="fw-bold mb-4 text-coffee-primary pb-3" style="border-bottom: 2px solid #f0e6dd;">Informasi Lahan</h4>
-                    <h5 class="fw-bold text-dark mb-4"><?= htmlspecialchars($lahan['nama_lahan']) ?></h5>
-                    
-                    <div class="info-grid">
-                        <div>
-                            <span class="label-text"><i class="fas fa-leaf mr-1"></i> Jenis Kopi</span>
-                            <span class="value-text"><?= htmlspecialchars($lahan['jenis_kopi']) ?></span>
-                        </div>
-                        <div>
-                            <span class="label-text"><i class="fas fa-ruler-combined mr-1"></i> Luas Lahan</span>
-                            <span class="value-text"><?= htmlspecialchars($lahan['luas']) ?> <small>Hektar</small></span>
-                        </div>
-                        <div>
-                            <span class="label-text"><i class="fas fa-map-marker-alt mr-1"></i> Lokasi</span>
-                            <span class="value-text"><?= htmlspecialchars($lahan['lokasi']) ?></span>
-                        </div>
-                        <div>
-                            <span class="label-text"><i class="fas fa-satellite mr-1"></i> Koordinat</span>
-                            <span class="value-text" style="font-size: 0.95rem;"><?= htmlspecialchars($lahan['latitude']) ?>, <br><?= htmlspecialchars($lahan['longitude']) ?></span>
-                        </div>
-                    </div>
-
-                    <h6 class="fw-bold mt-4 mb-2 text-coffee-primary">Peta Lokasi (Leaflet)</h6>
-                    <div id="map"></div>
-                </div>
-
-                <div class="card custom-card p-4">
-                    <h5 class="fw-bold mb-3 text-coffee-primary d-flex justify-content-between align-items-center">
-                        Riwayat Panen
-                        <a href="<?= base_url('petani/panen') ?>" class="btn btn-sm btn-outline-secondary" style="border-radius: 6px;"><i class="fas fa-external-link-alt"></i></a>
-                    </h5>
-                    
-                    <div class="table-responsive">
-                        <table class="table table-hover mt-2">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th class="border-0 text-muted" style="border-radius: 10px 0 0 10px;">Tanggal</th>
-                                    <th class="border-0 text-muted">Jumlah (Kg)</th>
-                                    <th class="border-0 text-muted" style="border-radius: 0 10px 10px 0;">Kualitas</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if(!empty($riwayat_panen)): ?>
-                                <?php foreach($riwayat_panen as $p): ?>
-                                <tr>
-                                    <td class="align-middle fw-bold"><?= date('d M Y', strtotime($p->tanggal_panen)); ?></td>
-                                    <td class="align-middle text-success fw-bold"><?= $p->jumlah_panen; ?> Kg</td>
-                                    <td class="align-middle">
-                                        <span class="badge badge-pill <?= ($p->kualitas == 'Grade A') ? 'badge-success' : 'badge-warning' ?>"><?= $p->kualitas; ?></span>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                                <?php else: ?>
-                                <tr>
-                                    <td colspan="3" class="text-center py-4 text-muted">
-                                        <i class="fas fa-box-open fa-2x mb-2 text-light"></i><br>
-                                        Belum ada riwayat panen untuk lahan ini.
-                                    </td>
-                                </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var lat = <?= !empty($lahan['latitude']) ? $lahan['latitude'] : 0 ?>;
-        var lng = <?= !empty($lahan['longitude']) ? $lahan['longitude'] : 0 ?>;
-        
-        var map = L.map('map').setView([lat, lng], 15);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
-        
-        L.marker([lat, lng]).addTo(map)
-         .bindPopup("<b style='color:#4A2C11;'><?= htmlspecialchars($lahan['nama_lahan']) ?></b><br>Luas: <?= $lahan['luas'] ?> Ha").openPopup();
-
-        // FORCE RENDER
-        setTimeout(function() {
-            map.invalidateSize();
-        }, 300);
-    });
-
-    // Responsive Sidebar
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebarMenu = document.getElementById('sidebarMenu');
-    const sidebarOverlay = document.getElementById('sidebarOverlay');
-
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', function() {
-            sidebarMenu.classList.toggle('open');
-            sidebarOverlay.classList.toggle('active');
-        });
-    }
-    if (sidebarOverlay) {
-        sidebarOverlay.addEventListener('click', function() {
-            sidebarMenu.classList.remove('open');
-            sidebarOverlay.classList.remove('active');
-        });
-    }
+    var lat = <?= $lahan['latitude'] ?>;
+    var lng = <?= $lahan['longitude'] ?>;
+    var map = L.map('map').setView([lat, lng], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+    L.marker([lat, lng]).addTo(map).bindPopup("<b><?= $lahan['nama_lahan'] ?></b>").openPopup();
     </script>
+
 </body>
 
 </html>
