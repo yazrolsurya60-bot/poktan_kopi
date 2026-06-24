@@ -9,12 +9,16 @@ class Dashboard extends CI_Controller
 
         // 🔴 PERBAIKI: Cek apakah user sudah login
         if (!$this->session->userdata('id_user')) {
+<<<<<<< HEAD
             $this->session->set_userdata([
                 'id_user' => 1,
                 'role' => 'Admin',
                 'nama' => 'Test Admin'
             ]);
             // redirect('auth/login');
+=======
+            redirect('auth/login');
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
 
         // 🔴 PERBAIKI: Jika role tidak sesuai, redirect ke dashboard yang benar
