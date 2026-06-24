@@ -86,4 +86,10 @@ class Panen_model extends CI_Model {
         $this->db->where('status_lahan', 'Active');
         return $this->db->get('tb_lahan')->result_array();
     }
+    public function get_panen_by_lahan($id_lahan) {
+    // Ubah bagian 'panen' menjadi 'tb_panen'
+    return $this->db->where('id_lahan', $id_lahan)
+                    ->get('tb_panen') 
+                    ->result();
+}
 }

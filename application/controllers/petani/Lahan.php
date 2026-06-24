@@ -112,16 +112,28 @@ public function update() {
     redirect('petani/lahan');
 }
 public function detail($id) {
-        $data['lahan'] = $this->Lahan_model->get_detail($id);
-        if (empty($data['lahan'])) {
-            show_404();
-        }
-        $this->load->view('petani/lahan/detail', $data);
+    // 1. Ambil data lahan
+    $data['lahan'] = $this->Lahan_model->get_detail($id);
+    
+    // Validasi jika lahan tidak ditemukan
+    if (empty($data['lahan'])) {
+        show_404();
     }
+
+    // 2. Ambil data panen (Memanggil model milik teman Anda)
+    $this->load->model('Panen_model'); 
+    $data['riwayat_panen'] = $this->Panen_model->get_panen_by_lahan($id);
+    
+    // 3. Load view
+    // Pastikan nama file view-nya konsisten (apakah 'petani/lahan/detail' atau 'petani/lahan_detail')
+    $this->load->view('petani/lahan/detail', $data);
+}
 
     public function hapus($id) {
         $this->Lahan_model->hapus_data($id);
         $this->session->set_flashdata('message', 'Data berhasil dihapus');
         redirect('petani/lahan');
     }
+    
+  
 }

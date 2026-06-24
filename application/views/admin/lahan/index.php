@@ -5,376 +5,463 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title; ?></title>
-    <link class="sub-concept-link" rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link class="sub-concept-link" rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- FontAwesome tetap dipertahankan hanya untuk konten utama jika diperlukan -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <style>
+    :root {
+        --roasted-brown: #4A2C11;
+        --dark-coffee: #2C1808;
+        --amber-cream: #E6A15C;
+        --bg-cream: #FAF6F0;
+        --card-white: #FFFFFF;
+        --text-secondary: #70655E;
+        --sidebar-width: 260px;
+        --shadow-soft: 0 8px 30px rgba(44, 24, 8, 0.08);
+        --shadow-hover: 0 12px 40px rgba(44, 24, 8, 0.15);
+        --radius-card: 14px;
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
     body {
-        background-color: #f7f5f2 !important;
-        font-family: 'Nunito', 'Segoe UI', sans-serif;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: var(--bg-cream);
+        color: var(--dark-coffee);
+        overflow-x: hidden;
     }
 
-    /* --- STYLING SIDEBAR --- */
-    .sidebar-container {
-        min-width: 280px;
-        max-width: 280px;
-        background-color: #241408;
-        min-height: 100vh;
-        color: #bfa594;
+    /* --- SIDEBAR PREMIUM (SELARAS DENGAN DASHBOARD) --- */
+    .sidebar {
+        width: var(--sidebar-width);
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: linear-gradient(180deg, var(--dark-coffee) 0%, #1a0e04 100%);
+        color: var(--bg-cream);
+        z-index: 100;
+        transition: var(--transition-smooth);
+        box-shadow: 4px 0 25px rgba(44, 24, 8, 0.2);
+        display: flex;
+        flex-direction: column;
     }
 
-    .sidebar-brand-box {
-        padding: 24px;
+    .sidebar-brand {
+        padding: 28px 24px 20px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid rgba(250, 246, 240, 0.08);
+        color: var(--amber-cream);
         display: flex;
         align-items: center;
+        gap: 10px;
     }
 
-    .brand-icon-wrapper {
-        background-color: #3d2716;
-        width: 48px;
-        height: 48px;
+    .sidebar-brand .brand-icon {
+        width: 40px;
+        height: 40px;
+        background: rgba(230, 161, 92, 0.15);
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 14px;
-        color: #e5934c;
-        font-size: 1.25rem;
+        font-size: 1.3rem;
     }
 
-    .brand-title {
-        color: #e5934c;
-        font-weight: 700;
-        font-size: 1.25rem;
-        letter-spacing: 0.5px;
-        line-height: 1.2;
-    }
-
-    .brand-subtitle {
-        color: #8c7161;
-        font-size: 0.9rem;
+    .sidebar-menu-wrapper {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px 0;
     }
 
     .sidebar-menu {
         list-style: none;
-        padding: 0 16px;
         margin: 0;
+        padding: 0;
     }
 
-    .sidebar-item {
-        margin-bottom: 6px;
-    }
-
-    .sidebar-link {
+    .menu-item a {
         display: flex;
         align-items: center;
-        padding: 12px 16px;
-        color: #bfa594;
+        padding: 12px 24px;
+        color: #A8988A;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: var(--transition-smooth);
         text-decoration: none;
-        border-radius: 12px;
-        font-weight: 600;
-        transition: all 0.2s ease;
+        position: relative;
+        margin: 2px 10px;
+        border-radius: 10px;
     }
 
-    .sidebar-link i {
-        width: 24px;
-        font-size: 1.1rem;
-        margin-right: 12px;
+    .menu-item a i {
+        font-size: 1.15rem;
+        margin-right: 14px;
+        width: 22px;
         text-align: center;
     }
 
-    .sidebar-link:hover {
-        background-color: rgba(255, 255, 255, 0.03);
-        color: #e5934c;
-        text-decoration: none;
+    .menu-item a .menu-badge {
+        margin-left: auto;
+        background: rgba(230, 161, 92, 0.2);
+        color: var(--amber-cream);
+        font-size: 0.7rem;
+        padding: 2px 10px;
+        border-radius: 20px;
+        font-weight: 600;
     }
 
-    .sidebar-item.active .sidebar-link {
-        background-color: #3b2414;
+    .menu-item.active a,
+    .menu-item a:hover {
         color: #ffffff;
-        position: relative;
+        background: rgba(230, 161, 92, 0.12);
     }
 
-    .sidebar-item.active .sidebar-link::before {
+    .menu-item.active a {
+        background: rgba(230, 161, 92, 0.18);
+        border-left: 3px solid var(--amber-cream);
+    }
+
+    .menu-item.active a::before {
         content: '';
         position: absolute;
         left: 0;
-        top: 25%;
-        height: 50%;
-        width: 4px;
-        background-color: #e5934c;
-        border-radius: 0 4px 4px 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3px;
+        height: 24px;
+        background: var(--amber-cream);
+        border-radius: 0 3px 3px 0;
     }
 
-    .sidebar-badge {
-        background-color: #3b2414;
-        color: #e5934c;
-        font-size: 0.75rem;
-        padding: 2px 8px;
+    .sidebar-footer {
+        padding: 16px 20px;
+        border-top: 1px solid rgba(250, 246, 240, 0.06);
+        margin-top: auto;
+    }
+
+    .sidebar-footer .btn-logout {
+        width: 100%;
+        padding: 10px 16px;
+        border: 1px solid rgba(250, 246, 240, 0.1);
         border-radius: 10px;
-        font-weight: 700;
-        margin-left: auto;
+        background: transparent;
+        color: #A8988A;
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: var(--transition-smooth);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
     }
 
-    .btn-logout-sidebar {
-        border: 1px solid #3b2414;
-        background-color: transparent;
-        color: #bfa594;
-        border-radius: 12px;
-        font-weight: 600;
-        transition: all 0.2s;
+    .sidebar-footer .btn-logout:hover {
+        background: rgba(230, 161, 92, 0.1);
+        color: #ffffff;
+        border-color: rgba(230, 161, 92, 0.2);
     }
 
-    .btn-logout-sidebar:hover {
-        background-color: #c94a4a;
-        color: white;
-        border-color: #c94a4a;
-    }
-
-    /* --- STYLING KONTEN UTAMA --- */
+    /* --- MAIN CONTENT ADJUSTMENT --- */
     .main-content {
+        margin-left: var(--sidebar-width);
+        padding: 30px 40px 40px;
+        min-height: 100vh;
+        transition: var(--transition-smooth);
         flex-grow: 1;
-        padding: 30px;
-        height: 100vh;
-        overflow-y: auto;
     }
 
     .text-coffee-primary {
-        color: #241408;
+        color: var(--dark-coffee);
     }
 
     .btn-coffee-submit {
-        background-color: #4a2f1b;
+        background-color: var(--roasted-brown);
         color: #f7f5f2;
+        border-radius: 10px;
     }
 
     .btn-coffee-submit:hover {
-        background-color: #241408;
-        color: #e5934c;
+        background-color: var(--dark-coffee);
+        color: var(--amber-cream);
     }
 
     .card-header-coffee {
-        background-color: #241408;
-        color: #e5934c;
+        background-color: var(--dark-coffee);
+        color: var(--amber-cream);
     }
 
     .badge-table-total {
-        background-color: #3b2414;
-        color: #e5934c;
+        background-color: rgba(230, 161, 92, 0.2);
+        color: var(--amber-cream);
+    }
+
+    /* RESPONSIVE SIDEBAR */
+    @media (max-width: 991.98px) {
+        .sidebar {
+            left: calc(-1 * var(--sidebar-width));
+            box-shadow: none;
+        }
+
+        .sidebar.open {
+            left: 0;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-content {
+            margin-left: 0;
+            padding: 20px 16px 30px;
+        }
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 99;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    .sidebar-menu-wrapper::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .sidebar-menu-wrapper::-webkit-scrollbar-thumb {
+        background: rgba(230, 161, 92, 0.3);
+        border-radius: 10px;
     }
     </style>
 </head>
 
 <body>
 
-    <div class="d-flex">
-        <div class="sidebar-container d-flex flex-column justify-content-between">
-            <div>
-                <div class="sidebar-brand-box">
-                    <div class="brand-icon-wrapper mr-3">
-                        <i class="fas fa-certificate"></i>
-                    </div>
-                    <div>
-                        <div class="brand-title">POKTAN</div>
-                        <div class="brand-subtitle">Liberchain</div>
-                    </div>
-                </div>
-                <hr class="m-0" style="border-top: 1px solid rgba(255,255,255,0.05);">
+    <!-- SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-                <ul class="sidebar-menu mt-4">
-                    <li class="sidebar-item">
-                        <a href="<?= base_url('admin/dashboard') ?>" class="sidebar-link">
-                            <i class="fas fa-th-large"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            <i class="fas fa-users"></i> Manajemen User <span class="sidebar-badge">12</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            <i class="fas fa-address-card"></i> Data Petani
-                        </a>
-                    </li>
-                    <li class="sidebar-item active">
-                        <a href="<?= base_url('admin/lahan') ?>" class="sidebar-link">
-                            <i class="fas fa-map"></i> Manajemen Lahan
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            <i class="fas fa-tree"></i> Manajemen Panen
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            <i class="fas fa-box"></i> Manajemen Produk
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            <i class="fas fa-wallet"></i> Transaksi <span class="sidebar-badge">8</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            <i class="fas fa-truck"></i> Manajemen Kurir
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            <i class="fas fa-store"></i> Manajemen Mitra
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            <i class="fas fa-file-invoice-dollar"></i> Laporan & Analytics
-                        </a>
-                    </li>
-                </ul>
+    <!-- SIDEBAR (Sekarang Selaras & Menu Lahan Otomatis Aktif Coklat) -->
+    <div class="sidebar" id="sidebarMenu">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="bi bi-patch-check-fill"></i>
             </div>
+            <span>POKTAN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
+        </div>
+        <div class="sidebar-menu-wrapper">
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="<?= base_url('admin/dashboard'); ?>">
+                        <i class="bi bi-grid-1x2-fill"></i>Dashboard
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('admin/user'); ?>">
+                        <i class="bi bi-people-fill"></i>Manajemen User
+                        <span class="menu-badge">12</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('admin/petani'); ?>">
+                        <i class="bi bi-person-badge-fill"></i>Data Petani
+                    </a>
+                </li>
+                <!-- Menu Lahan Aktif -->
+                <li class="menu-item active">
+                    <a href="<?= base_url('admin/lahan'); ?>">
+                        <i class="bi bi-map-fill"></i>Manajemen Lahan
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('admin/panen'); ?>">
+                        <i class="bi bi-tree-fill"></i>Manajemen Panen
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('admin/produk'); ?>">
+                        <i class="bi bi-box-seam-fill"></i>Manajemen Produk
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('admin/transaksi'); ?>">
+                        <i class="bi bi-wallet2"></i>Transaksi
+                        <span class="menu-badge">8</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('admin/kurir'); ?>">
+                        <i class="bi bi-truck"></i>Manajemen Kurir
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('admin/mitra'); ?>">
+                        <i class="bi bi-shop"></i>Manajemen Mitra
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('admin/laporan'); ?>">
+                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan & Analytics
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="sidebar-footer">
+            <button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
+                <i class="bi bi-box-arrow-right"></i> Keluar
+            </button>
+        </div>
+    </div>
 
-            <div class="p-3">
-                <a href="<?= base_url('auth/logout') ?>" class="btn btn-logout-sidebar btn-block py-2">
-                    <i class="fas fa-sign-out-alt mr-2"></i> Keluar
-                </a>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- Bagian atas halaman dengan Tombol Toggle Menu Responsif -->
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+            <div>
+                <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
+                    style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h3 class="font-weight-bold text-coffee-primary d-inline-block align-middle mb-0">
+                    <i class="fas fa-layer-group mr-2" style="color: #4a2f1b;"></i>Panel Admin: Data Lahan Kopi
+                </h3>
+                <p class="text-muted small mb-0 mt-1 ml-lg-5">Memantau seluruh persebaran lahan petani kopi yang
+                    terdaftar di sistem.</p>
             </div>
         </div>
 
-        <div class="main-content">
-            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-                <div>
-                    <h3 class="font-weight-bold text-coffee-primary"><i class="fas fa-layer-group mr-2"
-                            style="color: #4a2f1b;"></i>Panel Admin: Data Lahan Kopi</h3>
-                    <p class="text-muted small mb-0">Memantau seluruh persebaran lahan petani kopi yang terdaftar di
-                        sistem.</p>
-                </div>
-            </div>
+        <?php if ($this->session->flashdata('success')) : ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle mr-1"></i> <?= $this->session->flashdata('success'); ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <?php endif; ?>
 
-            <?php if ($this->session->flashdata('success')) : ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="fas fa-check-circle mr-1"></i> <?= $this->session->flashdata('success'); ?>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <?php endif; ?>
-
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body bg-white rounded">
-                    <h6 class="font-weight-bold text-muted mb-3"><i class="fas fa-filter mr-1"></i> Filter Data Lahan
-                    </h6>
-                    <form action="<?= base_url('admin/lahan') ?>" method="GET">
-                        <div class="form-row align-items-end">
-                            <div class="col-md-4 mb-2">
-                                <label class="small font-weight-bold text-secondary">Status Lahan</label>
-                                <select name="status_lahan" class="form-control form-control-sm"
-                                    style="border-color: #bfa594;">
-                                    <option value="">-- Semua Status --</option>
-                                    <option value="Active"
-                                        <?= $this->input->get('status_lahan') == 'Active' ? 'selected' : ''; ?>>Active
-                                    </option>
-                                    <option value="Inactive"
-                                        <?= $this->input->get('status_lahan') == 'Inactive' ? 'selected' : ''; ?>>
-                                        Inactive</option>
-                                </select>
-                            </div>
-                            <div class="col-md-5 mb-2">
-                                <label class="small font-weight-bold text-secondary">Cari Lokasi / Alamat</label>
-                                <input type="text" name="lokasi" class="form-control form-control-sm"
-                                    style="border-color: #bfa594;" placeholder="Masukkan nama daerah atau kota..."
-                                    value="<?= $this->input->get('lokasi'); ?>">
-                            </div>
-                            <div class="col-md-3 mb-2">
-                                <div class="btn-group w-100">
-                                    <button type="submit" class="btn btn-coffee-submit btn-sm w-100 font-weight-bold">
-                                        <i class="fas fa-search"></i> Cari
-                                    </button>
-                                    <a href="<?= base_url('admin/lahan') ?>" class="btn btn-outline-secondary btn-sm">
-                                        <i class="fas fa-undo"></i> Reset
-                                    </a>
-                                </div>
+        <!-- FILTER DATA LAHAN -->
+        <div class="card shadow-sm border-0 mb-4" style="border-radius: var(--radius-card);">
+            <div class="card-body bg-white rounded-lg">
+                <h6 class="font-weight-bold text-muted mb-3"><i class="fas fa-filter mr-1"></i> Filter Data Lahan</h6>
+                <form action="<?= base_url('admin/lahan') ?>" method="GET">
+                    <div class="form-row align-items-end">
+                        <div class="col-md-4 mb-2">
+                            <label class="small font-weight-bold text-secondary">Status Lahan</label>
+                            <select name="status_lahan" class="form-control form-control-sm"
+                                style="border-color: #bfa594; height: 38px; border-radius: 8px;">
+                                <option value="">-- Semua Status --</option>
+                                <option value="Active"
+                                    <?= $this->input->get('status_lahan') == 'Active' ? 'selected' : ''; ?>>Active
+                                </option>
+                                <option value="Inactive"
+                                    <?= $this->input->get('status_lahan') == 'Inactive' ? 'selected' : ''; ?>>Inactive
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-5 mb-2">
+                            <label class="small font-weight-bold text-secondary">Cari Lokasi / Alamat</label>
+                            <input type="text" name="lokasi" class="form-control form-control-sm"
+                                style="border-color: #bfa594; height: 38px; border-radius: 8px;"
+                                placeholder="Masukkan nama daerah atau kota..."
+                                value="<?= $this->input->get('lokasi'); ?>">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <div class="btn-group w-100">
+                                <button type="submit" class="btn btn-coffee-submit btn-sm w-100 font-weight-bold"
+                                    style="height: 38px;">
+                                    <i class="fas fa-search"></i> Cari
+                                </button>
+                                <a href="<?= base_url('admin/lahan') ?>"
+                                    class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-undo"></i>
+                                </a>
                             </div>
                         </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="card shadow border-0">
-                <div class="card-header card-header-coffee d-flex justify-content-between align-items-center">
-                    <h5 class="m-0 font-weight-bold" style="font-size: 1.05rem;"><i
-                            class="fas fa-map-marked-alt mr-2"></i>Daftar Pengawasan Seluruh Lahan</h5>
-                    <span class="badge badge-table-total px-3 py-2 font-weight-bold">Total: <?= count($lahan) ?> Item
-                        Terdata</span>
-                </div>
-                <div class="card-body bg-white">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover mb-0" width="100%" cellspacing="0">
-                            <thead class="thead-light text-center">
-                                <tr>
-                                    <th width="5%" class="align-middle">No</th>
-                                    <th width="12%" class="align-middle">Foto Lahan</th>
-                                    <th class="align-middle">Nama Lahan</th>
-                                    <th class="align-middle">Jenis Kopi</th>
-                                    <th class="align-middle">Luas (Ha)</th>
-                                    <th class="align-middle">Alamat / Lokasi</th>
-                                    <th class="align-middle">Catatan Perawatan</th>
-                                    <th width="15%" class="align-middle">Status Lahan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (!empty($lahan)) : ?>
-                                <?php $no = 1; foreach ($lahan as $lh) : ?>
-                                <tr>
-                                    <td class="text-center align-middle font-weight-bold text-muted"><?= $no++; ?></td>
-                                    <td class="text-center align-middle">
-                                        <?php if (!empty($lh['foto_lahan'])) : ?>
-                                        <img src="<?= base_url('assets/uploads/lahan/' . $lh['foto_lahan']) ?>"
-                                            class="img-thumbnail rounded shadow-sm"
-                                            style="max-width: 75px; height: auto;">
-                                        <?php else : ?>
-                                        <span class="badge badge-secondary p-1 small shadow-sm">No Photo</span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td class="align-middle">
-                                        <span class="font-weight-bold"
-                                            style="color: #4a2f1b;"><?= $lh['nama_lahan']; ?></span>
-                                        <br><small class="text-muted font-italic">Pemilik ID:
-                                            #<?= $lh['id_user']; ?></small>
-                                    </td>
-                                    <td class="align-middle text-center font-weight-bold"><?= $lh['jenis_kopi']; ?></td>
-                                    <td class="align-middle text-center text-dark font-weight-bold">
-                                        <?= number_format($lh['luas'], 2, ',', '.'); ?> Ha</td>
-                                    <td class="align-middle text-muted small"><?= $lh['lokasi']; ?></td>
-
-                                    <td class="align-middle text-secondary small">
-                                        <?= !empty($lh['catatan']) ? character_limiter($lh['catatan'], 50) : '<span class="text-muted font-italic">- Tidak ada catatan -</span>'; ?>
-                                    </td>
-
-                                    <td class="text-center align-middle">
-                                        <?php if (strtolower($lh['status_lahan']) == 'active') : ?>
-                                        <span class="badge badge-success px-3 py-2 shadow-sm"><i
-                                                class="fas fa-check-circle mr-1"></i> Active</span>
-                                        <?php else : ?>
-                                        <span class="badge badge-danger px-3 py-2 shadow-sm"><i
-                                                class="fas fa-times-circle mr-1"></i> Inactive</span>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                                <?php else : ?>
-                                <tr>
-                                    <td colspan="8" class="text-center text-muted py-5">
-                                        <i class="fas fa-folder-open fa-3x mb-3 text-secondary"></i>
-                                        <p class="mb-0 font-weight-bold text-secondary">Data lahan tidak ditemukan atau
-                                            filter tidak cocok.</p>
-                                    </td>
-                                </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
                     </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- DAFTAR LAHAN -->
+        <div class="card shadow border-0" style="border-radius: var(--radius-card); overflow: hidden;">
+            <div class="card-header card-header-coffee d-flex justify-content-between align-items-center py-3">
+                <h5 class="m-0 font-weight-bold" style="font-size: 1.05rem;"><i
+                        class="fas fa-map-marked-alt mr-2"></i>Daftar Pengawasan Seluruh Lahan</h5>
+                <span class="badge badge-table-total px-3 py-2 font-weight-bold" style="border-radius: 20px;">Total:
+                    <?= count($lahan) ?> Item Terdata</span>
+            </div>
+            <div class="card-body bg-white">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover mb-0" width="100%" cellspacing="0"
+                        style="font-size: 0.85rem;">
+                        <thead class="thead-light text-center">
+                            <tr>
+                                <th width="5%" class="align-middle">No</th>
+                                <th width="12%" class="align-middle">Foto Lahan</th>
+                                <th class="align-middle">Nama Lahan</th>
+                                <th class="align-middle">Jenis Kopi</th>
+                                <th class="align-middle">Luas (Ha)</th>
+                                <th class="align-middle">Alamat / Lokasi</th>
+                                <th class="align-middle">Catatan Perawatan</th>
+                                <th width="15%" class="align-middle">Status Lahan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($lahan)) : ?>
+                            <?php $no = 1; foreach ($lahan as $lh) : ?>
+                            <tr>
+                                <td class="text-center align-middle font-weight-bold text-muted"><?= $no++; ?></td>
+                                <td class="text-center align-middle">
+                                    <?php if (!empty($lh['foto_lahan'])) : ?>
+                                    <img src="<?= base_url('assets/uploads/lahan/' . $lh['foto_lahan']) ?>"
+                                        class="img-thumbnail rounded shadow-sm" style="max-width: 75px; height: auto;">
+                                    <?php else : ?>
+                                    <span class="badge badge-secondary p-1 small shadow-sm">No Photo</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="font-weight-bold"
+                                        style="color: var(--roasted-brown);"><?= $lh['nama_lahan']; ?></span>
+                                    <br><small class="text-muted font-italic">Pemilik ID:
+                                        #<?= $lh['id_user']; ?></small>
+                                </td>
+                                <td class="align-middle text-center font-weight-bold"><?= $lh['jenis_kopi']; ?></td>
+                                <td class="align-middle text-center text-dark font-weight-bold">
+                                    <?= number_format($lh['luas'], 2, ',', '.'); ?> Ha</td>
+                                <td class="align-middle text-muted small"><?= $lh['lokasi']; ?></td>
+                                <td class="align-middle text-secondary small">
+                                    <?= !empty($lh['catatan']) ? character_limiter($lh['catatan'], 50) : '<span class="text-muted font-italic">- Tidak ada catatan -</span>'; ?>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <?php if (strtolower($lh['status_lahan']) == 'active') : ?>
+                                    <span class="badge badge-success px-3 py-2 shadow-sm"
+                                        style="border-radius: 20px;"><i class="fas fa-check-circle mr-1"></i>
+                                        Active</span>
+                                    <?php else : ?>
+                                    <span class="badge badge-danger px-3 py-2 shadow-sm" style="border-radius: 20px;"><i
+                                            class="fas fa-times-circle mr-1"></i> Inactive</span>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php else : ?>
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-5">
+                                    <i class="fas fa-folder-open fa-3x mb-3 text-secondary"></i>
+                                    <p class="mb-0 font-weight-bold text-secondary">Data lahan tidak ditemukan atau
+                                        filter tidak cocok.</p>
+                                </td>
+                            </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -382,6 +469,25 @@
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // SCRIPT JAVASCRIPT UNTUK MENU RESPONSIF (SUPAYA SAMA DENGAN DASHBOARD)
+    const sidebar = document.getElementById('sidebarMenu');
+    const overlay = document.getElementById('sidebarOverlay');
+    const toggleBtn = document.getElementById('sidebarToggle');
+
+    function toggleSidebar() {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+        document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', toggleSidebar);
+    }
+    if (overlay) {
+        overlay.addEventListener('click', toggleSidebar);
+    }
+    </script>
 </body>
 
 </html>
