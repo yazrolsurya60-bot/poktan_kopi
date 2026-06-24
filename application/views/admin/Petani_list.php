@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -874,7 +874,7 @@
 		</div>
 		<div class="sidebar-menu-wrapper">
 			<ul class="sidebar-menu">
-				<li class="menu-item active">
+				<li class="menu-item">
 					<a href="<?= base_url('admin/dashboard'); ?>">
 						<i class="bi bi-grid-1x2-fill"></i>Dashboard
 					</a>
@@ -885,7 +885,7 @@
 						<span class="menu-badge">12</span>
 					</a>
 				</li>
-				<li class="menu-item">
+				<li class="menu-item active">
 					<a href="<?= base_url('admin/petani'); ?>">
 						<i class="bi bi-person-badge-fill"></i>Data Petani
 					</a>
@@ -1442,8 +1442,8 @@
 		// Refresh setiap 60 detik
 		// setInterval(refreshNotifications, 60000);
 
-		console.log('✅ Modul 11: Dashboard f& Notifikasi siap digunakan!');
-		console.log('📋 Fitur yang tersedia:');
+		console.log('âœ… Modul 11: Dashboard f& Notifikasi siap digunakan!');
+		console.log('ðŸ“‹ Fitur yang tersedia:');
 		console.log('   - KPI Cards (M11-F01)');
 		console.log('   - Grafik Penjualan (M10-F02)');
 		console.log('   - Produk Terlaris (M10-F04)');
