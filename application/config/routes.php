@@ -110,6 +110,7 @@ $route['admin/mitra/toggle/(:num)'] = 'admin/Mitra/toggle/$1';
 
 $route['landing'] = 'Landing/index';
 
+<<<<<<< HEAD
 
 // ============================================================
 // MODUL 6: TRANSAKSI
@@ -147,3 +148,28 @@ $route['pembeli/transaksi/upload_bukti'] = 'pembeli/transaksi/upload_bukti';
 // LANDING PRODUK - TAMBAHKAN INI!
 // ============================================
 $route['landing/produk'] = 'Landing/produk';
+=======
+// ============================================
+// MODUL 7: TRACKING PENGIRIMAN
+// ============================================
+
+// Pembeli Tracking (M07-F01, M07-F04, M07-F05, M07-F07)
+$route['pembeli/tracking'] = 'pembeli/Tracking/index';
+$route['pembeli/tracking/detail/(:num)'] = 'pembeli/Tracking/detail/$1';
+$route['pembeli/tracking/history'] = 'pembeli/Tracking/history';
+$route['pembeli/tracking/approve/(:num)'] = 'pembeli/Tracking/approve/$1';
+
+// Petani Tracking (M07-F02)
+$route['petani/tracking'] = 'petani/Tracking/index';
+$route['petani/tracking/update/(:num)'] = 'petani/Tracking/update/$1';
+
+// Kurir Tracking (M07-F03)
+$route['kurir/tracking'] = 'kurir/Tracking/index';
+$route['kurir/tracking/update_location/(:num)'] = 'kurir/Tracking/update_location/$1';
+$route['kurir/tracking/api_update_location'] = 'kurir/Tracking/api_update_location';
+
+// API Tracking
+$route['api/tracking/get'] = 'api/Tracking/get';
+$route['api/tracking/history'] = 'api/Tracking/history';
+$route['api/tracking/estimasi'] = 'api/Tracking/estimasi';
+>>>>>>> d6191db3a988433cbc0bfc6401bfa64adccddae2
