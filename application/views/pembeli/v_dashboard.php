@@ -280,10 +280,20 @@
             gap: 12px;
             transition: var(--transition-smooth);
             cursor: pointer;
+<<<<<<< HEAD
+            text-decoration: none;
+            color: inherit;
+=======
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
 
         .notif-item:hover {
             background: var(--bg-cream);
+<<<<<<< HEAD
+            text-decoration: none;
+            color: inherit;
+=======
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
 
         .notif-item .notif-icon {
@@ -323,6 +333,18 @@
             font-weight: 600;
         }
 
+<<<<<<< HEAD
+        .notif-badge-new {
+            background: var(--amber-cream);
+            color: white;
+            font-size: 0.55rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            align-self: center;
+        }
+
+=======
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         /* --- ACTION CARDS --- */
         .action-card { 
             background: var(--card-white); 
@@ -812,6 +834,67 @@
                 <i class="bi bi-list"></i>
             </button>
             <h2 class="d-inline-block align-middle mb-0">Ruang Belanja Member</h2>
+<<<<<<< HEAD
+            <p class="subtitle mb-0 mt-1">Selamat datang, <span id="memberName" style="color: var(--amber-cream); font-weight:600;"><?= $this->session->userdata('nama') ?? 'Pembeli' ?></span>! <span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span></p>
+        </div>
+        <div class="d-flex align-items-center gap-3" style="gap: 12px;">
+            <!-- NOTIFICATION BELL (M11-F01) - DINAMIS DARI DATABASE -->
+            <div style="position: relative;">
+                <button class="notif-btn" id="notifToggle">
+                    <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
+                    <?php if (isset($unread_count) && $unread_count > 0): ?>
+                        <span class="notif-dot" id="notifCount"><?= $unread_count ?></span>
+                    <?php else: ?>
+                        <span class="notif-dot" id="notifCount" style="display:none;">0</span>
+                    <?php endif; ?>
+                </button>
+
+                <div class="notif-dropdown" id="notifDropdown">
+                    <div class="notif-dropdown-header">
+                        <span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
+                        <a href="<?= base_url('pembeli/dashboard/history'); ?>" style="font-size:0.75rem; color: var(--amber-cream); font-weight:500; text-decoration:none;">Lihat Semua</a>
+                    </div>
+                    <div class="notif-dropdown-list" id="notifList">
+                        <?php if (!empty($notifikasi)): ?>
+                            <?php foreach ($notifikasi as $n): ?>
+                                <a class="notif-item <?= (isset($n->status_baca) && $n->status_baca == 0) ? 'unread' : ''; ?>" 
+                                   href="<?= base_url('pembeli/dashboard/read/' . $n->id_notifikasi); ?>">
+                                    <?php
+                                    $icon_type = $n->icon ?? 'info';
+                                    $icon_map = [
+                                        'success' => 'bi-check-circle-fill',
+                                        'warning' => 'bi-exclamation-triangle-fill',
+                                        'danger'  => 'bi-x-circle-fill',
+                                        'info'    => 'bi-info-circle-fill',
+                                        'primary' => 'bi-star-fill'
+                                    ];
+                                    $icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+                                    ?>
+                                    <div class="notif-icon <?= $icon_type; ?>">
+                                        <i class="bi <?= $icon_class; ?>"></i>
+                                    </div>
+                                    <div class="notif-text">
+                                        <?= htmlspecialchars($n->judul ?? 'Notifikasi'); ?><br>
+                                        <small><?= htmlspecialchars($n->isi_notifikasi); ?></small>
+                                        <span class="notif-time"><?= date('d M Y, H:i', strtotime($n->tanggal_buat)); ?></span>
+                                    </div>
+                                    <?php if (isset($n->status_baca) && $n->status_baca == 0): ?>
+                                        <span class="notif-badge-new">Baru</span>
+                                    <?php endif; ?>
+                                </a>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="text-center text-muted py-5 px-3">
+                                <i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
+                                <p class="small mb-0">Tidak ada notifikasi</p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="p-2 text-center border-top" style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+                        <a href="<?= base_url('pembeli/dashboard/settings'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
+                            <i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
+                        </a>
+=======
             <p class="subtitle mb-0 mt-1">Selamat datang, <span id="memberName" style="color: var(--amber-cream); font-weight:600;">Pembeli</span>! <span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span></p>
         </div>
         <div class="d-flex align-items-center gap-3" style="gap: 12px;">
@@ -862,13 +945,18 @@
                                 <span class="notif-time">5 jam lalu</span>
                             </div>
                         </div>
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
                     </div>
                 </div>
             </div>
             <!-- USER AVATAR -->
             <div class="d-flex align-items-center gap-2" style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
                 <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
+<<<<<<< HEAD
+                <span style="font-weight:500; font-size:0.85rem;"><?= $this->session->userdata('nama') ?? 'Pembeli' ?></span>
+=======
                 <span style="font-weight:500; font-size:0.85rem;">Pembeli</span>
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
             </div>
         </div>
     </div>
@@ -1202,6 +1290,27 @@
     // 3. MARK ALL READ (M11-F03)
     // ============================================
     function markAllRead() {
+<<<<<<< HEAD
+        if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+            $.ajax({
+                url: '<?= base_url('pembeli/dashboard/mark_all_read'); ?>',
+                type: 'POST',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert('Gagal menandai semua notifikasi.');
+                    }
+                },
+                error: function() {
+                    alert('Terjadi kesalahan. Silakan coba lagi.');
+                }
+            });
+        }
+    }
+
+=======
         document.querySelectorAll('.notif-item.unread').forEach(item => {
             item.classList.remove('unread');
         });
@@ -1214,6 +1323,7 @@
         markAllRead();
     });
 
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
     // ============================================
     // 4. TRACKING MAP (M07-F04)
     // ============================================
@@ -1383,7 +1493,11 @@
         // Set member name from session
         const memberNameEl = document.getElementById('memberName');
         if (memberNameEl) {
+<<<<<<< HEAD
+            memberNameEl.textContent = '<?= $this->session->userdata('nama') ?? 'Pembeli' ?>';
+=======
             // memberNameEl.textContent = '<?= $this->session->userdata('nama'); ?>';
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
     });
 
@@ -1407,4 +1521,8 @@
     console.log('   - Setting Notifikasi (M11-F03)');
 </script>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
