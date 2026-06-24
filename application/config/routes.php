@@ -1,54 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/*
-| -------------------------------------------------------------------------
-| URI ROUTING
-| -------------------------------------------------------------------------
-| This file lets you re-map URI requests to specific controller functions.
-|
-| Typically there is a one-to-one relationship between a URL string
-| and its corresponding controller class/method. The segments in a
-| URL normally follow this pattern:
-|
-|	example.com/class/method/id/
-|
-| In some instances, however, you may want to remap this relationship
-| so that a different class/function is called than the one
-| corresponding to the URL.
-|
-| Please see the user guide for complete details:
-|
-|	https://codeigniter.com/userguide3/general/routing.html
-|
-| -------------------------------------------------------------------------
-| RESERVED ROUTES
-| -------------------------------------------------------------------------
-|
-| There are three reserved routes:
-|
-|	$route['default_controller'] = 'welcome';
-|
-| This route indicates which controller class should be loaded if the
-| URI contains no data. In the above example, the "welcome" class
-| would be loaded.
-|
-|	$route['404_override'] = 'errors/page_missing';
-|
-| This route will tell the Router which controller/method to use if those
-| provided in the URL cannot be matched to a valid route.
-|
-|	$route['translate_uri_dashes'] = FALSE;
-|
-| This is not exactly a route, but allows you to automatically route
-| controller and method names that contain dashes. '-' isn't a valid
-| class or method name character, so it requires translation.
-| When you set this option to TRUE, it will replace ALL dashes in the
-| controller and method URI segments.
-|
-| Examples:	my-controller/index	-> my_controller/index
-|		my-controller/my-method	-> my_controller/my_method
-*/
 $route['default_controller'] = 'Landing';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
@@ -71,14 +23,14 @@ $route['notifikasi/history'] = 'Notifikasi/history';
 $route['notifikasi/setting'] = 'Notifikasi/setting';
 $route['notifikasi/read/(:num)'] = 'Notifikasi/read/$1';
 
-// API Notifikasi (untuk AJAX)
+// API Notifikasi
 $route['api/notifikasi/get'] = 'api/Notifikasi/get';
 $route['api/notifikasi/mark_read'] = 'api/Notifikasi/mark_read';
 $route['api/notifikasi/mark_all_read'] = 'api/Notifikasi/mark_all_read';
 $route['api/notifikasi/update_setting'] = 'api/Notifikasi/update_setting';
 $route['api/notifikasi/get_settings'] = 'api/Notifikasi/get_settings';
 
-// Authentication Routes
+// Authentication
 $route['auth/login'] = 'Auth/login';
 $route['auth/register'] = 'Auth/register';
 $route['auth/logout'] = 'Auth/logout';
@@ -88,11 +40,10 @@ $route['auth/verify/(:any)'] = 'Auth/verify/$1';
 $route['auth/change_password'] = 'Auth/change_password';
 $route['auth/profile'] = 'Auth/profile';
 
-// User Profile Redirections for farmers & buyers
 $route['petani/profil'] = 'Auth/profile';
 $route['pembeli/profil'] = 'Auth/profile';
 
-// Admin User Management Routes
+// Admin User Management
 $route['admin/user'] = 'admin/Users/index';
 $route['admin/user/add'] = 'admin/Users/add';
 $route['admin/user/edit/(:num)'] = 'admin/Users/edit/$1';
@@ -100,7 +51,7 @@ $route['admin/user/delete/(:num)'] = 'admin/Users/delete/$1';
 $route['admin/user/toggle/(:num)'] = 'admin/Users/toggle/$1';
 
 // ============================================
-// MODUL 9: MANAJEMEN MITRA & LANDING PAGE MITRA
+// MODUL 9: MANAJEMEN MITRA
 // ============================================
 $route['admin/mitra'] = 'admin/Mitra/index';
 $route['admin/mitra/add'] = 'admin/Mitra/add';
@@ -109,8 +60,6 @@ $route['admin/mitra/delete/(:num)'] = 'admin/Mitra/delete/$1';
 $route['admin/mitra/toggle/(:num)'] = 'admin/Mitra/toggle/$1';
 
 $route['landing'] = 'Landing/index';
-
-<<<<<<< HEAD
 
 // ============================================================
 // MODUL 6: TRANSAKSI
@@ -136,7 +85,7 @@ $route['admin/transaksi/konfirmasi_bayar'] = 'admin/transaksi/konfirmasi_bayar';
 $route['admin/transaksi/update_status/(:num)'] = 'admin/transaksi/update_status/$1';
 $route['admin/transaksi/export_excel'] = 'admin/transaksi/export_excel';
 $route['admin/transaksi/export_pdf'] = 'admin/transaksi/export_pdf';
-$route['admin/invoice/(:num)'] = 'admin/transaksi/invoice/$1';
+$route['admin/transaksi/invoice/(:num)'] = 'admin/transaksi/invoice/$1';
 
 // Pembeli Transaksi
 $route['pembeli/transaksi/history'] = 'pembeli/transaksi/history';
@@ -144,32 +93,5 @@ $route['pembeli/transaksi/detail/(:num)'] = 'pembeli/transaksi/detail/$1';
 $route['pembeli/transaksi/batalkan/(:num)'] = 'pembeli/transaksi/batalkan/$1';
 $route['pembeli/transaksi/upload_bukti'] = 'pembeli/transaksi/upload_bukti';
 
-// ============================================
-// LANDING PRODUK - TAMBAHKAN INI!
-// ============================================
-$route['landing/produk'] = 'Landing/produk';
-=======
-// ============================================
-// MODUL 7: TRACKING PENGIRIMAN
-// ============================================
-
-// Pembeli Tracking (M07-F01, M07-F04, M07-F05, M07-F07)
-$route['pembeli/tracking'] = 'pembeli/Tracking/index';
-$route['pembeli/tracking/detail/(:num)'] = 'pembeli/Tracking/detail/$1';
-$route['pembeli/tracking/history'] = 'pembeli/Tracking/history';
-$route['pembeli/tracking/approve/(:num)'] = 'pembeli/Tracking/approve/$1';
-
-// Petani Tracking (M07-F02)
-$route['petani/tracking'] = 'petani/Tracking/index';
-$route['petani/tracking/update/(:num)'] = 'petani/Tracking/update/$1';
-
-// Kurir Tracking (M07-F03)
-$route['kurir/tracking'] = 'kurir/Tracking/index';
-$route['kurir/tracking/update_location/(:num)'] = 'kurir/Tracking/update_location/$1';
-$route['kurir/tracking/api_update_location'] = 'kurir/Tracking/api_update_location';
-
-// API Tracking
-$route['api/tracking/get'] = 'api/Tracking/get';
-$route['api/tracking/history'] = 'api/Tracking/history';
-$route['api/tracking/estimasi'] = 'api/Tracking/estimasi';
->>>>>>> d6191db3a988433cbc0bfc6401bfa64adccddae2
+// Landing Produk
+$route['landing/produk'] = 'produk/index';
