@@ -53,6 +53,10 @@ $route['default_controller'] = 'Landing';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+#$route['default_controller'] = 'welcome';
+#$route['404_override'] = '';
+#$route['translate_uri_dashes'] = FALSE;
+
 $route['admin/dashboard'] = 'admin/dashboard/index';
 $route['petani/dashboard'] = 'petani/dashboard/index';
 $route['pembeli/dashboard'] = 'pembeli/dashboard/index';
@@ -66,6 +70,7 @@ $route['admin/laporan/export_excel'] = 'admin/laporan/export_excel';
 $route['admin/laporan/print_pdf'] = 'admin/laporan/print_pdf';
 $route['admin/laporan/get_chart_data'] = 'admin/laporan/get_chart_data';
 
+
 // Halaman Notifikasi
 $route['notifikasi/history'] = 'Notifikasi/history';
 $route['notifikasi/setting'] = 'Notifikasi/setting';
@@ -77,6 +82,19 @@ $route['api/notifikasi/mark_read'] = 'api/Notifikasi/mark_read';
 $route['api/notifikasi/mark_all_read'] = 'api/Notifikasi/mark_all_read';
 $route['api/notifikasi/update_setting'] = 'api/Notifikasi/update_setting';
 $route['api/notifikasi/get_settings'] = 'api/Notifikasi/get_settings';
+
+// Modul 5 - Manajemen Produk
+$route['admin/produk'] = 'petani/Produk/index';
+$route['admin/produk/tambah'] = 'petani/Produk/tambah';
+$route['admin/produk/simpan'] = 'petani/Produk/simpan';
+
+$route['admin/produk/detail/(:num)'] = 'petani/Produk/detail/$1';
+
+$route['admin/produk/edit/(:num)'] = 'petani/Produk/edit/$1';
+
+$route['admin/produk/update/(:num)'] = 'petani/Produk/update/$1';
+
+$route['admin/produk/hapus/(:num)'] = 'petani/Produk/hapus/$1';
 
 // Authentication Routes
 $route['auth/login'] = 'Auth/login';
@@ -98,6 +116,7 @@ $route['admin/user/add'] = 'admin/Users/add';
 $route['admin/user/edit/(:num)'] = 'admin/Users/edit/$1';
 $route['admin/user/delete/(:num)'] = 'admin/Users/delete/$1';
 $route['admin/user/toggle/(:num)'] = 'admin/Users/toggle/$1';
+
 
 // ============================================
 // MODUL 9: MANAJEMEN MITRA & LANDING PAGE MITRA
@@ -133,3 +152,12 @@ $route['kurir/tracking/api_update_location'] = 'kurir/Tracking/api_update_locati
 $route['api/tracking/get'] = 'api/Tracking/get';
 $route['api/tracking/history'] = 'api/Tracking/history';
 $route['api/tracking/estimasi'] = 'api/Tracking/estimasi';
+
+$route['admin/kurir']                    = 'admin/Kurir/index';
+$route['admin/kurir/tambah']             = 'admin/Kurir/tambah';
+$route['admin/kurir/edit/(:num)']        = 'admin/Kurir/edit/$1';
+$route['admin/kurir/hapus/(:num)']       = 'admin/Kurir/hapus/$1';
+$route['admin/kurir/toggle/(:num)']      = 'admin/Kurir/toggle/$1';
+$route['admin/kurir/assign']             = 'admin/Kurir/assign';
+$route['admin/kurir/proses_assign']      = 'admin/Kurir/proses_assign';
+

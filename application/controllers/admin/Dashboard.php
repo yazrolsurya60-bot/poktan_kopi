@@ -1,6 +1,25 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+// class Dashboard extends CI_Controller
+// {
+//     public function __construct()
+//     {
+//         parent::__construct();
+
+//         // 🔴 PERBAIKI: Cek apakah user sudah login
+//         if (!$this->session->userdata('id_user')) {
+//             $this->session->set_userdata([
+//                 'id_user' => 1,
+//                 'role' => 'Admin',
+//                 'nama' => 'Test Admin'
+//             ]);
+//             // redirect('auth/login');
+//         }
+
+//         // 🔴 PERBAIKI: Jika role tidak sesuai, redirect ke dashboard yang benar
+//         $current_role = $this->session->userdata('role');
+
 class Dashboard extends CI_Controller
 {
     public function __construct()
@@ -9,12 +28,7 @@ class Dashboard extends CI_Controller
 
         // 🔴 PERBAIKI: Cek apakah user sudah login
         if (!$this->session->userdata('id_user')) {
-            $this->session->set_userdata([
-                'id_user' => 1,
-                'role' => 'Admin',
-                'nama' => 'Test Admin'
-            ]);
-            // redirect('auth/login');
+            redirect('auth/login');
         }
 
         // 🔴 PERBAIKI: Jika role tidak sesuai, redirect ke dashboard yang benar
@@ -62,8 +76,8 @@ class Dashboard extends CI_Controller
         $this->load->view('admin/v_dashboard', $data);
     }
 
-    public function history()
-    {
+
+    public function history() {
         $id_user = $this->session->userdata('id_user');
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['history'] = $this->Notifikasi_model->get_all_notif($id_user);
@@ -93,7 +107,6 @@ class Dashboard extends CI_Controller
     {
         $id_user = $this->session->userdata('id_user');
         $this->Notifikasi_model->mark_as_read($id_notif, $id_user);
-
         $redirect = $this->input->get('redirect') ?? 'admin/dashboard/history';
         redirect($redirect);
     }
@@ -103,7 +116,7 @@ class Dashboard extends CI_Controller
         $id_user = $this->session->userdata('id_user');
         $notifikasi = $this->Notifikasi_model->get_unread_notif($id_user, 5);
         $unread = $this->Notifikasi_model->count_unread($id_user);
-
+    
         echo json_encode([
             'success' => true,
             'notifikasi' => $notifikasi,
@@ -111,8 +124,7 @@ class Dashboard extends CI_Controller
         ]);
     }
 
-    public function mark_all_read_ajax()
-    {
+    public function mark_all_read_ajax() {
         $id_user = $this->session->userdata('id_user');
         $result = $this->Notifikasi_model->mark_all_read($id_user);
 
