@@ -793,12 +793,7 @@
 </head>
 
 <body>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 5e259f91ac99edad6eba8d6d12534512a79b1062
-	<!-- ================================================================= -->
+<!-- ================================================================= -->
 <!-- KONDISI MENU: JIKA YANG DIKLIK ADALAH KURIR -->
 <!-- ================================================================= -->
 <?php if (isset($active_menu) && $active_menu === 'kurir'): ?>
@@ -863,12 +858,6 @@
     <!-- (Mulai dari KPI Card, Grafik, Ringkasan, Form Notif dll milik timmu) -->
 
 <?php endif; ?>
-<!-- ================================================================= -->
-<<<<<<< HEAD
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
-=======
-
->>>>>>> 5e259f91ac99edad6eba8d6d12534512a79b1062
 
 	<!-- SIDEBAR OVERLAY -->
 	<div class="sidebar-overlay" id="sidebarOverlay"></div>
