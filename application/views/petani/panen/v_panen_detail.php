@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -86,11 +86,6 @@
                     <i class="bi bi-truck"></i>Tracking Kiriman
                 </a>
             </li>
-            <li class="menu-item">
-                <a href="<?= base_url('petani/laporan'); ?>">
-                    <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan
-                </a>
-            </li>
         </ul>
     </div>
     <div class="sidebar-footer">
@@ -163,3 +158,4 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 </body>
 </html>
+

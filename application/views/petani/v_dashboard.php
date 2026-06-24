@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -854,11 +854,6 @@
                         <i class="bi bi-truck"></i>Tracking Kiriman
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('petani/laporan'); ?>">
-                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan
-                    </a>
-                </li>
             </ul>
         </div>
         <div class="sidebar-footer">
@@ -1194,7 +1189,7 @@
                                 <div class="schedule-info">
                                     <div class="title"><?= $schedule['lahan']; ?></div>
                                     <div class="detail">
-                                        <?= $schedule['varietas']; ?> · Estimasi <?= $schedule['estimasi']; ?>
+                                        <?= $schedule['varietas']; ?> Â· Estimasi <?= $schedule['estimasi']; ?>
                                     </div>
                                 </div>
                                 <span class="badge"
@@ -1468,8 +1463,8 @@
             });
         });
 
-        console.log('✅ Dashboard Petani siap digunakan!');
-        console.log('📋 Fitur yang tersedia:');
+        console.log('âœ… Dashboard Petani siap digunakan!');
+        console.log('ðŸ“‹ Fitur yang tersedia:');
         console.log('   - KPI Cards (M11-F01)');
         console.log('   - Grafik Panen (M11-F01)');
         console.log('   - Produk Terjual (M11-F01)');
