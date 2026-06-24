@@ -321,13 +321,10 @@
             box-shadow: var(--shadow-soft);
             transition: var(--transition-smooth);
             overflow: hidden;
-<<<<<<< HEAD
             min-height: 180px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-=======
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
 
         .stat-box:hover {
@@ -352,36 +349,23 @@
             text-transform: uppercase;
             color: var(--text-secondary);
             letter-spacing: 0.7px;
-<<<<<<< HEAD
             margin-bottom: 4px;
-=======
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
 
         .stat-num {
             font-size: 1.7rem;
             font-weight: 700;
-<<<<<<< HEAD
             margin-top: 8px;
             margin-bottom: 12px;
             color: var(--dark-coffee);
             line-height: 1.3;
             word-break: break-word;
-=======
-            margin-top: 6px;
-            margin-bottom: 0;
-            color: var(--dark-coffee);
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
 
         .stat-change {
             font-size: 0.75rem;
             font-weight: 600;
-<<<<<<< HEAD
             margin-top: 8px;
-=======
-            margin-top: 4px;
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
 
         .stat-change.up   { color: #10b981; }
@@ -420,11 +404,7 @@
         .custom-card:hover { box-shadow: var(--shadow-hover); }
 
         .custom-card .card-header-custom {
-<<<<<<< HEAD
             padding: 18px 24px 12px;
-=======
-            padding: 18px 24px;
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
             border-bottom: 1px solid rgba(74, 44, 17, 0.06);
             display: flex;
             align-items: center;
@@ -438,20 +418,12 @@
             font-size: 0.85rem;
         }
 
-<<<<<<< HEAD
         .custom-card .card-body-custom { padding: 20px 24px 24px; }
-=======
-        .custom-card .card-body-custom { padding: 24px; }
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
 
         /* --- CHART --- */
         .chart-container {
             position: relative;
-<<<<<<< HEAD
             height: 300px;
-=======
-            height: 260px;
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
             width: 100%;
         }
 
@@ -613,10 +585,7 @@
             border-radius: 10px;
             padding: 18px 20px;
             border-left: 4px solid;
-<<<<<<< HEAD
             margin-bottom: 8px;
-=======
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
 
         .keu-summary-card.pendapatan { border-color: #10b981; background: #F0FDF4; }
@@ -672,11 +641,7 @@
         @media (max-width: 575.98px) {
             .main-content { padding: 16px 12px 20px; }
             .stat-num { font-size: 1.3rem; }
-<<<<<<< HEAD
             .stat-box { padding: 16px 18px; min-height: 160px; }
-=======
-            .stat-box { padding: 16px 18px; }
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         }
 
         /* SCROLLBAR */
@@ -1496,8 +1461,4 @@ document.addEventListener('DOMContentLoaded', function() { initChartPenjualan('p
 if (document.readyState !== 'loading') { initChartPenjualan('pendapatan'); initChartProduk(); }
 </script>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
