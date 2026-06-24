@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analisis & Laporan - Sistem Supply Chain Kopi</title>
+    <title>Analytics & Reports - Sistem Supply Chain Kopi</title>
     <meta name="description" content="Dashboard laporan dan analytics sistem supply chain kopi Poktan Liberchain">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -716,15 +716,7 @@
             </li>
             <li class="menu-item active">
                 <a href="<?= base_url('admin/laporan'); ?>">
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    <i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
-=======
                     <i class="bi bi-file-earmark-bar-graph-fill"></i>Analytics & Reports
->>>>>>> 5e259f91ac99edad6eba8d6d12534512a79b1062
-=======
-                    <i class="bi bi-file-earmark-bar-graph-fill"></i>Analytics & Reports
->>>>>>> 043aad3d7632d9c00304bf9b9e9ed2a46e6fc500
                 </a>
             </li>
         </ul>
@@ -745,15 +737,7 @@
             <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle" style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
                 <i class="bi bi-list"></i>
             </button>
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <h2 class="d-inline-block align-middle mb-0">Analisis & Laporan</h2>
-=======
             <h2 class="d-inline-block align-middle mb-0">Analytics & Reports</h2>
->>>>>>> 5e259f91ac99edad6eba8d6d12534512a79b1062
-=======
-            <h2 class="d-inline-block align-middle mb-0">Analytics & Reports</h2>
->>>>>>> 043aad3d7632d9c00304bf9b9e9ed2a46e6fc500
             <p class="subtitle mb-0 mt-1">Ringkasan data bisnis dan analitik <span id="currentDateTime" style="color: var(--amber-cream); font-weight:500;"></span></p>
         </div>
         <div class="d-flex align-items-center flex-wrap mt-2 mt-md-0" style="gap: 10px;">
