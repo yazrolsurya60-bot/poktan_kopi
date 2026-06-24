@@ -49,14 +49,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
+<<<<<<< HEAD
 #$route['default_controller'] = 'welcome';
 #$route['404_override'] = '';
 #$route['translate_uri_dashes'] = FALSE;
+=======
+$route['default_controller'] = 'auth/login';
+$route['404_override'] = '';
+$route['translate_uri_dashes'] = FALSE;
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
 
 $route['admin/dashboard'] = 'admin/dashboard/index';
 $route['petani/dashboard'] = 'petani/dashboard/index';
 $route['pembeli/dashboard'] = 'pembeli/dashboard/index';
 
+<<<<<<< HEAD
+=======
+// ============================================
+// MODUL 10: LAPORAN & ANALYTICS
+// ============================================
+$route['admin/laporan'] = 'admin/laporan/index';
+$route['admin/laporan/filter'] = 'admin/laporan/filter';
+$route['admin/laporan/export_excel'] = 'admin/laporan/export_excel';
+$route['admin/laporan/print_pdf'] = 'admin/laporan/print_pdf';
+$route['admin/laporan/get_chart_data'] = 'admin/laporan/get_chart_data';
+
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
 // Halaman Notifikasi
 $route['notifikasi/history'] = 'Notifikasi/history';
 $route['notifikasi/setting'] = 'Notifikasi/setting';
@@ -69,6 +87,7 @@ $route['api/notifikasi/mark_all_read'] = 'api/Notifikasi/mark_all_read';
 $route['api/notifikasi/update_setting'] = 'api/Notifikasi/update_setting';
 $route['api/notifikasi/get_settings'] = 'api/Notifikasi/get_settings';
 
+<<<<<<< HEAD
 // Modul 5 - Manajemen Produk
 $route['admin/produk'] = 'petani/Produk/index';
 $route['admin/produk/tambah'] = 'petani/Produk/tambah';
@@ -81,3 +100,33 @@ $route['admin/produk/edit/(:num)'] = 'petani/Produk/edit/$1';
 $route['admin/produk/update/(:num)'] = 'petani/Produk/update/$1';
 
 $route['admin/produk/hapus/(:num)'] = 'petani/Produk/hapus/$1';
+=======
+// Authentication Routes
+$route['auth/login'] = 'Auth/login';
+$route['auth/register'] = 'Auth/register';
+$route['auth/logout'] = 'Auth/logout';
+$route['auth/forgot_password'] = 'Auth/forgot_password';
+$route['auth/reset_password/(:any)'] = 'Auth/reset_password/$1';
+$route['auth/verify/(:any)'] = 'Auth/verify/$1';
+$route['auth/change_password'] = 'Auth/change_password';
+$route['auth/profile'] = 'Auth/profile';
+
+// User Profile Redirections for farmers & buyers
+$route['petani/profil'] = 'Auth/profile';
+$route['pembeli/profil'] = 'Auth/profile';
+
+// Admin User Management Routes
+$route['admin/user'] = 'admin/Users/index';
+$route['admin/user/add'] = 'admin/Users/add';
+$route['admin/user/edit/(:num)'] = 'admin/Users/edit/$1';
+$route['admin/user/delete/(:num)'] = 'admin/Users/delete/$1';
+$route['admin/user/toggle/(:num)'] = 'admin/Users/toggle/$1';
+
+$route['admin/kurir']                    = 'admin/Kurir/index';
+$route['admin/kurir/tambah']             = 'admin/Kurir/tambah';
+$route['admin/kurir/edit/(:num)']        = 'admin/Kurir/edit/$1';
+$route['admin/kurir/hapus/(:num)']       = 'admin/Kurir/hapus/$1';
+$route['admin/kurir/toggle/(:num)']      = 'admin/Kurir/toggle/$1';
+$route['admin/kurir/assign']             = 'admin/Kurir/assign';
+$route['admin/kurir/proses_assign']      = 'admin/Kurir/proses_assign';
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab

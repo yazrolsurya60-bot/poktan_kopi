@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+<<<<<<< HEAD
 class Dashboard extends CI_Controller {
 
       public function __construct() {
@@ -18,6 +19,22 @@ if (!$this->session->userdata('id_user')) {
         // 🔴 PERBAIKI: Jika role tidak sesuai, redirect ke dashboard yang benar
         $current_role = $this->session->userdata('role');
         
+=======
+class Dashboard extends CI_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+
+        // 🔴 PERBAIKI: Cek apakah user sudah login
+        if (!$this->session->userdata('id_user')) {
+            redirect('auth/login');
+        }
+
+        // 🔴 PERBAIKI: Jika role tidak sesuai, redirect ke dashboard yang benar
+        $current_role = $this->session->userdata('role');
+
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         // Jika role bukan Admin, arahkan ke dashboard yang sesuai
         if ($current_role != 'Admin') {
             if ($current_role == 'Petani') {
@@ -30,6 +47,7 @@ if (!$this->session->userdata('id_user')) {
                 redirect('auth/login');
             }
         }
+<<<<<<< HEAD
         
         $this->load->model('Notifikasi_model');
     }
@@ -44,6 +62,22 @@ if (!$this->session->userdata('id_user')) {
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
         
+=======
+
+        $this->load->model('Notifikasi_model');
+    }
+
+    // ============================================
+    // INDEX - DASHBOARD UTAMA (M11-F01)
+    // ============================================
+    public function index()
+    {
+        $id_user = $this->session->userdata('id_user');
+
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         $kpi = $this->Notifikasi_model->get_admin_kpi();
         $data['kpi_total_revenue'] = $kpi['total_revenue'] ?? 0;
         $data['kpi_transaksi_aktif'] = $kpi['transaksi_aktif'] ?? 0;
@@ -52,7 +86,11 @@ if (!$this->session->userdata('id_user')) {
 
         $data['petani_baru'] = $this->db->where('status_petani', 'Pending')->limit(5)->get('tb_petani')->result_array();
         $data['pesanan_terbaru'] = $this->db->order_by('id_transaksi', 'DESC')->limit(5)->get('tb_transaksi')->result_array();
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         $data['grafik_penjualan'] = $this->Notifikasi_model->get_sales_chart();
         $data['produk_terlaris'] = $this->Notifikasi_model->get_top_products(5);
         $data['settings'] = $this->Notifikasi_model->get_settings($id_user);
@@ -60,11 +98,17 @@ if (!$this->session->userdata('id_user')) {
         $this->load->view('admin/v_dashboard', $data);
     }
 
+<<<<<<< HEAD
     public function history() {
+=======
+    public function history()
+    {
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         $id_user = $this->session->userdata('id_user');
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['history'] = $this->Notifikasi_model->get_all_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+<<<<<<< HEAD
         
         $this->load->view('template/v_notif_history', $data);
     }
@@ -72,6 +116,16 @@ if (!$this->session->userdata('id_user')) {
     public function settings() {
         $id_user = $this->session->userdata('id_user');
         
+=======
+
+        $this->load->view('template/v_notif_history', $data);
+    }
+
+    public function settings()
+    {
+        $id_user = $this->session->userdata('id_user');
+
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         if ($this->input->post()) {
             $this->Notifikasi_model->update_settings($id_user, $this->input->post());
             $this->session->set_flashdata('success', 'Preferensi notifikasi berhasil diperbarui.');
@@ -81,6 +135,7 @@ if (!$this->session->userdata('id_user')) {
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['settings'] = $this->Notifikasi_model->get_settings($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+<<<<<<< HEAD
         
         $this->load->view('template/v_notif_setting', $data);
     }
@@ -89,15 +144,35 @@ if (!$this->session->userdata('id_user')) {
         $id_user = $this->session->userdata('id_user');
         $this->Notifikasi_model->mark_as_read($id_notif, $id_user);
         
+=======
+
+        $this->load->view('template/v_notif_setting', $data);
+    }
+
+    public function read($id_notif)
+    {
+        $id_user = $this->session->userdata('id_user');
+        $this->Notifikasi_model->mark_as_read($id_notif, $id_user);
+
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         $redirect = $this->input->get('redirect') ?? 'admin/dashboard/history';
         redirect($redirect);
     }
 
+<<<<<<< HEAD
     public function get_notifications_ajax() {
         $id_user = $this->session->userdata('id_user');
         $notifikasi = $this->Notifikasi_model->get_unread_notif($id_user, 5);
         $unread = $this->Notifikasi_model->count_unread($id_user);
         
+=======
+    public function get_notifications_ajax()
+    {
+        $id_user = $this->session->userdata('id_user');
+        $notifikasi = $this->Notifikasi_model->get_unread_notif($id_user, 5);
+        $unread = $this->Notifikasi_model->count_unread($id_user);
+
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         echo json_encode([
             'success' => true,
             'notifikasi' => $notifikasi,
@@ -105,6 +180,7 @@ if (!$this->session->userdata('id_user')) {
         ]);
     }
 
+<<<<<<< HEAD
     public function mark_all_read_ajax() {
         $id_user = $this->session->userdata('id_user');
         $result = $this->Notifikasi_model->mark_all_read($id_user);
@@ -113,6 +189,18 @@ if (!$this->session->userdata('id_user')) {
     }
 
     public function get_chart_data() {
+=======
+    public function mark_all_read_ajax()
+    {
+        $id_user = $this->session->userdata('id_user');
+        $result = $this->Notifikasi_model->mark_all_read($id_user);
+
+        echo json_encode(['success' => $result]);
+    }
+
+    public function get_chart_data()
+    {
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
         $data = $this->Notifikasi_model->get_sales_chart();
         echo json_encode(['success' => true, 'values' => $data['values']]);
     }
