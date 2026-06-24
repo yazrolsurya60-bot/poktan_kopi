@@ -1522,7 +1522,7 @@
 		// Refresh setiap 60 detik
 		// setInterval(refreshNotifications, 60000);
 
-		console.log('✅ Modul 11: Dashboard & Notifikasi siap digunakan!');
+		console.log('✅ Modul 11: Dashboard f& Notifikasi siap digunakan!');
 		console.log('📋 Fitur yang tersedia:');
 		console.log('   - KPI Cards (M11-F01)');
 		console.log('   - Grafik Penjualan (M10-F02)');
