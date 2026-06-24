@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -861,8 +861,7 @@
 		<!-- (Mulai dari KPI Card, Grafik, Ringkasan, Form Notif dll milik timmu) -->
 
 	<?php endif; ?>
-	
-<!-- SIDEBAR OVERLAY -->
+	<!-- SIDEBAR OVERLAY -->
 	<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 	<!-- SIDEBAR -->
@@ -875,7 +874,7 @@
 		</div>
 		<div class="sidebar-menu-wrapper">
 			<ul class="sidebar-menu">
-				<li class="menu-item">
+				<li class="menu-item active">
 					<a href="<?= base_url('admin/dashboard'); ?>">
 						<i class="bi bi-grid-1x2-fill"></i>Dashboard
 					</a>
@@ -886,7 +885,7 @@
 						<span class="menu-badge">12</span>
 					</a>
 				</li>
-				<li class="menu-item active">
+				<li class="menu-item">
 					<a href="<?= base_url('admin/petani'); ?>">
 						<i class="bi bi-person-badge-fill"></i>Data Petani
 					</a>
@@ -946,8 +945,7 @@
 					<i class="bi bi-list"></i>
 				</button>
 				<h2 class="d-inline-block align-middle mb-0">Manajemen Petani</h2>
-				<p class="subtitle mb-0 mt-1">Selamat datang, Admin! <span id="currentDateTime"
-						style="color: var(--amber-cream); font-weight:500;"></span></p>
+				<p class="subtitle mb-0 mt-1 text-muted">Dashboard / Manajemen Petani</p>
 			</div>
 			<div class="d-flex align-items-center gap-3" style="gap: 12px;">
 				<!-- NOTIFICATION BELL -->
@@ -1030,88 +1028,175 @@
 		</div>
 
 		
-
-
-<div class="page-body" style="padding: 24px;">
+<!-- MAIN BODY CONTENT -->
+<div class="page-body" style="padding: 24px; background-color: #f8f9fa; min-height: calc(100vh - 80px);">
 <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm p-4" style="border-radius: 15px; border-left: 5px solid #d4a373;">
-                    <div class="d-flex align-items-center">
-                        <div class="p-3 rounded-circle" style="background-color: #FDF5ED; color: #d4a373;">
-                            <i class="bi bi-people-fill fs-4"></i>
-                        </div>
-                        <div class="ms-3">
-                            <small class="text-muted text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 1px;">Total Petani</small>
-                            <h4 class="mb-0 fw-bold" style="color: #4a2c11;"><?= !empty($daftar_petani) ? count($daftar_petani) : 0; ?></h4>
-                        </div>
-                    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-3 d-flex align-items-center">
+                <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px; background-color: #FFF3E0; color: #E6A15C;">
+                    <i class="bi bi-people-fill fs-4"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 text-muted fw-bold" style="font-size: 0.85rem;">Total Petani</h6>
+                    <h3 class="mb-0 fw-bold"><?= isset($total_petani) ? $total_petani : 0; ?></h3>
+                    <small class="text-muted" style="font-size: 0.7rem;">Semua Petani</small>
                 </div>
             </div>
         </div>
-
-        <div class="card border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
-            <div class="card-body p-0">
-                <div class="d-flex justify-content-between align-items-center p-4 border-bottom">
-                    <form method="GET" action="<?= base_url('admin/petani'); ?>" class="m-0">
-                        <select name="status" class="form-select border-0 bg-light" onchange="this.form.submit()" style="border-radius: 8px; cursor: pointer;">
-                            <option value="">Semua Status</option>
-                            <option value="Terverifikasi" <?= (isset($status_filter) && $status_filter == 'Terverifikasi') ? 'selected' : ''; ?>>Terverifikasi</option>
-                            <option value="Pending" <?= (isset($status_filter) && $status_filter == 'Pending') ? 'selected' : ''; ?>>Pending</option>
-                            <option value="Ditolak" <?= (isset($status_filter) && $status_filter == 'Ditolak') ? 'selected' : ''; ?>>Ditolak</option>
-                        </select>
-                    </form>
-                    <a href="<?= base_url('admin/petani/tambah'); ?>" class="btn px-4 shadow-sm" style="background-color: #E6A15C; color: #fff; border-radius: 10px; font-weight: 600;">
-                        + Tambah Petani
-                    </a>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-3 d-flex align-items-center">
+                <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px; background-color: #E8F5E9; color: #4CAF50;">
+                    <i class="bi bi-arrow-down-circle-fill fs-4"></i>
                 </div>
+                <div>
+                    <h6 class="mb-0 text-muted fw-bold" style="font-size: 0.85rem;">Active</h6>
+                    <h3 class="mb-0 fw-bold"><?= isset($active_count) ? $active_count : 0; ?></h3>
+                    <?php $pct_active = isset($total_petani) && $total_petani > 0 ? round(($active_count / $total_petani) * 100, 1) : 0; ?>
+                    <small class="text-muted" style="font-size: 0.7rem;"><?= $pct_active; ?>% dari total</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-3 d-flex align-items-center">
+                <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px; background-color: #FFF8E1; color: #FFC107;">
+                    <i class="bi bi-people-fill fs-4"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 text-muted fw-bold" style="font-size: 0.85rem;">Inactive</h6>
+                    <h3 class="mb-0 fw-bold"><?= isset($inactive_count) ? $inactive_count : 0; ?></h3>
+                    <?php $pct_inactive = isset($total_petani) && $total_petani > 0 ? round(($inactive_count / $total_petani) * 100, 1) : 0; ?>
+                    <small class="text-muted" style="font-size: 0.7rem;"><?= $pct_inactive; ?>% dari total</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-3 d-flex align-items-center">
+                <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px; background-color: #FFEBEE; color: #F44336;">
+                    <i class="bi bi-arrow-down-circle-fill fs-4"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 text-muted fw-bold" style="font-size: 0.85rem;">Suspended</h6>
+                    <h3 class="mb-0 fw-bold"><?= isset($suspended_count) ? $suspended_count : 0; ?></h3>
+                    <?php $pct_suspend = isset($total_petani) && $total_petani > 0 ? round(($suspended_count / $total_petani) * 100, 1) : 0; ?>
+                    <small class="text-muted" style="font-size: 0.7rem;"><?= $pct_suspend; ?>% dari total</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <div class="table-responsive">
-                    <table class="table table-hover table-custom align-middle mb-0" style="background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
-                        <thead style="background-color: #FDF5ED;">
-                            <tr style="color: #4a2c11; text-transform: uppercase; font-size: 13px;">
-                                <th class="p-4">No</th>
-                                <th>Nama Petani</th>
-                                <th>NIK</th>
-                                <th>Status</th>
-                                <th class="text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if(!empty($daftar_petani)): $no = 1; foreach($daftar_petani as $p): ?>
-                            <tr>
-                                <td class="ps-4"><?= $no++; ?></td>
-                                <td class="fw-bold" style="color: #4a2c11;"><?= htmlspecialchars($p['nama_petani'] ?? '-'); ?></td>
-                                <td><?= htmlspecialchars($p['nik'] ?? '-'); ?></td>
-                                <td>
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-4">
+        <!-- TOOLBAR -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex gap-3">
+                <div class="input-group" style="width: 250px;">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Cari petani...">
+                </div>
+                <form action="<?= base_url('admin/petani'); ?>" method="GET" class="d-flex">
+                    <select name="status" class="form-select text-muted" onchange="this.form.submit()" style="width: 150px;">
+                        <option value="">Semua Status</option>
+                        <option value="Active" <?= (isset($status_filter) && $status_filter == 'Active') ? 'selected' : ''; ?>>Active</option>
+                        <option value="Pending" <?= (isset($status_filter) && $status_filter == 'Pending') ? 'selected' : ''; ?>>Pending</option>
+                        <option value="Terverifikasi" <?= (isset($status_filter) && $status_filter == 'Terverifikasi') ? 'selected' : ''; ?>>Terverifikasi</option>
+                        <option value="Suspended" <?= (isset($status_filter) && $status_filter == 'Suspended') ? 'selected' : ''; ?>>Suspended</option>
+                    </select>
+                </form>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="<?= base_url('admin/petani/tambah'); ?>" class="btn px-4 text-white rounded-3 shadow-sm" style="background-color: #6d4c41; font-weight: 500;">
+                    <i class="bi bi-plus-lg me-1"></i> Tambah Petani
+                </a>
+                <a href="<?= base_url('admin/petani/export_page'); ?>" class="btn px-3 bg-white text-muted border rounded-3 shadow-sm">
+                    <i class="bi bi-box-arrow-up me-1"></i> Export <i class="bi bi-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="border-collapse: separate; border-spacing: 0 8px;">
+                <thead>
+                    <tr style="background-color: transparent;">
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem; padding-left: 15px;">No</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">Foto</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">Nama Petani</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">NIK</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">No HP</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">Status</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem; text-align: center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($daftar_petani)): ?>
+                        <?php $no = 1; foreach ($daftar_petani as $p): ?>
+                            <tr style="box-shadow: 0 2px 6px rgba(0,0,0,0.02); background-color: #fff; border-radius: 8px;">
+                                <td class="border-0 fw-bold" style="border-top-left-radius: 8px; border-bottom-left-radius: 8px; padding-left: 15px; width: 50px;"><?= $no++; ?></td>
+                                <td class="border-0">
+                                    <?php if(!empty($p['foto_profil'])): ?>
+                                        <img src="<?= base_url('uploads/dokumen/'.$p['foto_profil']); ?>" class="rounded-circle object-fit-cover" width="40" height="40">
+                                    <?php else: ?>
+                                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white" style="width: 40px; height: 40px; font-size: 1.2rem;">
+                                            <i class="bi bi-person"></i>
+                                        </div>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="border-0 fw-bold text-dark"><?= htmlspecialchars($p['nama_petani']); ?></td>
+                                <td class="border-0 text-muted"><?= htmlspecialchars($p['nik']); ?></td>
+                                <td class="border-0 text-muted"><?= htmlspecialchars($p['no_hp']); ?></td>
+                                <td class="border-0">
                                     <?php 
-                                    $status = $p['status_petani'] ?? 'Pending'; 
-                                    $bg = ($status == 'Terverifikasi') ? '#606c38' : (($status == 'Pending') ? '#d4a373' : '#bc4749');
+                                        $badge_color = 'bg-secondary';
+                                        $text_color = 'text-white';
+                                        if ($p['status_petani'] == 'Active' || $p['status_petani'] == 'Terverifikasi') { $badge_color = 'bg-success'; $badge_color = '#E8F5E9'; $text_color = '#4CAF50'; }
+                                        if ($p['status_petani'] == 'Pending' || $p['status_petani'] == 'Inactive') { $badge_color = 'bg-warning text-dark'; $badge_color = '#FFF8E1'; $text_color = '#FFC107'; }
+                                        if ($p['status_petani'] == 'Ditolak' || $p['status_petani'] == 'Suspended') { $badge_color = 'bg-danger'; $badge_color = '#FFEBEE'; $text_color = '#F44336'; }
                                     ?>
-                                    <span class="badge" style="background-color: <?= $bg; ?>; color: #fff; padding: 6px 12px; border-radius: 6px; font-weight: 500;">
-                                        <?= $status; ?>
+                                    <span class="badge rounded-pill px-3 py-2" style="background-color: <?= $badge_color; ?>; color: <?= $text_color; ?>; font-weight: 600; letter-spacing: 0.5px;">
+                                        <?= $p['status_petani']; ?>
                                     </span>
                                 </td>
-                                <td class="text-center">
-                                    <div class="btn-group gap-1">
-                                        <a href="<?= base_url('admin/petani/detail/'.$p['id_petani']); ?>" class="btn btn-sm" style="background-color: #e6ccb2; color: #4a2c11;">Detail</a>
-                                        <?php if ($status == 'Pending'): ?>
-                                            <a href="<?= base_url('admin/petani/verifikasi/'.$p['id_petani']); ?>" class="btn btn-sm btn-success">Verifikasi</a>
-                                        <?php endif; ?>
-                                        <a href="<?= base_url('admin/petani/hapus/'.$p['id_petani']); ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin hapus?');">Hapus</a>
+                                <td class="border-0" style="border-top-right-radius: 8px; border-bottom-right-radius: 8px; text-align: center;">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="<?= base_url('admin/petani/detail/' . $p['id_petani']); ?>" class="btn btn-sm" style="background-color: #F5E6D3; color: #8D6E63; border-radius: 6px;">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        <a href="<?= base_url('admin/petani/edit/' . $p['id_petani']); ?>" class="btn btn-sm" style="background-color: #FFF3E0; color: #FF9800; border-radius: 6px;">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <a href="<?= base_url('admin/petani/hapus/' . $p['id_petani']); ?>" onclick="return confirm('Yakin ingin menghapus?')" class="btn btn-sm" style="background-color: #FFEBEE; color: #F44336; border-radius: 6px;">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
-                            <?php endforeach; else: ?>
-                            <tr><td colspan="5" class="text-center py-5 text-muted">Belum ada data petani.</td></tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr><td colspan="7" class="text-center py-4 border-0">Belum ada data petani.</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         </div>
-    
+        
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <small class="text-muted">Menampilkan <?= isset($daftar_petani) ? count($daftar_petani) : 0; ?> data</small>
+            <!-- Pagination Placeholder -->
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item disabled"><a class="page-link text-muted border-0 bg-light" href="#">&laquo;</a></li>
+                <li class="page-item active"><a class="page-link border-0 text-white" style="background-color: #6d4c41;" href="#">1</a></li>
+                <li class="page-item"><a class="page-link text-muted border-0" href="#">&raquo;</a></li>
+            </ul>
+        </div>
 
-
+    </div>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
@@ -1357,8 +1442,8 @@
 		// Refresh setiap 60 detik
 		// setInterval(refreshNotifications, 60000);
 
-		console.log('âœ… Modul 11: Dashboard f& Notifikasi siap digunakan!');
-		console.log('ðŸ“‹ Fitur yang tersedia:');
+		console.log('✅ Modul 11: Dashboard f& Notifikasi siap digunakan!');
+		console.log('📋 Fitur yang tersedia:');
 		console.log('   - KPI Cards (M11-F01)');
 		console.log('   - Grafik Penjualan (M10-F02)');
 		console.log('   - Produk Terlaris (M10-F04)');
@@ -1371,4 +1456,3 @@
 </body>
 
 </html>
-

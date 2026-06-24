@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -861,8 +861,7 @@
 		<!-- (Mulai dari KPI Card, Grafik, Ringkasan, Form Notif dll milik timmu) -->
 
 	<?php endif; ?>
-	
-<!-- SIDEBAR OVERLAY -->
+	<!-- SIDEBAR OVERLAY -->
 	<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 	<!-- SIDEBAR -->
@@ -875,7 +874,7 @@
 		</div>
 		<div class="sidebar-menu-wrapper">
 			<ul class="sidebar-menu">
-				<li class="menu-item">
+				<li class="menu-item active">
 					<a href="<?= base_url('admin/dashboard'); ?>">
 						<i class="bi bi-grid-1x2-fill"></i>Dashboard
 					</a>
@@ -886,7 +885,7 @@
 						<span class="menu-badge">12</span>
 					</a>
 				</li>
-				<li class="menu-item active">
+				<li class="menu-item">
 					<a href="<?= base_url('admin/petani'); ?>">
 						<i class="bi bi-person-badge-fill"></i>Data Petani
 					</a>
@@ -946,8 +945,7 @@
 					<i class="bi bi-list"></i>
 				</button>
 				<h2 class="d-inline-block align-middle mb-0">Manajemen Petani</h2>
-				<p class="subtitle mb-0 mt-1">Selamat datang, Admin! <span id="currentDateTime"
-						style="color: var(--amber-cream); font-weight:500;"></span></p>
+				<p class="subtitle mb-0 mt-1 text-muted">Dashboard / Manajemen Petani / Tambah</p>
 			</div>
 			<div class="d-flex align-items-center gap-3" style="gap: 12px;">
 				<!-- NOTIFICATION BELL -->
@@ -1030,72 +1028,79 @@
 		</div>
 
 		
-
-
-<div class="page-body" style="padding: 24px;">
-<div class="pagetitle mb-4">
-            <h1 style="color: #4a2c11; font-weight: 700;">Tambah Petani</h1>
-            <p>Dashboard / Manajemen Petani / Tambah</p>
-        </div>
-
-        <div class="card border-0 shadow-sm" style="border-radius: 12px;">
-            <div class="card-body p-4">
-                <h5 class="card-title fw-bold">Form Data Petani</h5>
-                
-                <?php echo validation_errors('<div class="alert alert-danger">', '</div>'); ?>
-                
-                <form action="<?= base_url('admin/petani/tambah_aksi'); ?>" method="POST" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Nama Petani *</label>
-                                <input type="text" name="nama_petani" class="form-control" placeholder="Masukkan nama petani" value="<?= set_value('nama_petani'); ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">NIK *</label>
-                                <input type="text" name="nik" class="form-control" placeholder="Masukkan NIK" value="<?= set_value('nik'); ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">No HP *</label>
-                                <input type="number" name="no_hp" class="form-control" placeholder="Masukkan no HP" value="<?= set_value('no_hp'); ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Email</label>
-                                <input type="email" name="email" class="form-control" placeholder="Masukkan email" value="<?= set_value('email'); ?>">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Alamat *</label>
-                                <textarea name="alamat" class="form-control" rows="3" placeholder="Masukkan alamat lengkap" required><?= set_value('alamat'); ?></textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Foto Profil</label>
-                                <div class="border p-4 text-center" style="border-style: dashed !important; border-radius: 8px;">
-                                    <i class="bi bi-cloud-arrow-up fs-2"></i>
-                                    <p>Upload foto profil <br><small class="text-muted">JPG, PNG (maks. 2MB)</small></p>
-                                    <input type="file" name="foto_profil" class="form-control form-control-sm">
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Status *</label>
-                                <select name="status" class="form-select">
-                                    <option value="Active" <?= set_select('status', 'Active'); ?>>Active</option>
-                                    <option value="Pending" <?= set_select('status', 'Pending'); ?>>Pending</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 text-end">
-                        <a href="<?= base_url('admin/petani'); ?>" class="btn btn-light px-4">Batal</a>
-                        <button type="submit" class="btn text-white px-4" style="background-color: #4a2c11;">Simpan</button>
-                    </div>
-                </form>
+<!-- MAIN BODY CONTENT -->
+<div class="page-body" style="padding: 24px; background-color: #f8f9fa; min-height: calc(100vh - 80px);">
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-4">
+        <!-- HEADER -->
+        <div class="d-flex align-items-center mb-4">
+            <a href="<?= base_url('admin/petani'); ?>" class="btn btn-light rounded-circle me-3 d-flex justify-content-center align-items-center" style="width: 40px; height: 40px; border: 1px solid #e0e0e0;">
+                <i class="bi bi-arrow-left text-dark"></i>
+            </a>
+            <div>
+                <h4 class="mb-0 fw-bold">Tambah Petani</h4>
+                <small class="text-muted">Dashboard / Manajemen Petani / Tambah</small>
             </div>
         </div>
-    
+
+        <h6 class="fw-bold mb-3">Form Data Petani</h6>
+        
+        <?php echo validation_errors('<div class="alert alert-danger p-2" style="font-size:0.85rem;">', '</div>'); ?>
+        
+        <form action="<?= base_url('admin/petani/tambah_aksi'); ?>" method="POST" enctype="multipart/form-data">
+            <div class="row gx-5">
+                <!-- KIRI -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Nama Petani <span class="text-danger">*</span></label>
+                        <input type="text" name="nama_petani" class="form-control rounded-3 py-2" placeholder="Masukkan nama petani" value="<?= set_value('nama_petani'); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">NIK <span class="text-danger">*</span></label>
+                        <input type="text" name="nik" class="form-control rounded-3 py-2" placeholder="Masukkan NIK" value="<?= set_value('nik'); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">No HP <span class="text-danger">*</span></label>
+                        <input type="number" name="no_hp" class="form-control rounded-3 py-2" placeholder="Masukkan no HP" value="<?= set_value('no_hp'); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Email</label>
+                        <input type="email" name="email" class="form-control rounded-3 py-2" placeholder="Masukkan email" value="<?= set_value('email'); ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Alamat <span class="text-danger">*</span></label>
+                        <textarea name="alamat" class="form-control rounded-3 py-2" rows="4" placeholder="Masukkan alamat lengkap" required><?= set_value('alamat'); ?></textarea>
+                    </div>
+                </div>
+
+                <!-- KANAN -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Foto Profil</label>
+                        <div class="border rounded-4 text-center d-flex flex-column justify-content-center align-items-center" style="border-style: dashed !important; border-width: 2px !important; border-color: #d0d0d0 !important; height: 160px; background-color: #fafafa;">
+                            <i class="bi bi-cloud-arrow-up" style="font-size: 2.5rem; color: #8D6E63;"></i>
+                            <p class="mb-1 fw-bold mt-2" style="font-size: 0.9rem;">Upload foto profil</p>
+                            <small class="text-muted" style="font-size: 0.75rem;">JPG, PNG (maks. 2MB)</small>
+                            <input type="file" name="foto_profil" class="form-control form-control-sm mt-2 w-75 mx-auto" style="font-size: 0.75rem;">
+                        </div>
+                    </div>
+                    <div class="mb-3 mt-4">
+                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Status <span class="text-danger">*</span></label>
+                        <select name="status" class="form-select rounded-3 py-2">
+                            <option value="Active" <?= set_select('status', 'Active'); ?>>Active</option>
+                            <option value="Pending" <?= set_select('status', 'Pending'); ?>>Pending</option>
+                            <option value="Inactive" <?= set_select('status', 'Inactive'); ?>>Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 d-flex justify-content-end gap-3 border-top pt-4">
+                <a href="<?= base_url('admin/petani'); ?>" class="btn btn-light px-4 py-2 rounded-3 border fw-bold" style="color: #6c757d;">Batal</a>
+                <button type="submit" class="btn px-4 py-2 rounded-3 fw-bold text-white shadow-sm" style="background-color: #6d4c41;">Simpan</button>
+            </div>
+        </form>
+    </div>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
@@ -1341,8 +1346,8 @@
 		// Refresh setiap 60 detik
 		// setInterval(refreshNotifications, 60000);
 
-		console.log('âœ… Modul 11: Dashboard f& Notifikasi siap digunakan!');
-		console.log('ðŸ“‹ Fitur yang tersedia:');
+		console.log('✅ Modul 11: Dashboard f& Notifikasi siap digunakan!');
+		console.log('📋 Fitur yang tersedia:');
 		console.log('   - KPI Cards (M11-F01)');
 		console.log('   - Grafik Penjualan (M10-F02)');
 		console.log('   - Produk Terlaris (M10-F04)');
@@ -1355,4 +1360,3 @@
 </body>
 
 </html>
-

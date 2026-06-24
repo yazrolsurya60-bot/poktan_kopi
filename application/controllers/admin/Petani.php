@@ -21,6 +21,21 @@ class Petani extends CI_Controller {
         $data['daftar_petani'] = $this->Petani_model->get_daftar_petani($status);
         $data['status_filter'] = $status;
 
+        // Hitung statistik untuk KPI cards
+        $semua = $this->Petani_model->get_daftar_petani();
+        $active_count = 0;
+        $inactive_count = 0;
+        $suspended_count = 0;
+        foreach($semua as $p) {
+            if ($p['status_petani'] == 'Active' || $p['status_petani'] == 'Terverifikasi') $active_count++;
+            else if ($p['status_petani'] == 'Pending' || $p['status_petani'] == 'Inactive') $inactive_count++;
+            else if ($p['status_petani'] == 'Ditolak' || $p['status_petani'] == 'Suspended') $suspended_count++;
+        }
+        $data['total_petani'] = count($semua);
+        $data['active_count'] = $active_count;
+        $data['inactive_count'] = $inactive_count;
+        $data['suspended_count'] = $suspended_count;
+
         $this->load->view('admin/Petani_list', $data);
     }
 
@@ -59,6 +74,22 @@ class Petani extends CI_Controller {
             'tanggal_daftar' => date('Y-m-d'),
         ];
 
+        // Upload Foto Profil jika ada
+        $upload_path = './uploads/dokumen/';
+        if (!is_dir($upload_path)) {
+            mkdir($upload_path, 0755, true);
+        }
+        $config['upload_path']   = $upload_path;
+        $config['allowed_types'] = 'jpg|jpeg|png';
+        $config['max_size']      = 2048;
+        $this->upload->initialize($config);
+
+        if (!empty($_FILES['foto_profil']['name'])) {
+            if ($this->upload->do_upload('foto_profil')) {
+                $data['foto_profil'] = $this->upload->data('file_name');
+            }
+        }
+
         $this->Petani_model->insert_petani($data);
         $this->session->set_flashdata('pesan', 'Data petani berhasil ditambahkan!');
         redirect('admin/petani');
@@ -83,24 +114,19 @@ class Petani extends CI_Controller {
             'status_petani' => $this->input->post('status'),
         ];
 
-        // Pastikan folder uploads/dokumen ada
         $upload_path = './uploads/dokumen/';
         if (!is_dir($upload_path)) {
             mkdir($upload_path, 0755, true);
         }
 
-        // Konfigurasi Upload
-        $config = [
-            'upload_path'   => $upload_path,
-            'allowed_types' => 'jpg|jpeg|png|pdf',
-            'max_size'      => 2048,
-        ];
-        $this->load->library('upload', $config);
+        $config['upload_path']   = $upload_path;
+        $config['allowed_types'] = 'jpg|jpeg|png|pdf';
+        $config['max_size']      = 2048;
+        $this->upload->initialize($config);
 
-        $fields = ['file_ktp', 'file_npwp', 'file_sertifikat'];
+        $fields = ['file_ktp', 'file_npwp', 'file_sertifikat', 'foto_profil'];
         foreach ($fields as $field) {
             if (!empty($_FILES[$field]['name'])) {
-                $this->upload->initialize($config);
                 if ($this->upload->do_upload($field)) {
                     $data[$field] = $this->upload->data('file_name');
                 }
@@ -108,21 +134,45 @@ class Petani extends CI_Controller {
         }
 
         $this->Petani_model->update_petani($id, $data);
-        $this->session->set_flashdata('pesan', 'Data dan dokumen berhasil diperbarui!');
-        redirect('admin/petani/detail/' . $id);
+        $this->session->set_flashdata('pesan', 'Data berhasil diperbarui!');
+        redirect('admin/petani');
     }
 
     // ── 7. VERIFIKASI Petani ─────────────────────────────────────────
     public function verifikasi($id) {
-        $petani = $this->Petani_model->get_petani_by_id($id);
-        if (!$petani) { show_404(); }
+        $data['petani'] = $this->Petani_model->get_petani_by_id($id);
+        if (!$data['petani']) { show_404(); }
 
-        $this->Petani_model->update_petani($id, ['status_petani' => 'Terverifikasi']);
-        $this->session->set_flashdata('pesan', 'Petani berhasil diverifikasi!');
-        redirect('admin/petani/detail/' . $id);
+        if ($this->input->server('REQUEST_METHOD') === 'POST') {
+            $action = $this->input->post('action'); // 'approve' or 'reject'
+            $catatan = $this->input->post('catatan_verifikasi');
+
+            $status_baru = ($action === 'approve') ? 'Active' : 'Suspended';
+            
+            $update_data = [
+                'status_petani' => $status_baru,
+                'catatan_verifikasi' => $catatan
+            ];
+            
+            if ($action === 'approve') {
+                $update_data['status_ktp'] = 'Terverifikasi';
+                $update_data['status_npwp'] = 'Terverifikasi';
+                $update_data['status_sertifikat'] = 'Terverifikasi';
+            } else {
+                $update_data['status_ktp'] = 'Ditolak';
+                $update_data['status_npwp'] = 'Ditolak';
+                $update_data['status_sertifikat'] = 'Ditolak';
+            }
+
+            $this->Petani_model->update_petani($id, $update_data);
+            $this->session->set_flashdata('pesan', 'Verifikasi berhasil diproses!');
+            redirect('admin/petani');
+        }
+
+        $this->load->view('admin/Petani_verifikasi', $data);
     }
 
-    // ── 8. VERIFIKASI Dokumen Spesifik ──────────────────────────────
+    // ── 8. VERIFIKASI Dokumen Spesifik (Opsional, tapi dibiarkan) ──
     public function verifikasi_dokumen($id, $jenis_dokumen) {
         $allowed = ['status_ktp', 'status_npwp', 'status_sertifikat'];
         if (in_array($jenis_dokumen, $allowed)) {
@@ -143,7 +193,6 @@ class Petani extends CI_Controller {
 
     // ── 10. EXPORT PAGE ──────────────────────────────────────────────
     public function export_page() {
-        $data['daftar_petani'] = $this->Petani_model->get_daftar_petani();
-        $this->load->view('admin/Petani_list', $data);
+        $this->load->view('admin/Petani_export');
     }
 }
