@@ -793,8 +793,76 @@
 	</style>
 </head>
 
+<body>
+	<!-- KONDISI MENU: JIKA YANG DIKLIK ADALAH KURIR -->
+	<!-- ================================================================= -->
+	<?php if (isset($active_menu) && $active_menu === 'kurir'): ?>
 
-	<!-- SIDEBAR OVERLAY -->
+		<!-- TAMPILKAN TABEL KURIR DI SINI -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card shadow-sm mb-4">
+					<div class="card-header bg-white d-flex justify-content-between align-items-center">
+						<h6 class="m-0 font-weight-bold text-primary">Daftar Kurir Kelompok Kopi</h6>
+						<a href="<?= base_url('admin/kurir/tambah') ?>" class="btn btn-primary btn-sm">
+							<i class="bi bi-plus-circle mr-2"></i>Tambah Kurir
+						</a>
+					</div>
+					<div class="card-body p-0">
+						<div class="table-responsive">
+							<table class="table table-hover mb-0">
+								<thead>
+									<tr>
+										<th>Nama Kurir</th>
+										<th>No. Telepon</th>
+										<th>Kendaraan</th>
+										<th>Plat Nomor</th>
+										<th>Status</th>
+										<th class="text-center">Aksi</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php if (empty($kurir)): ?>
+										<tr>
+											<td colspan="6" class="text-center py-4">Belum ada data kurir.</td>
+										</tr>
+									<?php else: ?>
+										<?php foreach ($kurir as $k): ?>
+											<tr>
+												<td><?= htmlspecialchars($k->nama_kurir) ?></td>
+												<td><?= htmlspecialchars($k->no_telepon) ?></td>
+												<td><?= htmlspecialchars($k->jenis_kendaraan) ?></td>
+												<td><?= htmlspecialchars($k->plat_nomor) ?></td>
+												<td><?= $k->status_kurir ?></td>
+												<td class="text-center">
+													<a href="<?= base_url('admin/kurir/edit/' . $k->id_kurir) ?>"
+														class="text-warning mr-2"><i class="bi bi-pencil-fill"></i></a>
+													<a href="<?= base_url('admin/kurir/hapus/' . $k->id_kurir) ?>"
+														class="text-danger" onclick="return confirm('Hapus kurir?')"><i
+															class="bi bi-trash-fill"></i></a>
+												</td>
+											</tr>
+										<?php endforeach; ?>
+									<?php endif; ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ================================================================= -->
+		<!-- JIKA YANG DIKLIK BUKAN KURIR (MENU UTAMA), TAMPILKAN DASHBOARD ASLI -->
+		<!-- ================================================================= -->
+	<?php else: ?>
+
+		<!-- Pindahkan / Biarkan seluruh kode isi dashboard asli kelompokmu berada di sini -->
+		<!-- (Mulai dari KPI Card, Grafik, Ringkasan, Form Notif dll milik timmu) -->
+
+	<?php endif; ?>
+	
+<!-- SIDEBAR OVERLAY -->
 	<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 	<!-- SIDEBAR -->
@@ -807,7 +875,7 @@
 		</div>
 		<div class="sidebar-menu-wrapper">
 			<ul class="sidebar-menu">
-				<li class="menu-item active">
+				<li class="menu-item">
 					<a href="<?= base_url('admin/dashboard'); ?>">
 						<i class="bi bi-grid-1x2-fill"></i>Dashboard
 					</a>
@@ -818,7 +886,7 @@
 						<span class="menu-badge">12</span>
 					</a>
 				</li>
-				<li class="menu-item">
+				<li class="menu-item active">
 					<a href="<?= base_url('admin/petani'); ?>">
 						<i class="bi bi-person-badge-fill"></i>Data Petani
 					</a>
@@ -875,33 +943,101 @@
 			<div>
 				<button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
 					style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
+					<i class="bi bi-list"></i>
+				</button>
+				<h2 class="d-inline-block align-middle mb-0">Manajemen Petani</h2>
+				<p class="subtitle mb-0 mt-1">Selamat datang, Admin! <span id="currentDateTime"
+						style="color: var(--amber-cream); font-weight:500;"></span></p>
+			</div>
+			<div class="d-flex align-items-center gap-3" style="gap: 12px;">
+				<!-- NOTIFICATION BELL -->
+				<div style="position: relative;">
+					<button class="notif-btn" id="notifToggle">
+						<i class="bi bi-bell" style="font-size: 1.2rem;"></i>
+						<?php if (isset($unread_count) && $unread_count > 0): ?>
+							<span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
+						<?php else: ?>
+							<span class="notif-dot" id="notifCount" style="display:none;">0</span>
+						<?php endif; ?>
+					</button>
 
-					<i class="bi bi-list"></i></button></div></div>
+					<!-- NOTIFICATION DROPDOWN -->
+					<div class="notif-dropdown" id="notifDropdown">
+						<div class="notif-dropdown-header">
+							<span>
+								<?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
+							</span>
+							<div>
+								<?php if (isset($unread_count) && $unread_count > 0): ?>
+									<a href="#" id="markAllReadBtn" class="mr-2"
+										style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
+								<?php endif; ?>
+								<a href="<?= base_url('admin/dashboard/history'); ?>"
+									style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
+							</div>
+						</div>
+						<div class="notif-dropdown-list" id="notifList">
+							<?php if (!empty($notifikasi)): ?>
+								<?php foreach ($notifikasi as $n): ?>
+									<a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
+										href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
+										<?php
+										$icon_type = $n['icon'] ?? 'info';
+										$icon_map = [
+											'success' => 'bi-check-circle-fill',
+											'warning' => 'bi-exclamation-triangle-fill',
+											'danger' => 'bi-x-circle-fill',
+											'info' => 'bi-info-circle-fill'
+										];
+										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+										?>
+										<div class="notif-icon <?= $icon_type; ?>">
+											<i class="bi <?= $icon_class; ?>"></i>
+										</div>
+										<div class="notif-text">
+											<?= htmlspecialchars($n['isi_notifikasi']); ?>
+											<span
+												class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+										</div>
+										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
+											<span class="notif-badge-new">Baru</span>
+										<?php endif; ?>
+									</a>
+								<?php endforeach; ?>
+							<?php else: ?>
+								<div class="text-center text-muted py-5 px-3">
+									<i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
+									<p class="small mb-0">Tidak ada notifikasi</p>
+								</div>
+							<?php endif; ?>
+						</div>
+						<div class="p-2 text-center border-top"
+							style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+							<a href="<?= base_url('admin/dashboard/settings'); ?>"
+								class="small text-secondary font-weight-bold text-decoration-none">
+								<i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
+							</a>
+						</div>
+					</div>
+				</div>
+				<!-- USER AVATAR -->
+				<div class="d-flex align-items-center gap-2"
+					style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
+					<i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
+					<span style="font-weight:500; font-size:0.85rem;">Admin</span>
+				</div>
+			</div>
+		</div>
+
+		
 
 
-<div class="content-wrapper" style="min-height: 100vh; padding: 25px; background-color: #fcfaf7;">
-    <main id="main" class="main">
-        
-        <div class="d-flex justify-content-between align-items-end mb-4">
-            <div>
-                <h2 class="fw-bold mb-1" style="color: #4a2c11;">Manajemen Petani</h2>
-                <nav>
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="<?= base_url('admin/dashboard'); ?>" style="color: #d4a373; text-decoration: none;">Dashboard</a></li>
-                        <li class="breadcrumb-item active" style="color: #4a2c11;">Data Petani</li>
-                    </ol>
-                </nav>
-            </div>
-            <a href="<?= base_url('admin/petani/export_page'); ?>" class="btn shadow-sm px-4 py-2" style="background-color: #4a2c11; color: #fff; border-radius: 10px;">
-                <i class="bi bi-file-earmark-arrow-down me-2"></i> Export Data
-            </a>
-        </div>
-
-        <div class="row mb-4">
+<div class="page-body" style="padding: 24px;">
+<div class="row mb-4">
             <div class="col-md-3">
                 <div class="card border-0 shadow-sm p-4" style="border-radius: 15px; border-left: 5px solid #d4a373;">
                     <div class="d-flex align-items-center">
-                        <div class="p-3 rounded-circle" style="background-color: #fdfaf5; color: #d4a373;">
+                        <div class="p-3 rounded-circle" style="background-color: #FDF5ED; color: #d4a373;">
                             <i class="bi bi-people-fill fs-4"></i>
                         </div>
                         <div class="ms-3">
@@ -924,14 +1060,14 @@
                             <option value="Ditolak" <?= (isset($status_filter) && $status_filter == 'Ditolak') ? 'selected' : ''; ?>>Ditolak</option>
                         </select>
                     </form>
-                    <a href="<?= base_url('admin/petani/tambah'); ?>" class="btn px-4" style="background-color: #d4a373; color: #fff; border-radius: 10px;">
+                    <a href="<?= base_url('admin/petani/tambah'); ?>" class="btn px-4 shadow-sm" style="background-color: #E6A15C; color: #fff; border-radius: 10px; font-weight: 600;">
                         + Tambah Petani
                     </a>
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead style="background-color: #fdfaf5;">
+                    <table class="table table-hover table-custom align-middle mb-0" style="background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                        <thead style="background-color: #FDF5ED;">
                             <tr style="color: #4a2c11; text-transform: uppercase; font-size: 13px;">
                                 <th class="p-4">No</th>
                                 <th>Nama Petani</th>
@@ -973,13 +1109,17 @@
                 </div>
             </div>
         </div>
-    </main>
-</div>
+    
 
-	</div>
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	<script>
+		// ============================================
+		// 1. SIDEBAR TOGGLE
+		// ============================================
 		const sidebar = document.getElementById('sidebarMenu');
 		const overlay = document.getElementById('sidebarOverlay');
 		const toggleBtn = document.getElementById('sidebarToggle');
@@ -990,8 +1130,245 @@
 			document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
 		}
 
-		if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
-		if (overlay) overlay.addEventListener('click', toggleSidebar);
+		if (toggleBtn) {
+			toggleBtn.addEventListener('click', toggleSidebar);
+		}
+		if (overlay) {
+			overlay.addEventListener('click', toggleSidebar);
+		}
+
+		document.addEventListener('click', function (e) {
+			if (window.innerWidth > 991.98) return;
+			if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
+				if (sidebar.classList.contains('open')) {
+					toggleSidebar();
+				}
+			}
+		});
+
+		// ============================================
+		// 2. NOTIFICATION DROPDOWN (M11-F01)
+		// ============================================
+		const notifToggle = document.getElementById('notifToggle');
+		const notifDropdown = document.getElementById('notifDropdown');
+
+		if (notifToggle) {
+			notifToggle.addEventListener('click', function (e) {
+				e.stopPropagation();
+				notifDropdown.classList.toggle('show');
+			});
+		}
+
+		document.addEventListener('click', function (e) {
+			if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
+				notifDropdown.classList.remove('show');
+			}
+		});
+
+		// ============================================
+		// 3. MARK ALL READ (M11-F03)
+		// ============================================
+		function markAllRead() {
+			if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+				$.ajax({
+					url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
+					type: 'POST',
+					dataType: 'json',
+					success: function (response) {
+						if (response.success) {
+							location.reload();
+						} else {
+							alert('Gagal menandai semua notifikasi.');
+						}
+					},
+					error: function () {
+						alert('Terjadi kesalahan. Silakan coba lagi.');
+					}
+				});
+			}
+		}
+
+		$('#markAllReadBtn').on('click', function (e) {
+			e.preventDefault();
+			markAllRead();
+		});
+
+		// ============================================
+		// 4. CHART.JS - GRAFIK PENJUALAN (M10-F02)
+		// ============================================
+		let salesChart;
+
+		function initChart() {
+			const ctx = document.getElementById('salesChart')?.getContext('2d');
+			if (!ctx) return;
+
+			const chartData = <?= isset($grafik_penjualan['values']) ? json_encode($grafik_penjualan['values']) : json_encode([120, 150, 180, 140, 200, 230, 210, 250, 270, 240, 300, 280]); ?>;
+			const chartLabels = <?= isset($grafik_penjualan['labels']) ? json_encode($grafik_penjualan['labels']) : json_encode(['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des']); ?>;
+
+			salesChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: chartLabels,
+					datasets: [{
+						label: 'Penjualan (Kg)',
+						data: chartData,
+						borderColor: '#E6A15C',
+						backgroundColor: 'rgba(230, 161, 92, 0.08)',
+						fill: true,
+						tension: 0.4,
+						pointBackgroundColor: '#E6A15C',
+						pointBorderColor: '#FFFFFF',
+						pointBorderWidth: 2,
+						pointRadius: 4,
+						pointHoverRadius: 7,
+						borderWidth: 2.5
+					}]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: false
+						},
+						tooltip: {
+							backgroundColor: '#2C1808',
+							titleColor: '#E6A15C',
+							bodyColor: '#FAF6F0',
+							cornerRadius: 8,
+							padding: 10,
+							callbacks: {
+								label: function (context) {
+									return context.parsed.y + ' kg';
+								}
+							}
+						}
+					},
+					scales: {
+						y: {
+							beginAtZero: true,
+							grid: {
+								color: 'rgba(74, 44, 17, 0.06)',
+								drawBorder: false,
+							},
+							ticks: {
+								font: {
+									size: 10,
+									family: 'Plus Jakarta Sans'
+								},
+								color: '#70655E',
+								stepSize: 50,
+								callback: function (value) {
+									return value + ' kg';
+								}
+							}
+						},
+						x: {
+							grid: {
+								display: false
+							},
+							ticks: {
+								font: {
+									size: 10,
+									family: 'Plus Jakarta Sans'
+								},
+								color: '#70655E',
+							}
+						}
+					},
+					interaction: {
+						intersect: false,
+						mode: 'index'
+					}
+				}
+			});
+		}
+
+		function refreshChart() {
+			if (salesChart) {
+				$.get('<?= base_url('admin/dashboard/get_chart_data'); ?>', function (data) {
+					if (data.success) {
+						salesChart.data.datasets[0].data = data.values;
+						salesChart.update();
+					}
+				});
+			}
+		}
+
+		document.addEventListener('DOMContentLoaded', function () {
+			initChart();
+		});
+
+		// ============================================
+		// 5. CURRENT DATE TIME
+		// ============================================
+		function updateDateTime() {
+			const now = new Date();
+			const options = {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit'
+			};
+			const el = document.getElementById('currentDateTime');
+			if (el) {
+				el.textContent = now.toLocaleDateString('id-ID', options);
+			}
+		}
+		updateDateTime();
+		setInterval(updateDateTime, 60000);
+
+		// ============================================
+		// 6. SWITCH HANDLING (M11-F03)
+		// ============================================
+		document.querySelectorAll('.custom-control-input').forEach(function (switchEl) {
+			switchEl.addEventListener('change', function () {
+				const label = this.closest('.custom-control').querySelector('.custom-control-label');
+				const setting = label ? label.textContent.trim() : 'Unknown';
+				const status = this.checked ? 'diaktifkan' : 'dinonaktifkan';
+				console.log('Notifikasi ' + setting + ' ' + status);
+			});
+		});
+
+		// ============================================
+		// 7. AUTO REFRESH NOTIFIKASI (SETIAP 60 DETIK)
+		// ============================================
+		function refreshNotifications() {
+			$.ajax({
+				url: '<?= base_url('admin/dashboard/get_notifications_ajax'); ?>',
+				type: 'GET',
+				dataType: 'json',
+				success: function (response) {
+					if (response.success) {
+						const countEl = document.getElementById('notifCount');
+						if (response.unread > 0) {
+							countEl.textContent = response.unread;
+							countEl.style.display = 'flex';
+						} else {
+							countEl.style.display = 'none';
+						}
+					}
+				}
+			});
+		}
+
+		// Refresh setiap 60 detik
+		// setInterval(refreshNotifications, 60000);
+
+		console.log('âœ… Modul 11: Dashboard f& Notifikasi siap digunakan!');
+		console.log('ðŸ“‹ Fitur yang tersedia:');
+		console.log('   - KPI Cards (M11-F01)');
+		console.log('   - Grafik Penjualan (M10-F02)');
+		console.log('   - Produk Terlaris (M10-F04)');
+		console.log('   - Pesanan Terbaru (M11-F01)');
+		console.log('   - Petani Baru (M11-F01)');
+		console.log('   - Quick Action (M11-F04)');
+		console.log('   - Notifikasi Real-time (M11-F01)');
+		console.log('   - Setting Notifikasi (M11-F03)');
 	</script>
 </body>
+
 </html>
+
