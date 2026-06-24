@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analisis & Laporan - Sistem Supply Chain Kopi</title>
+    <title>Analytics & Reports - Sistem Supply Chain Kopi</title>
     <meta name="description" content="Dashboard laporan dan analytics sistem supply chain kopi Poktan Liberchain">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -321,6 +321,10 @@
             box-shadow: var(--shadow-soft);
             transition: var(--transition-smooth);
             overflow: hidden;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .stat-box:hover {
@@ -345,20 +349,23 @@
             text-transform: uppercase;
             color: var(--text-secondary);
             letter-spacing: 0.7px;
+            margin-bottom: 4px;
         }
 
         .stat-num {
             font-size: 1.7rem;
             font-weight: 700;
-            margin-top: 6px;
-            margin-bottom: 0;
+            margin-top: 8px;
+            margin-bottom: 12px;
             color: var(--dark-coffee);
+            line-height: 1.3;
+            word-break: break-word;
         }
 
         .stat-change {
             font-size: 0.75rem;
             font-weight: 600;
-            margin-top: 4px;
+            margin-top: 8px;
         }
 
         .stat-change.up   { color: #10b981; }
@@ -397,7 +404,7 @@
         .custom-card:hover { box-shadow: var(--shadow-hover); }
 
         .custom-card .card-header-custom {
-            padding: 18px 24px;
+            padding: 18px 24px 12px;
             border-bottom: 1px solid rgba(74, 44, 17, 0.06);
             display: flex;
             align-items: center;
@@ -411,12 +418,12 @@
             font-size: 0.85rem;
         }
 
-        .custom-card .card-body-custom { padding: 24px; }
+        .custom-card .card-body-custom { padding: 20px 24px 24px; }
 
         /* --- CHART --- */
         .chart-container {
             position: relative;
-            height: 260px;
+            height: 300px;
             width: 100%;
         }
 
@@ -578,6 +585,7 @@
             border-radius: 10px;
             padding: 18px 20px;
             border-left: 4px solid;
+            margin-bottom: 8px;
         }
 
         .keu-summary-card.pendapatan { border-color: #10b981; background: #F0FDF4; }
@@ -633,7 +641,7 @@
         @media (max-width: 575.98px) {
             .main-content { padding: 16px 12px 20px; }
             .stat-num { font-size: 1.3rem; }
-            .stat-box { padding: 16px 18px; }
+            .stat-box { padding: 16px 18px; min-height: 160px; }
         }
 
         /* SCROLLBAR */
@@ -708,7 +716,7 @@
             </li>
             <li class="menu-item active">
                 <a href="<?= base_url('admin/laporan'); ?>">
-                    <i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
+                    <i class="bi bi-file-earmark-bar-graph-fill"></i>Analytics & Reports
                 </a>
             </li>
         </ul>
@@ -729,7 +737,7 @@
             <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle" style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
                 <i class="bi bi-list"></i>
             </button>
-            <h2 class="d-inline-block align-middle mb-0">Analisis & Laporan</h2>
+            <h2 class="d-inline-block align-middle mb-0">Analytics & Reports</h2>
             <p class="subtitle mb-0 mt-1">Ringkasan data bisnis dan analitik <span id="currentDateTime" style="color: var(--amber-cream); font-weight:500;"></span></p>
         </div>
         <div class="d-flex align-items-center flex-wrap mt-2 mt-md-0" style="gap: 10px;">

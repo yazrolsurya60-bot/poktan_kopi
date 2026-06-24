@@ -74,10 +74,42 @@
     <div class="sidebar-menu-wrapper">
         <ul class="sidebar-menu">
             <li class="menu-item">
-                <a href="<?= base_url('petani/dashboard'); ?>"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
+                <a href="<?= base_url('petani/dashboard'); ?>">
+                    <i class="bi bi-grid-1x2-fill"></i>Dashboard
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="<?= base_url('petani/lahan'); ?>">
+                    <i class="bi bi-geo-alt-fill"></i>Kelola Lahan
+                    <span class="menu-badge" style="margin-left: auto; background: rgba(230, 161, 92, 0.2); color: #E6A15C; font-size: 0.7rem; padding: 2px 10px; border-radius: 20px; font-weight: 600;">3</span>
+                </a>
             </li>
             <li class="menu-item active">
-                <a href="<?= base_url('petani/panen'); ?>"><i class="bi bi-textarea-rose"></i>Manajemen Panen</a>
+                <a href="<?= base_url('petani/panen'); ?>">
+                    <i class="bi bi-textarea-rose"></i>Manajemen Panen
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="<?= base_url('petani/produk'); ?>">
+                    <i class="bi bi-box-seam"></i>Katalog Produk
+                    <span class="menu-badge" style="margin-left: auto; background: rgba(230, 161, 92, 0.2); color: #E6A15C; font-size: 0.7rem; padding: 2px 10px; border-radius: 20px; font-weight: 600;">5</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="<?= base_url('petani/transaksi'); ?>">
+                    <i class="bi bi-cart-check-fill"></i>Pesanan Masuk
+                    <span class="menu-badge" style="margin-left: auto; background: rgba(230, 161, 92, 0.2); color: #E6A15C; font-size: 0.7rem; padding: 2px 10px; border-radius: 20px; font-weight: 600;">8</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="<?= base_url('petani/tracking'); ?>">
+                    <i class="bi bi-truck"></i>Tracking Kiriman
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="<?= base_url('petani/laporan'); ?>">
+                    <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan
+                </a>
             </li>
         </ul>
     </div>

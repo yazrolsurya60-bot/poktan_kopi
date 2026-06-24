@@ -793,6 +793,82 @@
 </head>
 
 <body>
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 5e259f91ac99edad6eba8d6d12534512a79b1062
+	<!-- ================================================================= -->
+<!-- KONDISI MENU: JIKA YANG DIKLIK ADALAH KURIR -->
+<!-- ================================================================= -->
+<?php if (isset($active_menu) && $active_menu === 'kurir'): ?>
+
+    <!-- TAMPILKAN TABEL KURIR DI SINI -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Daftar Kurir Kelompok Kopi</h6>
+                    <a href="<?= base_url('admin/kurir/tambah') ?>" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle mr-2"></i>Tambah Kurir
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Nama Kurir</th>
+                                    <th>No. Telepon</th>
+                                    <th>Kendaraan</th>
+                                    <th>Plat Nomor</th>
+                                    <th>Status</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (empty($kurir)): ?>
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">Belum ada data kurir.</td>
+                                    </tr>
+                                <?php else: ?>
+                                    <?php foreach ($kurir as $k): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($k->nama_kurir) ?></td>
+                                            <td><?= htmlspecialchars($k->no_telepon) ?></td>
+                                            <td><?= htmlspecialchars($k->jenis_kendaraan) ?></td>
+                                            <td><?= htmlspecialchars($k->plat_nomor) ?></td>
+                                            <td><?= $k->status_kurir ?></td>
+                                            <td class="text-center">
+                                                <a href="<?= base_url('admin/kurir/edit/' . $k->id_kurir) ?>" class="text-warning mr-2"><i class="bi bi-pencil-fill"></i></a>
+                                                <a href="<?= base_url('admin/kurir/hapus/' . $k->id_kurir) ?>" class="text-danger" onclick="return confirm('Hapus kurir?')"><i class="bi bi-trash-fill"></i></a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- ================================================================= -->
+<!-- JIKA YANG DIKLIK BUKAN KURIR (MENU UTAMA), TAMPILKAN DASHBOARD ASLI -->
+<!-- ================================================================= -->
+<?php else: ?>
+
+    <!-- Pindahkan / Biarkan seluruh kode isi dashboard asli kelompokmu berada di sini -->
+    <!-- (Mulai dari KPI Card, Grafik, Ringkasan, Form Notif dll milik timmu) -->
+
+<?php endif; ?>
+<!-- ================================================================= -->
+<<<<<<< HEAD
+>>>>>>> 433eb8e300ef0f8efe1ca5225c15c9218cf570ab
+=======
+
+>>>>>>> 5e259f91ac99edad6eba8d6d12534512a79b1062
 
 	<!-- SIDEBAR OVERLAY -->
 	<div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -1522,7 +1598,7 @@
 		// Refresh setiap 60 detik
 		// setInterval(refreshNotifications, 60000);
 
-		console.log('✅ Modul 11: Dashboard & Notifikasi siap digunakan!');
+		console.log('✅ Modul 11: Dashboard f& Notifikasi siap digunakan!');
 		console.log('📋 Fitur yang tersedia:');
 		console.log('   - KPI Cards (M11-F01)');
 		console.log('   - Grafik Penjualan (M10-F02)');

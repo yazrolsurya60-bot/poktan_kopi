@@ -1,302 +1,533 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= isset($title) ? $title : 'POKTAN - Liberchain'; ?></title>
+    <title><?= $title ?? 'Sistem Supply Chain Kopi' ?></title>
 
+    <!-- Bootstrap 4 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Leaflet JS (untuk map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Chart.js (untuk grafik) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <style>
-    /* --- ROOT STYLE & LAYOUT --- */
-    body {
-        font-family: 'Nunito', sans-serif;
-        background-color: #f6f9ff;
-        margin: 0;
-        padding: 0;
+    :root {
+        --roasted-brown: #4A2C11;
+        --dark-coffee: #2C1808;
+        --amber-cream: #E6A15C;
+        --bg-cream: #FAF6F0;
+        --card-white: #FFFFFF;
+        --text-secondary: #70655E;
+        --sidebar-width: 260px;
+        --shadow-soft: 0 8px 30px rgba(44, 24, 8, 0.08);
+        --shadow-hover: 0 12px 40px rgba(44, 24, 8, 0.15);
+        --radius-card: 14px;
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* --- SIDEBAR UTAMA (Cokelat Gelap) --- */
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: var(--bg-cream);
+        color: var(--dark-coffee);
+        overflow-x: hidden;
+    }
+
+    /* ============================================
+           SIDEBAR
+           ============================================ */
     .sidebar {
-        width: 280px;
+        width: var(--sidebar-width);
         height: 100vh;
         position: fixed;
         top: 0;
         left: 0;
-        background-color: #2b1b0c;
-        /* Warna cokelat gelap sesuai gambar */
-        color: #d9c3b0;
+        background: linear-gradient(180deg, var(--dark-coffee) 0%, #1a0e04 100%);
+        color: var(--bg-cream);
+        z-index: 100;
+        transition: var(--transition-smooth);
+        box-shadow: 4px 0 25px rgba(44, 24, 8, 0.2);
         display: flex;
         flex-direction: column;
-        z-index: 1000;
-        border-right: 1px solid #3d2a19;
     }
 
-    /* --- BRAND HEADER SIDEBAR --- */
     .sidebar-brand {
-        padding: 24px 20px;
+        padding: 28px 24px 20px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border-bottom: 1px solid rgba(250, 246, 240, 0.08);
+        color: var(--amber-cream);
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 10px;
     }
 
-    .brand-icon {
-        background-color: #4a341e;
-        width: 45px;
-        height: 45px;
-        border-radius: 12px;
+    .sidebar-brand .brand-icon {
+        width: 40px;
+        height: 40px;
+        background: rgba(230, 161, 92, 0.15);
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #e6a753;
-        font-size: 22px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        font-size: 1.3rem;
     }
 
-    .brand-text h4 {
-        color: #f7e6d5;
-        font-size: 18px;
-        font-weight: 700;
-        margin: 0;
-        letter-spacing: 1px;
-    }
-
-    .brand-text p {
-        color: #8c735c;
-        font-size: 12px;
-        margin: 0;
-    }
-
-    /* --- FITUR GULIRKAN (Scrollable Menu Area) --- */
     .sidebar-menu-wrapper {
         flex: 1;
         overflow-y: auto;
-        /* Membuat menu bisa digulirkan jika penuh */
-        padding-left: 15px;
-        /* Memberi ruang untuk efek lengkungan active */
-        padding-right: 10px;
+        padding: 15px 0;
     }
 
-    /* Kustomisasi Scrollbar agar terlihat rapi dan tipis */
-    .sidebar-menu-wrapper::-webkit-scrollbar {
-        width: 5px;
-    }
-
-    .sidebar-menu-wrapper::-webkit-scrollbar-thumb {
-        background-color: #4a341e;
-        border-radius: 10px;
-    }
-
-    /* --- LIST MENU NAVIGASI --- */
-    .sidebar-nav {
+    .sidebar-menu {
         list-style: none;
-        padding: 0;
         margin: 0;
+        padding: 0;
     }
 
-    .sidebar-nav .nav-item {
-        margin-bottom: 8px;
-        position: relative;
-    }
-
-    .sidebar-nav .nav-link {
+    .menu-item a {
         display: flex;
         align-items: center;
-        padding: 14px 20px;
-        color: #a68c74;
-        font-size: 15px;
-        font-weight: 600;
+        padding: 12px 24px;
+        color: #A8988A;
+        font-weight: 500;
+        font-size: 0.9rem;
         text-decoration: none;
-        border-radius: 16px 0 0 16px;
-        /* Sisi kiri melengkung */
-        transition: all 0.3s ease;
-        gap: 15px;
-    }
-
-    .sidebar-nav .nav-link i {
-        font-size: 20px;
-        transition: all 0.3s ease;
-    }
-
-    /* Efek Hover Menu */
-    .sidebar-nav .nav-link:hover {
-        color: #f7e6d5;
-        background-color: rgba(255, 255, 255, 0.03);
-    }
-
-    /* --- MENU AKTIF (Efek Lengkung Menjorok ke Luar) --- */
-    .sidebar-nav .nav-item.active .nav-link {
-        background-color: #5c3c1e;
-        /* Warna cokelat highlight menu aktif */
-        color: #ffffff;
-        font-weight: 700;
-    }
-
-    /* Pembatas indikator garis tegak vertikal di ujung kiri jika diperlukan */
-    .sidebar-nav .nav-item.active::before {
-        content: '';
-        position: absolute;
-        left: -15px;
-        top: 15%;
-        height: 70%;
-        width: 5px;
-        background-color: #e6a753;
-        border-radius: 0 4px 4px 0;
-    }
-
-    /* --- BADGE ANGKA NOTIFIKASI --- */
-    .badge-count {
-        background-color: #442d17;
-        color: #e6a753;
-        font-size: 12px;
-        font-weight: 700;
-        padding: 3px 10px;
+        transition: var(--transition-smooth);
+        position: relative;
+        margin: 2px 10px;
         border-radius: 10px;
+    }
+
+    .menu-item a i {
+        font-size: 1.15rem;
+        margin-right: 14px;
+        width: 22px;
+        text-align: center;
+    }
+
+    .menu-item a .menu-badge {
         margin-left: auto;
+        background: rgba(230, 161, 92, 0.2);
+        color: var(--amber-cream);
+        font-size: 0.7rem;
+        padding: 2px 10px;
+        border-radius: 20px;
+        font-weight: 600;
     }
 
-    /* --- TOMBOL KELUAR / LOGOUT (Paling Bawah) --- */
+    .menu-item.active a,
+    .menu-item a:hover {
+        color: #ffffff;
+        background: rgba(230, 161, 92, 0.12);
+    }
+
+    .menu-item.active a {
+        background: rgba(230, 161, 92, 0.18);
+        border-left: 3px solid var(--amber-cream);
+    }
+
     .sidebar-footer {
-        padding: 20px;
-        border-top: 1px solid #3d2a19;
+        padding: 16px 20px;
+        border-top: 1px solid rgba(250, 246, 240, 0.06);
+        margin-top: auto;
     }
 
-    .btn-logout {
+    .sidebar-footer .btn-logout {
+        width: 100%;
+        padding: 10px 16px;
+        border: 1px solid rgba(250, 246, 240, 0.1);
+        border-radius: 10px;
+        background: transparent;
+        color: #A8988A;
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: var(--transition-smooth);
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
-        width: 100%;
-        background-color: rgba(0, 0, 0, 0.2);
-        border: 1px solid #4a341e;
-        color: #a68c74;
-        padding: 12px;
-        border-radius: 12px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.3s ease;
+        cursor: pointer;
     }
 
-    .btn-logout:hover {
-        background-color: #6b211a;
-        color: #fff;
-        border-color: #8c2a20;
-        text-decoration: none;
+    .sidebar-footer .btn-logout:hover {
+        background: rgba(230, 161, 92, 0.1);
+        color: #ffffff;
+        border-color: rgba(230, 161, 92, 0.2);
     }
 
-    /* --- AREA KONTEN UTAMA (Disebelah Sidebar) --- */
-    .content-wrapper {
-        margin-left: 280px;
-        /* Lebar sama dengan sidebar */
-        padding: 30px;
+    /* ============================================
+           MAIN CONTENT
+           ============================================ */
+    .main-content {
+        margin-left: var(--sidebar-width);
+        padding: 30px 40px 40px;
         min-height: 100vh;
+        transition: var(--transition-smooth);
+    }
+
+    .page-header {
+        border-bottom: 1px solid rgba(74, 44, 17, 0.08);
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+    }
+
+    .page-header h2 {
+        font-weight: 700;
+        color: var(--dark-coffee);
+        letter-spacing: -0.02em;
+    }
+
+    .page-header .subtitle {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-top: 2px;
+    }
+
+    /* ============================================
+           NOTIFICATION BELL
+           ============================================ */
+    .notif-btn {
+        position: relative;
+        background: var(--card-white);
+        border: 1px solid rgba(74, 44, 17, 0.06);
+        border-radius: 12px;
+        padding: 8px 14px;
+        color: var(--dark-coffee);
+        transition: var(--transition-smooth);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .notif-btn:hover {
+        background: var(--bg-cream);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .notif-btn .notif-dot {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 18px;
+        height: 18px;
+        background: #EF4444;
+        border-radius: 50%;
+        font-size: 0.6rem;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        border: 2px solid white;
+    }
+
+    /* ============================================
+           STATUS BADGE (konsisten dengan dashboard)
+           ============================================ */
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .status-badge.pending {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    .status-badge.processing {
+        background: #DBEAFE;
+        color: #1E40AF;
+    }
+
+    .status-badge.delivery {
+        background: #EDE9FE;
+        color: #5B21B6;
+    }
+
+    .status-badge.complete {
+        background: #D1FAE5;
+        color: #065F46;
+    }
+
+    .status-badge.cancelled {
+        background: #FEE2E2;
+        color: #991B1B;
+    }
+
+    /* ============================================
+           RESPONSIVE
+           ============================================ */
+    @media (max-width: 991.98px) {
+        .sidebar {
+            left: calc(-1 * var(--sidebar-width));
+            box-shadow: none;
+        }
+
+        .sidebar.open {
+            left: 0;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-content {
+            margin-left: 0;
+            padding: 20px 16px 30px;
+        }
+
+        .page-header h2 {
+            font-size: 1.3rem;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .main-content {
+            padding: 16px 12px 20px;
+        }
+    }
+
+    /* ============================================
+           SIDEBAR OVERLAY
+           ============================================ */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 99;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    @media (max-width: 991.98px) {
+        .sidebar-overlay.active {
+            display: block;
+        }
+    }
+
+    /* ============================================
+           SCROLLBAR
+           ============================================ */
+    .sidebar-menu-wrapper::-webkit-scrollbar,
+    .notif-dropdown-list::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .sidebar-menu-wrapper::-webkit-scrollbar-track,
+    .notif-dropdown-list::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .sidebar-menu-wrapper::-webkit-scrollbar-thumb,
+    .notif-dropdown-list::-webkit-scrollbar-thumb {
+        background: rgba(230, 161, 92, 0.3);
+        border-radius: 10px;
     }
     </style>
 </head>
 
 <body>
 
-    <div class="sidebar">
+    <!-- SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+    <!-- ============================================
+     SIDEBAR - DINAMIS BERDASARKAN ROLE
+     ============================================ -->
+    <?php
+$role = $this->session->userdata('role');
+$nama_user = $this->session->userdata('nama') ?? 'User';
+$base_url = base_url();
+?>
+
+    <div class="sidebar" id="sidebarMenu">
         <div class="sidebar-brand">
             <div class="brand-icon">
+                <?php if ($role == 'Admin'): ?>
                 <i class="bi bi-patch-check-fill"></i>
+                <?php elseif ($role == 'Petani'): ?>
+                <i class="bi bi-patch-check-fill"></i>
+                <?php else: ?>
+                <i class="bi bi-cup-hot-fill"></i>
+                <?php endif; ?>
             </div>
-            <div class="brand-text">
-                <h4>POKTAN</h4>
-                <p>Liberchain</p>
-            </div>
+            <span>
+                <?php if ($role == 'Admin'): ?>
+                ADMIN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
+                <?php elseif ($role == 'Petani'): ?>
+                PETANI <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
+                <?php else: ?>
+                MEMBER <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Kafi</small>
+                <?php endif; ?>
+            </span>
         </div>
 
         <div class="sidebar-menu-wrapper">
-            <ul class="sidebar-nav">
+            <ul class="sidebar-menu">
 
-                <li
-                    class="nav-item <?= ($this->uri->segment(2) == 'dashboard' || $this->uri->segment(1) == 'dashboard') ? 'active' : '' ?>">
-                    <a href="<?= base_url('admin/dashboard') ?>" class="nav-link">
-                        <i class="bi bi-grid-1x2-fill"></i>
-                        <span>Dashboard</span>
-                    </a>
+                <?php if ($role == 'Admin'): ?>
+                <!-- ====== MENU ADMIN ====== -->
+                <li class="menu-item <?= current_url() == base_url('admin/dashboard') ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/dashboard'); ?>"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'admin/user') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/user'); ?>"><i class="bi bi-people-fill"></i>Manajemen User <span
+                            class="menu-badge">12</span></a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'admin/petani') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/petani'); ?>"><i class="bi bi-person-badge-fill"></i>Data Petani</a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'admin/lahan') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/lahan'); ?>"><i class="bi bi-map-fill"></i>Manajemen Lahan</a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'admin/panen') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/panen'); ?>"><i class="bi bi-tree-fill"></i>Manajemen Panen</a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'admin/produk') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/produk'); ?>"><i class="bi bi-box-seam-fill"></i>Manajemen Produk</a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'admin/transaksi') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/transaksi'); ?>"><i class="bi bi-wallet2"></i>Transaksi <span
+                            class="menu-badge">8</span></a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'admin/kurir') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/kurir'); ?>"><i class="bi bi-truck"></i>Manajemen Kurir</a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'admin/mitra') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/mitra'); ?>"><i class="bi bi-shop"></i>Manajemen Mitra</a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'admin/laporan') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/laporan'); ?>"><i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan
+                        & Analytics</a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-people-fill"></i>
-                        <span>Manajemen User</span>
-                        <span class="badge-count">12</span>
-                    </a>
+                <?php elseif ($role == 'Petani'): ?>
+                <!-- ====== MENU PETANI ====== -->
+                <li class="menu-item <?= current_url() == base_url('petani/dashboard') ? 'active' : '' ?>">
+                    <a href="<?= base_url('petani/dashboard'); ?>"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'petani/lahan') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('petani/lahan'); ?>"><i class="bi bi-geo-alt-fill"></i>Kelola Lahan <span
+                            class="menu-badge">3</span></a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'petani/panen') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('petani/panen'); ?>"><i class="bi bi-textarea-rose"></i>Manajemen Panen</a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'petani/produk') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('petani/produk'); ?>"><i class="bi bi-box-seam"></i>Katalog Produk <span
+                            class="menu-badge">5</span></a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'petani/transaksi') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('petani/transaksi'); ?>"><i class="bi bi-cart-check-fill"></i>Pesanan Masuk
+                        <span class="menu-badge">8</span></a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'petani/tracking') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('petani/tracking'); ?>"><i class="bi bi-truck"></i>Tracking Kiriman</a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'petani/laporan') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('petani/laporan'); ?>"><i
+                            class="bi bi-file-earmark-bar-graph-fill"></i>Laporan</a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-person-vcard-fill"></i>
-                        <span>Data Petani</span>
-                    </a>
+                <?php else: ?>
+                <!-- ====== MENU PEMBELI ====== -->
+                <li class="menu-item <?= current_url() == base_url('pembeli/dashboard') ? 'active' : '' ?>">
+                    <a href="<?= base_url('pembeli/dashboard'); ?>"><i class="bi bi-house-door-fill"></i>Beranda
+                        Akun</a>
                 </li>
-
-                <li class="nav-item <?= ($this->uri->segment(2) == 'lahan') ? 'active' : '' ?>">
-                    <a href="<?= base_url($this->session->userdata('role') == 'Admin' ? 'admin/lahan' : 'petani/lahan') ?>"
-                        class="nav-link">
-                        <i class="bi bi-map-fill"></i>
-                        <span>Manajemen Lahan</span>
-                    </a>
+                <li class="menu-item <?= strpos(current_url(), 'landing/produk') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('landing/produk'); ?>"><i class="bi bi-shop-window"></i>Katalog Belanja</a>
                 </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-tree-fill"></i>
-                        <span>Manajemen Panen</span>
-                    </a>
+                <li class="menu-item <?= strpos(current_url(), 'pembeli/transaksi') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('pembeli/transaksi'); ?>"><i class="bi bi-receipt"></i>Riwayat Transaksi <span
+                            class="menu-badge">8</span></a>
                 </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-box-seam-fill"></i>
-                        <span>Manajemen Produk</span>
-                    </a>
+                <li class="menu-item <?= strpos(current_url(), 'pembeli/tracking') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('pembeli/tracking'); ?>"><i class="bi bi-geo-alt-fill"></i>Lacak Pengiriman
+                        <span class="menu-badge">2</span></a>
                 </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-wallet2"></i>
-                        <span>Transaksi</span>
-                        <span class="badge-count">8</span>
-                    </a>
+                <li class="menu-item <?= strpos(current_url(), 'pembeli/poin') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('pembeli/poin'); ?>"><i class="bi bi-gift-fill"></i>Tukar Poin Hadiah</a>
                 </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-truck"></i>
-                        <span>Manajemen Kurir</span>
-                    </a>
+                <li class="menu-item <?= strpos(current_url(), 'pembeli/profil') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('pembeli/profil'); ?>"><i class="bi bi-person-fill"></i>Profil Saya</a>
                 </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-shop"></i>
-                        <span>Manajemen Mitra</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-bar-chart-line-fill"></i>
-                        <span>Laporan & Analytics</span>
-                    </a>
-                </li>
+                <?php endif; ?>
 
             </ul>
         </div>
 
         <div class="sidebar-footer">
-            <a href="<?= base_url('auth/logout') ?>" class="btn-logout">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Keluar</span>
-            </a>
+            <button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
+                <i class="bi bi-box-arrow-right"></i> Keluar
+            </button>
         </div>
-
     </div>
 
-    <div class="content-wrapper">
+    <!-- ============================================
+     MAIN CONTENT WRAPPER
+     ============================================ -->
+    <div class="main-content">
+
+        <!-- ============================================
+     PAGE HEADER
+     ============================================ -->
+        <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
+                    style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h2 class="d-inline-block align-middle mb-0"><?= $title ?? 'Dashboard' ?></h2>
+                <p class="subtitle mb-0 mt-1">
+                    Selamat datang, <span
+                        style="color: var(--amber-cream); font-weight:600;"><?= $this->session->userdata('nama') ?? 'User' ?></span>!
+                    <span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span>
+                </p>
+            </div>
+
+            <div class="d-flex align-items-center gap-3" style="gap: 12px;">
+                <!-- ==========================================
+             NOTIFICATION BELL & DROPDOWN
+             ========================================== -->
+                <?php if (!empty($notifikasi) || isset($notifikasi)): ?>
+                <?php $this->load->view('template/v_notification'); ?>
+                <?php else: ?>
+                <!-- Fallback jika tidak ada data notifikasi -->
+                <div style="position: relative;">
+                    <button class="notif-btn" id="notifToggle"
+                        style="background: var(--card-white); border: 1px solid rgba(74,44,17,0.06); border-radius: 12px; padding: 8px 14px; color: var(--dark-coffee); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                        <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
+                        <span class="notif-dot" id="notifCount" style="display:none;">0</span>
+                    </button>
+                </div>
+                <?php endif; ?>
+
+                <!-- USER AVATAR -->
+                <div
+                    style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
+                    <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
+                    <span
+                        style="font-weight:500; font-size:0.85rem;"><?= $this->session->userdata('nama') ?? 'User' ?></span>
+                </div>
+            </div>
+        </div>
+        <!-- END PAGE HEADER -->
