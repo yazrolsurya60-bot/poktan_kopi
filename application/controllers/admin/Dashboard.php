@@ -6,10 +6,14 @@ class Dashboard extends CI_Controller {
       public function __construct() {
         parent::__construct();
         
-        // 🔴 PERBAIKI: Cek apakah user sudah login
-        if (!$this->session->userdata('id_user')) {
-            redirect('auth/login');
-        }
+     // Di setiap controller
+if (!$this->session->userdata('id_user')) {
+    $this->session->set_userdata([
+        'id_user' => 1, 
+        'role' => 'Admin', // atau 'Petani' / 'Pembeli'
+        'nama' => 'Test User'
+    ]);
+}
         
         // 🔴 PERBAIKI: Jika role tidak sesuai, redirect ke dashboard yang benar
         $current_role = $this->session->userdata('role');

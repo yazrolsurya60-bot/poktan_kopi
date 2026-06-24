@@ -68,3 +68,16 @@ $route['api/notifikasi/mark_read'] = 'api/Notifikasi/mark_read';
 $route['api/notifikasi/mark_all_read'] = 'api/Notifikasi/mark_all_read';
 $route['api/notifikasi/update_setting'] = 'api/Notifikasi/update_setting';
 $route['api/notifikasi/get_settings'] = 'api/Notifikasi/get_settings';
+
+// Modul 5 - Manajemen Produk
+$route['admin/produk'] = 'petani/Produk/index';
+$route['admin/produk/tambah'] = 'petani/Produk/tambah';
+$route['admin/produk/simpan'] = 'petani/Produk/simpan';
+
+$route['admin/produk/detail/(:num)'] = 'petani/Produk/detail/$1';
+
+$route['admin/produk/edit/(:num)'] = 'petani/Produk/edit/$1';
+
+$route['admin/produk/update/(:num)'] = 'petani/Produk/update/$1';
+
+$route['admin/produk/hapus/(:num)'] = 'petani/Produk/hapus/$1';
