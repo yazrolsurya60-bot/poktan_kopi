@@ -92,7 +92,7 @@ $autoload['drivers'] = array();
 #$autoload['helper'] = array();
 // application/config/autoload.php
 
-$autoload['helper'] = array('url', 'form', 'notifikasi');
+$autoload['helper'] = array('url', 'form', 'notifikasi', 'text');
 /*
 | -------------------------------------------------------------------
 |  Auto-load Config files

@@ -4,6 +4,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'Landing';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+#$route['default_controller'] = 'welcome';
+#$route['404_override'] = '';
+#$route['translate_uri_dashes'] = FALSE;
+
 $route['admin/dashboard'] = 'admin/dashboard/index';
 $route['petani/dashboard'] = 'petani/dashboard/index';
 $route['pembeli/dashboard'] = 'pembeli/dashboard/index';
@@ -110,13 +115,30 @@ $route['pembeli/transaksi/upload_bukti'] = 'pembeli/transaksi/upload_bukti';
 // ============================================
 $route['landing/produk'] = 'produk/index';
 
-// ============================================
-// MODUL 8: MANAJEMEN KURIR
-// ============================================
-$route['admin/kurir'] = 'admin/Kurir/index';
-$route['admin/kurir/tambah'] = 'admin/Kurir/tambah';
-$route['admin/kurir/edit/(:num)'] = 'admin/Kurir/edit/$1';
-$route['admin/kurir/hapus/(:num)'] = 'admin/Kurir/hapus/$1';
-$route['admin/kurir/toggle/(:num)'] = 'admin/Kurir/toggle/$1';
-$route['admin/kurir/assign'] = 'admin/Kurir/assign';
-$route['admin/kurir/proses_assign'] = 'admin/Kurir/proses_assign';
+// Pembeli Tracking (M07-F01, M07-F04, M07-F05, M07-F07)
+$route['pembeli/tracking'] = 'pembeli/Tracking/index';
+$route['pembeli/tracking/detail/(:num)'] = 'pembeli/Tracking/detail/$1';
+$route['pembeli/tracking/history'] = 'pembeli/Tracking/history';
+$route['pembeli/tracking/approve/(:num)'] = 'pembeli/Tracking/approve/$1';
+
+// Petani Tracking (M07-F02)
+$route['petani/tracking'] = 'petani/Tracking/index';
+$route['petani/tracking/update/(:num)'] = 'petani/Tracking/update/$1';
+
+// Kurir Tracking (M07-F03)
+$route['kurir/tracking'] = 'kurir/Tracking/index';
+$route['kurir/tracking/update_location/(:num)'] = 'kurir/Tracking/update_location/$1';
+$route['kurir/tracking/api_update_location'] = 'kurir/Tracking/api_update_location';
+
+// API Tracking
+$route['api/tracking/get'] = 'api/Tracking/get';
+$route['api/tracking/history'] = 'api/Tracking/history';
+$route['api/tracking/estimasi'] = 'api/Tracking/estimasi';
+
+$route['admin/kurir']                    = 'admin/Kurir/index';
+$route['admin/kurir/tambah']             = 'admin/Kurir/tambah';
+$route['admin/kurir/edit/(:num)']        = 'admin/Kurir/edit/$1';
+$route['admin/kurir/hapus/(:num)']       = 'admin/Kurir/hapus/$1';
+$route['admin/kurir/toggle/(:num)']      = 'admin/Kurir/toggle/$1';
+$route['admin/kurir/assign']             = 'admin/Kurir/assign';
+$route['admin/kurir/proses_assign']      = 'admin/Kurir/proses_assign';

@@ -44,6 +44,7 @@ class Panen_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 
+<<<<<<< HEAD
     public function check_unrecorded_harvest($id_user) {
         // M04-F09: Cek lahan aktif yang belum dipanen > 30 hari
         $query = "
@@ -55,6 +56,18 @@ class Panen_model extends CI_Model {
                 WHERE p.id_lahan = l.id_lahan 
                 AND p.tanggal_panen >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
             )
+=======
+   public function check_unrecorded_harvest($id_user) {
+        // M04-F09: Cek lahan aktif yang belum dipanen > 30 hari menggunakan LEFT JOIN (Lebih aman dari bug alias MySQL)
+        $query = "
+            SELECT l.id_lahan, l.nama_lahan 
+            FROM tb_lahan l 
+            LEFT JOIN tb_panen p ON p.id_lahan = l.id_lahan 
+                AND p.tanggal_panen >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+            WHERE l.id_user = ? 
+              AND l.status_lahan = 'Active' 
+              AND p.id_lahan IS NULL
+>>>>>>> d8b8a835a631ab58188cf94e9aa651830be1c284
         ";
         return $this->db->query($query, [$id_user])->result_array();
     }
@@ -87,4 +100,14 @@ class Panen_model extends CI_Model {
         $this->db->where('status_lahan', 'Active');
         return $this->db->get('tb_lahan')->result_array();
     }
+<<<<<<< HEAD
 }
+=======
+    public function get_panen_by_lahan($id_lahan) {
+    // Ubah bagian 'panen' menjadi 'tb_panen'
+    return $this->db->where('id_lahan', $id_lahan)
+                    ->get('tb_panen') 
+                    ->result();
+}
+}
+>>>>>>> d8b8a835a631ab58188cf94e9aa651830be1c284
