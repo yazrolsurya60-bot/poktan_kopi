@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -1099,7 +1099,7 @@
             <div class="d-flex gap-3">
                 <div class="input-group" style="width: 250px;">
                     <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Cari petani...">
+                    <input type="text" id="searchPetani" class="form-control border-start-0 ps-0" placeholder="Cari petani...">
                 </div>
                 <form action="<?= base_url('admin/petani'); ?>" method="GET" class="d-flex">
                     <select name="status" class="form-select text-muted" onchange="this.form.submit()" style="width: 150px;">
@@ -1135,7 +1135,7 @@
                         <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tbodyPetani">
                     <?php if (!empty($daftar_petani)): ?>
                         <?php $no = 1; foreach ($daftar_petani as $p): ?>
                             <tr style="box-shadow: 0 2px 6px rgba(0,0,0,0.02); background-color: #fff; border-radius: 8px;">
@@ -1187,7 +1187,7 @@
         </div>
         
         <div class="d-flex justify-content-between align-items-center mt-3">
-            <small class="text-muted">Menampilkan <?= isset($daftar_petani) ? count($daftar_petani) : 0; ?> data</small>
+            <small class="text-muted" id="countPetani">Menampilkan <?= isset($daftar_petani) ? count($daftar_petani) : 0; ?> data</small>
             <!-- Pagination Placeholder -->
             <ul class="pagination pagination-sm mb-0">
                 <li class="page-item disabled"><a class="page-link text-muted border-0 bg-light" href="#">&laquo;</a></li>
@@ -1452,6 +1452,26 @@
 		console.log('   - Quick Action (M11-F04)');
 		console.log('   - Notifikasi Real-time (M11-F01)');
 		console.log('   - Setting Notifikasi (M11-F03)');
+	</script>
+	<script>
+	// ── Pencarian Petani (client-side) ──
+	document.getElementById('searchPetani').addEventListener('keyup', function() {
+		var keyword = this.value.toLowerCase();
+		var rows = document.querySelectorAll('#tbodyPetani tr');
+		var visibleCount = 0;
+		rows.forEach(function(row) {
+			var text = row.textContent.toLowerCase();
+			if (text.indexOf(keyword) > -1) {
+				row.style.display = '';
+				visibleCount++;
+			} else {
+				row.style.display = 'none';
+			}
+		});
+		// Update counter
+		var counter = document.getElementById('countPetani');
+		if (counter) counter.textContent = 'Menampilkan ' + visibleCount + ' data';
+	});
 	</script>
 </body>
 
