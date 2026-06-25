@@ -356,7 +356,7 @@
                                     </td>
                                     <td class="text-center">
                                         <!-- NOTE: Kurir uses this link to update location, for Petani we probably just show detail -->
-                                        <a href="<?= base_url('petani/tracking/detail/' . $track->id_tracking) ?>"
+                                        <a href="<?= base_url('petani/tracking/update_location/' . $track->id_tracking) ?>"
                                             class="btn btn-sm text-white"
                                             style="background-color: var(--amber-cream); border-radius: 8px;">
                                             <i class="bi bi-search"></i> Lihat Detail
