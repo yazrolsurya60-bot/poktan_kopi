@@ -1105,8 +1105,7 @@
                     <select name="status" class="form-select text-muted" onchange="this.form.submit()" style="width: 150px;">
                         <option value="">Semua Status</option>
                         <option value="Active" <?= (isset($status_filter) && $status_filter == 'Active') ? 'selected' : ''; ?>>Active</option>
-                        <option value="Pending" <?= (isset($status_filter) && $status_filter == 'Pending') ? 'selected' : ''; ?>>Pending</option>
-                        <option value="Terverifikasi" <?= (isset($status_filter) && $status_filter == 'Terverifikasi') ? 'selected' : ''; ?>>Terverifikasi</option>
+                        <option value="Inactive" <?= (isset($status_filter) && $status_filter == 'Inactive') ? 'selected' : ''; ?>>Inactive</option>
                         <option value="Suspended" <?= (isset($status_filter) && $status_filter == 'Suspended') ? 'selected' : ''; ?>>Suspended</option>
                     </select>
                 </form>
@@ -1156,9 +1155,9 @@
                                     <?php 
                                         $badge_color = 'bg-secondary';
                                         $text_color = 'text-white';
-                                        if ($p['status_petani'] == 'Active' || $p['status_petani'] == 'Terverifikasi') { $badge_color = 'bg-success'; $badge_color = '#E8F5E9'; $text_color = '#4CAF50'; }
-                                        if ($p['status_petani'] == 'Pending' || $p['status_petani'] == 'Inactive') { $badge_color = 'bg-warning text-dark'; $badge_color = '#FFF8E1'; $text_color = '#FFC107'; }
-                                        if ($p['status_petani'] == 'Ditolak' || $p['status_petani'] == 'Suspended') { $badge_color = 'bg-danger'; $badge_color = '#FFEBEE'; $text_color = '#F44336'; }
+                                        if ($p['status_petani'] == 'Active') { $badge_color = '#E8F5E9'; $text_color = '#4CAF50'; }
+                                        if ($p['status_petani'] == 'Inactive') { $badge_color = '#FFF8E1'; $text_color = '#FFC107'; }
+                                        if ($p['status_petani'] == 'Suspended') { $badge_color = '#FFEBEE'; $text_color = '#F44336'; }
                                     ?>
                                     <span class="badge rounded-pill px-3 py-2" style="background-color: <?= $badge_color; ?>; color: <?= $text_color; ?>; font-weight: 600; letter-spacing: 0.5px;">
                                         <?= $p['status_petani']; ?>

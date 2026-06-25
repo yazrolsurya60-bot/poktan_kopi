@@ -1061,7 +1061,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">No HP <span class="text-danger">*</span></label>
-                        <input type="number" name="no_hp" class="form-control rounded-3 py-2" placeholder="Masukkan no HP" value="<?= set_value('no_hp'); ?>" required>
+                        <input type="tel" name="no_hp" pattern="[0-9]{9,15}" class="form-control rounded-3 py-2" placeholder="Masukkan no HP" value="<?= set_value('no_hp'); ?>" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Email</label>
@@ -1088,8 +1088,8 @@
                         <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Status <span class="text-danger">*</span></label>
                         <select name="status" class="form-select rounded-3 py-2">
                             <option value="Active" <?= set_select('status', 'Active'); ?>>Active</option>
-                            <option value="Pending" <?= set_select('status', 'Pending'); ?>>Pending</option>
-                            <option value="Inactive" <?= set_select('status', 'Inactive'); ?>>Inactive</option>
+                            <option value="Inactive" <?= set_select('status', 'Inactive', TRUE); ?>>Inactive</option>
+                            <option value="Suspended" <?= set_select('status', 'Suspended'); ?>>Suspended</option>
                         </select>
                     </div>
                 </div>

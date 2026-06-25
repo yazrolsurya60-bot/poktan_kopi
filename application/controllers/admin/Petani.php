@@ -27,9 +27,9 @@ class Petani extends CI_Controller {
         $inactive_count = 0;
         $suspended_count = 0;
         foreach($semua as $p) {
-            if ($p['status_petani'] == 'Active' || $p['status_petani'] == 'Terverifikasi') $active_count++;
-            else if ($p['status_petani'] == 'Pending' || $p['status_petani'] == 'Inactive') $inactive_count++;
-            else if ($p['status_petani'] == 'Ditolak' || $p['status_petani'] == 'Suspended') $suspended_count++;
+            if ($p['status_petani'] == 'Active') $active_count++;
+            else if ($p['status_petani'] == 'Inactive') $inactive_count++;
+            else if ($p['status_petani'] == 'Suspended') $suspended_count++;
         }
         $data['total_petani'] = count($semua);
         $data['active_count'] = $active_count;
@@ -55,8 +55,8 @@ class Petani extends CI_Controller {
     // ── 4. PROSES Tambah ─────────────────────────────────────────────
     public function tambah_aksi() {
         $this->form_validation->set_rules('nama_petani', 'Nama Petani', 'required|trim');
-        $this->form_validation->set_rules('nik',         'NIK',         'required|trim');
-        $this->form_validation->set_rules('no_hp',       'No HP',       'required|trim');
+        $this->form_validation->set_rules('nik',         'NIK',         'required|trim|numeric|exact_length[16]');
+        $this->form_validation->set_rules('no_hp',       'No HP',       'required|trim|numeric|min_length[9]|max_length[15]');
         $this->form_validation->set_rules('alamat',      'Alamat',      'required|trim');
 
         if ($this->form_validation->run() === FALSE) {
@@ -70,7 +70,7 @@ class Petani extends CI_Controller {
             'no_hp'         => $this->input->post('no_hp'),
             'email'         => $this->input->post('email'),
             'alamat'        => $this->input->post('alamat'),
-            'status_petani' => $this->input->post('status') ?: 'Pending',
+            'status_petani' => $this->input->post('status') ?: 'Inactive',
             'tanggal_daftar' => date('Y-m-d'),
         ];
 
@@ -275,7 +275,25 @@ class Petani extends CI_Controller {
             }
             echo "</table>";
         } else if ($format == 'pdf') {
-            $this->load->view('admin/Petani_export_pdf', $data);
+            // Render view ke string HTML dulu (bukan langsung di-echo ke browser)
+            $html = $this->load->view('admin/Petani_export_pdf', $data, true);
+
+            if (!class_exists('Dompdf\\Dompdf')) {
+                show_error(
+                    'Library Dompdf belum terpasang. Jalankan <b>composer install</b> di root project '
+                    . '(sudah terdaftar di composer.json) agar fitur Export PDF dapat menghasilkan file PDF.',
+                    500, 'Library PDF Tidak Ditemukan'
+                );
+                return;
+            }
+
+            $dompdf = new \Dompdf\Dompdf();
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->loadHtml($html);
+            $dompdf->render();
+
+            // Memaksa browser untuk mendownload file PDF asli (bukan sekadar menampilkan HTML)
+            $dompdf->stream('Data_Petani_' . date('Y-m-d') . '.pdf', ['Attachment' => true]);
         } else {
             redirect('admin/petani/export_page');
         }
