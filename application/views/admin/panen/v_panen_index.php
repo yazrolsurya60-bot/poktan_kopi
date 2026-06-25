@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,6 +37,8 @@
             left: 0;
             background: linear-gradient(180deg, var(--dark-coffee) 0%, #1a0e04 100%);
             color: var(--bg-cream);
+            display: flex;
+            flex-direction: column;
         }
 
         .sidebar-brand {
@@ -61,6 +64,8 @@
         }
 
         .sidebar-menu-wrapper {
+            flex: 1;
+            overflow-y: auto;
             padding: 15px 0;
         }
 
@@ -95,9 +100,34 @@
             color: #fff;
         }
 
-        .sidebar-footer { position: absolute; bottom: 0; width: 100%; padding: 16px 20px; border-top: 1px solid rgba(250, 246, 240, 0.06); }
-        .sidebar-footer .btn-logout { width: 100%; padding: 10px 16px; border: 1px solid rgba(250, 246, 240, 0.1); border-radius: 10px; background: transparent; color: #A8988A; font-weight: 500; font-size: 0.85rem; transition: var(--transition-smooth); display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
-        .sidebar-footer .btn-logout:hover { background: rgba(230, 161, 92, 0.1); color: #ffffff; border-color: rgba(230, 161, 92, 0.2); }
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(250, 246, 240, 0.06);
+            margin-top: auto;
+        }
+
+        .sidebar-footer .btn-logout {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid rgba(250, 246, 240, 0.1);
+            border-radius: 10px;
+            background: transparent;
+            color: #A8988A;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .sidebar-footer .btn-logout:hover {
+            background: rgba(230, 161, 92, 0.1);
+            color: #ffffff;
+            border-color: rgba(230, 161, 92, 0.2);
+        }
 
         .main-content {
             margin-left: var(--sidebar-width);
@@ -165,6 +195,10 @@
             color: #1E40AF;
             border: none;
         }
+        /* SCROLLBAR */
+        .sidebar-menu-wrapper::-webkit-scrollbar { width: 3px; }
+        .sidebar-menu-wrapper::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-menu-wrapper::-webkit-scrollbar-thumb { background: rgba(230, 161, 92, 0.3); border-radius: 10px; }
     </style>
 </head>
 
@@ -315,10 +349,12 @@
                                         <td><?= $no++; ?></td>
                                         <td><?= date('d M Y', strtotime($p['tanggal_panen'])); ?></td>
                                         <td class="font-weight-bold">
-                                            <?= htmlspecialchars($p['nama_petani'] ?? 'Unknown Petani'); ?></td>
+                                            <?= htmlspecialchars($p['nama_petani'] ?? 'Unknown Petani'); ?>
+                                        </td>
                                         <td><?= htmlspecialchars($p['nama_lahan'] ?? '-'); ?></td>
                                         <td class="text-success font-weight-bold">
-                                            <?= number_format($p['jumlah_panen'], 0, ',', '.'); ?> Kg</td>
+                                            <?= number_format($p['jumlah_panen'], 0, ',', '.'); ?> Kg
+                                        </td>
                                         <td><span class="badge badge-light"
                                                 style="font-size:0.75rem; border:1px solid #ccc;"><?= htmlspecialchars($p['kualitas'] ?? '-'); ?></span>
                                         </td>

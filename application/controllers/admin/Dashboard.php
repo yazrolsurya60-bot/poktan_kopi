@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-        
+
 class Dashboard extends CI_Controller
 {
     public function __construct()
@@ -33,7 +33,7 @@ class Dashboard extends CI_Controller
             }
         }
 
-        
+
         $this->load->model('Notifikasi_model');
     }
 
@@ -62,7 +62,8 @@ class Dashboard extends CI_Controller
         $this->load->view('admin/v_dashboard', $data);
     }
 
-    public function history() {
+    public function history()
+    {
 
         $id_user = $this->session->userdata('id_user');
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
@@ -85,7 +86,7 @@ class Dashboard extends CI_Controller
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['settings'] = $this->Notifikasi_model->get_settings($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        
+
         $this->load->view('template/v_notif_setting', $data);
     }
 

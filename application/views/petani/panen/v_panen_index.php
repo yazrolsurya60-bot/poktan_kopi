@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -62,6 +62,10 @@
         .btn-custom-info { background-color: #DBEAFE; color: #1E40AF; border: none; }
         .btn-custom-warning { background-color: #FEF3C7; color: #92400E; border: none; }
         .btn-custom-danger { background-color: #FEE2E2; color: #991B1B; border: none; }
+        /* SCROLLBAR */
+        .sidebar-menu-wrapper::-webkit-scrollbar { width: 3px; }
+        .sidebar-menu-wrapper::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-menu-wrapper::-webkit-scrollbar-thumb { background: rgba(230, 161, 92, 0.3); border-radius: 10px; }
     </style>
 </head>
 <body>
