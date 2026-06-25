@@ -177,21 +177,31 @@
 
         <div class="row">
             <?php if (!empty($produk)): ?>
-                <?php foreach ($produk as $p): ?>
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="product-card">
-                        <img src="<?= base_url('uploads/produk/' . ($p['foto_produk'] ?: 'default.jpg')); ?>" 
-                             alt="<?= $p['nama_produk']; ?>" 
-                             class="product-image">
-                        <h5 class="product-name"><?= $p['nama_produk']; ?></h5>
-                        <div class="product-price">Rp <?= number_format($p['harga_produk'], 0, ',', '.'); ?> /kg</div>
-                        <div class="product-stock">Stok: <?= $p['stok_produk']; ?> kg</div>
-                        <button class="btn-beli" onclick="tambahKeranjang(<?= $p['id_produk']; ?>)">
-                            <i class="bi bi-cart-plus"></i> Tambah ke Keranjang
-                        </button>
-                    </div>
-                </div>
-                <?php endforeach; ?>
+               <?php foreach ($produk as $p): ?>
+<div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+    <div class="product-card">
+
+        <img src="<?= base_url('uploads/produk/' . (!empty($p->foto_utama) ? $p->foto_utama : 'default.jpg')); ?>"
+             alt="<?= $p->nama_produk; ?>"
+             class="product-image">
+
+        <h5 class="product-name"><?= $p->nama_produk; ?></h5>
+
+        <div class="product-price">
+            Rp <?= number_format($p->harga, 0, ',', '.'); ?> /kg
+        </div>
+
+        <div class="product-stock">
+            Stok: <?= $p->stok_produk; ?> kg
+        </div>
+
+        <button class="btn-beli" onclick="tambahKeranjang(<?= $p->id_produk; ?>)">
+            <i class="bi bi-cart-plus"></i> Tambah ke Keranjang
+        </button>
+
+    </div>
+</div>
+<?php endforeach; ?>
             <?php else: ?>
                 <div class="col-12 text-center py-5">
                     <i class="bi bi-box-seam" style="font-size: 3rem; opacity: 0.3;"></i>

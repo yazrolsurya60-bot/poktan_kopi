@@ -91,7 +91,7 @@ class Produk extends CI_Controller
     {
         $data['produk'] = $this->Produk_model->getById($id);
 
-        $this->load->view('admin/produk_detail', $data);
+        $this->load->view('petani/produk_detail', $data);
     }
 
     // Form edit produk
@@ -99,7 +99,7 @@ class Produk extends CI_Controller
     {
         $data['produk'] = $this->Produk_model->getById($id);
 
-        $this->load->view('admin/produk_edit', $data);
+        $this->load->view('petani/produk_edit', $data);
     }
 
     // Update produk
