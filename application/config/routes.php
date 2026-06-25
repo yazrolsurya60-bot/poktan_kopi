@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$route['default_controller'] = 'Landing';
+$route['default_controller'] = 'Beranda';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
@@ -88,6 +88,9 @@ $route['admin/mitra/delete/(:num)'] = 'admin/Mitra/delete/$1';
 $route['admin/mitra/toggle/(:num)'] = 'admin/Mitra/toggle/$1';
 
 $route['landing'] = 'Landing/index';
+$route['landing/mitra'] = 'Landing/mitra';
+$route['produk'] = 'Landing/index';
+$route['tentang'] = 'Tentang/index';
 
 // ============================================================
 // MODUL 6: TRANSAKSI

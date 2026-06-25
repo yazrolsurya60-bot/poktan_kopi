@@ -52,6 +52,10 @@
             color: white;
             font-size: 1.2rem;
         }
+        .nav-links { display: flex; align-items: center; gap: 28px; margin-left: auto; margin-right: 28px; }
+        .nav-links a { color: var(--text-secondary); font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: var(--transition-smooth); }
+        .nav-links a:hover { color: var(--roasted-brown); text-decoration: none; }
+        .nav-links a.active { color: var(--roasted-brown); font-weight: 800; }
         .nav-btn {
             background: var(--dark-coffee);
             color: white;
@@ -157,7 +161,13 @@
             <div class="brand-icon"><i class="bi bi-patch-check-fill"></i></div>
             Liberchain
         </a>
-        <div class="ml-auto d-flex align-items-center gap-3">
+        <div class="nav-links d-none d-lg-flex">
+            <a href="<?= base_url(); ?>">Beranda</a>
+            <a href="<?= base_url('produk'); ?>" class="active">Produk</a>
+            <a href="<?= base_url('landing/mitra'); ?>">Mitra</a>
+            <a href="<?= base_url('tentang'); ?>">Tentang Kami</a>
+        </div>
+        <div class="ml-auto d-flex align-items-center" style="gap: 16px;">
             <a href="<?= base_url('transaksi/keranjang'); ?>" class="nav-btn" style="background: transparent; border-color: var(--roasted-brown); color: var(--roasted-brown); position: relative;">
                 <i class="bi bi-cart"></i> Keranjang
                 <span class="cart-badge" id="cart_count">0</span>
