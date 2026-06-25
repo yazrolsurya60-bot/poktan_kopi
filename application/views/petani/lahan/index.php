@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -340,13 +340,6 @@
                 <li class="menu-item <?= ($this->uri->segment(2) == 'tracking') ? 'active' : ''; ?>">
                     <a href="<?= base_url('petani/tracking'); ?>">
                         <i class="bi bi-truck"></i> Tracking Kiriman
-                    </a>
-                </li>
-
-                <!-- LAPORAN -->
-                <li class="menu-item <?= ($this->uri->segment(2) == 'laporan') ? 'active' : ''; ?>">
-                    <a href="<?= base_url('petani/laporan'); ?>">
-                        <i class="bi bi-file-earmark-bar-graph-fill"></i> Laporan
                     </a>
                 </li>
             </ul>

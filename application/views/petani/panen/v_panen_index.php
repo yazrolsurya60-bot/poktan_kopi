@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -86,7 +86,7 @@
             </li>
             <li class="menu-item active">
                 <a href="<?= base_url('petani/panen'); ?>">
-                    <i class="bi bi-textarea-rose"></i>Manajemen Panen
+                    <i class="bi bi-tree-fill"></i>Manajemen Panen
                 </a>
             </li>
             <li class="menu-item">
@@ -104,11 +104,6 @@
             <li class="menu-item">
                 <a href="<?= base_url('petani/tracking'); ?>">
                     <i class="bi bi-truck"></i>Tracking Kiriman
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="<?= base_url('petani/laporan'); ?>">
-                    <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan
                 </a>
             </li>
         </ul>
@@ -271,3 +266,4 @@
 </script>
 </body>
 </html>
+

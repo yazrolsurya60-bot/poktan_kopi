@@ -874,7 +874,7 @@
 		</div>
 		<div class="sidebar-menu-wrapper">
 			<ul class="sidebar-menu">
-				<li class="menu-item active">
+				<li class="menu-item">
 					<a href="<?= base_url('admin/dashboard'); ?>">
 						<i class="bi bi-grid-1x2-fill"></i>Dashboard
 					</a>
@@ -885,7 +885,7 @@
 						<span class="menu-badge">12</span>
 					</a>
 				</li>
-				<li class="menu-item">
+				<li class="menu-item active">
 					<a href="<?= base_url('admin/petani'); ?>">
 						<i class="bi bi-person-badge-fill"></i>Data Petani
 					</a>
@@ -944,9 +944,8 @@
 					style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
 					<i class="bi bi-list"></i>
 				</button>
-				<h2 class="d-inline-block align-middle mb-0">Dashboard</h2>
-				<p class="subtitle mb-0 mt-1">Selamat datang, Admin! <span id="currentDateTime"
-						style="color: var(--amber-cream); font-weight:500;"></span></p>
+				<h2 class="d-inline-block align-middle mb-0">Manajemen Petani</h2>
+				<p class="subtitle mb-0 mt-1 text-muted">Dashboard / Manajemen Petani</p>
 			</div>
 			<div class="d-flex align-items-center gap-3" style="gap: 12px;">
 				<!-- NOTIFICATION BELL -->
@@ -1028,363 +1027,179 @@
 			</div>
 		</div>
 
-		<!-- QUICK ACTION BUTTONS (M11-F04) -->
-		<h5 class="font-weight-bold mb-3"
-			style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
-			<i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
-		</h5>
-		<div class="row mb-4">
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/petani/verifikasi'); ?>" class="quick-action-btn">
-					<i class="bi bi-person-check-fill"></i> Verifikasi Petani
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/transaksi/konfirmasi'); ?>" class="quick-action-btn">
-					<i class="bi bi-credit-card-fill"></i> Konfirmasi Bayar
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/kurir/assign'); ?>" class="quick-action-btn">
-					<i class="bi bi-truck"></i> Assign Kurir
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/laporan/generate'); ?>" class="quick-action-btn">
-					<i class="bi bi-file-earmark-pdf-fill"></i> Buat Laporan
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/produk/tambah'); ?>" class="quick-action-btn">
-					<i class="bi bi-plus-circle-fill"></i> Tambah Produk
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/mitra/tambah'); ?>" class="quick-action-btn">
-					<i class="bi bi-shop"></i> Tambah Mitra
-				</a>
-			</div>
-		</div>
+		
+<!-- MAIN BODY CONTENT -->
+<div class="page-body" style="padding: 24px; background-color: #f8f9fa; min-height: calc(100vh - 80px);">
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-3 d-flex align-items-center">
+                <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px; background-color: #FFF3E0; color: #E6A15C;">
+                    <i class="bi bi-people-fill fs-4"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 text-muted fw-bold" style="font-size: 0.85rem;">Total Petani</h6>
+                    <h3 class="mb-0 fw-bold"><?= isset($total_petani) ? $total_petani : 0; ?></h3>
+                    <small class="text-muted" style="font-size: 0.7rem;">Semua Petani</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-3 d-flex align-items-center">
+                <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px; background-color: #E8F5E9; color: #4CAF50;">
+                    <i class="bi bi-arrow-down-circle-fill fs-4"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 text-muted fw-bold" style="font-size: 0.85rem;">Active</h6>
+                    <h3 class="mb-0 fw-bold"><?= isset($active_count) ? $active_count : 0; ?></h3>
+                    <?php $pct_active = isset($total_petani) && $total_petani > 0 ? round(($active_count / $total_petani) * 100, 1) : 0; ?>
+                    <small class="text-muted" style="font-size: 0.7rem;"><?= $pct_active; ?>% dari total</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-3 d-flex align-items-center">
+                <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px; background-color: #FFF8E1; color: #FFC107;">
+                    <i class="bi bi-people-fill fs-4"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 text-muted fw-bold" style="font-size: 0.85rem;">Inactive</h6>
+                    <h3 class="mb-0 fw-bold"><?= isset($inactive_count) ? $inactive_count : 0; ?></h3>
+                    <?php $pct_inactive = isset($total_petani) && $total_petani > 0 ? round(($inactive_count / $total_petani) * 100, 1) : 0; ?>
+                    <small class="text-muted" style="font-size: 0.7rem;"><?= $pct_inactive; ?>% dari total</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-3 d-flex align-items-center">
+                <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px; background-color: #FFEBEE; color: #F44336;">
+                    <i class="bi bi-arrow-down-circle-fill fs-4"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 text-muted fw-bold" style="font-size: 0.85rem;">Suspended</h6>
+                    <h3 class="mb-0 fw-bold"><?= isset($suspended_count) ? $suspended_count : 0; ?></h3>
+                    <?php $pct_suspend = isset($total_petani) && $total_petani > 0 ? round(($suspended_count / $total_petani) * 100, 1) : 0; ?>
+                    <small class="text-muted" style="font-size: 0.7rem;"><?= $pct_suspend; ?>% dari total</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-		<!-- KPI CARDS (M11-F01) -->
-		<div class="row mb-4">
-			<div class="col-xl-3 col-md-6 mb-4">
-				<div class="stat-box">
-					<div class="stat-decoration"></div>
-					<div class="stat-title">Total Pendapatan</div>
-					<h3 class="stat-num">Rp <?= number_format($kpi_total_revenue ?? 0, 0, ',', '.'); ?></h3>
-					<div class="stat-change up"><i class="bi bi-arrow-up"></i> 12.5% dari bulan lalu</div>
-					<div class="stat-badge" style="background: var(--amber-cream); color: white;"><i
-							class="bi bi-currency-dollar"></i></div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-md-6 mb-4">
-				<div class="stat-box">
-					<div class="stat-decoration"></div>
-					<div class="stat-title">Total Transaksi</div>
-					<h3 class="stat-num"><?= $kpi_transaksi_aktif ?? 0; ?></h3>
-					<div class="stat-change up"><i class="bi bi-arrow-up"></i> 8.3% dari bulan lalu</div>
-					<div class="stat-badge"><i class="bi bi-receipt"></i></div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-md-6 mb-4">
-				<div class="stat-box">
-					<div class="stat-decoration"></div>
-					<div class="stat-title">Petani Aktif</div>
-					<h3 class="stat-num"><?= $kpi_petani_terverifikasi ?? 0; ?></h3>
-					<div class="stat-change up"><i class="bi bi-arrow-up"></i> 3 bergabung minggu ini</div>
-					<div class="stat-badge"><i class="bi bi-people-fill"></i></div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-md-6 mb-4">
-				<div class="stat-box">
-					<div class="stat-decoration"></div>
-					<div class="stat-title">Mitra Aktif</div>
-					<h3 class="stat-num"><?= $kpi_mitra_cafe ?? 0; ?></h3>
-					<div class="stat-change up"><i class="bi bi-arrow-up"></i> 2 mitra baru</div>
-					<div class="stat-badge" style="background: var(--dark-coffee); color: white;"><i
-							class="bi bi-shop"></i></div>
-				</div>
-			</div>
-		</div>
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-4">
+        <!-- TOOLBAR -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex gap-3">
+                <div class="input-group" style="width: 250px;">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" id="searchPetani" class="form-control border-start-0 ps-0" placeholder="Cari petani...">
+                </div>
+                <form action="<?= base_url('admin/petani'); ?>" method="GET" class="d-flex">
+                    <select name="status" class="form-select text-muted" onchange="this.form.submit()" style="width: 150px;">
+                        <option value="">Semua Status</option>
+                        <option value="Active" <?= (isset($status_filter) && $status_filter == 'Active') ? 'selected' : ''; ?>>Active</option>
+                        <option value="Pending" <?= (isset($status_filter) && $status_filter == 'Pending') ? 'selected' : ''; ?>>Pending</option>
+                        <option value="Terverifikasi" <?= (isset($status_filter) && $status_filter == 'Terverifikasi') ? 'selected' : ''; ?>>Terverifikasi</option>
+                        <option value="Suspended" <?= (isset($status_filter) && $status_filter == 'Suspended') ? 'selected' : ''; ?>>Suspended</option>
+                    </select>
+                </form>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="<?= base_url('admin/petani/tambah'); ?>" class="btn px-4 text-white rounded-3 shadow-sm" style="background-color: #6d4c41; font-weight: 500;">
+                    <i class="bi bi-plus-lg me-1"></i> Tambah Petani
+                </a>
+                <a href="<?= base_url('admin/petani/export_page'); ?>" class="btn px-3 bg-white text-muted border rounded-3 shadow-sm">
+                    <i class="bi bi-box-arrow-up me-1"></i> Export <i class="bi bi-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                </a>
+            </div>
+        </div>
 
-		<!-- GRAFIK & PRODUK TERLARIS -->
-		<div class="row">
-			<!-- GRAFIK PENJUALAN (M10-F02) -->
-			<div class="col-lg-8 mb-4">
-				<div class="custom-card">
-					<div class="card-header-custom">
-						<h6><i class="bi bi-graph-up-arrow text-warning mr-2"></i> Grafik Penjualan Bulanan</h6>
-						<div>
-							<span class="badge"
-								style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;"><?= date('Y'); ?></span>
-							<button class="btn btn-sm btn-link text-muted" onclick="refreshChart()"
-								style="padding:0 4px;">
-								<i class="bi bi-arrow-repeat"></i>
-							</button>
-						</div>
-					</div>
-					<div class="card-body-custom">
-						<div class="chart-container">
-							<canvas id="salesChart"></canvas>
-						</div>
-					</div>
-				</div>
-			</div>
+        <!-- TABLE -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="border-collapse: separate; border-spacing: 0 8px;">
+                <thead>
+                    <tr style="background-color: transparent;">
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem; padding-left: 15px;">No</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">Foto</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">Nama Petani</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">NIK</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">No HP</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">Status</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem; text-align: center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyPetani">
+                    <?php if (!empty($daftar_petani)): ?>
+                        <?php $no = 1; foreach ($daftar_petani as $p): ?>
+                            <tr style="box-shadow: 0 2px 6px rgba(0,0,0,0.02); background-color: #fff; border-radius: 8px;">
+                                <td class="border-0 fw-bold" style="border-top-left-radius: 8px; border-bottom-left-radius: 8px; padding-left: 15px; width: 50px;"><?= $no++; ?></td>
+                                <td class="border-0">
+                                    <?php if(!empty($p['foto_profil'])): ?>
+                                        <img src="<?= base_url('uploads/dokumen/'.$p['foto_profil']); ?>" class="rounded-circle object-fit-cover" width="40" height="40">
+                                    <?php else: ?>
+                                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white" style="width: 40px; height: 40px; font-size: 1.2rem;">
+                                            <i class="bi bi-person"></i>
+                                        </div>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="border-0 fw-bold text-dark"><?= htmlspecialchars($p['nama_petani']); ?></td>
+                                <td class="border-0 text-muted"><?= htmlspecialchars($p['nik']); ?></td>
+                                <td class="border-0 text-muted"><?= htmlspecialchars($p['no_hp']); ?></td>
+                                <td class="border-0">
+                                    <?php 
+                                        $badge_color = 'bg-secondary';
+                                        $text_color = 'text-white';
+                                        if ($p['status_petani'] == 'Active' || $p['status_petani'] == 'Terverifikasi') { $badge_color = 'bg-success'; $badge_color = '#E8F5E9'; $text_color = '#4CAF50'; }
+                                        if ($p['status_petani'] == 'Pending' || $p['status_petani'] == 'Inactive') { $badge_color = 'bg-warning text-dark'; $badge_color = '#FFF8E1'; $text_color = '#FFC107'; }
+                                        if ($p['status_petani'] == 'Ditolak' || $p['status_petani'] == 'Suspended') { $badge_color = 'bg-danger'; $badge_color = '#FFEBEE'; $text_color = '#F44336'; }
+                                    ?>
+                                    <span class="badge rounded-pill px-3 py-2" style="background-color: <?= $badge_color; ?>; color: <?= $text_color; ?>; font-weight: 600; letter-spacing: 0.5px;">
+                                        <?= $p['status_petani']; ?>
+                                    </span>
+                                </td>
+                                <td class="border-0" style="border-top-right-radius: 8px; border-bottom-right-radius: 8px; text-align: center;">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="<?= base_url('admin/petani/detail/' . $p['id_petani']); ?>" class="btn btn-sm" style="background-color: #F5E6D3; color: #8D6E63; border-radius: 6px;">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        <a href="<?= base_url('admin/petani/edit/' . $p['id_petani']); ?>" class="btn btn-sm" style="background-color: #FFF3E0; color: #FF9800; border-radius: 6px;">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <a href="<?= base_url('admin/petani/hapus/' . $p['id_petani']); ?>" onclick="return confirm('Yakin ingin menghapus?')" class="btn btn-sm" style="background-color: #FFEBEE; color: #F44336; border-radius: 6px;">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr><td colspan="7" class="text-center py-4 border-0">Belum ada data petani.</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <small class="text-muted" id="countPetani">Menampilkan <?= isset($daftar_petani) ? count($daftar_petani) : 0; ?> data</small>
+            <!-- Pagination Placeholder -->
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item disabled"><a class="page-link text-muted border-0 bg-light" href="#">&laquo;</a></li>
+                <li class="page-item active"><a class="page-link border-0 text-white" style="background-color: #6d4c41;" href="#">1</a></li>
+                <li class="page-item"><a class="page-link text-muted border-0" href="#">&raquo;</a></li>
+            </ul>
+        </div>
 
-			<!-- PRODUK TERLARIS (M10-F04) -->
-			<div class="col-lg-4 mb-4">
-				<div class="custom-card">
-					<div class="card-header-custom">
-						<h6><i class="bi bi-trophy-fill text-warning mr-2"></i> Produk Terlaris</h6>
-						<span class="badge" style="background: #D1FAE5; color: #065F46; font-weight:500;">Top
-							5</span>
-					</div>
-					<div class="card-body-custom" style="padding: 16px 20px;">
-						<?php if (!empty($produk_terlaris)): ?>
-							<?php foreach ($produk_terlaris as $index => $product): ?>
-								<div class="d-flex align-items-center justify-content-between py-2 <?= $index < 4 ? 'border-bottom' : ''; ?>"
-									style="border-color: rgba(74,44,17,0.05);">
-									<div class="d-flex align-items-center gap-2">
-										<span class="badge"
-											style="background: <?= $index === 0 ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= $index === 0 ? 'white' : 'var(--text-secondary)'; ?>; width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">
-											<?= $index + 1; ?>
-										</span>
-										<span
-											style="font-weight:600; font-size:0.85rem;"><?= $product['nama_produk'] ?? $product['nama']; ?></span>
-									</div>
-									<div class="text-right">
-										<span style="font-weight:600; font-size:0.85rem;"><?= $product['total_terjual']; ?>
-											kg</span>
-										<small class="d-block text-muted" style="font-size:0.7rem;">Rp
-											<?= number_format($product['pendapatan'], 0, ',', '.'); ?></small>
-									</div>
-								</div>
-							<?php endforeach; ?>
-						<?php else: ?>
-							<div class="text-center py-3 text-muted">Belum ada data produk terjual</div>
-						<?php endif; ?>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- PESANAN TERBARU & PETANI BARU -->
-		<div class="row">
-			<!-- PESANAN TERBARU (M11-F01) -->
-			<div class="col-lg-6 mb-4">
-				<div class="custom-card">
-					<div class="card-header-custom">
-						<h6><i class="bi bi-clock-history text-primary mr-2"></i> Pesanan Terbaru</h6>
-						<a href="<?= base_url('admin/transaksi'); ?>" class="text-muted"
-							style="font-size:0.75rem;">Lihat semua <i class="bi bi-chevron-right"></i></a>
-					</div>
-					<div class="card-body-custom" style="padding:0;">
-						<div class="table-responsive">
-							<table class="table table-custom mb-0">
-								<thead>
-									<tr>
-										<th>Invoice</th>
-										<th>Pembeli</th>
-										<th>Total</th>
-										<th>Status</th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php if (!empty($pesanan_terbaru)): ?>
-										<?php foreach ($pesanan_terbaru as $order): ?>
-											<tr>
-												<td><b>#<?= $order['id_transaksi']; ?></b></td>
-												<td><?= $order['metode_bayar'] ?? 'Transfer'; ?></td>
-												<!-- GANTI dengan metode_bayar -->
-												<td>Rp <?= number_format($order['total_harga'] ?? 0, 0, ',', '.'); ?></td>
-												<td>
-													<span
-														class="status-badge <?= strtolower($order['status_pesanan'] ?? 'pending'); ?>">
-														<?= ucfirst($order['status_pesanan'] ?? 'Pending'); ?>
-													</span>
-												</td>
-											</tr>
-										<?php endforeach; ?>
-									<?php else: ?>
-										<tr>
-											<td colspan="4" class="text-center py-3 text-muted">Belum ada pesanan</td>
-										</tr>
-									<?php endif; ?>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- PETANI BARU (M11-F01) -->
-			<div class="col-lg-6 mb-4">
-				<div class="custom-card">
-					<div class="card-header-custom">
-						<h6><i class="bi bi-person-plus-fill text-success mr-2"></i> Petani Baru</h6>
-						<a href="<?= base_url('admin/petani'); ?>" class="text-muted" style="font-size:0.75rem;">Lihat
-							semua <i class="bi bi-chevron-right"></i></a>
-					</div>
-					<div class="card-body-custom" style="padding:0;">
-						<div class="table-responsive">
-							<table class="table table-custom mb-0">
-								<thead>
-									<tr>
-										<th>Nama Petani</th>
-										<th>Lokasi</th>
-										<th>Tgl Daftar</th>
-										<th>Status</th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php if (!empty($petani_baru)): ?>
-										<?php foreach ($petani_baru as $farmer): ?>
-											<tr>
-												<td><b><?= $farmer['nama_petani']; ?></b></td>
-												<td><?= $farmer['status_petani'] == 'Active' ? 'Aktif' : 'Menunggu'; ?></td>
-												<!-- GANTI dengan status -->
-												<td><?= date('d-m-Y', strtotime($farmer['tanggal_daftar'] ?? date('Y-m-d'))); ?>
-												</td>
-												<td>
-													<span
-														class="status-badge <?= $farmer['status_petani'] === 'Active' ? 'complete' : 'pending'; ?>">
-														<?= $farmer['status_petani'] === 'Active' ? 'Terverifikasi' : 'Review'; ?>
-													</span>
-												</td>
-											</tr>
-										<?php endforeach; ?>
-									<?php else: ?>
-										<tr>
-											<td colspan="4" class="text-center py-3 text-muted">Belum ada petani baru
-											</td>
-										</tr>
-									<?php endif; ?>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- SETTING NOTIFIKASI (M11-F03) -->
-		<div class="row">
-			<div class="col-12">
-				<div class="custom-card">
-					<div class="card-header-custom">
-						<h6><i class="bi bi-gear-fill text-secondary mr-2"></i> Preferensi Notifikasi</h6>
-						<span class="badge"
-							style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;">Pengaturan</span>
-					</div>
-					<div class="card-body-custom">
-						<?php
-						// Default settings
-						$default_settings = [
-							'notifTransaksi' => 1,
-							'notifPembayaran' => 1,
-							'notifStok' => 1,
-							'notifLaporan' => 0,
-							'notifPetani' => 1,
-							'notifKurir' => 1,
-							'notifPromo' => 0,
-							'notifSistem' => 1
-						];
-
-						// Merge dengan data dari database
-						if (!empty($settings)) {
-							foreach ($default_settings as $key => $value) {
-								if (isset($settings[$key])) {
-									$default_settings[$key] = $settings[$key];
-								}
-							}
-						}
-						?>
-						<form method="POST" action="<?= base_url('admin/dashboard/settings'); ?>" id="formNotifSetting">
-							<div class="row">
-								<div class="col-md-3 col-6 mb-2">
-									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifTransaksi"
-											name="notifTransaksi" <?= $default_settings['notifTransaksi'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifTransaksi"
-											style="font-size:0.85rem;">Transaksi Baru</label>
-									</div>
-								</div>
-								<div class="col-md-3 col-6 mb-2">
-									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifPembayaran"
-											name="notifPembayaran" <?= $default_settings['notifPembayaran'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifPembayaran"
-											style="font-size:0.85rem;">Konfirmasi Bayar</label>
-									</div>
-								</div>
-								<div class="col-md-3 col-6 mb-2">
-									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifStok"
-											name="notifStok" <?= $default_settings['notifStok'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifStok"
-											style="font-size:0.85rem;">Peringatan Stok</label>
-									</div>
-								</div>
-								<div class="col-md-3 col-6 mb-2">
-									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifLaporan"
-											name="notifLaporan" <?= $default_settings['notifLaporan'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifLaporan"
-											style="font-size:0.85rem;">Laporan Bulanan</label>
-									</div>
-								</div>
-								<div class="col-md-3 col-6 mb-2">
-									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifPetani"
-											name="notifPetani" <?= $default_settings['notifPetani'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifPetani"
-											style="font-size:0.85rem;">Registrasi Petani</label>
-									</div>
-								</div>
-								<div class="col-md-3 col-6 mb-2">
-									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifKurir"
-											name="notifKurir" <?= $default_settings['notifKurir'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifKurir"
-											style="font-size:0.85rem;">Status Pengiriman</label>
-									</div>
-								</div>
-								<div class="col-md-3 col-6 mb-2">
-									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifPromo"
-											name="notifPromo" <?= $default_settings['notifPromo'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifPromo"
-											style="font-size:0.85rem;">Promo & Diskon</label>
-									</div>
-								</div>
-								<div class="col-md-3 col-6 mb-2">
-									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notifSistem"
-											name="notifSistem" <?= $default_settings['notifSistem'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notifSistem"
-											style="font-size:0.85rem;">Update Sistem</label>
-									</div>
-								</div>
-							</div>
-							<div class="mt-3 pt-2 border-top" style="border-color: rgba(74,44,17,0.06);">
-								<button type="submit" class="btn"
-									style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
-									<i class="bi bi-save mr-1"></i> Simpan Pengaturan
-								</button>
-								<button type="button" class="btn btn-link text-muted" style="font-size:0.85rem;"
-									onclick="markAllRead()">
-									<i class="bi bi-check2-all mr-1"></i> Tandai Semua Dibaca
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    </div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	<script>
 		// ============================================
@@ -1627,8 +1442,8 @@
 		// Refresh setiap 60 detik
 		// setInterval(refreshNotifications, 60000);
 
-		console.log('✅ Modul 11: Dashboard f& Notifikasi siap digunakan!');
-		console.log('📋 Fitur yang tersedia:');
+		console.log('âœ… Modul 11: Dashboard f& Notifikasi siap digunakan!');
+		console.log('ðŸ“‹ Fitur yang tersedia:');
 		console.log('   - KPI Cards (M11-F01)');
 		console.log('   - Grafik Penjualan (M10-F02)');
 		console.log('   - Produk Terlaris (M10-F04)');
@@ -1637,6 +1452,26 @@
 		console.log('   - Quick Action (M11-F04)');
 		console.log('   - Notifikasi Real-time (M11-F01)');
 		console.log('   - Setting Notifikasi (M11-F03)');
+	</script>
+	<script>
+	// ── Pencarian Petani (client-side) ──
+	document.getElementById('searchPetani').addEventListener('keyup', function() {
+		var keyword = this.value.toLowerCase();
+		var rows = document.querySelectorAll('#tbodyPetani tr');
+		var visibleCount = 0;
+		rows.forEach(function(row) {
+			var text = row.textContent.toLowerCase();
+			if (text.indexOf(keyword) > -1) {
+				row.style.display = '';
+				visibleCount++;
+			} else {
+				row.style.display = 'none';
+			}
+		});
+		// Update counter
+		var counter = document.getElementById('countPetani');
+		if (counter) counter.textContent = 'Menampilkan ' + visibleCount + ' data';
+	});
 	</script>
 </body>
 
