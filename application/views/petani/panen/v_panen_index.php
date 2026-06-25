@@ -62,6 +62,10 @@
         .btn-custom-info { background-color: #DBEAFE; color: #1E40AF; border: none; }
         .btn-custom-warning { background-color: #FEF3C7; color: #92400E; border: none; }
         .btn-custom-danger { background-color: #FEE2E2; color: #991B1B; border: none; }
+        /* SCROLLBAR */
+        .sidebar-menu-wrapper::-webkit-scrollbar { width: 3px; }
+        .sidebar-menu-wrapper::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-menu-wrapper::-webkit-scrollbar-thumb { background: rgba(230, 161, 92, 0.3); border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -104,11 +108,6 @@
             <li class="menu-item">
                 <a href="<?= base_url('petani/tracking'); ?>">
                     <i class="bi bi-truck"></i>Tracking Kiriman
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="<?= base_url('petani/laporan'); ?>">
-                    <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan
                 </a>
             </li>
         </ul>
@@ -271,3 +270,4 @@
 </script>
 </body>
 </html>
+

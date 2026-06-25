@@ -945,7 +945,7 @@
 					<i class="bi bi-list"></i>
 				</button>
 				<h2 class="d-inline-block align-middle mb-0">Manajemen Petani</h2>
-				<p class="subtitle mb-0 mt-1 text-muted">Dashboard / Manajemen Petani / Edit</p>
+				<p class="subtitle mb-0 mt-1 text-muted">Dashboard / Manajemen Petani / Verifikasi</p>
 			</div>
 			<div class="d-flex align-items-center gap-3" style="gap: 12px;">
 				<!-- NOTIFICATION BELL -->
@@ -1030,81 +1030,131 @@
 		
 <!-- MAIN BODY CONTENT -->
 <div class="page-body" style="padding: 24px; background-color: #f8f9fa; min-height: calc(100vh - 80px);">
-<div class="card border-0 shadow-sm rounded-4">
-    <div class="card-body p-4">
-        <!-- HEADER -->
-        <div class="d-flex align-items-center mb-4">
+<?php 
+function get_status_badge($status) {
+    if ($status == 'Active' || $status == 'Terverifikasi') return '<span class="badge" style="background-color: #E8F5E9; color: #4CAF50; padding: 6px 12px; border-radius: 6px;">'.$status.'</span>';
+    if ($status == 'Pending' || $status == 'Inactive' || $status == 'Menunggu Verifikasi') return '<span class="badge" style="background-color: #FFF8E1; color: #FFC107; padding: 6px 12px; border-radius: 6px;">'.$status.'</span>';
+    if ($status == 'Ditolak' || $status == 'Suspended') return '<span class="badge" style="background-color: #FFEBEE; color: #F44336; padding: 6px 12px; border-radius: 6px;">'.$status.'</span>';
+    return '<span class="badge bg-secondary">'.$status.'</span>';
+}
+function get_doc_badge($status) {
+    if ($status == 'Terverifikasi') return '<span class="badge" style="background-color: #E8F5E9; color: #4CAF50;">Terverifikasi</span>';
+    if ($status == 'Ditolak') return '<span class="badge" style="background-color: #FFEBEE; color: #F44336;">Ditolak</span>';
+    return '<span class="badge" style="background-color: #FFF8E1; color: #FFC107;">Menunggu</span>';
+}
+?><div class="row gx-4">
+    <div class="col-12 mb-4">
+        <div class="d-flex align-items-center">
             <a href="<?= base_url('admin/petani'); ?>" class="btn btn-light rounded-circle me-3 d-flex justify-content-center align-items-center" style="width: 40px; height: 40px; border: 1px solid #e0e0e0;">
                 <i class="bi bi-arrow-left text-dark"></i>
             </a>
             <div>
-                <h4 class="mb-0 fw-bold">Edit Petani</h4>
-                <small class="text-muted">Dashboard / Manajemen Petani / Edit</small>
+                <h4 class="mb-0 fw-bold">Verifikasi Petani</h4>
+                <small class="text-muted">Dashboard / Manajemen Petani / Verifikasi</small>
             </div>
         </div>
+    </div>
 
-        <h6 class="fw-bold mb-3">Form Data Petani</h6>
-        
-        <?php echo validation_errors('<div class="alert alert-danger p-2" style="font-size:0.85rem;">', '</div>'); ?>
-        
-        <form action="<?= base_url('admin/petani/update_aksi/' . $petani['id_petani']); ?>" method="POST" enctype="multipart/form-data">
-            <div class="row gx-5">
-                <!-- KIRI -->
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Nama Petani <span class="text-danger">*</span></label>
-                        <input type="text" name="nama_petani" class="form-control rounded-3 py-2" value="<?= htmlspecialchars($petani['nama_petani']); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">NIK <span class="text-danger">*</span></label>
-                        <input type="text" name="nik" class="form-control rounded-3 py-2" value="<?= htmlspecialchars($petani['nik']); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">No HP <span class="text-danger">*</span></label>
-                        <input type="tel" name="no_hp" pattern="[0-9]{9,15}" class="form-control rounded-3 py-2" value="<?= htmlspecialchars($petani['no_hp']); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Email</label>
-                        <input type="email" name="email" class="form-control rounded-3 py-2" value="<?= htmlspecialchars($petani['email']); ?>">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Alamat <span class="text-danger">*</span></label>
-                        <textarea name="alamat" class="form-control rounded-3 py-2" rows="4" required><?= htmlspecialchars($petani['alamat']); ?></textarea>
-                    </div>
-                </div>
-
-                <!-- KANAN -->
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Foto Profil</label>
-                        <div class="d-flex align-items-center mb-3">
-                            <?php if(!empty($petani['foto_profil'])): ?>
-                                <img src="<?= base_url('uploads/dokumen/'.$petani['foto_profil']); ?>" class="rounded-circle object-fit-cover me-3" width="70" height="70">
-                            <?php else: ?>
-                                <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white me-3" style="width: 70px; height: 70px; font-size: 2rem;">
-                                    <i class="bi bi-person"></i>
-                                </div>
-                            <?php endif; ?>
-                            <input type="file" name="foto_profil" class="form-control form-control-sm w-50">
+    <!-- KIRI: Profil & Informasi -->
+    <div class="col-md-5">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+                <h6 class="fw-bold mb-4">Informasi Petani</h6>
+                <div class="d-flex align-items-center mb-4">
+                    <?php if(!empty($petani['foto_profil'])): ?>
+                        <img src="<?= base_url('uploads/dokumen/'.$petani['foto_profil']); ?>" class="rounded-circle object-fit-cover shadow-sm me-3" width="80" height="80">
+                    <?php else: ?>
+                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white shadow-sm me-3" style="width: 80px; height: 80px; font-size: 2.5rem;">
+                            <i class="bi bi-person"></i>
                         </div>
-                        <small class="text-muted d-block" style="font-size: 0.75rem;">Biarkan kosong jika tidak ingin mengubah foto. (JPG, PNG maks 2MB)</small>
-                    </div>
-                    <div class="mb-3 mt-4">
-                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Status <span class="text-danger">*</span></label>
-                        <select name="status" class="form-select rounded-3 py-2">
-                            <option value="Active" <?= $petani['status_petani'] == 'Active' ? 'selected' : ''; ?>>Active</option>
-                            <option value="Inactive" <?= $petani['status_petani'] == 'Inactive' ? 'selected' : ''; ?>>Inactive</option>
-                            <option value="Suspended" <?= $petani['status_petani'] == 'Suspended' ? 'selected' : ''; ?>>Suspended</option>
-                        </select>
+                    <?php endif; ?>
+                    <div>
+                        <h5 class="fw-bold mb-1"><?= htmlspecialchars($petani['nama_petani']); ?></h5>
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr>
+                                <td class="text-muted p-0" style="width: 100px; font-size: 0.85rem;">NIK</td>
+                                <td class="fw-bold p-0" style="font-size: 0.85rem;">: <?= htmlspecialchars($petani['nik']); ?></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted p-0" style="font-size: 0.85rem;">Tanggal Daftar</td>
+                                <td class="fw-bold p-0" style="font-size: 0.85rem;">: <?= date('d F Y', strtotime($petani['tanggal_daftar'])); ?></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted p-0" style="font-size: 0.85rem;">Status Saat Ini</td>
+                                <td class="p-0">: <?= get_status_badge($petani['status_petani']); ?></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="mt-5 d-flex justify-content-end gap-3 border-top pt-4">
-                <a href="<?= base_url('admin/petani'); ?>" class="btn btn-light px-4 py-2 rounded-3 border fw-bold" style="color: #6c757d;">Batal</a>
-                <button type="submit" class="btn px-4 py-2 rounded-3 fw-bold text-white shadow-sm" style="background-color: #6d4c41;">Simpan Perubahan</button>
+    <!-- KANAN: Dokumen & Form Verifikasi -->
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+                <h6 class="fw-bold mb-4">Dokumen yang Diupload</h6>
+                
+                <div class="d-flex flex-column gap-3 mb-4">
+                    <!-- KTP -->
+                    <div class="border rounded-3 p-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle bg-light d-flex justify-content-center align-items-center fw-bold text-muted" style="width: 35px; height: 35px;">1</div>
+                            <div>
+                                <h6 class="fw-bold mb-0">KTP</h6>
+                                <small class="text-muted"><?= !empty($petani['file_ktp']) ? $petani['file_ktp'] : 'Belum diupload'; ?></small>
+                            </div>
+                        </div>
+                        <?php if(!empty($petani['file_ktp'])): ?>
+                            <a href="<?= base_url('uploads/dokumen/'.$petani['file_ktp']); ?>" target="_blank" class="btn btn-sm btn-outline-secondary px-4 py-2 rounded-3">Lihat</a>
+                        <?php endif; ?>
+                    </div>
+                    <!-- NPWP -->
+                    <div class="border rounded-3 p-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle bg-light d-flex justify-content-center align-items-center fw-bold text-muted" style="width: 35px; height: 35px;">2</div>
+                            <div>
+                                <h6 class="fw-bold mb-0">NPWP</h6>
+                                <small class="text-muted"><?= !empty($petani['file_npwp']) ? $petani['file_npwp'] : 'Belum diupload'; ?></small>
+                            </div>
+                        </div>
+                        <?php if(!empty($petani['file_npwp'])): ?>
+                            <a href="<?= base_url('uploads/dokumen/'.$petani['file_npwp']); ?>" target="_blank" class="btn btn-sm btn-outline-secondary px-4 py-2 rounded-3">Lihat</a>
+                        <?php endif; ?>
+                    </div>
+                    <!-- Sertifikat -->
+                    <div class="border rounded-3 p-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle bg-light d-flex justify-content-center align-items-center fw-bold text-muted" style="width: 35px; height: 35px;">3</div>
+                            <div>
+                                <h6 class="fw-bold mb-0">Sertifikat</h6>
+                                <small class="text-muted"><?= !empty($petani['file_sertifikat']) ? $petani['file_sertifikat'] : 'Belum diupload'; ?></small>
+                            </div>
+                        </div>
+                        <?php if(!empty($petani['file_sertifikat'])): ?>
+                            <a href="<?= base_url('uploads/dokumen/'.$petani['file_sertifikat']); ?>" target="_blank" class="btn btn-sm btn-outline-secondary px-4 py-2 rounded-3">Lihat</a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <form action="<?= base_url('admin/petani/verifikasi/' . $petani['id_petani']); ?>" method="POST">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold" style="font-size: 0.85rem;">Catatan (Opsional)</label>
+                        <textarea name="catatan_verifikasi" class="form-control rounded-3 py-2 bg-light" rows="3" placeholder="Masukkan catatan jika diperlukan..."><?= htmlspecialchars($petani['catatan_verifikasi'] ?? ''); ?></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-3 pt-2">
+                        <button type="submit" name="action" value="reject" class="btn px-4 py-2 rounded-3 fw-bold text-white shadow-sm d-flex align-items-center" style="background-color: #F44336;">
+                            <i class="bi bi-x-lg me-2"></i> Reject
+                        </button>
+                        <button type="submit" name="action" value="approve" class="btn px-4 py-2 rounded-3 fw-bold text-white shadow-sm d-flex align-items-center" style="background-color: #4CAF50;">
+                            <i class="bi bi-check-lg me-2"></i> Approve
+                        </button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 </div>
