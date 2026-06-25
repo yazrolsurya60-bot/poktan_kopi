@@ -11,35 +11,33 @@
             font-size: 13px;
             color: #333;
             background: #fff;
-            padding: 30px;
         }
 
-        /* Header Laporan */
-        .report-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* Header Laporan (pakai table, bukan flex, agar aman di Dompdf) */
+        .report-header-table {
+            width: 100%;
             border-bottom: 3px solid #6d4c41;
             padding-bottom: 16px;
             margin-bottom: 24px;
         }
-        .report-header .logo-side h2 {
+        .report-header-table td { vertical-align: middle; }
+        .logo-side h2 {
             font-size: 1.4rem;
             color: #6d4c41;
             font-weight: bold;
             letter-spacing: 1px;
         }
-        .report-header .logo-side p {
+        .logo-side p {
             font-size: 0.75rem;
             color: #888;
             margin-top: 2px;
         }
-        .report-header .meta-side {
+        .meta-side {
             text-align: right;
             font-size: 0.75rem;
             color: #888;
         }
-        .report-header .meta-side strong {
+        .meta-side strong {
             display: block;
             font-size: 1.1rem;
             color: #333;
@@ -64,8 +62,8 @@
             margin-top: 4px;
         }
 
-        /* Tabel */
-        table {
+        /* Tabel Data */
+        table.data-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 8px;
@@ -84,9 +82,6 @@
         tbody tr:nth-child(even) {
             background-color: #fdf8f5;
         }
-        tbody tr:hover {
-            background-color: #f5ebe3;
-        }
         tbody td {
             padding: 9px 12px;
             border-bottom: 1px solid #eee;
@@ -103,87 +98,37 @@
             font-weight: 600;
         }
         .badge-active    { background: #E8F5E9; color: #4CAF50; }
-        .badge-inactive  { background: #FFF8E1; color: #FFC107; }
-        .badge-pending   { background: #FFF8E1; color: #FFC107; }
+        .badge-inactive   { background: #FFF8E1; color: #FFC107; }
         .badge-suspended { background: #FFEBEE; color: #F44336; }
         .badge-other     { background: #eeeeee; color: #555; }
 
         /* Footer */
-        .report-footer {
+        .report-footer-table {
+            width: 100%;
             margin-top: 32px;
-            display: flex;
-            justify-content: space-between;
             font-size: 0.75rem;
             color: #aaa;
             border-top: 1px solid #eee;
             padding-top: 12px;
         }
-
-        /* Tombol Cetak */
-        .print-toolbar {
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            display: flex;
-            gap: 10px;
-            z-index: 999;
-        }
-        .btn-print {
-            background-color: #6d4c41;
-            color: #fff;
-            border: none;
-            padding: 10px 22px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        .btn-print:hover { background-color: #5d3e37; }
-        .btn-back {
-            background-color: #fff;
-            color: #555;
-            border: 1px solid #ddd;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Sembunyikan toolbar saat print */
-        @media print {
-            .print-toolbar { display: none; }
-            body { padding: 15px; }
-        }
+        .report-footer-table td.right { text-align: right; }
     </style>
 </head>
 <body>
 
-<!-- Toolbar (tidak ikut tercetak) -->
-<div class="print-toolbar">
-    <a href="<?= base_url('admin/petani/export_page'); ?>" class="btn-back">&#8592; Kembali</a>
-    <button class="btn-print" onclick="window.print()">&#128438; Cetak / Simpan PDF</button>
-</div>
-
 <!-- Header Laporan -->
-<div class="report-header">
-    <div class="logo-side">
-        <h2>&#9749; POKTAN KOPI</h2>
-        <p>Sistem Supply Chain Kopi | liberchain</p>
-    </div>
-    <div class="meta-side">
-        <strong>Laporan Data Petani</strong>
-        Tanggal Cetak: <?= date('d F Y, H:i'); ?> WIB
-    </div>
-</div>
+<table class="report-header-table">
+    <tr>
+        <td class="logo-side" style="width: 50%;">
+            <h2>POKTAN KOPI</h2>
+            <p>Sistem Supply Chain Kopi | liberchain</p>
+        </td>
+        <td class="meta-side">
+            <strong>Laporan Data Petani</strong>
+            Tanggal Cetak: <?= date('d F Y, H:i'); ?> WIB
+        </td>
+    </tr>
+</table>
 
 <!-- Judul -->
 <div class="report-title">
@@ -192,10 +137,10 @@
 </div>
 
 <!-- Tabel Data -->
-<table>
+<table class="data-table">
     <thead>
         <tr>
-            <th style="width: 40px;">No</th>
+            <th style="width: 30px;">No</th>
             <th>Nama Petani</th>
             <th>NIK</th>
             <th>No HP</th>
@@ -209,10 +154,11 @@
         <?php if (!empty($daftar_petani)): ?>
             <?php $no = 1; foreach ($daftar_petani as $p): ?>
                 <?php
+                    // Hanya 3 status resmi sesuai modul: Active / Inactive / Suspended
                     $stat = strtolower($p['status_petani']);
-                    if ($stat == 'active' || $stat == 'terverifikasi') $badge = 'badge-active';
-                    elseif ($stat == 'suspended' || $stat == 'ditolak') $badge = 'badge-suspended';
-                    elseif ($stat == 'pending' || $stat == 'inactive') $badge = 'badge-pending';
+                    if ($stat == 'active') $badge = 'badge-active';
+                    elseif ($stat == 'suspended') $badge = 'badge-suspended';
+                    elseif ($stat == 'inactive') $badge = 'badge-inactive';
                     else $badge = 'badge-other';
                 ?>
                 <tr>
@@ -223,7 +169,7 @@
                     <td><?= htmlspecialchars($p['email'] ?: '-'); ?></td>
                     <td><?= htmlspecialchars($p['alamat'] ?: '-'); ?></td>
                     <td style="text-align: center;">
-                        <span class="badge-status <?= $badge; ?>"><?= $p['status_petani']; ?></span>
+                        <span class="badge-status <?= $badge; ?>"><?= htmlspecialchars($p['status_petani']); ?></span>
                     </td>
                     <td><?= date('d/m/Y', strtotime($p['tanggal_daftar'])); ?></td>
                 </tr>
@@ -235,10 +181,12 @@
 </table>
 
 <!-- Footer -->
-<div class="report-footer">
-    <span>Dicetak oleh: Admin Sistem Supply Chain Kopi</span>
-    <span>Halaman 1 dari 1</span>
-</div>
+<table class="report-footer-table">
+    <tr>
+        <td>Dicetak oleh: Admin Sistem Supply Chain Kopi</td>
+        <td class="right">Halaman 1 dari 1</td>
+    </tr>
+</table>
 
 </body>
 </html>

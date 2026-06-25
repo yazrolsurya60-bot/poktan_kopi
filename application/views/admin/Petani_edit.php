@@ -923,7 +923,7 @@
 				</li>
 				<li class="menu-item">
 					<a href="<?= base_url('admin/laporan'); ?>">
-						<i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan & Analytics
+						<i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
 					</a>
 				</li>
 			</ul>
@@ -1061,7 +1061,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">No HP <span class="text-danger">*</span></label>
-                        <input type="number" name="no_hp" class="form-control rounded-3 py-2" value="<?= htmlspecialchars($petani['no_hp']); ?>" required>
+                        <input type="tel" name="no_hp" pattern="[0-9]{9,15}" class="form-control rounded-3 py-2" value="<?= htmlspecialchars($petani['no_hp']); ?>" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Email</label>
@@ -1093,7 +1093,6 @@
                         <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Status <span class="text-danger">*</span></label>
                         <select name="status" class="form-select rounded-3 py-2">
                             <option value="Active" <?= $petani['status_petani'] == 'Active' ? 'selected' : ''; ?>>Active</option>
-                            <option value="Pending" <?= $petani['status_petani'] == 'Pending' ? 'selected' : ''; ?>>Pending</option>
                             <option value="Inactive" <?= $petani['status_petani'] == 'Inactive' ? 'selected' : ''; ?>>Inactive</option>
                             <option value="Suspended" <?= $petani['status_petani'] == 'Suspended' ? 'selected' : ''; ?>>Suspended</option>
                         </select>
