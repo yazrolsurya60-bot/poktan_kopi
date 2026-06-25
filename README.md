@@ -1,57 +1,57 @@
 # LiberChain
 
-## 📖 Project Overview
+## 📖 Gambaran Proyek
 
-**LiberChain** is a web‑based management system for coffee farmer cooperatives (Poktan). It enables administrators, farmers (Petani), product managers, couriers, and partners to manage:
+**LiberChain** adalah sistem manajemen berbasis web untuk koperasi petani kopi (Poktan). Sistem ini memungkinkan administrator, petani, manajer produk, kurir, dan mitra untuk mengelola:
 
-- **Farm (Lahan) data** – locations, sizes, owners.
-- **Harvest (Panen) records** – periodic harvest data per farm.
-- **Products** – coffee batch details, pricing, images.
-- **User management** – admins, farmers, couriers, partners.
-- **Reporting & dashboards** – visual insights for production, sales, and logistics.
+- **Data Lahan** – lokasi, ukuran, pemilik.
+- **Catatan Panen** – data panen periodik per lahan.
+- **Produk** – detail batch kopi, harga, gambar.
+- **Manajemen Pengguna** – admin, petani, kurir, mitra.
+- **Laporan & Dashboard** – visualisasi produksi, penjualan, dan logistik.
 
-Built on **CodeIgniter 3** (PHP) following an MVC architecture, the application provides a clean, responsive UI for both desktop and mobile browsers.
-
----
-
-## ✨ Key Features
-
-- **Role‑based access control** (Admin, Farmer, Courier, Partner)
-- Full CRUD operations for farms, harvests, products, and users
-- File upload handling for product images
-- Interactive dashboards with charts and tables
-- Export functionality (CSV/Excel) for farmer and product data
-- Multi‑language support (future‑proof i18n)
-- Secure authentication & session handling
-- Modern responsive design with gradients, glass‑morphism effects, and subtle micro‑animations
+Dibangun dengan **CodeIgniter 3** (PHP) mengikuti arsitektur MVC, aplikasi menyediakan antarmuka bersih dan responsif untuk browser desktop maupun seluler.
 
 ---
 
-## 🛠️ Tech Stack
+## ✨ Fitur Utama
 
-| Layer | Technology |
-|-------|------------|
+- **Kontrol akses berbasis peran** (Admin, Petani, Kurir, Mitra)
+- Operasi CRUD lengkap untuk lahan, panen, produk, dan pengguna
+- Penanganan unggah foto produk
+- Dashboard interaktif dengan diagram dan tabel
+- Ekspor data (CSV/Excel) untuk data petani dan produk
+- Dukungan multi-bahasa (i18n) untuk masa depan
+- Otentikasi aman & penanganan sesi
+- Desain responsif modern dengan gradien, efek glassmorphism, dan micro‑animasi halus
+
+---
+
+## 🛠️ Teknologi yang Digunakan
+
+| Lapisan | Teknologi |
+|---------|-----------|
 | **Backend** | PHP 7.x, CodeIgniter 3 (MVC) |
 | **Database** | MySQL / MariaDB |
-| **Frontend** | HTML5, CSS3 (vanilla, custom UI components), JavaScript (jQuery) |
+| **Frontend** | HTML5, CSS3 (vanilla, komponen UI khusus), JavaScript (jQuery) |
 | **Server** | Apache (XAMPP) |
 | **Version Control** | Git |
 
 ---
 
-## 📦 Installation Guide
+## 📦 Panduan Instalasi
 
-1. **Prerequisites**
-   - XAMPP (Apache, PHP, MySQL) installed on Windows.
-   - Composer (optional, for future dependency management).
-2. **Clone the repository**
+1. **Prasyarat**
+   - XAMPP (Apache, PHP, MySQL) terpasang di Windows.
+   - Composer (opsional, untuk manajemen dependensi di masa depan).
+2. **Clone repositori**
    ```bash
    git clone https://github.com/yazrolsurya60-bot/poktan_kopi.git
    ```
-3. **Configure the database**
-   - Create a new MySQL database, e.g., `liberchain`.
-   - Import the provided SQL dump (`database/poktan_kopi.sql`) if available.
-4. **Update configuration**
+3. **Konfigurasi basis data**
+   - Buat basis data MySQL baru, misalnya `liberchain`.
+   - Impor file dump SQL `database/poktan_kopi.sql` jika tersedia.
+4. **Perbarui konfigurasi**
    - Edit `application/config/config.php`:
      ```php
      $config['base_url'] = 'http://localhost/poktan_kopi/';
@@ -60,75 +60,73 @@ Built on **CodeIgniter 3** (PHP) following an MVC architecture, the application 
        'username' => 'root',
        'password' => '',
        'database' => 'liberchain',
-       // ... other settings ...
+       // ... pengaturan lainnya ...
      );
      ```
-5. **Set folder permissions**
-   - Ensure `uploads/` and `application/cache/` are writable by Apache.
-6. **Run the application**
-   - Start Apache & MySQL via XAMPP.
-   - Navigate to `http://localhost/poktan_kopi/` in your browser.
+5. **Setel izin folder**
+   - Pastikan folder `uploads/` dan `application/cache/` dapat ditulisi oleh Apache.
+6. **Jalankan aplikasi**
+   - Mulai layanan Apache & MySQL melalui XAMPP.
+   - Buka `http://localhost/poktan_kopi/` di peramban.
 
 ---
 
-## ⚙️ Configuration Details
+## ⚙️ Rincian Konfigurasi
 
-- **Base URL** – defined in `application/config/config.php`.
-- **Encryption key** – set `$config['encryption_key']` for session security.
-- **Email settings** – optional SMTP configuration in `application/config/email.php` for notifications.
-- **Environment** – switch `$config['environment']` between `development` and `production` to control error reporting.
+- **Base URL** – didefinisikan di `application/config/config.php`.
+- **Kunci enkripsi** – atur `$config['encryption_key']` untuk keamanan sesi.
+- **Pengaturan email** – konfigurasi SMTP opsional di `application/config/email.php` untuk notifikasi.
+- **Lingkungan** – ubah `$config['environment']` menjadi `development` atau `production` untuk mengatur tingkat laporan error.
 
 ---
 
-## 🚀 Running Locally
+## 🚀 Menjalankan Secara Lokal
 
 ```bash
-# Using PHP built‑in server (for quick testing)
+# Menggunakan server bawaan PHP (untuk pengujian cepat)
 php -S localhost:8000 -t public
 ```
 
-Or simply use XAMPP’s Apache service as described above.
+Atau cukup gunakan layanan Apache XAMPP sebagaimana dijelaskan di atas.
 
 ---
 
-## 📂 Directory Structure
+## 📂 Struktur Direktori
 
 ```
-├─ application/            # CodeIgniter MVC core
-│   ├─ config/            # Configuration files (config.php, routes.php, etc.)
-│   ├─ controllers/       # Controllers (Welcome.php, admin/, petani/)
-│   ├─ models/            # Data models (Panen_model.php, etc.)
-│   └─ views/             # HTML templates (admin/, petani/, landing/)
-├─ assets/                # CSS, JS, images used by the UI
-├─ uploads/               # Uploaded product images
-├─ database/              # Optional SQL dump files
-└─ README.md              # Project documentation (this file)
+├─ application/            # Inti MVC CodeIgniter
+│   ├─ config/            # File konfigurasi (config.php, routes.php, dll.)
+│   ├─ controllers/       # Kontroler (Welcome.php, admin/, petani/)
+│   ├─ models/            # Model data (Panen_model.php, dll.)
+│   └─ views/             # Template HTML (admin/, petani/, landing/)
+├─ assets/                # CSS, JS, gambar UI
+├─ uploads/               # Gambar produk yang diunggah
+├─ database/              # File dump SQL opsional
+└─ README.md              # Dokumentasi proyek (file ini)
 ```
 
 ---
 
-## 🤝 Contributing
+## 🤝 Kontribusi
 
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/your-feature`).
-3. Commit changes with clear messages.
-4. Open a Pull Request targeting `main`.
-5. Ensure all existing tests pass (`phpunit` – if a test suite exists).
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** – see the `LICENSE` file for details.
+1. Fork repositori.
+2. Buat cabang fitur (`git checkout -b feature/fitur-anda`).
+3. Commit perubahan dengan pesan yang jelas.
+4. Buat Pull Request menuju `main`.
+5. Pastikan semua tes yang ada lulus (`phpunit` – jika ada suite tes).
 
 ---
 
-## 📞 Support & Contact
+## 📄 Lisensi
 
-For questions or contributions, reach out to the repository maintainer:
+Proyek ini dilisensikan di bawah **MIT License** – lihat file `LICENSE` untuk detailnya.
+
+---
+
+## 📞 Dukungan & Kontak
+
+Untuk pertanyaan atau kontribusi, hubungi pemelihara repositori:
 - **GitHub**: https://github.com/yazrolsurya60-bot/poktan_kopi
-- **Email**: dev@example.com
-
 ---
 
-*Generated on 2026‑06‑25.*
+*Dibuat pada 2026‑06‑25.*
