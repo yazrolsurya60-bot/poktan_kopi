@@ -30,7 +30,10 @@ class Panen_model extends CI_Model {
         $this->db->order_by('tb_panen.tanggal_panen', 'DESC');
         return $this->db->get()->result_array();
     }
-
+public function get_all_produk()
+{
+    return $this->db->get('tb_produk')->result();
+}
     public function get_statistik_panen($id_user = null) {
         // M04-F07: Grafik hasil panen per periode (6 bulan terakhir)
         $this->db->select('DATE_FORMAT(tanggal_panen, "%Y-%m") as bulan, SUM(jumlah_panen) as total_panen');

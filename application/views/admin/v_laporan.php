@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics & Reports - Sistem Supply Chain Kopi</title>
-    <meta name="description" content="Dashboard laporan dan analytics sistem supply chain kopi Poktan Liberchain">
+    <title>Laporan & Analisis - Sistem Supply Chain Kopi</title>
+    <meta name="description" content="Dashboard laporan dan analisis sistem supply chain kopi Poktan Liberchain">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -716,7 +716,7 @@
             </li>
             <li class="menu-item active">
                 <a href="<?= base_url('admin/laporan'); ?>">
-                    <i class="bi bi-file-earmark-bar-graph-fill"></i>Analytics & Reports
+                    <i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
                 </a>
             </li>
         </ul>
@@ -737,8 +737,8 @@
             <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle" style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
                 <i class="bi bi-list"></i>
             </button>
-            <h2 class="d-inline-block align-middle mb-0">Analytics & Reports</h2>
-            <p class="subtitle mb-0 mt-1">Ringkasan data bisnis dan analitik <span id="currentDateTime" style="color: var(--amber-cream); font-weight:500;"></span></p>
+            <h2 class="d-inline-block align-middle mb-0">Analisis & Laporan</h2>
+            <p class="subtitle mb-0 mt-1">Ringkasan data bisnis dan analitik </p>
         </div>
         <div class="d-flex align-items-center flex-wrap mt-2 mt-md-0" style="gap: 10px;">
             <!-- Tombol Export -->

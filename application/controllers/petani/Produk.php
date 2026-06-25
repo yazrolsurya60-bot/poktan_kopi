@@ -31,7 +31,7 @@ class Produk extends CI_Controller
 
     }
 
-    $this->load->view('admin/v_produk', $data);
+    $this->load->view('petani/v_produk', $data);
 }
 
     // Form tambah produk
@@ -39,7 +39,7 @@ class Produk extends CI_Controller
     {
         $data['produk'] = $this->Produk_model->getAll();
 
-        $this->load->view('admin/produk_tambah', $data);
+        $this->load->view('petani/produk_tambah', $data);
     }
 
     // Simpan produk baru
@@ -84,14 +84,14 @@ if (!empty($_FILES['foto_utama']['name'])) {
 
     $this->Produk_model->insert($data);
 
-    redirect('admin/produk');
+    redirect('petani/produk');
 }
     // Detail produk
     public function detail($id)
     {
         $data['produk'] = $this->Produk_model->getById($id);
 
-        $this->load->view('admin/produk_detail', $data);
+        $this->load->view('petani/produk_detail', $data);
     }
 
     // Form edit produk
@@ -99,7 +99,7 @@ if (!empty($_FILES['foto_utama']['name'])) {
     {
         $data['produk'] = $this->Produk_model->getById($id);
 
-        $this->load->view('admin/produk_edit', $data);
+        $this->load->view('petani/produk_edit', $data);
     }
 
     // Update produk
@@ -120,7 +120,7 @@ if (!empty($_FILES['foto_utama']['name'])) {
 
         $this->Produk_model->update($id, $data);
 
-        redirect('admin/produk');
+        redirect('petani/produk');
     }
 
     // Hapus produk
@@ -128,6 +128,6 @@ if (!empty($_FILES['foto_utama']['name'])) {
     {
         $this->Produk_model->delete($id);
 
-        redirect('admin/produk');
+        redirect('petani/produk');
     }
 }
