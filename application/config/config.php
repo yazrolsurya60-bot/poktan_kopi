@@ -529,9 +529,5 @@ $config['rewrite_short_tags'] = FALSE;
 | Comma-separated:	'10.0.1.200,192.168.5.0/24'
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
-<<<<<<< HEAD
-$config['proxy_ips'] = '';
-=======
 $config['proxy_ips'] = '';
 date_default_timezone_set('Asia/Jakarta');
->>>>>>> 6501bf9be1d3357172f47c62534cbcdc39c6d790
