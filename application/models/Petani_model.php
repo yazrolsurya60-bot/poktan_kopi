@@ -8,6 +8,7 @@ class Petani_model extends CI_Model {
     // Mengambil daftar petani dengan penanganan filter yang lebih aman
     public function get_daftar_petani($status = null) {
         $this->db->from($this->table);
+        $this->db->where('is_deleted', 0);
         
         // Cek jika status ada dan bukan string kosong
         if (!empty($status)) {
@@ -42,12 +43,12 @@ class Petani_model extends CI_Model {
         return $this->db->update($this->table, $data);
     }
 
-    // Menghapus baris data petani
+    // Menghapus baris data petani (Soft Delete)
     public function delete_petani($id) {
         if (empty($id)) {
             return false;
         }
         $this->db->where('id_petani', $id);
-        return $this->db->delete($this->table);
+        return $this->db->update($this->table, ['is_deleted' => 1]);
     }
 }
