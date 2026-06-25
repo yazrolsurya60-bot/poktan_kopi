@@ -20,7 +20,6 @@ class Dashboard extends CI_Controller
         // 🔴 PERBAIKI: Jika role tidak sesuai, redirect ke dashboard yang benar
         $current_role = $this->session->userdata('role');
 
-
         // Jika role bukan Admin, arahkan ke dashboard yang sesuai
         if ($current_role != 'Admin') {
             if ($current_role == 'Petani') {
@@ -98,7 +97,6 @@ class Dashboard extends CI_Controller
         $redirect = $this->input->get('redirect') ?? 'admin/dashboard/history';
         redirect($redirect);
     }
-
     public function get_notifications_ajax()
     {
         $id_user = $this->session->userdata('id_user');

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -28,6 +28,9 @@
         .menu-item a { display: flex; align-items: center; padding: 12px 24px; color: #A8988A; font-weight: 500; font-size: 0.9rem; text-decoration: none; margin: 2px 10px; border-radius: 10px; }
         .menu-item a i { font-size: 1.15rem; margin-right: 14px; width: 22px; text-align: center; }
         .menu-item.active a { background: rgba(230, 161, 92, 0.18); border-left: 3px solid var(--amber-cream); color: #fff; }
+        .sidebar-footer { position: absolute; bottom: 0; width: 100%; padding: 16px 20px; border-top: 1px solid rgba(250, 246, 240, 0.06); }
+        .sidebar-footer .btn-logout { width: 100%; padding: 10px 16px; border: 1px solid rgba(250, 246, 240, 0.1); border-radius: 10px; background: transparent; color: #A8988A; font-weight: 500; font-size: 0.85rem; transition: var(--transition-smooth); display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
+        .sidebar-footer .btn-logout:hover { background: rgba(230, 161, 92, 0.1); color: #ffffff; border-color: rgba(230, 161, 92, 0.2); }
         
         .main-content { margin-left: var(--sidebar-width); padding: 30px 40px; }
         .page-header { border-bottom: 1px solid rgba(74,44,17,0.08); padding-bottom: 20px; margin-bottom: 30px; }
@@ -66,7 +69,7 @@
             </li>
             <li class="menu-item active">
                 <a href="<?= base_url('petani/panen'); ?>">
-                    <i class="bi bi-textarea-rose"></i>Manajemen Panen
+                    <i class="bi bi-tree-fill"></i>Manajemen Panen
                 </a>
             </li>
             <li class="menu-item">
@@ -86,12 +89,12 @@
                     <i class="bi bi-truck"></i>Tracking Kiriman
                 </a>
             </li>
-            <li class="menu-item">
-                <a href="<?= base_url('petani/laporan'); ?>">
-                    <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan
-                </a>
-            </li>
         </ul>
+    </div>
+    <div class="sidebar-footer">
+        <button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
+            <i class="bi bi-box-arrow-right"></i> Keluar
+        </button>
     </div>
 </div>
 
@@ -177,3 +180,4 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 </body>
 </html>
+

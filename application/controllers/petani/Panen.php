@@ -8,12 +8,12 @@ class Panen extends CI_Controller
         parent::__construct();
         // Cek login
         if (!$this->session->userdata('id_user')) {
-            $this->session->set_userdata([
-                'id_user' => 2,
-                'role' => 'Petani',
-                'nama' => 'Test Petani'
-            ]);
-            // redirect('auth/login');
+            // $this->session->set_userdata([
+            //     'id_user' => 2,
+            //     'role' => 'Petani',
+            //     'nama' => 'Test Petani'
+            // ]);
+            redirect('auth/login');
         }
 
         // Cek role Petani
@@ -44,18 +44,18 @@ class Panen extends CI_Controller
             // Cek apakah notif yang sama sudah ada hari ini
             $this->db->where('id_user', $id_user);
             $this->db->where('judul', 'Pengingat Panen');
-            $this->db->like('pesan', $lahan['nama_lahan']);
-            $this->db->where('DATE(created_at)', date('Y-m-d'));
+            // $this->db->like('pesan', $lahan['nama_lahan']);
+            // $this->db->where('DATE(created_at)', date('Y-m-d'));
             $cek = $this->db->get('tb_notifikasi')->row();
 
             if (!$cek) {
                 $this->db->insert('tb_notifikasi', [
                     'id_user' => $id_user,
                     'judul' => 'Pengingat Panen',
-                    'pesan' => 'Lahan ' . $lahan['nama_lahan'] . ' belum memiliki catatan panen dalam 30 hari terakhir. Harap perbarui data panen Anda.',
-                    'tipe' => 'Warning',
-                    'is_read' => 0,
-                    'created_at' => date('Y-m-d H:i:s')
+                    // 'pesan' => 'Lahan ' . $lahan['nama_lahan'] . ' belum memiliki catatan panen dalam 30 hari terakhir. Harap perbarui data panen Anda.',
+                    // 'tipe' => 'Warning',
+                    // 'is_read' => 0,
+                    // 'created_at' => date('Y-m-d H:i:s')
                 ]);
             }
         }

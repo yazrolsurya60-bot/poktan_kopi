@@ -207,7 +207,7 @@
     <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
         <div>
             <h2 class="mb-0">Manajemen Mitra</h2>
-            <p class="subtitle mb-0 mt-1">Kelola mitra, reseller, cafe, dan partner bisnis LiberChain &mdash; <span id="currentDateTime" style="color:var(--amber-cream);font-weight:500;"></span></p>
+            <p class="subtitle mb-0 mt-1">Kelola mitra, reseller, cafe, dan partner bisnis LiberChain </p>
         </div>
         <div class="d-flex align-items-center" style="gap:10px;">
             <!-- NOTIF BELL -->

@@ -1,3 +1,5 @@
+# poktan_kopi
+Seluruh perubahan kode yang di lakukan, di push di repositori ini. 
 # LiberChain – Sistem Manajemen Supply Chain Kopi
 
 ## Deskripsi Singkat
@@ -56,3 +58,9 @@ application/
 
 ---
 *Repository ini mencatat semua perubahan kode yang dipush ke Git. Pastikan commit secara teratur untuk melacak evolusi aplikasi.*
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+=======
+>>>>>>> d8b8a835a631ab58188cf94e9aa651830be1c284
