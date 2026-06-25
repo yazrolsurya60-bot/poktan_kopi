@@ -23,14 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-<<<<<<< HEAD
-
-
-
 $config['base_url'] = 'http://localhost/poktan_kopi/';
-=======
-$config['base_url'] = 'http://localhost/app_coffee/';
->>>>>>> 82cc47111c9d2a7f6f858de36c260dc3d9972d62
 
 /*
 |--------------------------------------------------------------------------
