@@ -228,7 +228,7 @@
                 </li>
                 <li class="menu-item">
                     <a href="<?= base_url('admin/laporan'); ?>">
-                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan & Analytics
+                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
                     </a>
                 </li>
             </ul>
