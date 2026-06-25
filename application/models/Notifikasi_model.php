@@ -1,9 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Notifikasi_model extends CI_Model {
-    
-    public function __construct() {
+class Notifikasi_model extends CI_Model
+{
+
+    public function __construct()
+    {
         parent::__construct();
         $this->load->database();
     }
@@ -15,7 +17,8 @@ class Notifikasi_model extends CI_Model {
     /**
      * Save notification
      */
-    public function save_notifikasi($data) {
+    public function save_notifikasi($data)
+    {
         $insert_data = [
             'id_user' => $data['id_user'],
             'judul' => $data['judul'] ?? 'Notifikasi',
@@ -31,28 +34,33 @@ class Notifikasi_model extends CI_Model {
     /**
      * Get unread notifications
      */
-    public function get_unread_notif($id_user, $limit = null) {
+    public function get_unread_notif($id_user, $limit = null)
+    {
         $this->db->where('id_user', $id_user);
         $this->db->where('status_baca', 0);
         $this->db->order_by('tanggal_buat', 'DESC');
-        if ($limit) $this->db->limit($limit);
-        return $this->db->get('tb_notifikasi')->result();
+        if ($limit)
+            $this->db->limit($limit);
+        return $this->db->get('tb_notifikasi')->result_array();
     }
 
     /**
      * Get all notifications with pagination
      */
-    public function get_all_notif($id_user, $limit = null, $offset = null) {
+    public function get_all_notif($id_user, $limit = null, $offset = null)
+    {
         $this->db->where('id_user', $id_user);
         $this->db->order_by('tanggal_buat', 'DESC');
-        if ($limit) $this->db->limit($limit, $offset);
-        return $this->db->get('tb_notifikasi')->result();
+        if ($limit)
+            $this->db->limit($limit, $offset);
+        return $this->db->get('tb_notifikasi')->result_array();
     }
 
     /**
      * Count unread notifications
      */
-    public function count_unread($id_user) {
+    public function count_unread($id_user)
+    {
         $this->db->where('id_user', $id_user);
         $this->db->where('status_baca', 0);
         return $this->db->count_all_results('tb_notifikasi');
@@ -61,7 +69,8 @@ class Notifikasi_model extends CI_Model {
     /**
      * Mark notification as read
      */
-    public function mark_as_read($id_notif, $id_user) {
+    public function mark_as_read($id_notif, $id_user)
+    {
         $this->db->where('id_notifikasi', $id_notif);
         $this->db->where('id_user', $id_user);
         return $this->db->update('tb_notifikasi', ['status_baca' => 1]);
@@ -70,7 +79,8 @@ class Notifikasi_model extends CI_Model {
     /**
      * Mark all notifications as read
      */
-    public function mark_all_read($id_user) {
+    public function mark_all_read($id_user)
+    {
         $this->db->where('id_user', $id_user);
         $this->db->where('status_baca', 0);
         return $this->db->update('tb_notifikasi', ['status_baca' => 1]);
@@ -79,7 +89,8 @@ class Notifikasi_model extends CI_Model {
     /**
      * Get notification settings (DIPERTAHANKAN untuk Modul 7)
      */
-    public function get_settings($id_user) {
+    public function get_settings($id_user)
+    {
         $this->db->where('id_user', $id_user);
         $query = $this->db->get('tb_setting_notifikasi');
         if ($query->num_rows() == 0) {
@@ -104,7 +115,8 @@ class Notifikasi_model extends CI_Model {
     /**
      * Update notification settings
      */
-    public function update_settings($id_user, $data) {
+    public function update_settings($id_user, $data)
+    {
         unset($data['id_user']);
         $this->db->where('id_user', $id_user);
         $query = $this->db->get('tb_setting_notifikasi');
@@ -124,7 +136,8 @@ class Notifikasi_model extends CI_Model {
     /**
      * Get KPI for Pembeli
      */
-    public function get_pembeli_kpi($id_user) {
+    public function get_pembeli_kpi($id_user)
+    {
         // Total transaksi
         $this->db->where('id_user', $id_user);
         $total_transaksi = $this->db->count_all_results('tb_transaksi');
@@ -145,16 +158,17 @@ class Notifikasi_model extends CI_Model {
 
         return [
             'total_transaksi' => $total_transaksi,
-            'total_belanja'   => $total_belanja,
+            'total_belanja' => $total_belanja,
             'pesanan_dikirim' => $pesanan_dikirim,
-            'poin'            => $poin
+            'poin' => $poin
         ];
     }
 
     /**
      * Get KPI for Petani
      */
-    public function get_petani_kpi($id_user) {
+    public function get_petani_kpi($id_user)
+    {
         // Total panen
         $this->db->select_sum('jumlah_panen');
         $this->db->where('id_user', $id_user);
@@ -175,17 +189,18 @@ class Notifikasi_model extends CI_Model {
         $pesanan_masuk = $this->db->count_all_results('tb_transaksi');
 
         return [
-            'total_panen'      => $total_panen,
-            'omset_penjualan'  => $omset,
-            'lahan_aktif'      => $lahan_aktif,
-            'pesanan_masuk'    => $pesanan_masuk
+            'total_panen' => $total_panen,
+            'omset_penjualan' => $omset,
+            'lahan_aktif' => $lahan_aktif,
+            'pesanan_masuk' => $pesanan_masuk
         ];
     }
 
     /**
      * Get KPI for Admin
      */
-    public function get_admin_kpi() {
+    public function get_admin_kpi()
+    {
         // Total pendapatan (status selesai)
         $this->db->select_sum('total_harga');
         $this->db->where('status_pesanan', 'Selesai');
@@ -205,10 +220,10 @@ class Notifikasi_model extends CI_Model {
         $mitra_cafe = $this->db->count_all_results('tb_mitra');
 
         return [
-            'total_revenue'        => $total_revenue,
-            'transaksi_aktif'      => $transaksi_aktif,
+            'total_revenue' => $total_revenue,
+            'transaksi_aktif' => $transaksi_aktif,
             'petani_terverifikasi' => $petani_terverifikasi,
-            'mitra_cafe'           => $mitra_cafe
+            'mitra_cafe' => $mitra_cafe
         ];
     }
 
@@ -219,7 +234,8 @@ class Notifikasi_model extends CI_Model {
     /**
      * Sales chart (Admin)
      */
-    public function get_sales_chart() {
+    public function get_sales_chart()
+    {
         $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
         $values = [];
         for ($i = 0; $i < 12; $i++) {
@@ -235,7 +251,8 @@ class Notifikasi_model extends CI_Model {
     /**
      * Harvest chart (Petani)
      */
-    public function get_harvest_chart($id_user) {
+    public function get_harvest_chart($id_user)
+    {
         $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
         $values = [];
         for ($i = 0; $i < 12; $i++) {
@@ -252,7 +269,8 @@ class Notifikasi_model extends CI_Model {
     /**
      * Shopping chart (Pembeli)
      */
-    public function get_shopping_chart($id_user) {
+    public function get_shopping_chart($id_user)
+    {
         $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
         $values = [];
         for ($i = 0; $i < 12; $i++) {
@@ -273,7 +291,8 @@ class Notifikasi_model extends CI_Model {
     /**
      * Top products (Admin)
      */
-    public function get_top_products($limit = 5) {
+    public function get_top_products($limit = 5)
+    {
         $this->db->select('id_produk, nama_produk, stok_produk as total_terjual, 0 as pendapatan');
         $this->db->from('tb_produk');
         $this->db->where('stok_produk >', 0);
@@ -285,7 +304,8 @@ class Notifikasi_model extends CI_Model {
     /**
      * Top products for Petani
      */
-    public function get_petani_top_products($id_user, $limit = 5) {
+    public function get_petani_top_products($id_user, $limit = 5)
+    {
         $this->db->select('id_produk, nama_produk, stok_produk as total_terjual, 0 as pendapatan');
         $this->db->from('tb_produk');
         $this->db->where('id_user', $id_user);
@@ -298,7 +318,8 @@ class Notifikasi_model extends CI_Model {
     /**
      * Recommendations (Pembeli)
      */
-    public function get_recommendations($id_user, $limit = 4) {
+    public function get_recommendations($id_user, $limit = 4)
+    {
         $this->db->select('*');
         $this->db->from('tb_produk');
         $this->db->where('stok_produk >', 0);
