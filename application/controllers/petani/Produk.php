@@ -31,7 +31,7 @@ class Produk extends CI_Controller
 
     }
 
-    $this->load->view('admin/v_produk', $data);
+    $this->load->view('petani/v_produk', $data);
 }
 
     // Form tambah produk
@@ -39,7 +39,7 @@ class Produk extends CI_Controller
     {
         $data['produk'] = $this->Produk_model->getAll();
 
-        $this->load->view('admin/produk_tambah', $data);
+        $this->load->view('petani/produk_tambah', $data);
     }
 
     // Simpan produk baru
@@ -82,24 +82,52 @@ if (!empty($_FILES['foto_utama']['name'])) {
         'foto_utama'    => $foto
     );
 
-    $this->Produk_model->insert($data);
+    $insert_id = $this->Produk_model->insert($data);
 
-    redirect('admin/produk');
+    if (!empty($_FILES['galeri']['name'][0])) {
+        $filesCount = count($_FILES['galeri']['name']);
+        for($i = 0; $i < $filesCount; $i++){
+            $_FILES['file']['name']     = $_FILES['galeri']['name'][$i];
+            $_FILES['file']['type']     = $_FILES['galeri']['type'][$i];
+            $_FILES['file']['tmp_name'] = $_FILES['galeri']['tmp_name'][$i];
+            $_FILES['file']['error']     = $_FILES['galeri']['error'][$i];
+            $_FILES['file']['size']     = $_FILES['galeri']['size'][$i];
+            
+            $config2['upload_path']   = './uploads/produk/';
+            $config2['allowed_types'] = 'jpg|jpeg|png';
+            $config2['max_size']      = 2048;
+            $config2['encrypt_name']  = TRUE;
+            
+            $this->load->library('upload', $config2);
+            $this->upload->initialize($config2);
+            if($this->upload->do_upload('file')){
+                $fileData = $this->upload->data();
+                $this->Produk_model->insert_galeri([
+                    'id_produk' => $insert_id,
+                    'foto' => $fileData['file_name']
+                ]);
+            }
+        }
+    }
+
+    redirect('petani/produk');
 }
     // Detail produk
     public function detail($id)
     {
         $data['produk'] = $this->Produk_model->getById($id);
+        $data['galeri'] = $this->Produk_model->getGaleriByProduk($id);
 
-        $this->load->view('admin/produk_detail', $data);
+        $this->load->view('petani/produk_detail', $data);
     }
 
     // Form edit produk
     public function edit($id)
     {
         $data['produk'] = $this->Produk_model->getById($id);
+        $data['galeri'] = $this->Produk_model->getGaleriByProduk($id);
 
-        $this->load->view('admin/produk_edit', $data);
+        $this->load->view('petani/produk_edit', $data);
     }
 
     // Update produk
@@ -118,9 +146,48 @@ if (!empty($_FILES['foto_utama']['name'])) {
             'status_produk' => $this->input->post('status_produk')
         );
 
+        if (!empty($_FILES['foto_utama']['name'])) {
+            $config['upload_path']   = './uploads/produk/';
+            $config['allowed_types'] = 'jpg|jpeg|png';
+            $config['max_size']      = 2048;
+            $config['encrypt_name']  = TRUE;
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+            if ($this->upload->do_upload('foto_utama')) {
+                $upload = $this->upload->data();
+                $data['foto_utama'] = $upload['file_name'];
+            }
+        }
+
         $this->Produk_model->update($id, $data);
 
-        redirect('admin/produk');
+        if (!empty($_FILES['galeri']['name'][0])) {
+            $filesCount = count($_FILES['galeri']['name']);
+            for($i = 0; $i < $filesCount; $i++){
+                $_FILES['file']['name']     = $_FILES['galeri']['name'][$i];
+                $_FILES['file']['type']     = $_FILES['galeri']['type'][$i];
+                $_FILES['file']['tmp_name'] = $_FILES['galeri']['tmp_name'][$i];
+                $_FILES['file']['error']     = $_FILES['galeri']['error'][$i];
+                $_FILES['file']['size']     = $_FILES['galeri']['size'][$i];
+                
+                $config2['upload_path']   = './uploads/produk/';
+                $config2['allowed_types'] = 'jpg|jpeg|png';
+                $config2['max_size']      = 2048;
+                $config2['encrypt_name']  = TRUE;
+                
+                $this->load->library('upload', $config2);
+                $this->upload->initialize($config2);
+                if($this->upload->do_upload('file')){
+                    $fileData = $this->upload->data();
+                    $this->Produk_model->insert_galeri([
+                        'id_produk' => $id,
+                        'foto' => $fileData['file_name']
+                    ]);
+                }
+            }
+        }
+
+        redirect('petani/produk');
     }
 
     // Hapus produk
@@ -128,6 +195,6 @@ if (!empty($_FILES['foto_utama']['name'])) {
     {
         $this->Produk_model->delete($id);
 
-        redirect('admin/produk');
+        redirect('petani/produk');
     }
 }

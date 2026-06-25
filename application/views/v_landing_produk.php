@@ -52,6 +52,10 @@
             color: white;
             font-size: 1.2rem;
         }
+        .nav-links { display: flex; align-items: center; gap: 28px; margin-left: auto; margin-right: 28px; }
+        .nav-links a { color: var(--text-secondary); font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: var(--transition-smooth); }
+        .nav-links a:hover { color: var(--roasted-brown); text-decoration: none; }
+        .nav-links a.active { color: var(--roasted-brown); font-weight: 800; }
         .nav-btn {
             background: var(--dark-coffee);
             color: white;
@@ -157,7 +161,13 @@
             <div class="brand-icon"><i class="bi bi-patch-check-fill"></i></div>
             Liberchain
         </a>
-        <div class="ml-auto d-flex align-items-center gap-3">
+        <div class="nav-links d-none d-lg-flex">
+            <a href="<?= base_url(); ?>">Beranda</a>
+            <a href="<?= base_url('produk'); ?>" class="active">Produk</a>
+            <a href="<?= base_url('landing/mitra'); ?>">Mitra</a>
+            <a href="<?= base_url('tentang'); ?>">Tentang Kami</a>
+        </div>
+        <div class="ml-auto d-flex align-items-center" style="gap: 16px;">
             <a href="<?= base_url('transaksi/keranjang'); ?>" class="nav-btn" style="background: transparent; border-color: var(--roasted-brown); color: var(--roasted-brown); position: relative;">
                 <i class="bi bi-cart"></i> Keranjang
                 <span class="cart-badge" id="cart_count">0</span>
@@ -177,21 +187,31 @@
 
         <div class="row">
             <?php if (!empty($produk)): ?>
-                <?php foreach ($produk as $p): ?>
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="product-card">
-                        <img src="<?= base_url('uploads/produk/' . ($p->foto_utama ?: 'default.jpg')); ?>" 
-                             alt="<?= $p->nama_produk; ?>" 
-                             class="product-image">
-                        <h5 class="product-name"><?= $p->nama_produk; ?></h5>
-                        <div class="product-price">Rp <?= number_format($p->harga, 0, ',', '.'); ?> /kg</div>
-                        <div class="product-stock">Stok: <?= $p->stok_produk; ?> kg</div>
-                        <button class="btn-beli" onclick="tambahKeranjang(<?= $p->id_produk; ?>)">
-                            <i class="bi bi-cart-plus"></i> Tambah ke Keranjang
-                        </button>
-                    </div>
-                </div>
-                <?php endforeach; ?>
+               <?php foreach ($produk as $p): ?>
+<div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+    <div class="product-card">
+
+        <img src="<?= base_url('uploads/produk/' . (!empty($p->foto_utama) ? $p->foto_utama : 'default.jpg')); ?>"
+             alt="<?= $p->nama_produk; ?>"
+             class="product-image">
+
+        <h5 class="product-name"><?= $p->nama_produk; ?></h5>
+
+        <div class="product-price">
+            Rp <?= number_format($p->harga, 0, ',', '.'); ?> /kg
+        </div>
+
+        <div class="product-stock">
+            Stok: <?= $p->stok_produk; ?> kg
+        </div>
+
+        <button class="btn-beli" onclick="tambahKeranjang(<?= $p->id_produk; ?>)">
+            <i class="bi bi-cart-plus"></i> Tambah ke Keranjang
+        </button>
+
+    </div>
+</div>
+<?php endforeach; ?>
             <?php else: ?>
                 <div class="col-12 text-center py-5">
                     <i class="bi bi-box-seam" style="font-size: 3rem; opacity: 0.3;"></i>

@@ -808,7 +808,6 @@
 
 <body>
 
-    
     <!-- SIDEBAR OVERLAY -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -818,58 +817,46 @@
             <div class="brand-icon">
                 <i class="bi bi-patch-check-fill"></i>
             </div>
-            <span>POKTAN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
+            <span>PETANI <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
         </div>
         <div class="sidebar-menu-wrapper">
             <ul class="sidebar-menu">
                 <li class="menu-item">
-                    <a href="<?= base_url('admin/dashboard'); ?>">
+                    <a href="<?= base_url('petani/dashboard'); ?>">
                         <i class="bi bi-grid-1x2-fill"></i>Dashboard
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="<?= base_url('admin/user'); ?>">
-                        <i class="bi bi-people-fill"></i>Manajemen User
+                    <a href="<?= base_url('petani/lahan'); ?>">
+                        <i class="bi bi-geo-alt-fill"></i>Kelola Lahan
+                        <span class="menu-badge">3</span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="<?= base_url('admin/petani'); ?>">
-                        <i class="bi bi-person-badge-fill"></i>Data Petani
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/lahan'); ?>">
-                        <i class="bi bi-map-fill"></i>Manajemen Lahan
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/panen'); ?>">
+                    <a href="<?= base_url('petani/panen'); ?>">
                         <i class="bi bi-tree-fill"></i>Manajemen Panen
                     </a>
                 </li>
                 <li class="menu-item active">
-                    <a href="<?= base_url('admin/produk'); ?>">
-                        <i class="bi bi-box-seam-fill"></i>Manajemen Produk
+                    <a href="<?= base_url('petani/produk'); ?>">
+                        <i class="bi bi-box-seam"></i>Katalog Produk
+                        <span class="menu-badge">5</span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="<?= base_url('admin/transaksi'); ?>">
-                        <i class="bi bi-wallet2"></i>Transaksi
+                    <a href="<?= base_url('petani/transaksi'); ?>">
+                        <i class="bi bi-cart-check-fill"></i>Pesanan Masuk
+                        <span class="menu-badge">8</span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="<?= base_url('admin/kurir'); ?>">
-                        <i class="bi bi-truck"></i>Manajemen Kurir
+                    <a href="<?= base_url('petani/tracking'); ?>">
+                        <i class="bi bi-truck"></i>Tracking Kiriman
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="<?= base_url('admin/mitra'); ?>">
-                        <i class="bi bi-shop"></i>Manajemen Mitra
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/laporan'); ?>">
-                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
+                    <a href="<?= base_url('petani/laporan'); ?>">
+                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan
                     </a>
                 </li>
             </ul>
@@ -881,62 +868,172 @@
         </div>
     </div>
 
-    
-<div class="main-content">
-<div class="card-custom">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="detail-label">Nama Produk</div>
-                    <div class="detail-value"><?= $produk->nama_produk; ?></div>
-
-                    <div class="detail-label">Jenis Kopi</div>
-                    <div class="detail-value"><span class="badge bg-light text-dark border px-3 py-2"><?= $produk->jenis_kopi; ?></span></div>
-
-                    <div class="detail-label">Grade Kopi</div>
-                    <div class="detail-value"><?= $produk->grade; ?></div>
-
-                    <div class="detail-label">Harga per Kilogram</div>
-                    <div class="detail-value" style="color: var(--roasted-brown); font-size: 20px;">Rp <?= number_format($produk->harga, 0, ',', '.'); ?></div>
-
-                    <div class="detail-label">Stok Tersedia</div>
-                    <div class="detail-value"><?= $produk->stok_produk; ?> Pcs</div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="detail-label">Altitude (Ketinggian Tanam)</div>
-                    <div class="detail-value"><?= !empty($produk->altitude) ? $produk->altitude : '-'; ?></div>
-
-                    <div class="detail-label">Proses Pengolahan</div>
-                    <div class="detail-value"><?= !empty($produk->proses) ? $produk->proses : '-'; ?></div>
-
-                    <div class="detail-label">Flavor Notes (Catatan Rasa)</div>
-                    <div class="detail-value" style="font-style: italic; font-weight: 500;"><?= !empty($produk->flavor_notes) ? $produk->flavor_notes : '-'; ?></div>
-
-                    <div class="detail-label">Status Penjualan</div>
-                    <div class="detail-value">
-                        <span class="badge <?= strtolower($produk->status_produk) == 'aktif' ? 'badge-success' : 'badge-danger'; ?> px-3 py-2">
-                            <?= $produk->status_produk; ?>
-                        </span>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- PAGE HEADER -->
+        <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
+                    style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h2 class="d-inline-block align-middle mb-0">Manajemen Produk</h2>
+                <p class="subtitle mb-0 mt-1">Kelola data produk komoditas kopi Anda di sini <span id="currentDateTime"
+                        style="color: var(--amber-cream); font-weight:500;"></span></p>
+            </div>
+            
+            <div class="d-flex align-items-center gap-3" style="gap: 12px;">
+                <!-- NOTIFICATION BELL (M11-F01) -->
+                <div style="position: relative;">
+                    <button class="notif-btn" id="notifToggle">
+                        <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
+                        <span class="notif-dot" id="notifCount">4</span>
+                    </button>
+                    <div class="notif-dropdown" id="notifDropdown">
+                        <div class="notif-dropdown-header">
+                            <span>Notifikasi</span>
+                            <a href="#" id="markAllRead">Tandai semua dibaca</a>
+                        </div>
+                        <div class="notif-dropdown-list" id="notifList">
+                            <div class="notif-item unread">
+                                <div class="notif-icon warning"><i class="bi bi-clock"></i></div>
+                                <div class="notif-text">
+                                    Stok Liberika Grade A menipis (tersisa 15 kg)
+                                    <span class="notif-time">5 menit lalu</span>
+                                </div>
+                            </div>
+                            <div class="notif-item unread">
+                                <div class="notif-icon success"><i class="bi bi-cart-check"></i></div>
+                                <div class="notif-text">
+                                    Pesanan baru dari Cafe Merdeka
+                                    <span class="notif-time">15 menit lalu</span>
+                                </div>
+                            </div>
+                            <div class="notif-item">
+                                <div class="notif-icon info"><i class="bi bi-truck"></i></div>
+                                <div class="notif-text">
+                                    Kurir telah mengambil pesanan #INV-2026-002
+                                    <span class="notif-time">1 jam lalu</span>
+                                </div>
+                            </div>
+                            <div class="notif-item unread">
+                                <div class="notif-icon danger"><i class="bi bi-exclamation-triangle"></i></div>
+                                <div class="notif-text">
+                                    Jadwal panen untuk Lahan Sukamakmur hari ini
+                                    <span class="notif-time">2 jam lalu</span>
+                                </div>
+                            </div>
+                            <div class="notif-item">
+                                <div class="notif-icon success"><i class="bi bi-check-circle"></i></div>
+                                <div class="notif-text">
+                                    Pembayaran #INV-2026-001 telah dikonfirmasi
+                                    <span class="notif-time">3 jam lalu</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="col-12 mt-3">
-                    <div class="detail-label">Deskripsi Produk</div>
-                    <div class="p-3 bg-light rounded" style="font-size: 15px; color: #555; line-height: 1.6; border: 1px solid #E2DCD5;">
-                        <?= !empty($produk->deskripsi) ? nl2br($produk->deskripsi) : 'Tidak ada deskripsi.'; ?>
-                    </div>
+                <!-- USER AVATAR -->
+                <div class="d-flex align-items-center gap-2"
+                    style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
+                    <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
+                    <span style="font-weight:500; font-size:0.85rem;">Petani</span>
                 </div>
             </div>
+        </div>
+	<!-- TOMBOL TAMBAH -->
+<div class="d-flex justify-content-end mb-3">
+    <a href="<?= base_url('petani/produk/tambah'); ?>"
+       class="btn"
+       style="background:#E6A15C;color:#fff;border-radius:8px;">
+        <i class="bi bi-plus-lg"></i> Tambah Produk
+    </a>
+</div>
 
-            <div class="text-right mt-4 border-top pt-3">
-                <a href="<?= base_url('admin/produk'); ?>" class="btn btn-secondary px-4" style="border-radius: 8px;">
-                    <i class="bi bi-arrow-left mr-1"></i> Kembali ke List
-                </a>
-            </div>
-        
-</div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<!-- FILTER -->
+<form method="get" action="<?= base_url('petani/produk'); ?>" class="mb-4">
+    <div class="row">
+        <div class="col-md-5">
+            <input
+                type="text"
+                name="keyword"
+                class="form-control"
+                placeholder="Cari nama produk, jenis kopi, atau grade..."
+                value="<?= $this->input->get('keyword'); ?>">
+        </div>
+
+        <div class="col-md-2">
+            <button
+                type="submit"
+                class="btn btn-block"
+                style="background:#6F4E37;color:white;">
+                <i class="bi bi-search"></i> Cari
+            </button>
+        </div>
+
+        <div class="col-md-2">
+            <a href="<?= base_url('petani/produk'); ?>"
+               class="btn btn-secondary btn-block">
+                Reset
+            </a>
+        </div>
+    </div>
+</form>
+			<!-- TABEL PRODUK -->
+			<div class="table-responsive">
+				<table class="table-custom">
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>Foto</th>
+							<th>Nama Produk</th>
+							<th>Jenis Kopi</th>
+							<th>Grade</th>
+							<th>Harga</th>
+							<th>Stok</th>
+							<th>Status</th>
+							<th>Aksi</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php $no = 1;
+						foreach ($produk as $row): ?>
+							<tr>
+								<td><?= $no++; ?></td>
+								<td>
+									<?php if(!empty($row->foto_utama)) : ?>
+										<img src="<?= base_url('uploads/produk/'.$row->foto_utama); ?>"
+											width="65" height="65" style="object-fit:cover; border-radius:10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+									<?php else : ?>
+										<span class="text-muted" style="font-size: 0.75rem;">Tidak ada foto</span>
+									<?php endif; ?>
+								</td>
+								<td class="font-weight-bold" style="font-size: 0.9rem;"><?= $row->nama_produk; ?></td>
+								<td><?= $row->jenis_kopi; ?></td>
+								<td><span class="badge badge-light" style="padding: 5px 10px; border-radius: 6px;"><?= $row->grade; ?></span></td>
+								<td class="font-weight-bold text-dark">Rp <?= number_format($row->harga, 0, ',', '.'); ?></td>
+								<td><?= $row->stok_produk; ?> <small class="text-muted">kg</small></td>
+								<td><span class="status-badge complete"><?= $row->status_produk; ?></span></td>
+								<td>
+									<div class="btn-group" role="group">
+										<a class="btn btn-sm btn-info text-white mr-1" style="border-radius: 6px;"
+											href="<?= base_url('petani/produk/detail/' . $row->id_produk); ?>"><i class="bi bi-eye"></i> Detail</a>
+										<a class="btn btn-sm btn-warning text-white mr-1" style="border-radius: 6px;"
+											href="<?= base_url('petani/produk/edit/' . $row->id_produk); ?>"><i class="bi bi-pencil-square"></i> Edit</a>
+										<a class="btn btn-sm btn-danger" style="border-radius: 6px;"
+											href="<?= base_url('petani/produk/hapus/' . $row->id_produk); ?>"
+											onclick="return confirm('Yakin hapus produk ini?')"><i class="bi bi-trash"></i> Hapus</a>
+								</div>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // ============================================
@@ -1144,4 +1241,3 @@
 </body>
 
 </html>
-

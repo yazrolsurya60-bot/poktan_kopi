@@ -808,7 +808,6 @@
 
 <body>
 
-    
     <!-- SIDEBAR OVERLAY -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -818,58 +817,46 @@
             <div class="brand-icon">
                 <i class="bi bi-patch-check-fill"></i>
             </div>
-            <span>POKTAN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
+            <span>PETANI <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
         </div>
         <div class="sidebar-menu-wrapper">
             <ul class="sidebar-menu">
                 <li class="menu-item">
-                    <a href="<?= base_url('admin/dashboard'); ?>">
+                    <a href="<?= base_url('petani/dashboard'); ?>">
                         <i class="bi bi-grid-1x2-fill"></i>Dashboard
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="<?= base_url('admin/user'); ?>">
-                        <i class="bi bi-people-fill"></i>Manajemen User
+                    <a href="<?= base_url('petani/lahan'); ?>">
+                        <i class="bi bi-geo-alt-fill"></i>Kelola Lahan
+                        <span class="menu-badge">3</span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="<?= base_url('admin/petani'); ?>">
-                        <i class="bi bi-person-badge-fill"></i>Data Petani
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/lahan'); ?>">
-                        <i class="bi bi-map-fill"></i>Manajemen Lahan
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/panen'); ?>">
+                    <a href="<?= base_url('petani/panen'); ?>">
                         <i class="bi bi-tree-fill"></i>Manajemen Panen
                     </a>
                 </li>
                 <li class="menu-item active">
-                    <a href="<?= base_url('admin/produk'); ?>">
-                        <i class="bi bi-box-seam-fill"></i>Manajemen Produk
+                    <a href="<?= base_url('petani/produk'); ?>">
+                        <i class="bi bi-box-seam"></i>Katalog Produk
+                        <span class="menu-badge">5</span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="<?= base_url('admin/transaksi'); ?>">
-                        <i class="bi bi-wallet2"></i>Transaksi
+                    <a href="<?= base_url('petani/transaksi'); ?>">
+                        <i class="bi bi-cart-check-fill"></i>Pesanan Masuk
+                        <span class="menu-badge">8</span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="<?= base_url('admin/kurir'); ?>">
-                        <i class="bi bi-truck"></i>Manajemen Kurir
+                    <a href="<?= base_url('petani/tracking'); ?>">
+                        <i class="bi bi-truck"></i>Tracking Kiriman
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="<?= base_url('admin/mitra'); ?>">
-                        <i class="bi bi-shop"></i>Manajemen Mitra
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/laporan'); ?>">
-                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
+                    <a href="<?= base_url('petani/laporan'); ?>">
+                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan
                     </a>
                 </li>
             </ul>
@@ -929,7 +916,7 @@
             </div>
 
             <div class="text-right mt-4 border-top pt-3">
-                <a href="<?= base_url('admin/produk'); ?>" class="btn btn-secondary px-4" style="border-radius: 8px;">
+                <a href="<?= base_url('petani/produk'); ?>" class="btn btn-secondary px-4" style="border-radius: 8px;">
                     <i class="bi bi-arrow-left mr-1"></i> Kembali ke List
                 </a>
             </div>
@@ -1144,4 +1131,3 @@
 </body>
 
 </html>
-
