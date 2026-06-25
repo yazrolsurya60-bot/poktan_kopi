@@ -110,5 +110,44 @@ class Transaksi_model extends CI_Model {
         $this->db->where('id_transaksi', $id_transaksi);
         return $this->db->update('tb_bukti_bayar', $data);
     }
+
+    // ==================== ONGKIR ====================
+
+    public function get_ongkir($kota_asal, $kota_tujuan) {
+        $this->db->where('kota_asal', $kota_asal);
+        $this->db->where('kota_tujuan', $kota_tujuan);
+        return $this->db->get('tb_ongkir')->row_array();
+    }
+
+    // ==================== NOMOR INVOICE ====================
+
+    public function generate_invoice() {
+        $last = $this->db
+            ->select('invoice')
+            ->order_by('id_transaksi', 'DESC')
+            ->limit(1)
+            ->get('tb_transaksi')
+            ->row();
+
+        if ($last && preg_match('/INV-(\d+)/', $last->invoice, $m)) {
+            $next = (int)$m[1] + 1;
+        } else {
+            $next = 1;
+        }
+        return 'INV-' . str_pad($next, 6, '0', STR_PAD_LEFT);
+    }
+
+    // Ambil transaksi yang sudah upload bukti tapi belum diverifikasi
+    public function get_transaksi_butuh_konfirmasi() {
+        $this->db->select('t.id_transaksi, t.id_user, t.invoice, t.total_harga, t.ongkir, t.grand_total, t.nama_penerima, t.no_hp, t.status_bayar, t.status_pesanan, t.metode_bayar, t.tanggal_transaksi, u.nama as nama_pembeli, b.id_bukti, b.file_bukti, b.nama_bank, b.nama_pengirim, b.jumlah_transfer, b.tanggal_transfer, b.status_verifikasi');
+        $this->db->from('tb_transaksi t');
+        $this->db->join('tb_user u', 't.id_user = u.id_user', 'left');
+        $this->db->join('tb_bukti_bayar b', 'b.id_transaksi = t.id_transaksi', 'inner');
+        $this->db->where('b.status_verifikasi', 'Pending');
+        $this->db->where('t.status_bayar !=', 'Lunas');
+        $this->db->where('t.status_pesanan !=', 'Dibatalkan');
+        $this->db->order_by('t.tanggal_transaksi', 'DESC');
+        return $this->db->get()->result_array();
+    }
 }
 ?>

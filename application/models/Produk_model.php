@@ -38,4 +38,19 @@ class Produk_model extends CI_Model {
                     ->where('id_produk',$id)
                     ->delete($this->table);
     }
+
+    public function kurangi_stok($id_produk, $jumlah)
+    {
+        $this->db->set('stok_produk', 'stok_produk - ' . (int)$jumlah, FALSE);
+        $this->db->where('id_produk', $id_produk);
+        $this->db->where('stok_produk >=', $jumlah);
+        return $this->db->update($this->table);
+    }
+
+    public function tambah_stok($id_produk, $jumlah)
+    {
+        $this->db->set('stok_produk', 'stok_produk + ' . (int)$jumlah, FALSE);
+        $this->db->where('id_produk', $id_produk);
+        return $this->db->update($this->table);
+    }
 }

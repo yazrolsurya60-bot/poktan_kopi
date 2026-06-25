@@ -1,3 +1,39 @@
+<?php
+// FIX: view ini dipakai bareng oleh controller admin, guest (transaksi/invoice),
+// dan pembeli (pembeli/transaksi/invoice). Field di $transaksi bisa beda-beda
+// tergantung sumber datanya (terutama transaksi lama), jadi kasih default biar
+// nggak error "Undefined array key" / strtotime(null) deprecation.
+$transaksi['status_pesanan'] = $transaksi['status_pesanan'] ?? 'Pending';
+$transaksi['status_bayar']   = $transaksi['status_bayar'] ?? 'Pending';
+$transaksi['metode_bayar']   = $transaksi['metode_bayar'] ?? '-';
+$transaksi['alamat_kirim']   = $transaksi['alamat_kirim'] ?? '-';
+$transaksi['kota_kirim']     = $transaksi['kota_kirim'] ?? '-';
+$transaksi['kode_pos']       = $transaksi['kode_pos'] ?? '-';
+
+// FIX: Perhitungan ulang untuk memastikan data konsisten
+// Hitung ulang total_harga dari detail produk
+$total_dari_detail = 0;
+if (isset($details) && is_array($details)) {
+    foreach ($details as $d) {
+        $total_dari_detail += ($d['harga_satuan'] ?? 0) * ($d['jumlah'] ?? 0);
+    }
+}
+
+// Gunakan total dari detail jika tersedia, tapi tetap pakai dari transaksi sebagai fallback
+$transaksi['total_harga'] = $total_dari_detail > 0 
+    ? $total_dari_detail 
+    : ($transaksi['total_harga'] ?? 0);
+
+$transaksi['ongkir'] = $transaksi['ongkir'] ?? 0;
+
+// Hitung ulang grand_total untuk memastikan akurat
+$transaksi['grand_total'] = $transaksi['total_harga'] + $transaksi['ongkir'];
+
+// Format tanggal
+$tanggal_transaksi_display = !empty($transaksi['tanggal_transaksi'])
+    ? date('d F Y H:i', strtotime($transaksi['tanggal_transaksi']))
+    : '-';
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +57,6 @@
             border: 1px solid rgba(74, 44, 17, 0.06);
         }
 
-        /* HEADER */
         .invoice-header {
             text-align: center;
             border-bottom: 3px solid #4A2C11;
@@ -68,7 +103,6 @@
             display: inline-block;
         }
 
-        /* INFO GRID */
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -107,7 +141,6 @@
         .status-badge.danger { background: #FEE2E2; color: #991B1B; }
         .status-badge.info { background: #DBEAFE; color: #1E40AF; }
 
-        /* ALAMAT */
         .alamat-box {
             background: #ffffff;
             border: 1px solid rgba(74, 44, 17, 0.06);
@@ -121,7 +154,6 @@
         .alamat-box .label { font-size: 10px; text-transform: uppercase; color: #70655E; font-weight: 600; }
         .alamat-box .value { font-size: 13px; font-weight: 500; color: #2C1808; }
 
-        /* TABLE */
         .product-table {
             width: 100%;
             border-collapse: collapse;
@@ -163,7 +195,6 @@
             font-weight: 700;
         }
 
-        /* FOOTER */
         .invoice-footer {
             text-align: center;
             margin-top: 30px;
@@ -179,7 +210,6 @@
             margin-bottom: 4px;
         }
 
-        /* TOMBOL */
         .btn-group {
             display: flex;
             justify-content: center;
@@ -251,7 +281,7 @@
     <div class="info-grid">
         <div class="info-item">
             <span class="label">Tanggal Transaksi</span>
-            <span class="value"><?php echo date('d F Y H:i', strtotime($transaksi['tanggal_transaksi'])); ?></span>
+            <span class="value"><?php echo $tanggal_transaksi_display; ?></span>
         </div>
         <div class="info-item" style="text-align:right;">
             <span class="label">Status</span>
@@ -307,15 +337,28 @@
             </tr>
         </thead>
         <tbody>
-            <?php $no = 1; foreach ($details as $d): ?>
+            <?php $no = 1; 
+            $total_terhitung = 0;
+            foreach ($details as $d): 
+                $subtotal = ($d['harga_satuan'] ?? 0) * ($d['jumlah'] ?? 0);
+                $total_terhitung += $subtotal;
+            ?>
             <tr>
                 <td><?php echo $no++; ?></td>
-                <td><?php echo $d['nama_produk']; ?></td>
-                <td class="text-center"><?php echo $d['jumlah']; ?></td>
-                <td class="text-right">Rp <?php echo number_format($d['harga_satuan'], 0, ',', '.'); ?></td>
-                <td class="text-right">Rp <?php echo number_format($d['subtotal'], 0, ',', '.'); ?></td>
+                <td><?php echo $d['nama_produk'] ?? 'Produk tidak tersedia'; ?></td>
+                <td class="text-center"><?php echo $d['jumlah'] ?? 0; ?></td>
+                <td class="text-right">Rp <?php echo number_format($d['harga_satuan'] ?? 0, 0, ',', '.'); ?></td>
+                <td class="text-right">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></td>
             </tr>
             <?php endforeach; ?>
+            
+            <?php if (empty($details)): ?>
+            <tr>
+                <td colspan="5" style="text-align:center; padding:20px; color:#70655E;">
+                    Tidak ada produk dalam transaksi ini
+                </td>
+            </tr>
+            <?php endif; ?>
         </tbody>
         <tfoot>
             <tr>
@@ -345,7 +388,7 @@
             <button onclick="window.print()" class="btn btn-print">
                 🖨️ Cetak Invoice
             </button>
-            <a href="<?php echo base_url('admin/transaksi/detail/' . $transaksi['id_transaksi']); ?>" class="btn btn-back">
+            <a href="javascript:history.back()" class="btn btn-back">
                 🔙 Kembali ke Detail
             </a>
         </div>

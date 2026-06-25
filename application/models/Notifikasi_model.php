@@ -105,15 +105,26 @@ class Notifikasi_model extends CI_Model {
      * Update notification settings
      */
     public function update_settings($id_user, $data) {
-        unset($data['id_user']);
+        // Map nama field form (camelCase) ke nama kolom DB (snake_case)
+        $mapped = [
+            'notif_transaksi'  => isset($data['notifTransaksi'])  ? 1 : (isset($data['notif_transaksi'])  ? 1 : 0),
+            'notif_pembayaran' => isset($data['notifPembayaran']) ? 1 : (isset($data['notif_pembayaran']) ? 1 : 0),
+            'notif_stok'       => isset($data['notifStok'])       ? 1 : (isset($data['notif_stok'])       ? 1 : 0),
+            'notif_laporan'    => isset($data['notifLaporan'])    ? 1 : (isset($data['notif_laporan'])    ? 1 : 0),
+            'notif_petani'     => isset($data['notifPetani'])     ? 1 : (isset($data['notif_petani'])     ? 1 : 0),
+            'notif_kurir'      => isset($data['notifKurir'])      ? 1 : (isset($data['notif_kurir'])      ? 1 : 0),
+            'notif_promo'      => isset($data['notifPromo'])      ? 1 : (isset($data['notif_promo'])      ? 1 : 0),
+            'notif_sistem'     => isset($data['notifSistem'])     ? 1 : (isset($data['notif_sistem'])     ? 1 : 0),
+        ];
+
         $this->db->where('id_user', $id_user);
         $query = $this->db->get('tb_setting_notifikasi');
         if ($query->num_rows() > 0) {
             $this->db->where('id_user', $id_user);
-            return $this->db->update('tb_setting_notifikasi', $data);
+            return $this->db->update('tb_setting_notifikasi', $mapped);
         } else {
-            $data['id_user'] = $id_user;
-            return $this->db->insert('tb_setting_notifikasi', $data);
+            $mapped['id_user'] = $id_user;
+            return $this->db->insert('tb_setting_notifikasi', $mapped);
         }
     }
 
