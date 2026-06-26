@@ -324,6 +324,46 @@ class Auth extends CI_Controller {
         $this->load->view('auth/v_profile', $data);
     }
 
+	// application/controllers/Auth.php
+
+public function ubah_password() {
+    // Cek login
+    if (!$this->session->userdata('id_user')) {
+        redirect('auth/login');
+    }
+
+    $this->form_validation->set_rules('password_lama', 'Password Lama', 'required');
+    $this->form_validation->set_rules('password_baru', 'Password Baru', 'required|min_length[6]');
+    $this->form_validation->set_rules('konfirmasi_password', 'Konfirmasi Password', 'required|matches[password_baru]');
+
+    if ($this->form_validation->run() == FALSE) {
+        $this->load->view('auth/v_ubah_password');
+    } else {
+        $id_user = $this->session->userdata('id_user');
+        $password_lama = md5($this->input->post('password_lama'));
+        $password_baru = md5($this->input->post('password_baru'));
+
+        // Cek password lama di DATABASE
+        $user = $this->db->get_where('tb_user', [
+            'id_user' => $id_user,
+            'password' => $password_lama
+        ])->row();
+
+        if ($user) {
+            // ✅ UPDATE PASSWORD DI DATABASE
+            $this->db->where('id_user', $id_user)
+                     ->update('tb_user', ['password' => $password_baru]);
+            
+            $this->session->set_flashdata('success', 'Password berhasil diubah!');
+            redirect('auth/ubah_password');
+        } else {
+            $this->session->set_flashdata('error', 'Password lama salah!');
+            redirect('auth/ubah_password');
+        }
+    }
+}
+
+
     public function logout() {
         $this->session->sess_destroy();
         redirect('beranda');

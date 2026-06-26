@@ -140,7 +140,7 @@
 <div class="sidebar" id="sidebarMenu">
     <div class="sidebar-brand">
         <div class="brand-icon"><i class="bi bi-cup-hot-fill"></i></div>
-        <span>MEMBER <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Kafi</small></span>
+        <span>MEMBER <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
     </div>
     <div class="sidebar-menu-wrapper">
         <ul class="sidebar-menu">
@@ -157,7 +157,7 @@
             <li class="menu-item active">
                 <a href="<?= base_url('pembeli/transaksi/history'); ?>">
                     <i class="bi bi-receipt"></i>Riwayat Transaksi
-                    <span class="menu-badge"><?= count($transaksi ?? []); ?></span>
+                    <span class="menu-badge"><?= $total_transaksi ?? 0; ?></span>
                 </a>
             </li>
             <li class="menu-item">
@@ -197,35 +197,69 @@
             <p class="subtitle mb-0 mt-1">Kelola dan lihat semua pesanan Anda</p>
         </div>
         <div class="d-flex align-items-center gap-3" style="gap: 12px;">
+            <!-- NOTIFICATION BELL (M11-F01) - DINAMIS DARI DATABASE -->
             <div style="position: relative;">
                 <button class="notif-btn" id="notifToggle">
                     <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
-                    <span class="notif-dot" id="notifCount">3</span>
+                    <?php if (isset($unread_count) && $unread_count > 0): ?>
+                        <span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
+                    <?php else: ?>
+                        <span class="notif-dot" id="notifCount" style="display:none;">0</span>
+                    <?php endif; ?>
                 </button>
+
                 <div class="notif-dropdown" id="notifDropdown">
                     <div class="notif-dropdown-header">
-                        <span>Notifikasi</span>
-                        <a href="#" id="markAllRead">Tandai semua dibaca</a>
+                        <span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
+                        <a href="<?= base_url('pembeli/dashboard/history'); ?>" style="font-size:0.75rem; color: var(--amber-cream); font-weight:500; text-decoration:none;">Lihat Semua</a>
                     </div>
-                    <div class="notif-dropdown-list">
-                        <div class="notif-item unread">
-                            <div class="notif-icon success"><i class="bi bi-check-circle"></i></div>
-                            <div class="notif-text">Pesanan #INV-2026-008 telah sampai tujuan <span class="notif-time">5 menit lalu</span></div>
-                        </div>
-                        <div class="notif-item unread">
-                            <div class="notif-icon info"><i class="bi bi-truck"></i></div>
-                            <div class="notif-text">Kurir sedang menuju lokasi Anda <span class="notif-time">15 menit lalu</span></div>
-                        </div>
-                        <div class="notif-item">
-                            <div class="notif-icon warning"><i class="bi bi-star-fill"></i></div>
-                            <div class="notif-text">Anda mendapatkan 50 poin reward! <span class="notif-time">1 jam lalu</span></div>
-                        </div>
+                    <div class="notif-dropdown-list" id="notifList">
+                        <?php if (!empty($notifikasi)): ?>
+                            <?php foreach ($notifikasi as $n): ?>
+                                <a class="notif-item <?= (isset($n->status_baca) && $n->status_baca == 0) ? 'unread' : ''; ?>" 
+                                   href="<?= base_url('pembeli/dashboard/read/' . $n->id_notifikasi); ?>">
+                                    <?php
+                                    $icon_type = $n->icon ?? 'info';
+                                    $icon_map = [
+                                        'success' => 'bi-check-circle-fill',
+                                        'warning' => 'bi-exclamation-triangle-fill',
+                                        'danger'  => 'bi-x-circle-fill',
+                                        'info'    => 'bi-info-circle-fill',
+                                        'primary' => 'bi-star-fill'
+                                    ];
+                                    $icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+                                    ?>
+                                    <div class="notif-icon <?= $icon_type; ?>">
+                                        <i class="bi <?= $icon_class; ?>"></i>
+                                    </div>
+                                    <div class="notif-text">
+                                        <?= htmlspecialchars($n->judul ?? 'Notifikasi'); ?><br>
+                                        <small><?= htmlspecialchars($n->isi_notifikasi); ?></small>
+                                        <span class="notif-time"><?= date('d M Y, H:i', strtotime($n->tanggal_buat)); ?></span>
+                                    </div>
+                                    <?php if (isset($n->status_baca) && $n->status_baca == 0): ?>
+                                        <span class="notif-badge-new">Baru</span>
+                                    <?php endif; ?>
+                                </a>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="text-center text-muted py-5 px-3">
+                                <i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
+                                <p class="small mb-0">Tidak ada notifikasi</p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="p-2 text-center border-top" style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+                        <a href="<?= base_url('pembeli/dashboard/settings'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
+                            <i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
+                        </a>
                     </div>
                 </div>
             </div>
+            <!-- USER AVATAR -->
             <div class="d-flex align-items-center gap-2" style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
                 <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-                <span style="font-weight:500; font-size:0.85rem;">Pembeli</span>
+                <span style="font-weight:500; font-size:0.85rem;"><?= $this->session->userdata('nama') ?? 'Pembeli' ?></span>
             </div>
         </div>
     </div>
@@ -283,7 +317,7 @@
     <div class="custom-card">
         <div class="card-header-custom">
             <h6><i class="bi bi-clock-history text-primary mr-2"></i> Daftar Transaksi</h6>
-            <span class="badge" style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;"><?= count($transaksi ?? []); ?> transaksi</span>
+            <span class="badge" style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;"><?= $total_transaksi ?? 0; ?> transaksi</span>
         </div>
         <div class="card-body-custom" style="padding:0;">
             <div class="table-responsive">
@@ -304,34 +338,35 @@
                             <?php foreach ($transaksi as $t): ?>
                             <tr>
                                 <td><b>#<?= $t['id_transaksi']; ?></b></td>
-                                <td><?= date('d/m/Y H:i', strtotime($t['tanggal_transaksi'])); ?></td>
+                                <td><?= isset($t['tanggal_transaksi']) ? date('d/m/Y H:i', strtotime($t['tanggal_transaksi'])) : date('d/m/Y H:i'); ?></td>
                                 <td>
                                     <?php 
-                                        $detail = $this->Transaksi_model->get_detail_transaksi($t['id_transaksi']);
-                                        $nama_produk = !empty($detail) ? $detail[0]['nama_produk'] : '-';
-                                        $jml = !empty($detail) ? count($detail) : 0;
+                                        $nama_produk = $t['nama_produk'] ?? '-';
+                                        $jml = $t['jumlah_item'] ?? 1;
                                         echo $nama_produk . ($jml > 1 ? ' +' . ($jml - 1) . ' lainnya' : '');
                                     ?>
                                 </td>
-                                <td>Rp <?= number_format($t['grand_total'], 0, ',', '.'); ?></td>
+                                <td>Rp <?= number_format($t['grand_total'] ?? $t['total_harga'] ?? 0, 0, ',', '.'); ?></td>
                                 <td>
                                     <?php
                                         $status_class = 'pending';
-                                        if ($t['status_pesanan'] == 'Selesai') $status_class = 'complete';
-                                        elseif ($t['status_pesanan'] == 'Dikirim') $status_class = 'delivery';
-                                        elseif ($t['status_pesanan'] == 'Diproses') $status_class = 'processing';
-                                        elseif ($t['status_pesanan'] == 'Dibatalkan') $status_class = 'cancelled';
+                                        $status_pesanan = $t['status_pesanan'] ?? 'Pending';
+                                        if ($status_pesanan == 'Selesai') $status_class = 'complete';
+                                        elseif ($status_pesanan == 'Dikirim') $status_class = 'delivery';
+                                        elseif ($status_pesanan == 'Diproses') $status_class = 'processing';
+                                        elseif ($status_pesanan == 'Dibatalkan') $status_class = 'cancelled';
                                     ?>
                                     <span class="status-badge <?= $status_class; ?>">
-                                        <?= $t['status_pesanan']; ?>
+                                        <?= $status_pesanan; ?>
                                     </span>
                                 </td>
                                 <td>
                                     <?php
-                                        $bayar_class = $t['status_bayar'] == 'Lunas' ? 'complete' : 'pending';
+                                        $status_bayar = $t['status_bayar'] ?? 'Belum Bayar';
+                                        $bayar_class = $status_bayar == 'Lunas' ? 'complete' : 'pending';
                                     ?>
                                     <span class="status-badge <?= $bayar_class; ?>">
-                                        <?= $t['status_bayar']; ?>
+                                        <?= $status_bayar; ?>
                                     </span>
                                 </td>
                                 <td>
@@ -373,6 +408,7 @@
     if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
     if (overlay) overlay.addEventListener('click', toggleSidebar);
 
+    // NOTIFICATION DROPDOWN
     const notifToggle = document.getElementById('notifToggle');
     const notifDropdown = document.getElementById('notifDropdown');
 

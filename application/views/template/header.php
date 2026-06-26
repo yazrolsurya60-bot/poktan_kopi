@@ -375,7 +375,7 @@
                 <?php elseif ($role == 'Petani'): ?>
                     PETANI <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
                 <?php else: ?>
-                    MEMBER <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Kafi</small>
+                    MEMBER <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
                 <?php endif; ?>
             </span>
         </div>

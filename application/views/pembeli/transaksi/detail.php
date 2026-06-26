@@ -121,7 +121,7 @@
 <div class="sidebar" id="sidebarMenu">
     <div class="sidebar-brand">
         <div class="brand-icon"><i class="bi bi-cup-hot-fill"></i></div>
-        <span>MEMBER <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Kafi</small></span>
+        <span>MEMBER <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
     </div>
     <div class="sidebar-menu-wrapper">
         <ul class="sidebar-menu">
