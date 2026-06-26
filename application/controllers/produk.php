@@ -5,12 +5,12 @@ class Produk extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('Panen_model');
+        $this->load->model('Produk_model');
         $this->load->helper('url');
     }
 
     public function index() {
-        $data['produk'] = $this->Panen_model->get_all_produk();
+        $data['produk'] = $this->Produk_model->getAll();
         $this->load->view('v_landing_produk', $data);
     }
 }

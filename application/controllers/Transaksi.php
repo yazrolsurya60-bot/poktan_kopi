@@ -31,7 +31,6 @@ class Transaksi extends CI_Controller {
         $data['total_harga'] = $this->Keranjang_model->total_harga($id_user, $session_id);
         $data['total_item'] = $this->Keranjang_model->count_keranjang($id_user, $session_id);
         
-        // LANGSUNG LOAD VIEW KERANJANG (TANPA TEMPLATE)
         $this->load->view('keranjang/index', $data);
     }
 
@@ -39,15 +38,15 @@ class Transaksi extends CI_Controller {
         $id_produk = $this->input->post('id_produk');
         $jumlah = $this->input->post('jumlah') ?: 1;
         
-        $this->load->model('Panen_model');
-        $produk = $this->Panen_model->get_produk_by_id($id_produk);
+        $this->load->model('Produk_model');
+        $produk = $this->Produk_model->getById($id_produk);
         
         if (!$produk) {
             echo json_encode(['status' => 'error', 'message' => 'Produk tidak ditemukan']);
             return;
         }
         
-        if ($produk['stok_produk'] < $jumlah) {
+        if ($produk->stok_produk < $jumlah) {
             echo json_encode(['status' => 'error', 'message' => 'Stok tidak mencukupi']);
             return;
         }
@@ -57,7 +56,7 @@ class Transaksi extends CI_Controller {
             'session_id' => $this->session->userdata('session_id') ?: session_id(),
             'id_produk' => $id_produk,
             'jumlah' => $jumlah,
-            'harga_satuan' => $produk['harga_produk']
+            'harga_satuan' => $produk->harga
         );
         
         if ($this->Keranjang_model->tambah($data)) {
@@ -119,50 +118,50 @@ class Transaksi extends CI_Controller {
             $this->session->set_flashdata('error', 'Keranjang kosong');
             redirect('transaksi/keranjang');
         }
+
+        // ============================================================
+        // GATE VERIFIKASI OTP — wajib lewat sebelum checkout, supaya
+        // akun/pesanan bohongan tidak bisa merugikan pemilik (stok
+        // kepotong tapi pesanan tidak jelas). Sekali kontak terverifikasi
+        // (tersimpan di tb_user.kontak_terverifikasi), user tidak akan
+        // ditanya lagi di checkout berikutnya.
+        // ============================================================
+        $sudah_terverifikasi = $this->session->userdata('otp_verified');
+        if (!$sudah_terverifikasi && $id_user) {
+            $user_cek = $this->User_model->get_by_id($id_user);
+            if ($user_cek && !empty($user_cek['kontak_terverifikasi'])) {
+                $sudah_terverifikasi = true;
+                $this->session->set_userdata('otp_verified', true);
+            }
+        }
+
+        if (!$sudah_terverifikasi) {
+            $this->session->set_userdata('redirect_after_otp', 'transaksi/checkout');
+            redirect('verifikasi');
+        }
         
         $data['subtotal'] = $this->Keranjang_model->total_harga($id_user, $session_id);
-        $data['user'] = $id_user ? $this->User_model->get_user_by_id($id_user) : null;
+        $data['user'] = $id_user ? $this->User_model->get_by_id($id_user) : null;
         $data['kota'] = ['Jakarta', 'Bandung', 'Surabaya', 'Yogyakarta', 'Semarang'];
         
-        // LANGSUNG LOAD VIEW CHECKOUT (TANPA TEMPLATE)
         $this->load->view('transaksi/checkout', $data);
     }
 
     public function hitung_ongkir() {
         $kota_asal = $this->input->post('kota_asal');
         $kota_tujuan = $this->input->post('kota_tujuan');
-        
-        // Ambil dari database dulu
-        $ongkir = $this->Transaksi_model->get_ongkir($kota_asal, $kota_tujuan);
-        
-        if ($ongkir) {
+
+        $hasil = $this->Transaksi_model->hitung_ongkir_server($kota_asal, $kota_tujuan);
+
+        if ($hasil !== null) {
             echo json_encode([
                 'status' => 'success',
-                'tarif' => $ongkir['tarif'],
-                'estimasi' => $ongkir['estimasi_hari'],
-                'tarif_formatted' => 'Rp ' . number_format($ongkir['tarif'], 0, ',', '.')
+                'tarif' => $hasil['tarif'],
+                'estimasi' => $hasil['estimasi'],
+                'tarif_formatted' => 'Rp ' . number_format($hasil['tarif'], 0, ',', '.')
             ]);
         } else {
-            // Fallback ke data hardcode
-            $ongkir_list = [
-                'Jakarta-Bandung' => ['tarif' => 25000, 'estimasi' => 2],
-                'Jakarta-Surabaya' => ['tarif' => 45000, 'estimasi' => 3],
-                'Jakarta-Yogyakarta' => ['tarif' => 35000, 'estimasi' => 3],
-                'Bandung-Jakarta' => ['tarif' => 25000, 'estimasi' => 2],
-                'Bandung-Surabaya' => ['tarif' => 50000, 'estimasi' => 4],
-            ];
-            $key = $kota_asal . '-' . $kota_tujuan;
-            
-            if (isset($ongkir_list[$key])) {
-                echo json_encode([
-                    'status' => 'success',
-                    'tarif' => $ongkir_list[$key]['tarif'],
-                    'estimasi' => $ongkir_list[$key]['estimasi'],
-                    'tarif_formatted' => 'Rp ' . number_format($ongkir_list[$key]['tarif'], 0, ',', '.')
-                ]);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Ongkir tidak tersedia']);
-            }
+            echo json_encode(['status' => 'error', 'message' => 'Ongkir tidak tersedia untuk rute ini, silakan hubungi admin']);
         }
     }
 
@@ -194,31 +193,49 @@ class Transaksi extends CI_Controller {
         foreach ($cart_items as $item) {
             $subtotal += $item['harga_satuan'] * $item['jumlah'];
         }
-        
-        $ongkir = $this->input->post('ongkir') ?: 0;
+
+        // ============================================
+        // FIX: GANTI KOTA ASAL JADI JAKARTA
+        // ============================================
+        $kota_asal = 'Jakarta';  // ← UBAH DARI 'Pontianak' KE 'Jakarta'
+        $kota_tujuan = $this->input->post('kota_kirim');
+        $hasil_ongkir = $this->Transaksi_model->hitung_ongkir_server($kota_asal, $kota_tujuan);
+
+        if ($hasil_ongkir === null) {
+            $this->session->set_flashdata('error', 'Ongkir untuk kota tujuan "' . $kota_tujuan . '" belum tersedia. Silakan pilih kota lain atau hubungi admin.');
+            redirect('transaksi/checkout');
+        }
+
+        $ongkir = $hasil_ongkir['tarif'];
         $grand_total = $subtotal + $ongkir;
-        
+
         $data_transaksi = array(
-            'id_user' => $id_user,
-            'total_harga' => $subtotal,
-            'ongkir' => $ongkir,
-            'grand_total' => $grand_total,
-            'alamat_kirim' => $this->input->post('alamat_kirim'),
-            'kota_kirim' => $this->input->post('kota_kirim'),
-            'kode_pos' => $this->input->post('kode_pos'),
-            'no_hp' => $this->input->post('no_hp'),
-            'metode_bayar' => $this->input->post('metode_bayar'),
+            'id_user'        => $id_user,
+            'invoice'        => $this->Transaksi_model->generate_invoice(),
+            'total_harga'    => $subtotal,
+            'ongkir'         => $ongkir,
+            'grand_total'    => $grand_total,
+            'nama_penerima'  => $this->input->post('nama_penerima'),
+            'alamat_kirim'   => $this->input->post('alamat_kirim'),
+            'kota_kirim'     => $this->input->post('kota_kirim'),
+            'kode_pos'       => $this->input->post('kode_pos'),
+            'no_hp'          => $this->input->post('no_hp'),
+            'metode_bayar'   => $this->input->post('metode_bayar'),
             'status_pesanan' => 'Pending',
-            'status_bayar' => 'Pending'
+            'status_bayar'   => 'Pending'
         );
-        
+
+        $this->db->trans_begin();
+
         $id_transaksi = $this->Transaksi_model->buat_transaksi($data_transaksi);
-        
+
         if (!$id_transaksi) {
+            $this->db->trans_rollback();
             $this->session->set_flashdata('error', 'Gagal membuat transaksi');
             redirect('transaksi/checkout');
         }
-        
+
+        $this->load->model('Produk_model');
         foreach ($cart_items as $item) {
             $subtotal_item = $item['harga_satuan'] * $item['jumlah'];
             $this->Transaksi_model->tambah_detail(array(
@@ -228,11 +245,18 @@ class Transaksi extends CI_Controller {
                 'harga_satuan' => $item['harga_satuan'],
                 'subtotal' => $subtotal_item
             ));
-            
-            $this->load->model('Panen_model');
-            $this->Panen_model->kurangi_stok($item['id_produk'], $item['jumlah']);
+
+            $this->Produk_model->kurangi_stok($item['id_produk'], $item['jumlah']);
         }
-        
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', 'Gagal menyimpan detail transaksi, silakan coba lagi');
+            redirect('transaksi/checkout');
+        }
+
+        $this->db->trans_commit();
+
         $this->Keranjang_model->kosongkan($id_user, $session_id);
         
         $this->session->set_flashdata('success', 'Transaksi berhasil!');
@@ -250,7 +274,6 @@ class Transaksi extends CI_Controller {
         $data['details'] = $this->Transaksi_model->get_detail_transaksi($id_transaksi);
         $data['bukti'] = $this->Transaksi_model->get_bukti_by_transaksi($id_transaksi);
         
-        // LANGSUNG LOAD VIEW DETAIL (TANPA TEMPLATE)
         $this->load->view('transaksi/detail', $data);
     }
 
@@ -308,9 +331,9 @@ class Transaksi extends CI_Controller {
         $this->Transaksi_model->update_status_bayar($id_transaksi, 'Batal');
         
         $details = $this->Transaksi_model->get_detail_transaksi($id_transaksi);
-        $this->load->model('Panen_model');
+        $this->load->model('Produk_model');
         foreach ($details as $detail) {
-            $this->Panen_model->tambah_stok($detail['id_produk'], $detail['jumlah']);
+            $this->Produk_model->tambah_stok($detail['id_produk'], $detail['jumlah']);
         }
         
         $this->session->set_flashdata('success', 'Transaksi dibatalkan');
@@ -335,4 +358,3 @@ class Transaksi extends CI_Controller {
         echo json_encode(['total' => $total]);
     }
 }
-?>
