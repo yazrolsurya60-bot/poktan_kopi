@@ -118,6 +118,27 @@ class Transaksi extends CI_Controller {
             $this->session->set_flashdata('error', 'Keranjang kosong');
             redirect('transaksi/keranjang');
         }
+
+        // ============================================================
+        // GATE VERIFIKASI OTP — wajib lewat sebelum checkout, supaya
+        // akun/pesanan bohongan tidak bisa merugikan pemilik (stok
+        // kepotong tapi pesanan tidak jelas). Sekali kontak terverifikasi
+        // (tersimpan di tb_user.kontak_terverifikasi), user tidak akan
+        // ditanya lagi di checkout berikutnya.
+        // ============================================================
+        $sudah_terverifikasi = $this->session->userdata('otp_verified');
+        if (!$sudah_terverifikasi && $id_user) {
+            $user_cek = $this->User_model->get_by_id($id_user);
+            if ($user_cek && !empty($user_cek['kontak_terverifikasi'])) {
+                $sudah_terverifikasi = true;
+                $this->session->set_userdata('otp_verified', true);
+            }
+        }
+
+        if (!$sudah_terverifikasi) {
+            $this->session->set_userdata('redirect_after_otp', 'transaksi/checkout');
+            redirect('verifikasi');
+        }
         
         $data['subtotal'] = $this->Keranjang_model->total_harga($id_user, $session_id);
         $data['user'] = $id_user ? $this->User_model->get_by_id($id_user) : null;
@@ -337,4 +358,3 @@ class Transaksi extends CI_Controller {
         echo json_encode(['total' => $total]);
     }
 }
-?>

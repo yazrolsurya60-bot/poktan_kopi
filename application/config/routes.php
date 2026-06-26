@@ -157,3 +157,10 @@ $route['admin/kurir/hapus/(:num)']       = 'admin/Kurir/hapus/$1';
 $route['admin/kurir/toggle/(:num)']      = 'admin/Kurir/toggle/$1';
 $route['admin/kurir/assign']             = 'admin/Kurir/assign';
 $route['admin/kurir/proses_assign']      = 'admin/Kurir/proses_assign';
+
+// ============================================================
+// VERIFIKASI OTP (sebelum checkout)
+// ============================================================
+$route['verifikasi'] = 'Verifikasi/index';
+$route['verifikasi/kirim'] = 'Verifikasi/kirim';
+$route['verifikasi/cek'] = 'Verifikasi/cek';
