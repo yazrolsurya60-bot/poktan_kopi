@@ -12,106 +12,119 @@ class Produk extends CI_Controller
 
     // Halaman utama produk
     public function index()
-{
-    $keyword = $this->input->get('keyword');
+    {
+        $keyword = $this->input->get('keyword');
 
-    if (!empty($keyword)) {
+        if (!empty($keyword)) {
 
-        $this->db->group_start();
-        $this->db->like('nama_produk', $keyword);
-        $this->db->or_like('jenis_kopi', $keyword);
-        $this->db->or_like('grade', $keyword);
-        $this->db->group_end();
+            $this->db->group_start();
+            $this->db->like('nama_produk', $keyword);
+            $this->db->or_like('jenis_kopi', $keyword);
+            $this->db->or_like('grade', $keyword);
+            $this->db->group_end();
 
-        $data['produk'] = $this->db->get('tb_produk')->result();
+            $data['produk'] = $this->db->get('tb_produk')->result();
 
-    } else {
+        } else {
 
-        $data['produk'] = $this->Produk_model->getAll();
+            $data['produk'] = $this->Produk_model->getAll();
 
+        }
+
+        $this->load->view('petani/produk/index', $data);
     }
-
-    $this->load->view('petani/v_produk', $data);
-}
 
     // Form tambah produk
     public function tambah()
     {
         $data['produk'] = $this->Produk_model->getAll();
 
-        $this->load->view('petani/produk_tambah', $data);
+        $this->load->view('petani/produk/produk_tambah', $data);
     }
 
     // Simpan produk baru
     public function simpan()
-{
-   $foto = '';
+    {
+        $foto = '';
 
-if (!empty($_FILES['foto_utama']['name'])) {
+        if (!empty($_FILES['foto_utama']['name'])) {
 
-    $config['upload_path']   = './uploads/produk/';
-    $config['allowed_types'] = 'jpg|jpeg|png';
-    $config['max_size']      = 2048;
-    $config['encrypt_name']  = TRUE;
+            $config['upload_path'] = './uploads/produk/';
+            $config['allowed_types'] = 'jpg|jpeg|png';
+            $config['max_size'] = 2048;
+            $config['encrypt_name'] = TRUE;
 
-    $this->load->library('upload', $config);
+            $this->load->library('upload', $config);
 
-    if ($this->upload->do_upload('foto_utama')) {
+            if ($this->upload->do_upload('foto_utama')) {
 
-        $upload = $this->upload->data();
-        $foto = $upload['file_name'];
+                $upload = $this->upload->data();
+                $foto = $upload['file_name'];
 
-    } else {
+            } else {
 
-        echo $this->upload->display_errors();
-        return;
-    }
-}
-    $data = array(
-        'id_user'       => 1,
-        'nama_produk'   => $this->input->post('nama_produk'),
-        'jenis_kopi'    => $this->input->post('jenis_kopi'),
-        'grade'         => $this->input->post('grade'),
-        'harga'         => $this->input->post('harga'),
-        'stok_produk'   => $this->input->post('stok_produk'),
-        'altitude'      => $this->input->post('altitude'),
-        'proses'        => $this->input->post('proses'),
-        'flavor_notes'  => $this->input->post('flavor_notes'),
-        'status_produk' => $this->input->post('status_produk'),
-        'deskripsi'     => $this->input->post('deskripsi'),
-        'foto_utama'    => $foto
-    );
+                echo $this->upload->display_errors();
+                return;
+            }
+        }
+        $data = array(
+            'id_user' => 1,
+            'nama_produk' => $this->input->post('nama_produk'),
+            'jenis_kopi' => $this->input->post('jenis_kopi'),
+            'grade' => $this->input->post('grade'),
+            'harga' => $this->input->post('harga'),
+            'stok_produk' => $this->input->post('stok_produk'),
+            'altitude' => $this->input->post('altitude'),
+            'proses' => $this->input->post('proses'),
+            'flavor_notes' => $this->input->post('flavor_notes'),
+            'status_produk' => $this->input->post('status_produk'),
+            'deskripsi' => $this->input->post('deskripsi'),
+            'foto_utama' => $foto
+        );
 
-    $insert_id = $this->Produk_model->insert($data);
+        $data = array(
+            'id_user' => 1,
+            'nama_produk' => $this->input->post('nama_produk'),
+            'jenis_kopi' => $this->input->post('jenis_kopi'),
+            'grade' => $this->input->post('grade'),
+            'harga' => $this->input->post('harga'),
+            'stok_produk' => $this->input->post('stok_produk'),
+            'altitude' => $this->input->post('altitude'),
+            'proses' => $this->input->post('proses'),
+            'flavor_notes' => $this->input->post('flavor_notes'),
+            'status_produk' => $this->input->post('status_produk'),
+            'deskripsi' => $this->input->post('deskripsi'),
+            'foto_utama' => $foto
+        );
 
-    if (!empty($_FILES['galeri']['name'][0])) {
-        $filesCount = count($_FILES['galeri']['name']);
-        for($i = 0; $i < $filesCount; $i++){
-            $_FILES['file']['name']     = $_FILES['galeri']['name'][$i];
-            $_FILES['file']['type']     = $_FILES['galeri']['type'][$i];
-            $_FILES['file']['tmp_name'] = $_FILES['galeri']['tmp_name'][$i];
-            $_FILES['file']['error']     = $_FILES['galeri']['error'][$i];
-            $_FILES['file']['size']     = $_FILES['galeri']['size'][$i];
-            
-            $config2['upload_path']   = './uploads/produk/';
-            $config2['allowed_types'] = 'jpg|jpeg|png';
-            $config2['max_size']      = 2048;
-            $config2['encrypt_name']  = TRUE;
-            
-            $this->load->library('upload', $config2);
-            $this->upload->initialize($config2);
-            if($this->upload->do_upload('file')){
-                $fileData = $this->upload->data();
-                $this->Produk_model->insert_galeri([
-                    'id_produk' => $insert_id,
-                    'foto' => $fileData['file_name']
-                ]);
+        $insert_id = $this->Produk_model->insert($data);
+
+        if (!empty($_FILES['galeri']['name'][0])) {
+            $filesCount = count($_FILES['galeri']['name']);
+            for ($i = 0; $i < $filesCount; $i++) {
+                $_FILES['file']['name'] = $_FILES['galeri']['name'][$i];
+                $_FILES['file']['type'] = $_FILES['galeri']['type'][$i];
+                $_FILES['file']['tmp_name'] = $_FILES['galeri']['tmp_name'][$i];
+                $_FILES['file']['error'] = $_FILES['galeri']['error'][$i];
+                $_FILES['file']['size'] = $_FILES['galeri']['size'][$i];
+
+                $config2['upload_path'] = './uploads/produk/';
+                $config2['allowed_types'] = 'jpg|jpeg|png';
+                $config2['max_size'] = 2048;
+                $config2['encrypt_name'] = TRUE;
+
+                $this->load->library('upload', $config2);
+                $this->upload->initialize($config2);
+                if ($this->upload->do_upload('file')) {
+                    $fileData = $this->upload->data();
+                    $this->Produk_model->insert_galeri([
+                        'id_produk' => $insert_id,
+                        'foto' => $fileData['file_name']
+                    ]);
+                }
             }
         }
     }
-
-    redirect('petani/produk');
-}
     // Detail produk
     public function detail($id)
     {
@@ -147,10 +160,10 @@ if (!empty($_FILES['foto_utama']['name'])) {
         );
 
         if (!empty($_FILES['foto_utama']['name'])) {
-            $config['upload_path']   = './uploads/produk/';
+            $config['upload_path'] = './uploads/produk/';
             $config['allowed_types'] = 'jpg|jpeg|png';
-            $config['max_size']      = 2048;
-            $config['encrypt_name']  = TRUE;
+            $config['max_size'] = 2048;
+            $config['encrypt_name'] = TRUE;
             $this->load->library('upload', $config);
             $this->upload->initialize($config);
             if ($this->upload->do_upload('foto_utama')) {
@@ -163,21 +176,21 @@ if (!empty($_FILES['foto_utama']['name'])) {
 
         if (!empty($_FILES['galeri']['name'][0])) {
             $filesCount = count($_FILES['galeri']['name']);
-            for($i = 0; $i < $filesCount; $i++){
-                $_FILES['file']['name']     = $_FILES['galeri']['name'][$i];
-                $_FILES['file']['type']     = $_FILES['galeri']['type'][$i];
+            for ($i = 0; $i < $filesCount; $i++) {
+                $_FILES['file']['name'] = $_FILES['galeri']['name'][$i];
+                $_FILES['file']['type'] = $_FILES['galeri']['type'][$i];
                 $_FILES['file']['tmp_name'] = $_FILES['galeri']['tmp_name'][$i];
-                $_FILES['file']['error']     = $_FILES['galeri']['error'][$i];
-                $_FILES['file']['size']     = $_FILES['galeri']['size'][$i];
-                
-                $config2['upload_path']   = './uploads/produk/';
+                $_FILES['file']['error'] = $_FILES['galeri']['error'][$i];
+                $_FILES['file']['size'] = $_FILES['galeri']['size'][$i];
+
+                $config2['upload_path'] = './uploads/produk/';
                 $config2['allowed_types'] = 'jpg|jpeg|png';
-                $config2['max_size']      = 2048;
-                $config2['encrypt_name']  = TRUE;
-                
+                $config2['max_size'] = 2048;
+                $config2['encrypt_name'] = TRUE;
+
                 $this->load->library('upload', $config2);
                 $this->upload->initialize($config2);
-                if($this->upload->do_upload('file')){
+                if ($this->upload->do_upload('file')) {
                     $fileData = $this->upload->data();
                     $this->Produk_model->insert_galeri([
                         'id_produk' => $id,
