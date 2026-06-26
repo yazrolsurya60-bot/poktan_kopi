@@ -123,6 +123,7 @@ $route['pembeli/transaksi/history'] = 'pembeli/transaksi/history';
 $route['pembeli/transaksi/detail/(:num)'] = 'pembeli/transaksi/detail/$1';
 $route['pembeli/transaksi/batalkan/(:num)'] = 'pembeli/transaksi/batalkan/$1';
 $route['pembeli/transaksi/upload_bukti'] = 'pembeli/transaksi/upload_bukti';
+$route['pembeli/transaksi/invoice/(:num)'] = 'pembeli/transaksi/invoice/$1';
 
 // ============================================
 // LANDING PRODUK
@@ -156,3 +157,14 @@ $route['admin/kurir/hapus/(:num)']       = 'admin/Kurir/hapus/$1';
 $route['admin/kurir/toggle/(:num)']      = 'admin/Kurir/toggle/$1';
 $route['admin/kurir/assign']             = 'admin/Kurir/assign';
 $route['admin/kurir/proses_assign']      = 'admin/Kurir/proses_assign';
+
+// ============================================================
+// VERIFIKASI OTP (sebelum checkout)
+// ============================================================
+$route['verifikasi'] = 'Verifikasi/index';
+$route['verifikasi/kirim'] = 'Verifikasi/kirim';
+$route['verifikasi/cek'] = 'Verifikasi/cek';
+
+// Profile Pembeli
+$route['pembeli/profil'] = 'pembeli/Profil/index';
+$route['pembeli/profil/update'] = 'pembeli/Profil/update';

@@ -13,6 +13,9 @@ class Transaksi extends CI_Controller {
         $this->load->helper('form');
     }
 
+    // ============================================================
+    // INDEX - DAFTAR TRANSAKSI
+    // ============================================================
     public function index() {
         $data['title'] = 'Manajemen Transaksi';
         $data['transaksi'] = $this->Transaksi_model->get_all_transaksi();
@@ -21,9 +24,13 @@ class Transaksi extends CI_Controller {
         $data['count_dikirim'] = $this->Transaksi_model->count_by_status('Dikirim');
         $data['count_selesai'] = $this->Transaksi_model->count_by_status('Selesai');
         
+        // LANGSUNG LOAD VIEW TANPA HEADER/SIDEBAR/FOOTER
         $this->load->view('admin/transaksi/index', $data);
     }
 
+    // ============================================================
+    // DETAIL TRANSAKSI
+    // ============================================================
     public function detail($id_transaksi) {
         $data['title'] = 'Detail Transaksi';
         
@@ -35,9 +42,13 @@ class Transaksi extends CI_Controller {
         $data['details'] = $this->Transaksi_model->get_detail_transaksi($id_transaksi);
         $data['bukti'] = $this->Transaksi_model->get_bukti_by_transaksi($id_transaksi);
         
+        // LANGSUNG LOAD VIEW TANPA HEADER/SIDEBAR/FOOTER
         $this->load->view('admin/transaksi/detail', $data);
     }
 
+    // ============================================================
+    // KONFIRMASI BAYAR (M06-F06)
+    // ============================================================
     public function konfirmasi_bayar() {
         $id_transaksi = $this->input->post('id_transaksi');
         $status = $this->input->post('status');
@@ -48,16 +59,19 @@ class Transaksi extends CI_Controller {
         if ($status == 'Diverifikasi') {
             $this->Transaksi_model->update_status_bayar($id_transaksi, 'Lunas');
             $this->Transaksi_model->update_status($id_transaksi, 'Diproses');
-            $message = 'Pembayaran diverifikasi. Pesanan diproses.';
+            $message = '✅ Pembayaran diverifikasi. Pesanan diproses.';
         } else {
             $this->Transaksi_model->update_status_bayar($id_transaksi, 'Pending');
-            $message = 'Pembayaran ditolak. Upload ulang bukti.';
+            $message = '❌ Pembayaran ditolak. Upload ulang bukti.';
         }
         
         $this->session->set_flashdata('success', $message);
         redirect('admin/transaksi/detail/' . $id_transaksi);
     }
 
+    // ============================================================
+    // UPDATE STATUS PESANAN (M06-F07)
+    // ============================================================
     public function update_status($id_transaksi) {
         $status = $this->input->post('status');
         $valid_status = ['Pending', 'Diproses', 'Dikirim', 'Selesai', 'Dibatalkan'];
@@ -68,60 +82,70 @@ class Transaksi extends CI_Controller {
         }
         
         $this->Transaksi_model->update_status($id_transaksi, $status);
-        $this->session->set_flashdata('success', 'Status pesanan diupdate');
+        $this->session->set_flashdata('success', '✅ Status pesanan berhasil diupdate menjadi ' . $status);
         redirect('admin/transaksi/detail/' . $id_transaksi);
     }
 
-    // ================================================================
-    // EXPORT EXCEL (CSV - Bisa dibuka di Excel, TANPA LIBRARY)
-    // ================================================================
+    // ============================================================
+    // EXPORT EXCEL (CSV)
+    // ============================================================
     public function export_excel() {
         $transaksi = $this->Transaksi_model->get_all_transaksi();
         
-        // Set header untuk download CSV
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename="Laporan_Transaksi_' . date('Y-m-d') . '.csv"');
         
-        // Buka output
         $output = fopen('php://output', 'w');
-        
-        // Tambahkan BOM untuk UTF-8 (biar Excel baca dengan benar)
         fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
         
-        // Header CSV
-        fputcsv($output, array('ID Transaksi', 'Pembeli', 'Total', 'Status Pesanan', 'Status Bayar', 'Metode Bayar', 'Tanggal'));
+        fputcsv($output, ['ID Transaksi', 'Pembeli', 'Total', 'Ongkir', 'Grand Total', 'Status', 'Status Bayar', 'Metode', 'Tanggal']);
         
-        // Data
         foreach ($transaksi as $t) {
-            fputcsv($output, array(
+            fputcsv($output, [
                 $t['id_transaksi'],
                 $t['nama_pembeli'] ?? 'Guest',
+                $t['total_harga'],
+                $t['ongkir'] ?? 0,
                 $t['grand_total'],
                 $t['status_pesanan'],
                 $t['status_bayar'],
                 $t['metode_bayar'],
                 $t['tanggal_transaksi']
-            ));
+            ]);
         }
         
         fclose($output);
         exit;
     }
 
-    // ================================================================
-    // EXPORT PDF (Print to PDF - TANPA LIBRARY)
-    // ================================================================
+    // ============================================================
+    // EXPORT PDF
+    // ============================================================
     public function export_pdf() {
         $data['transaksi'] = $this->Transaksi_model->get_all_transaksi();
         $data['title'] = 'Laporan Transaksi';
         
-        // Load view untuk print
+        // LANGSUNG LOAD VIEW TANPA HEADER/SIDEBAR/FOOTER
         $this->load->view('admin/transaksi/export_pdf', $data);
     }
 
-    // ================================================================
-    // INVOICE - DIPERBAIKI (path view + admin/)
-    // ================================================================
+    // ============================================================
+    // HALAMAN KONFIRMASI BAYAR (dari quick action dashboard)
+    // ============================================================
+    public function konfirmasi() {
+        $data['title'] = 'Konfirmasi Pembayaran';
+        $data['transaksi_pending'] = $this->Transaksi_model->get_transaksi_butuh_konfirmasi();
+        $data['count_menunggu']    = count($data['transaksi_pending']);
+        $data['count_pending']     = $this->Transaksi_model->count_by_status('Pending');
+        $data['count_diproses']    = $this->Transaksi_model->count_by_status('Diproses');
+        $data['count_dikirim']     = $this->Transaksi_model->count_by_status('Dikirim');
+        $data['count_selesai']     = $this->Transaksi_model->count_by_status('Selesai');
+        $this->load->view('admin/transaksi/konfirmasi', $data);
+    }
+
+    // ============================================================
+    // INVOICE (M06-F10)
+    // ============================================================
     public function invoice($id_transaksi) {
         $data['transaksi'] = $this->Transaksi_model->get_transaksi($id_transaksi);
         if (!$data['transaksi']) {
@@ -129,7 +153,7 @@ class Transaksi extends CI_Controller {
         }
         $data['details'] = $this->Transaksi_model->get_detail_transaksi($id_transaksi);
         
-        // Perbaikan: tambahkan admin/ karena file ada di admin/transaksi/invoice.php
+        // LANGSUNG LOAD VIEW TANPA HEADER/SIDEBAR/FOOTER
         $this->load->view('admin/transaksi/invoice', $data);
     }
 }
