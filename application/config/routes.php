@@ -158,15 +158,13 @@ $route['admin/kurir/toggle/(:num)']      = 'admin/Kurir/toggle/$1';
 $route['admin/kurir/assign']             = 'admin/Kurir/assign';
 $route['admin/kurir/proses_assign']      = 'admin/Kurir/proses_assign';
 
-<<<<<<< HEAD
 // ============================================================
 // VERIFIKASI OTP (sebelum checkout)
 // ============================================================
 $route['verifikasi'] = 'Verifikasi/index';
 $route['verifikasi/kirim'] = 'Verifikasi/kirim';
 $route['verifikasi/cek'] = 'Verifikasi/cek';
-=======
-// Tambahkan di bagian bawah untuk profile
+
+// Profile Pembeli
 $route['pembeli/profil'] = 'pembeli/Profil/index';
 $route['pembeli/profil/update'] = 'pembeli/Profil/update';
->>>>>>> 7dd4807c84950f9b70a2d892c0e68d5cea88917f
