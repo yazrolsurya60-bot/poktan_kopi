@@ -822,7 +822,7 @@
                 </li>
                 <li class="menu-item">
                     <a href="<?= base_url('admin/laporan'); ?>">
-                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan & Analytics
+                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
                     </a>
                 </li>
             </ul>
@@ -843,7 +843,9 @@
                     <i class="bi bi-list"></i>
                 </button>
                 <h2 class="d-inline-block align-middle mb-0">Dashboard</h2>
-                <p class="subtitle mb-0 mt-1">Selamat datang, Admin! <span id="currentDateTime" style="color: var(--amber-cream); font-weight:500;"></span></p>
+                <p class="subtitle mb-0 mt-1">Selamat datang, <span style="color: var(--amber-cream); font-weight:600;"><?= $this->session->userdata('nama') ?? 'Admin' ?></span>!
+                    <span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span>
+                </p>
             </div>
             <div class="d-flex align-items-center gap-3" style="gap: 12px;">
                 <!-- NOTIFICATION BELL -->
@@ -955,14 +957,14 @@
             </div>
         </div>
 
-        <!-- KPI CARDS -->
+        <!-- KPI CARDS - DATA REAL -->
         <div class="row mb-4">
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Total Pendapatan</div>
-                    <h3 class="stat-num">Rp <?= number_format($kpi_total_revenue ?? 87500000, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 12.5% dari bulan lalu</div>
+                    <h3 class="stat-num">Rp <?= number_format($kpi_total_revenue ?? 0, 0, ',', '.'); ?></h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge" style="background: var(--amber-cream); color: white;"><i class="bi bi-currency-dollar"></i></div>
                 </div>
             </div>
@@ -970,8 +972,8 @@
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Total Transaksi</div>
-                    <h3 class="stat-num"><?= number_format($kpi_transaksi_aktif ?? 156, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 8.3% dari bulan lalu</div>
+                    <h3 class="stat-num"><?= $kpi_transaksi_aktif ?? 0; ?></h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge"><i class="bi bi-receipt"></i></div>
                 </div>
             </div>
@@ -979,8 +981,8 @@
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Petani Aktif</div>
-                    <h3 class="stat-num"><?= number_format($kpi_petani_terverifikasi ?? 48, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 3 bergabung minggu ini</div>
+                    <h3 class="stat-num"><?= $kpi_petani_terverifikasi ?? 0; ?></h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge"><i class="bi bi-people-fill"></i></div>
                 </div>
             </div>
@@ -988,8 +990,8 @@
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Mitra Aktif</div>
-                    <h3 class="stat-num"><?= number_format($kpi_mitra_cafe ?? 32, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 2 mitra baru</div>
+                    <h3 class="stat-num"><?= $kpi_mitra_cafe ?? 0; ?></h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge" style="background: var(--dark-coffee); color: white;"><i class="bi bi-shop"></i></div>
                 </div>
             </div>
@@ -1064,9 +1066,9 @@
                                         <?php foreach ($pesanan_terbaru as $order): ?>
                                             <tr>
                                                 <td><b>#<?= $order['id_transaksi']; ?></b></td>
-                                                <td><?= $order['metode_bayar']; ?></td>
-                                                <td>Rp <?= number_format($order['total_harga'], 0, ',', '.'); ?></td>
-                                                <td><span class="status-badge <?= strtolower($order['status_pesanan']); ?>"><?= ucfirst($order['status_pesanan']); ?></span></td>
+                                                <td><?= $order['metode_bayar'] ?? 'Transfer'; ?></td>
+                                                <td>Rp <?= number_format($order['total_harga'] ?? 0, 0, ',', '.'); ?></td>
+                                                <td><span class="status-badge <?= strtolower($order['status_pesanan'] ?? 'pending'); ?>"><?= ucfirst($order['status_pesanan'] ?? 'Pending'); ?></span></td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
@@ -1096,8 +1098,8 @@
                                             <tr>
                                                 <td><b><?= $farmer['nama_petani']; ?></b></td>
                                                 <td><?= $farmer['status_petani'] == 'Active' ? 'Aktif' : 'Menunggu'; ?></td>
-                                                <td><?= date('d-m-Y', strtotime($farmer['tanggal_daftar'])); ?></td>
-                                                <td><span class="status-badge <?= $farmer['status_petani'] === 'Active' ? 'complete' : 'pending'; ?>"><?= $farmer['status_petani'] === 'Active' ? 'Terverifikasi' : 'Review'; ?></span></td>
+                                                <td><?= date('d-m-Y', strtotime($farmer['tanggal_daftar'] ?? date('Y-m-d'))); ?></td>
+                                                <td><span class="status-badge <?= ($farmer['status_petani'] ?? 'Pending') === 'Active' ? 'complete' : 'pending'; ?>"><?= ($farmer['status_petani'] ?? 'Pending') === 'Active' ? 'Terverifikasi' : 'Review'; ?></span></td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
@@ -1111,7 +1113,7 @@
             </div>
         </div>
 
-        <!-- SETTING NOTIFIKASI -->
+        <!-- SETTING NOTIFIKASI - SESUAI ROLE ADMIN -->
         <div class="row">
             <div class="col-12">
                 <div class="custom-card">
@@ -1121,16 +1123,17 @@
                     </div>
                     <div class="card-body-custom">
                         <?php
+                        // Default settings untuk Admin
                         $default_settings = [
-                            'notifTransaksi' => 1,
-                            'notifPembayaran' => 1,
-                            'notifStok' => 1,
-                            'notifLaporan' => 0,
-                            'notifPetani' => 1,
-                            'notifKurir' => 1,
-                            'notifPromo' => 0,
-                            'notifSistem' => 1
+                            'notif_transaksi' => 1,
+                            'notif_pembayaran' => 1,
+                            'notif_stok' => 1,
+                            'notif_petani' => 1,
+                            'notif_kurir' => 1,
+                            'notif_laporan' => 0,
+                            'notif_sistem' => 1
                         ];
+
                         if (!empty($settings)) {
                             foreach ($default_settings as $key => $value) {
                                 if (isset($settings[$key])) {
@@ -1143,50 +1146,44 @@
                             <div class="row">
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifTransaksi" name="notifTransaksi" <?= $default_settings['notifTransaksi'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifTransaksi" style="font-size:0.85rem;">Transaksi Baru</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_transaksi" name="notif_transaksi" <?= $default_settings['notif_transaksi'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_transaksi" style="font-size:0.85rem;">Transaksi Baru</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifPembayaran" name="notifPembayaran" <?= $default_settings['notifPembayaran'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifPembayaran" style="font-size:0.85rem;">Konfirmasi Bayar</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_pembayaran" name="notif_pembayaran" <?= $default_settings['notif_pembayaran'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_pembayaran" style="font-size:0.85rem;">Konfirmasi Bayar</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifStok" name="notifStok" <?= $default_settings['notifStok'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifStok" style="font-size:0.85rem;">Peringatan Stok</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_stok" name="notif_stok" <?= $default_settings['notif_stok'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_stok" style="font-size:0.85rem;">Peringatan Stok</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifLaporan" name="notifLaporan" <?= $default_settings['notifLaporan'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifLaporan" style="font-size:0.85rem;">Laporan Bulanan</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_petani" name="notif_petani" <?= $default_settings['notif_petani'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_petani" style="font-size:0.85rem;">Registrasi Petani</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifPetani" name="notifPetani" <?= $default_settings['notifPetani'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifPetani" style="font-size:0.85rem;">Registrasi Petani</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_kurir" name="notif_kurir" <?= $default_settings['notif_kurir'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_kurir" style="font-size:0.85rem;">Status Pengiriman</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifKurir" name="notifKurir" <?= $default_settings['notifKurir'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifKurir" style="font-size:0.85rem;">Status Pengiriman</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_laporan" name="notif_laporan" <?= $default_settings['notif_laporan'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_laporan" style="font-size:0.85rem;">Laporan Bulanan</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifPromo" name="notifPromo" <?= $default_settings['notifPromo'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifPromo" style="font-size:0.85rem;">Promo & Diskon</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6 mb-2">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifSistem" name="notifSistem" <?= $default_settings['notifSistem'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifSistem" style="font-size:0.85rem;">Update Sistem</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_sistem" name="notif_sistem" <?= $default_settings['notif_sistem'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_sistem" style="font-size:0.85rem;">Update Sistem</label>
                                     </div>
                                 </div>
                             </div>
@@ -1278,7 +1275,7 @@
             if (!ctx) return;
 
             const chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
-            const chartData = <?= isset($grafik_values) ? json_encode($grafik_values) : json_encode([120, 150, 180, 140, 200, 230, 210, 250, 270, 240, 300, 280]); ?>;
+            const chartData = <?= isset($grafik_penjualan['values']) ? json_encode($grafik_penjualan['values']) : json_encode(array_fill(0, 12, 0)); ?>;
 
             salesChart = new Chart(ctx, {
                 type: 'line',
@@ -1367,7 +1364,16 @@
             });
         });
 
-        console.log('✅ Dashboard siap digunakan!');
+        console.log('✅ Dashboard Admin siap digunakan!');
+        console.log('📋 Fitur yang tersedia:');
+        console.log('   - KPI Cards (M11-F01) - Data Real');
+        console.log('   - Grafik Penjualan (M10-F02) - Data Real');
+        console.log('   - Produk Terlaris (M10-F04) - Data Real');
+        console.log('   - Pesanan Terbaru (M11-F01) - Data Real');
+        console.log('   - Petani Baru (M11-F01) - Data Real');
+        console.log('   - Quick Action (M11-F04)');
+        console.log('   - Notifikasi Real-time (M11-F01)');
+        console.log('   - Setting Notifikasi (M11-F03) - Sesuai Role Admin');
     </script>
 </body>
 

@@ -4,12 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Produk - Petani Kopi</title>
+    <title>Detail Produk - Sistem Supply Chain Kopi</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root {
             --roasted-brown: #4A2C11;
@@ -25,6 +23,12 @@
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-cream);
@@ -32,7 +36,7 @@
             overflow-x: hidden;
         }
 
-        /* --- SIDEBAR PREMIUM --- */
+        /* ===== SIDEBAR ===== */
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -136,7 +140,6 @@
             border-radius: 0 3px 3px 0;
         }
 
-        /* Sidebar Footer - Tombol Keluar */
         .sidebar-footer {
             padding: 16px 20px;
             border-top: 1px solid rgba(250, 246, 240, 0.06);
@@ -166,7 +169,7 @@
             border-color: rgba(230, 161, 92, 0.2);
         }
 
-        /* --- MAIN CONTENT --- */
+        /* ===== MAIN CONTENT ===== */
         .main-content {
             margin-left: var(--sidebar-width);
             padding: 30px 40px 40px;
@@ -192,7 +195,29 @@
             margin-top: 2px;
         }
 
-        /* --- NOTIFICATION BELL --- */
+        .breadcrumb-custom {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb-custom .breadcrumb-item a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+
+        .breadcrumb-custom .breadcrumb-item a:hover {
+            color: var(--amber-cream);
+        }
+
+        .breadcrumb-custom .breadcrumb-item.active {
+            color: var(--dark-coffee);
+            font-weight: 600;
+        }
+
+        /* ===== NOTIFICATION ===== */
         .notif-btn {
             position: relative;
             background: var(--card-white);
@@ -229,7 +254,6 @@
             border: 2px solid white;
         }
 
-        /* --- NOTIFICATION DROPDOWN --- */
         .notif-dropdown {
             position: absolute;
             right: 0;
@@ -255,7 +279,6 @@
                 opacity: 0;
                 transform: translateY(-10px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -275,6 +298,12 @@
             font-size: 0.75rem;
             color: var(--amber-cream);
             font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .notif-dropdown-header a:hover {
+            text-decoration: underline;
         }
 
         .notif-dropdown-list {
@@ -290,10 +319,14 @@
             gap: 12px;
             transition: var(--transition-smooth);
             cursor: pointer;
+            text-decoration: none;
+            color: inherit;
         }
 
         .notif-item:hover {
             background: var(--bg-cream);
+            text-decoration: none;
+            color: inherit;
         }
 
         .notif-item .notif-icon {
@@ -311,17 +344,14 @@
             background: #D1FAE5;
             color: #065F46;
         }
-
         .notif-item .notif-icon.warning {
             background: #FEF3C7;
             color: #92400E;
         }
-
         .notif-item .notif-icon.info {
             background: #DBEAFE;
             color: #1E40AF;
         }
-
         .notif-item .notif-icon.danger {
             background: #FEE2E2;
             color: #991B1B;
@@ -347,161 +377,17 @@
             font-weight: 600;
         }
 
-        /* --- ACTION CARDS --- */
-        .action-card {
-            background: var(--card-white);
-            border: 1px solid rgba(74, 44, 17, 0.06);
-            border-radius: var(--radius-card);
-            padding: 18px 22px;
-            display: flex;
-            align-items: center;
-            color: var(--dark-coffee);
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: var(--transition-smooth);
-            box-shadow: var(--shadow-soft);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .action-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--amber-cream), transparent);
-            opacity: 0;
-            transition: var(--transition-smooth);
-        }
-
-        .action-card:hover {
-            text-decoration: none;
-            color: var(--dark-coffee);
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-            border-color: transparent;
-        }
-
-        .action-card:hover::after {
-            opacity: 1;
-        }
-
-        .action-icon {
-            width: 44px;
-            height: 44px;
-            min-width: 44px;
-            border-radius: 10px;
-            background: #FDF5ED;
-            color: var(--amber-cream);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-size: 1.2rem;
-            transition: var(--transition-smooth);
-        }
-
-        .action-card:hover .action-icon {
+        .notif-badge-new {
             background: var(--amber-cream);
             color: white;
-            transform: scale(1.05);
+            font-size: 0.55rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            align-self: center;
         }
 
-        .action-card .action-arrow {
-            margin-left: auto;
-            color: var(--text-secondary);
-            transition: var(--transition-smooth);
-            font-size: 0.9rem;
-        }
-
-        .action-card:hover .action-arrow {
-            color: var(--amber-cream);
-            transform: translateX(4px);
-        }
-
-        /* --- STAT BOX --- */
-        .stat-box {
-            background: var(--card-white);
-            border: 1px solid rgba(74, 44, 17, 0.06);
-            border-radius: var(--radius-card);
-            padding: 22px 24px;
-            position: relative;
-            box-shadow: var(--shadow-soft);
-            transition: var(--transition-smooth);
-            overflow: hidden;
-        }
-
-        .stat-box:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .stat-box .stat-decoration {
-            position: absolute;
-            right: -20px;
-            top: -20px;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(230, 161, 92, 0.05);
-            pointer-events: none;
-        }
-
-        .stat-title {
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            letter-spacing: 0.7px;
-        }
-
-        .stat-num {
-            font-size: 1.7rem;
-            font-weight: 700;
-            margin-top: 6px;
-            margin-bottom: 0;
-            color: var(--dark-coffee);
-        }
-
-        .stat-change {
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-        .stat-change.up {
-            color: #10b981;
-        }
-
-        .stat-change.down {
-            color: #EF4444;
-        }
-
-        .stat-badge {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: var(--bg-cream);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--roasted-brown);
-            transition: var(--transition-smooth);
-        }
-
-        .stat-box:hover .stat-badge {
-            transform: scale(1.05) rotate(-3deg);
-        }
-
-        /* --- CUSTOM CARD --- */
-        .custom-card {
+        /* ===== DETAIL CARD ===== */
+        .detail-card {
             background: var(--card-white);
             border: 1px solid rgba(74, 44, 17, 0.06);
             border-radius: var(--radius-card);
@@ -510,265 +396,173 @@
             overflow: hidden;
         }
 
-        .custom-card:hover {
+        .detail-card:hover {
             box-shadow: var(--shadow-hover);
         }
 
-        .custom-card .card-header-custom {
-            padding: 18px 24px;
+        .detail-card .card-header-custom {
+            padding: 20px 28px;
             border-bottom: 1px solid rgba(74, 44, 17, 0.06);
+            background: var(--bg-cream);
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .custom-card .card-header-custom h6 {
+        .detail-card .card-header-custom h5 {
             font-weight: 700;
             color: var(--dark-coffee);
             margin: 0;
-            font-size: 0.85rem;
         }
 
-        .custom-card .card-body-custom {
-            padding: 24px;
+        .detail-card .card-body-custom {
+            padding: 28px;
         }
 
-        /* --- CHART --- */
-        .chart-container {
-            position: relative;
-            height: 250px;
-            width: 100%;
+        /* ===== DETAIL ITEMS ===== */
+        .detail-group {
+            margin-bottom: 20px;
         }
 
-        /* --- TABEL --- */
-        .table-custom {
-            font-size: 0.85rem;
+        .detail-group:last-child {
+            margin-bottom: 0;
         }
 
-        .table-custom thead th {
-            border-bottom: 2px solid rgba(74, 44, 17, 0.06);
-            color: var(--text-secondary);
-            font-weight: 600;
+        .detail-label {
             font-size: 0.7rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 10px 8px;
+            color: var(--text-secondary);
+            letter-spacing: 0.7px;
+            margin-bottom: 4px;
         }
 
-        .table-custom tbody td {
-            padding: 10px 8px;
-            border-bottom: 1px solid rgba(74, 44, 17, 0.04);
-            vertical-align: middle;
-        }
-
-        .table-custom tbody tr:hover {
-            background: rgba(250, 246, 240, 0.3);
-        }
-
-        /* --- STATUS BADGE --- */
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
+        .detail-value {
+            font-size: 1rem;
             font-weight: 600;
-        }
-
-        .status-badge.pending {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-badge.processing {
-            background: #DBEAFE;
-            color: #1E40AF;
-        }
-
-        .status-badge.delivery {
-            background: #EDE9FE;
-            color: #5B21B6;
-        }
-
-        .status-badge.complete {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-
-        .status-badge.cancelled {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        .status-badge.stok_aman {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-
-        .status-badge.stok_tipis {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-badge.stok_habis {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        /* --- QUICK ACTION BUTTONS --- */
-        .quick-action-btn {
-            padding: 10px 16px;
-            border: 1px solid rgba(74, 44, 17, 0.06);
-            border-radius: 10px;
-            background: var(--card-white);
             color: var(--dark-coffee);
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            padding: 8px 14px;
+            background: var(--bg-cream);
+            border-radius: 8px;
+            border: 1px solid rgba(74, 44, 17, 0.06);
+        }
+
+        .detail-value .badge-status {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge-status.aktif {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .badge-status.nonaktif {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .detail-value .badge-info {
+            background: var(--bg-cream);
+            color: var(--text-secondary);
+            padding: 6px 14px;
+            border-radius: 6px;
             font-weight: 500;
             font-size: 0.85rem;
-            cursor: pointer;
+        }
+
+        .detail-image {
             width: 100%;
-            text-decoration: none;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(74, 44, 17, 0.06);
         }
 
-        .quick-action-btn:hover {
+        .detail-description {
+            padding: 16px 20px;
             background: var(--bg-cream);
-            border-color: var(--amber-cream);
-            transform: translateX(4px);
-            text-decoration: none;
-            color: var(--dark-coffee);
+            border-radius: 10px;
+            border: 1px solid rgba(74, 44, 17, 0.06);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #4a3a2a;
+            min-height: 80px;
         }
 
-        .quick-action-btn i {
-            font-size: 1.1rem;
-            color: var(--amber-cream);
-        }
-
-        /* --- CALENDAR / JADWAL PANEN (M11-F01) --- */
-        .harvest-schedule-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(74, 44, 17, 0.05);
-        }
-
-        .harvest-schedule-item:last-child {
-            border-bottom: none;
-        }
-
-        .schedule-date {
-            min-width: 50px;
-            text-align: center;
-        }
-
-        .schedule-date .day {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--dark-coffee);
-            line-height: 1;
-        }
-
-        .schedule-date .month {
-            font-size: 0.6rem;
-            text-transform: uppercase;
+        /* ===== BUTTON ===== */
+        .btn-back {
+            background: var(--bg-cream);
             color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        .schedule-info {
-            flex: 1;
-        }
-
-        .schedule-info .title {
+            border: 1px solid rgba(74, 44, 17, 0.1);
+            padding: 10px 24px;
+            border-radius: 10px;
             font-weight: 600;
             font-size: 0.85rem;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .schedule-info .detail {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
+        .btn-back:hover {
+            background: #e8e0d8;
+            color: var(--dark-coffee);
+            text-decoration: none;
         }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 991.98px) {
-            .sidebar {
-                left: calc(-1 * var(--sidebar-width));
-                box-shadow: none;
-            }
-
-            .sidebar.open {
-                left: 0;
-                box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px 16px 30px;
-            }
-
-            .page-header h2 {
-                font-size: 1.3rem;
-            }
-
-            .stat-num {
-                font-size: 1.3rem;
-            }
-
-            .action-card {
-                padding: 14px 16px;
-                font-size: 0.8rem;
-            }
-
-            .action-icon {
-                width: 36px;
-                height: 36px;
-                min-width: 36px;
-                font-size: 1rem;
-            }
-
-            .chart-container {
-                height: 200px;
-            }
-
-            .notif-dropdown {
-                width: calc(100vw - 32px);
-                right: -60px;
-            }
+        .btn-edit-detail {
+            background: var(--amber-cream);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        @media (max-width: 575.98px) {
-            .main-content {
-                padding: 16px 12px 20px;
-            }
-
-            .stat-box {
-                padding: 16px 18px;
-            }
-
-            .stat-num {
-                font-size: 1.1rem;
-            }
-
-            .stat-badge {
-                width: 36px;
-                height: 36px;
-                font-size: 1rem;
-                right: 14px;
-                top: 14px;
-            }
-
-            .custom-card .card-body-custom {
-                padding: 16px;
-            }
-
-            .notif-dropdown {
-                width: calc(100vw - 24px);
-                right: -70px;
-            }
+        .btn-edit-detail:hover {
+            background: var(--roasted-brown);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            text-decoration: none;
         }
 
-        /* SIDEBAR OVERLAY */
+        .btn-delete-detail {
+            background: #FEE2E2;
+            color: #991B1B;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-delete-detail:hover {
+            background: #991B1B;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            text-decoration: none;
+        }
+
+        /* ===== SIDEBAR OVERLAY ===== */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -781,9 +575,61 @@
             display: block;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 991.98px) {
+            .sidebar {
+                left: calc(-1 * var(--sidebar-width));
+                box-shadow: none;
+            }
+            .sidebar.open {
+                left: 0;
+                box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px 16px 30px;
+            }
+            .page-header h2 {
+                font-size: 1.3rem;
+            }
+            .notif-dropdown {
+                width: calc(100vw - 32px);
+                right: -60px;
+            }
             .sidebar-overlay.active {
                 display: block;
+            }
+            .detail-card .card-body-custom {
+                padding: 20px;
+            }
+            .detail-image {
+                max-height: 200px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .main-content {
+                padding: 16px 12px 20px;
+            }
+            .detail-card .card-body-custom {
+                padding: 16px;
+            }
+            .detail-card .card-header-custom {
+                padding: 16px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .notif-dropdown {
+                width: calc(100vw - 24px);
+                right: -70px;
+            }
+            .detail-image {
+                max-height: 150px;
+            }
+            .detail-value {
+                font-size: 0.9rem;
+                padding: 6px 12px;
             }
         }
 
@@ -808,7 +654,6 @@
 
 <body>
 
-    
     <!-- SIDEBAR OVERLAY -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -830,6 +675,7 @@
                 <li class="menu-item">
                     <a href="<?= base_url('admin/user'); ?>">
                         <i class="bi bi-people-fill"></i>Manajemen User
+                        <span class="menu-badge">12</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -855,6 +701,7 @@
                 <li class="menu-item">
                     <a href="<?= base_url('admin/transaksi'); ?>">
                         <i class="bi bi-wallet2"></i>Transaksi
+                        <span class="menu-badge">8</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -881,62 +728,232 @@
         </div>
     </div>
 
-    
-<div class="main-content">
-<div class="card-custom">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="detail-label">Nama Produk</div>
-                    <div class="detail-value"><?= $produk->nama_produk; ?></div>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
 
-                    <div class="detail-label">Jenis Kopi</div>
-                    <div class="detail-value"><span class="badge bg-light text-dark border px-3 py-2"><?= $produk->jenis_kopi; ?></span></div>
+        <!-- PAGE HEADER -->
+        <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
+                    style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h2 class="d-inline-block align-middle mb-0">
+                    <i class="bi bi-box-seam-fill" style="color: var(--amber-cream);"></i> Detail Produk
+                </h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-custom">
+                        <li class="breadcrumb-item"><a href="<?= base_url('admin/dashboard'); ?>">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="<?= base_url('admin/produk'); ?>">Manajemen Produk</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><?= $produk->nama_produk ?? 'Detail'; ?></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="d-flex align-items-center gap-3" style="gap: 12px;">
+                <!-- NOTIFICATION -->
+                <div style="position: relative;">
+                    <button class="notif-btn" id="notifToggle">
+                        <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
+                        <?php if (isset($unread_count) && $unread_count > 0): ?>
+                            <span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
+                        <?php else: ?>
+                            <span class="notif-dot" id="notifCount" style="display:none;">0</span>
+                        <?php endif; ?>
+                    </button>
 
-                    <div class="detail-label">Grade Kopi</div>
-                    <div class="detail-value"><?= $produk->grade; ?></div>
-
-                    <div class="detail-label">Harga per Kilogram</div>
-                    <div class="detail-value" style="color: var(--roasted-brown); font-size: 20px;">Rp <?= number_format($produk->harga, 0, ',', '.'); ?></div>
-
-                    <div class="detail-label">Stok Tersedia</div>
-                    <div class="detail-value"><?= $produk->stok_produk; ?> Pcs</div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="detail-label">Altitude (Ketinggian Tanam)</div>
-                    <div class="detail-value"><?= !empty($produk->altitude) ? $produk->altitude : '-'; ?></div>
-
-                    <div class="detail-label">Proses Pengolahan</div>
-                    <div class="detail-value"><?= !empty($produk->proses) ? $produk->proses : '-'; ?></div>
-
-                    <div class="detail-label">Flavor Notes (Catatan Rasa)</div>
-                    <div class="detail-value" style="font-style: italic; font-weight: 500;"><?= !empty($produk->flavor_notes) ? $produk->flavor_notes : '-'; ?></div>
-
-                    <div class="detail-label">Status Penjualan</div>
-                    <div class="detail-value">
-                        <span class="badge <?= strtolower($produk->status_produk) == 'aktif' ? 'badge-success' : 'badge-danger'; ?> px-3 py-2">
-                            <?= $produk->status_produk; ?>
-                        </span>
+                    <div class="notif-dropdown" id="notifDropdown">
+                        <div class="notif-dropdown-header">
+                            <span>
+                                <?= (isset($unread_count) && $unread_count > 0) ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
+                            </span>
+                            <div>
+                                <?php if (isset($unread_count) && $unread_count > 0): ?>
+                                    <a href="#" id="markAllReadBtn" class="mr-2" style="font-size:0.7rem;">Tandai semua</a>
+                                <?php endif; ?>
+                                <a href="<?= base_url('admin/dashboard/history'); ?>" style="font-size:0.7rem;">Lihat Semua</a>
+                            </div>
+                        </div>
+                        <div class="notif-dropdown-list" id="notifList">
+                            <?php if (!empty($notifikasi)): ?>
+                                <?php foreach ($notifikasi as $n): ?>
+                                    <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>" 
+                                       href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
+                                        <?php
+                                        $icon_type = $n['icon'] ?? 'info';
+                                        $icon_map = [
+                                            'success' => 'bi-check-circle-fill',
+                                            'warning' => 'bi-exclamation-triangle-fill',
+                                            'danger' => 'bi-x-circle-fill',
+                                            'info' => 'bi-info-circle-fill'
+                                        ];
+                                        $icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+                                        ?>
+                                        <div class="notif-icon <?= $icon_type; ?>">
+                                            <i class="bi <?= $icon_class; ?>"></i>
+                                        </div>
+                                        <div class="notif-text">
+                                            <?= htmlspecialchars($n['isi_notifikasi']); ?>
+                                            <span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+                                        </div>
+                                        <?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
+                                            <span class="notif-badge-new">Baru</span>
+                                        <?php endif; ?>
+                                    </a>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="text-center text-muted py-5 px-3">
+                                    <i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
+                                    <p class="small mb-0">Tidak ada notifikasi</p>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="p-2 text-center border-top" style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+                            <a href="<?= base_url('admin/dashboard/settings'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
+                                <i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-12 mt-3">
-                    <div class="detail-label">Deskripsi Produk</div>
-                    <div class="p-3 bg-light rounded" style="font-size: 15px; color: #555; line-height: 1.6; border: 1px solid #E2DCD5;">
-                        <?= !empty($produk->deskripsi) ? nl2br($produk->deskripsi) : 'Tidak ada deskripsi.'; ?>
+                <!-- USER AVATAR -->
+                <div class="d-flex align-items-center gap-2"
+                    style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
+                    <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
+                    <span style="font-weight:500; font-size:0.85rem;"><?= $this->session->userdata('nama') ?? 'Admin' ?></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DETAIL CARD -->
+        <div class="detail-card">
+            <div class="card-header-custom">
+                <h5><i class="bi bi-info-circle-fill" style="color: var(--amber-cream);"></i> Informasi Produk</h5>
+                <div class="d-flex gap-2" style="gap: 8px;">
+                    <a href="<?= base_url('admin/produk/edit/' . $produk->id_produk); ?>" class="btn-edit-detail">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                    <a href="<?= base_url('admin/produk/hapus/' . $produk->id_produk); ?>" class="btn-delete-detail"
+                       onclick="return confirm('Yakin ingin menghapus produk ini?')">
+                        <i class="bi bi-trash"></i> Hapus
+                    </a>
+                </div>
+            </div>
+            <div class="card-body-custom">
+                <div class="row">
+                    <!-- KOLOM KIRI: FOTO -->
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <?php if(!empty($produk->foto_utama)) : ?>
+                            <img src="<?= base_url('uploads/produk/'.$produk->foto_utama); ?>" 
+                                 alt="<?= $produk->nama_produk; ?>" 
+                                 class="detail-image">
+                        <?php else : ?>
+                            <div style="width:100%; height:300px; background:var(--bg-cream); border-radius:12px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(74,44,17,0.06); flex-direction:column; gap:10px;">
+                                <i class="bi bi-image" style="font-size:3rem; color:var(--text-secondary); opacity:0.3;"></i>
+                                <span class="text-muted" style="font-size:0.85rem;">Tidak ada foto</span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- KOLOM KANAN: DETAIL -->
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="detail-group">
+                                    <div class="detail-label">Nama Produk</div>
+                                    <div class="detail-value"><?= $produk->nama_produk; ?></div>
+                                </div>
+
+                                <div class="detail-group">
+                                    <div class="detail-label">Jenis Kopi</div>
+                                    <div class="detail-value">
+                                        <span class="badge-info"><?= $produk->jenis_kopi; ?></span>
+                                    </div>
+                                </div>
+
+                                <div class="detail-group">
+                                    <div class="detail-label">Grade Kopi</div>
+                                    <div class="detail-value">
+                                        <span class="badge-info"><?= $produk->grade; ?></span>
+                                    </div>
+                                </div>
+
+                                <div class="detail-group">
+                                    <div class="detail-label">Harga per Kilogram</div>
+                                    <div class="detail-value" style="color: var(--roasted-brown); font-weight: 700; font-size: 1.1rem;">
+                                        Rp <?= number_format($produk->harga, 0, ',', '.'); ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="detail-group">
+                                    <div class="detail-label">Stok Tersedia</div>
+                                    <div class="detail-value">
+                                        <?= $produk->stok_produk; ?> <small style="color: var(--text-secondary);">kg</small>
+                                    </div>
+                                </div>
+
+                                <div class="detail-group">
+                                    <div class="detail-label">Altitude (Ketinggian Tanam)</div>
+                                    <div class="detail-value"><?= !empty($produk->altitude) ? $produk->altitude : '<span class="text-muted">-</span>'; ?></div>
+                                </div>
+
+                                <div class="detail-group">
+                                    <div class="detail-label">Proses Pengolahan</div>
+                                    <div class="detail-value"><?= !empty($produk->proses) ? $produk->proses : '<span class="text-muted">-</span>'; ?></div>
+                                </div>
+
+                                <div class="detail-group">
+                                    <div class="detail-label">Flavor Notes (Catatan Rasa)</div>
+                                    <div class="detail-value" style="font-style: italic;">
+                                        <?= !empty($produk->flavor_notes) ? $produk->flavor_notes : '<span class="text-muted">-</span>'; ?>
+                                    </div>
+                                </div>
+
+                                <div class="detail-group">
+                                    <div class="detail-label">Status Penjualan</div>
+                                    <div class="detail-value">
+                                        <?php
+                                        $status_class = 'aktif';
+                                        $status_text = $produk->status_produk ?? 'Aktif';
+                                        if (strtolower($status_text) == 'nonaktif') $status_class = 'nonaktif';
+                                        ?>
+                                        <span class="badge-status <?= $status_class; ?>"><?= $status_text; ?></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DESKRIPSI (FULL WIDTH) -->
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <div class="detail-group">
+                                    <div class="detail-label">Deskripsi Produk</div>
+                                    <div class="detail-description">
+                                        <?= !empty($produk->deskripsi) ? nl2br($produk->deskripsi) : '<span class="text-muted">Tidak ada deskripsi.</span>'; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOMBOL KEMBALI -->
+                <div class="mt-4 pt-3 border-top" style="border-color: rgba(74,44,17,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <a href="<?= base_url('admin/produk'); ?>" class="btn-back">
+                        <i class="bi bi-arrow-left"></i> Kembali ke Daftar Produk
+                    </a>
+                    <div class="text-muted" style="font-size:0.75rem;">
+                        <i class="bi bi-clock"></i> ID Produk: #<?= $produk->id_produk; ?>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="text-right mt-4 border-top pt-3">
-                <a href="<?= base_url('admin/produk'); ?>" class="btn btn-secondary px-4" style="border-radius: 8px;">
-                    <i class="bi bi-arrow-left mr-1"></i> Kembali ke List
-                </a>
-            </div>
-        
-</div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // ============================================
@@ -952,196 +969,63 @@
             document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
         }
 
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', toggleSidebar);
-        }
-        if (overlay) {
-            overlay.addEventListener('click', toggleSidebar);
-        }
+        if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+        if (overlay) overlay.addEventListener('click', toggleSidebar);
 
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function(e) {
             if (window.innerWidth > 991.98) return;
             if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
-                if (sidebar.classList.contains('open')) {
-                    toggleSidebar();
-                }
+                if (sidebar.classList.contains('open')) toggleSidebar();
             }
         });
 
         // ============================================
-        // 2. NOTIFICATION DROPDOWN (M11-F01)
+        // 2. NOTIFICATION DROPDOWN
         // ============================================
         const notifToggle = document.getElementById('notifToggle');
         const notifDropdown = document.getElementById('notifDropdown');
 
         if (notifToggle) {
-            notifToggle.addEventListener('click', function (e) {
+            notifToggle.addEventListener('click', function(e) {
                 e.stopPropagation();
                 notifDropdown.classList.toggle('show');
             });
         }
 
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function(e) {
             if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
                 notifDropdown.classList.remove('show');
             }
         });
 
         // ============================================
-        // 3. MARK ALL READ (M11-F03)
+        // 3. MARK ALL READ
         // ============================================
         function markAllRead() {
-            document.querySelectorAll('.notif-item.unread').forEach(item => {
-                item.classList.remove('unread');
-            });
-            document.getElementById('notifCount').textContent = '0';
-            document.getElementById('notifCount').style.display = 'none';
+            if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+                $.ajax({
+                    url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) location.reload();
+                        else alert('Gagal menandai semua notifikasi.');
+                    },
+                    error: function() {
+                        alert('Terjadi kesalahan. Silakan coba lagi.');
+                    }
+                });
+            }
         }
 
-        document.getElementById('markAllRead')?.addEventListener('click', function (e) {
+        document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
             e.preventDefault();
             markAllRead();
         });
 
-        // ============================================
-        // 4. CHART.JS - GRAFIK PANEN (M11-F01)
-        // ============================================
-        let harvestChart;
-
-        function initChart() {
-            const ctx = document.getElementById('harvestChart')?.getContext('2d');
-            if (!ctx) return;
-
-            harvestChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'],
-                    datasets: [{
-                        label: 'Hasil Panen (Kg)',
-                        data: [180, 210, 240, 190, 260, 290, 270, 310, 330, 290, 350, 320],
-                        backgroundColor: 'rgba(230, 161, 92, 0.8)',
-                        borderColor: '#E6A15C',
-                        borderWidth: 2,
-                        borderRadius: 6,
-                        barPercentage: 0.6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            backgroundColor: '#2C1808',
-                            titleColor: '#E6A15C',
-                            bodyColor: '#FAF6F0',
-                            cornerRadius: 8,
-                            padding: 10,
-                            callbacks: {
-                                label: function (context) {
-                                    return context.parsed.y + ' kg';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(74, 44, 17, 0.06)',
-                                drawBorder: false,
-                            },
-                            ticks: {
-                                font: { size: 10, family: 'Plus Jakarta Sans' },
-                                color: '#70655E',
-                                stepSize: 50,
-                                callback: function (value) { return value + ' kg'; }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                font: { size: 10, family: 'Plus Jakarta Sans' },
-                                color: '#70655E',
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function refreshChart() {
-            if (harvestChart) {
-                // Update dengan data baru dari AJAX
-                // $.get('<?= base_url('api/petani/chart_data'); ?>', function(data) {
-                //     harvestChart.data.datasets[0].data = data.values;
-                //     harvestChart.update();
-                // });
-                harvestChart.update();
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            initChart();
-        });
-
-        // ============================================
-        // 5. CURRENT DATE TIME
-        // ============================================
-        function updateDateTime() {
-            const now = new Date();
-            const options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-            const el = document.getElementById('currentDateTime');
-            if (el) {
-                el.textContent = now.toLocaleDateString('id-ID', options);
-            }
-        }
-        updateDateTime();
-        setInterval(updateDateTime, 60000);
-
-        // ============================================
-        // 6. SWITCH HANDLING (M11-F03)
-        // ============================================
-        document.querySelectorAll('.custom-control-input').forEach(switchEl => {
-            switchEl.addEventListener('change', function () {
-                const label = this.closest('.custom-control').querySelector('.custom-control-label');
-                const setting = label ? label.textContent.trim() : 'Unknown';
-                const status = this.checked ? 'diaktifkan' : 'dinonaktifkan';
-
-                // Save to database via AJAX
-                // $.post('<?= base_url('api/petani/notifikasi/setting'); ?>', {
-                //     key: this.id,
-                //     value: this.checked ? 1 : 0
-                // });
-
-                console.log(`Notifikasi ${setting} ${status}`);
-            });
-        });
-
-        console.log('✅ Dashboard Petani siap digunakan!');
-        console.log('📋 Fitur yang tersedia:');
-        console.log('   - KPI Cards (M11-F01)');
-        console.log('   - Grafik Panen (M11-F01)');
-        console.log('   - Produk Terjual (M11-F01)');
-        console.log('   - Pesanan Masuk (M11-F01)');
-        console.log('   - Peringatan Stok (M11-F01)');
-        console.log('   - Jadwal Panen (M11-F01)');
-        console.log('   - Quick Action (M11-F04)');
-        console.log('   - Notifikasi Real-time (M11-F01)');
-        console.log('   - Setting Notifikasi (M11-F03)');
+        console.log('✅ Detail Produk siap digunakan!');
+        console.log('📋 Informasi produk dari database real-time');
     </script>
 </body>
 
 </html>
-
