@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$route['default_controller'] = 'Landing';
+$route['default_controller'] = 'Beranda';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
@@ -88,6 +88,9 @@ $route['admin/mitra/delete/(:num)'] = 'admin/Mitra/delete/$1';
 $route['admin/mitra/toggle/(:num)'] = 'admin/Mitra/toggle/$1';
 
 $route['landing'] = 'Landing/index';
+$route['landing/mitra'] = 'Landing/mitra';
+$route['produk'] = 'Landing/index';
+$route['tentang'] = 'Tentang/index';
 
 // ============================================================
 // MODUL 6: TRANSAKSI
@@ -153,3 +156,7 @@ $route['admin/kurir/hapus/(:num)']       = 'admin/Kurir/hapus/$1';
 $route['admin/kurir/toggle/(:num)']      = 'admin/Kurir/toggle/$1';
 $route['admin/kurir/assign']             = 'admin/Kurir/assign';
 $route['admin/kurir/proses_assign']      = 'admin/Kurir/proses_assign';
+
+// Tambahkan di bagian bawah untuk profile
+$route['pembeli/profil'] = 'pembeli/Profil/index';
+$route['pembeli/profil/update'] = 'pembeli/Profil/update';

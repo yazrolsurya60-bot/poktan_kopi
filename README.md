@@ -1,66 +1,132 @@
-# poktan_kopi
-Seluruh perubahan kode yang di lakukan, di push di repositori ini. 
-# LiberChain – Sistem Manajemen Supply Chain Kopi
+# LiberChain
 
-## Deskripsi Singkat
-Aplikasi **LiberChain** adalah platform berbasis web yang dirancang untuk mengelola seluruh proses rantai pasokan kopi, mulai dari petani, produsen, hingga pembeli. Sistem ini menyediakan dashboard admin premium dengan tampilan modern (tema premium, warna hangat, tipografi *Plus Jakarta Sans*) serta modul manajemen pengguna lengkap.
+## 📖 Gambaran Proyek
 
-## Penjelasan Aplikasi
-LiberChain membantu mengoptimalkan rantai pasokan kopi dengan menyediakan fitur-fitur seperti pelacakan produksi, manajemen stok, laporan penjualan, serta integrasi data real-time antara petani, mitra, kurir, dan pembeli. Sistem ini memanfaatkan arsitektur MVC CodeIgniter untuk memisahkan logika bisnis, data, dan tampilan, memastikan pemeliharaan yang mudah dan skalabilitas.
+**LiberChain** adalah sistem manajemen berbasis web untuk koperasi petani kopi (Poktan). Sistem ini memungkinkan administrator, petani, manajer produk, kurir, dan mitra untuk mengelola:
 
-Dengan antarmuka yang responsif dan desain modern, pengguna dapat mengakses dashboard melalui perangkat desktop maupun mobile, memantau status order, notifikasi, serta melihat statistik performa secara visual menggunakan Chart.js.
+- **Data Lahan** – lokasi, ukuran, pemilik.
+- **Catatan Panen** – data panen periodik per lahan.
+- **Produk** – detail batch kopi, harga, gambar.
+- **Manajemen Pengguna** – admin, petani, kurir, mitra.
+- **Laporan & Dashboard** – visualisasi produksi, penjualan, dan logistik.
 
-## Fitur Utama
-- **Dashboard Admin**: Sidebar premium, statistik ringkas, notifikasi real‑time, dan grafik Chart.js.
-- **Manajemen User** (CRUD): Tambah, edit, hapus, serta aktivasi/non‑aktivasi pengguna dengan peran *Admin*, *Petani*, *Pembeli*, atau *Guest*.
-- **Autentikasi**: Login/logout berbasis session, proteksi akses admin.
-- **Role‑Based Access Control**: Hanya admin yang dapat mengakses modul manajemen.
-- **Responsive Design**: Tata letak menyesuaikan layar desktop hingga mobile.
-- **Styling Premium**: Menggunakan variabel CSS (`--roasted-brown`, `--dark-coffee`, dll.) untuk konsistensi visual.
-- **Tracking**: Real‑time pelacakan status order untuk petani, mitra, kurir, dan pembeli.
-- **Laporan**: Generate laporan penjualan & produksi, dukungan ekspor Excel & PDF.
-- **Manajemen Mitra & Panen**: CRUD lengkap untuk data mitra dan data panen, termasuk pencatatan volume panen, kualitas, tanggal, serta integrasi stok real‑time yang memungkinkan petani memperbarui hasil panen dan admin memantau ketersediaan stok.
-- **API Endpoints**: Penyediaan API untuk integrasi dengan aplikasi pihak ketiga.
-
-
-## Teknologi yang Digunakan
-- **Backend**: CodeIgniter 3 (PHP) – MVC pattern, routing, model `User_model`.
-- **Frontend**: HTML5, Bootstrap 5, CSS custom, JavaScript (jQuery) untuk interaksi AJAX (status toggle).
-- **Database**: MySQL (password disimpan dengan MD5 untuk kompatibilitas legacy).
-
-## Struktur Direktori Penting
-```
-application/
-├─ controllers/
-│   └─ admin/Users.php      # Kontroler CRUD user
-│   └─ admin/Dashboard.php  # Dashboard utama
-├─ models/
-│   └─ User_model.php       # Interaksi DB user
-├─ views/
-│   ├─ admin/
-│   │   ├─ v_dashboard.php # Tampilan dashboard premium
-│   │   ├─ v_manajemen_user.php # Tampilan manajemen user (tema serasi)
-│   │   └─ users/ (add, edit, index)
-└─ config/routes.php        # Routing admin/*
-```
-
-## Cara Menjalankan
-1. Pastikan **XAMPP** (Apache & MySQL) aktif.
-2. Import skema database yang ada di `database.sql` (tidak termasuk dalam repo).
-3. Sesuaikan `application/config/database.php` dengan kredensial lokal.
-4. Jalankan `http://localhost/poktan_kopi/` → masuk ke login admin.
-5. Setelah login, Anda dapat mengakses *Dashboard* dan *Manajemen User*.
-
-## Catatan Pengembangan
-- Email verifikasi dan fitur *Forgot Password* masih dicurigai karena belum terhubung ke server SMTP.
-- Password disimpan menggunakan `md5()`; jika ingin meningkatkan keamanan, ganti dengan `password_hash()` dan migrasi data.
-- Semua tampilan mengikuti tema yang didefinisikan di `v_dashboard.php`; pastikan perubahan CSS dilakukan di sana untuk konsistensi.
+Dibangun dengan **CodeIgniter 3** (PHP) mengikuti arsitektur MVC, aplikasi menyediakan antarmuka bersih dan responsif untuk browser desktop maupun seluler.
 
 ---
-*Repository ini mencatat semua perubahan kode yang dipush ke Git. Pastikan commit secara teratur untuk melacak evolusi aplikasi.*
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
-=======
->>>>>>> d8b8a835a631ab58188cf94e9aa651830be1c284
+## ✨ Fitur Utama
+
+- **Kontrol akses berbasis peran** (Admin, Petani, Kurir, Mitra)
+- Operasi CRUD lengkap untuk lahan, panen, produk, dan pengguna
+- Penanganan unggah foto produk
+- Dashboard interaktif dengan diagram dan tabel
+- Ekspor data (CSV/Excel) untuk data petani dan produk
+- Dukungan multi-bahasa (i18n) untuk masa depan
+- Otentikasi aman & penanganan sesi
+- Desain responsif modern dengan gradien, efek glassmorphism, dan micro‑animasi halus
+
+---
+
+## 🛠️ Teknologi yang Digunakan
+
+| Lapisan | Teknologi |
+|---------|-----------|
+| **Backend** | PHP 7.x, CodeIgniter 3 (MVC) |
+| **Database** | MySQL / MariaDB |
+| **Frontend** | HTML5, CSS3 (vanilla, komponen UI khusus), JavaScript (jQuery) |
+| **Server** | Apache (XAMPP) |
+| **Version Control** | Git |
+
+---
+
+## 📦 Panduan Instalasi
+
+1. **Prasyarat**
+   - XAMPP (Apache, PHP, MySQL) terpasang di Windows.
+   - Composer (opsional, untuk manajemen dependensi di masa depan).
+2. **Clone repositori**
+   ```bash
+   git clone https://github.com/yazrolsurya60-bot/poktan_kopi.git
+   ```
+3. **Konfigurasi basis data**
+   - Buat basis data MySQL baru, misalnya `liberchain`.
+   - Impor file dump SQL `database/poktan_kopi.sql` jika tersedia.
+4. **Perbarui konfigurasi**
+   - Edit `application/config/config.php`:
+     ```php
+     $config['base_url'] = 'http://localhost/poktan_kopi/';
+     $db['default'] = array(
+       'hostname' => 'localhost',
+       'username' => 'root',
+       'password' => '',
+       'database' => 'liberchain',
+       // ... pengaturan lainnya ...
+     );
+     ```
+5. **Setel izin folder**
+   - Pastikan folder `uploads/` dan `application/cache/` dapat ditulisi oleh Apache.
+6. **Jalankan aplikasi**
+   - Mulai layanan Apache & MySQL melalui XAMPP.
+   - Buka `http://localhost/poktan_kopi/` di peramban.
+
+---
+
+## ⚙️ Rincian Konfigurasi
+
+- **Base URL** – didefinisikan di `application/config/config.php`.
+- **Kunci enkripsi** – atur `$config['encryption_key']` untuk keamanan sesi.
+- **Pengaturan email** – konfigurasi SMTP opsional di `application/config/email.php` untuk notifikasi.
+- **Lingkungan** – ubah `$config['environment']` menjadi `development` atau `production` untuk mengatur tingkat laporan error.
+
+---
+
+## 🚀 Menjalankan Secara Lokal
+
+```bash
+# Menggunakan server bawaan PHP (untuk pengujian cepat)
+php -S localhost:8000 -t public
+```
+
+Atau cukup gunakan layanan Apache XAMPP sebagaimana dijelaskan di atas.
+
+---
+
+## 📂 Struktur Direktori
+
+```
+├─ application/            # Inti MVC CodeIgniter
+│   ├─ config/            # File konfigurasi (config.php, routes.php, dll.)
+│   ├─ controllers/       # Kontroler (Welcome.php, admin/, petani/)
+│   ├─ models/            # Model data (Panen_model.php, dll.)
+│   └─ views/             # Template HTML (admin/, petani/, landing/)
+├─ assets/                # CSS, JS, gambar UI
+├─ uploads/               # Gambar produk yang diunggah
+├─ database/              # File dump SQL opsional
+└─ README.md              # Dokumentasi proyek (file ini)
+```
+
+---
+
+## 🤝 Kontribusi
+
+1. Fork repositori.
+2. Buat cabang fitur (`git checkout -b feature/fitur-anda`).
+3. Commit perubahan dengan pesan yang jelas.
+4. Buat Pull Request menuju `main`.
+5. Pastikan semua tes yang ada lulus (`phpunit` – jika ada suite tes).
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dilisensikan di bawah **MIT License** – lihat file `LICENSE` untuk detailnya.
+
+---
+
+## 📞 Dukungan & Kontak
+
+Untuk pertanyaan atau kontribusi, hubungi pemelihara repositori:
+- **GitHub**: https://github.com/yazrolsurya60-bot/poktan_kopi
+---
+
+*Dibuat pada 2026‑06‑25.*

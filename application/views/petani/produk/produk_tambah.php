@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katalog Produk Kopi</title>
+    <title>Tambah Produk Kopi - Petani</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
@@ -182,34 +184,39 @@
             box-shadow: 0 8px 30px rgba(44, 24, 8, 0.08);
         }
 
-        .table-modern thead th {
-            background-color: #f8f9fa;
-            color: #6c757d;
+        .card-header-custom {
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(74, 44, 17, 0.06);
             font-weight: 700;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid #edf2f7 !important;
-            border-top: none !important;
+            font-size: 1.1rem;
+            color: var(--dark-coffee);
         }
 
-        .table-modern tbody td {
-            border-bottom: 1px solid #edf2f7 !important;
-            color: #495057;
+        .card-body-custom {
+            padding: 24px;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            border: 1px solid rgba(74, 44, 17, 0.2);
+            padding: 10px 15px;
             font-size: 0.9rem;
-            vertical-align: middle;
         }
 
-        .table-modern tbody tr:hover {
-            background-color: #fdfcfb;
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--amber-cream);
+            box-shadow: 0 0 0 0.2rem rgba(230, 161, 92, 0.25);
         }
 
         .btn-custom {
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            padding: 8px 20px;
+            padding: 10px 24px;
             border: none;
+            transition: var(--transition-smooth);
         }
 
         .btn-primary-custom {
@@ -222,22 +229,36 @@
             color: white;
         }
 
-        .btn-action {
-            width: 32px;
-            height: 32px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
+        .btn-secondary-custom {
+            background-color: #E5E7EB;
+            color: #4B5563;
+        }
+
+        .btn-secondary-custom:hover {
+            background-color: #D1D5DB;
+            color: #374151;
+        }
+
+        label {
+            font-weight: 600;
             font-size: 0.85rem;
-            color: white;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
         }
 
         /* SCROLLBAR */
-        .sidebar-menu-wrapper::-webkit-scrollbar { width: 3px; }
-        .sidebar-menu-wrapper::-webkit-scrollbar-track { background: transparent; }
-        .sidebar-menu-wrapper::-webkit-scrollbar-thumb { background: rgba(230, 161, 92, 0.3); border-radius: 10px; }
+        .sidebar-menu-wrapper::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .sidebar-menu-wrapper::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-menu-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(230, 161, 92, 0.3);
+            border-radius: 10px;
+        }
     </style>
 </head>
 
@@ -254,7 +275,8 @@
 
         <div class="sidebar-menu-wrapper">
             <ul class="sidebar-menu">
-                <li class="menu-item <?= ($this->uri->segment(2) == 'dashboard' || $this->uri->segment(2) == '') ? 'active' : ''; ?>">
+                <li
+                    class="menu-item <?= ($this->uri->segment(2) == 'dashboard' || $this->uri->segment(2) == '') ? 'active' : ''; ?>">
                     <a href="<?= base_url('petani/dashboard'); ?>">
                         <i class="bi bi-grid-1x2-fill"></i> Dashboard
                     </a>
@@ -296,98 +318,110 @@
 
     <!-- MAIN CONTENT -->
     <div class="main-content">
-        <div class="page-header d-flex justify-content-between align-items-center">
-            <div>
-                <h2 class="font-weight-bold text-dark mb-1">Katalog Produk</h2>
-                <p class="text-muted mb-0" style="font-size: 0.9rem;">Kelola daftar produk kopi yang siap dipasarkan ke pembeli.</p>
-            </div>
-            <a href="<?= base_url('petani/produk/tambah'); ?>" class="btn btn-primary-custom shadow-sm">
-                <i class="fas fa-plus mr-2"></i> Tambah Produk
-            </a>
+        <div class="page-header">
+            <h2 class="font-weight-bold text-dark mb-1">Tambah Produk Baru</h2>
+            <p class="text-muted mb-0" style="font-size: 0.9rem;">Silakan lengkapi spesifikasi produk komoditas kopi
+                untuk ditambahkan ke katalog.</p>
         </div>
 
-        <?php if ($this->session->flashdata('success')): ?>
-            <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
-                <i class="fas fa-check-circle mr-1"></i> <?= $this->session->flashdata('success'); ?>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        <?php endif; ?>
-
         <div class="custom-card">
-            <div class="table-responsive">
-                <table class="table table-modern table-hover mb-0">
-                    <thead>
-                        <tr>
-                            <th class="text-center" width="5%">No</th>
-                            <th width="10%" class="text-center">Foto</th>
-                            <th width="20%">Nama Produk</th>
-                            <th width="15%">Jenis Kopi & Grade</th>
-                            <th width="15%">Harga (Rp)</th>
-                            <th width="10%">Stok</th>
-                            <th width="10%" class="text-center">Status</th>
-                            <th width="15%" class="text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if(!empty($produk)): ?>
-                            <?php $no=1; foreach($produk as $row): ?>
-                            <tr>
-                                <td class="text-center text-muted font-weight-bold"><?= $no++ ?></td>
-                                <td class="text-center">
-                                    <?php if(!empty($row->foto_utama)): ?>
-                                        <img src="<?= base_url('uploads/produk/' . $row->foto_utama) ?>" class="img-thumbnail rounded" style="max-width: 60px; height: 60px; object-fit: cover;">
-                                    <?php else: ?>
-                                        <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted" style="width: 60px; height: 60px; margin: 0 auto;">
-                                            <i class="bi bi-image" style="font-size: 1.5rem;"></i>
-                                        </div>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <span class="font-weight-bold text-dark d-block"><?= htmlspecialchars($row->nama_produk) ?></span>
-                                </td>
-                                <td>
-                                    <span class="text-coffee-primary font-weight-bold"><?= htmlspecialchars($row->jenis_kopi) ?></span><br>
-                                    <small class="text-muted">Grade: <?= htmlspecialchars($row->grade) ?></small>
-                                </td>
-                                <td class="font-weight-bold text-dark">Rp <?= number_format($row->harga, 0, ',', '.') ?></td>
-                                <td>
-                                    <span class="badge badge-light border border-secondary text-dark px-2 py-1"><?= htmlspecialchars($row->stok_produk) ?> Kg</span>
-                                </td>
-                                <td class="text-center">
-                                    <?php if(strtolower($row->status_produk) == 'tersedia'): ?>
-                                        <span class="badge badge-success px-2 py-1">Tersedia</span>
-                                    <?php else: ?>
-                                        <span class="badge badge-danger px-2 py-1">Habis</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td class="text-center">
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <a href="<?= base_url('petani/produk/detail/' . $row->id_produk) ?>" class="btn btn-action mr-1" style="background-color: #5c3d2e;" title="Detail">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="<?= base_url('petani/produk/edit/' . $row->id_produk) ?>" class="btn btn-warning btn-action mr-1" title="Edit">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </a>
-                                        <a href="<?= base_url('petani/produk/hapus/' . $row->id_produk) ?>" class="btn btn-danger btn-action" onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?')" title="Hapus">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
+            <div class="card-body-custom">
+                <form action="<?= base_url('petani/produk/simpan'); ?>" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-4">
+                                <label>Nama Produk</label>
+                                <input type="text" name="nama_produk" class="form-control"
+                                    placeholder="Contoh: Biji Kopi Arabica Organik" required>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label>Jenis Kopi</label>
+                                <select name="jenis_kopi" class="form-control" required>
+                                    <option value="">-- Pilih Jenis Kopi --</option>
+                                    <option value="Arabica">Arabica</option>
+                                    <option value="Robusta">Robusta</option>
+                                    <option value="Liberica">Liberica</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label>Grade</label>
+                                <select name="grade" class="form-control" required>
+                                    <option value="">-- Pilih Grade --</option>
+                                    <option value="A">Grade A</option>
+                                    <option value="AA">Grade AA</option>
+                                    <option value="B">Grade B</option>
+                                    <option value="C">Grade C</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label>Harga (Rp) / Kg</label>
+                                <input type="number" name="harga" class="form-control" placeholder="Contoh: 120000"
+                                    required>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label>Stok Ketersediaan (Kg)</label>
+                                <input type="number" name="stok_produk" class="form-control" placeholder="Contoh: 50"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-4">
+                                <label>Altitude (Ketinggian Tanam)</label>
+                                <input type="text" name="altitude" class="form-control"
+                                    placeholder="Contoh: 1200 - 1500 mdpl">
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label>Proses Pengolahan</label>
+                                <input type="text" name="proses" class="form-control"
+                                    placeholder="Contoh: Full Washed, Natural, Honey">
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label>Flavor Notes (Catatan Rasa)</label>
+                                <textarea class="form-control" rows="2" name="flavor_notes"
+                                    placeholder="Contoh: Fruity, Chocolatey, Nutty..."></textarea>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label>Deskripsi Tambahan</label>
+                                <textarea class="form-control" rows="3" name="deskripsi"
+                                    placeholder="Tuliskan deskripsi lengkap produk kopi Anda..."></textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label>Status Produk</label>
+                                        <select name="status_produk" class="form-control">
+                                            <option value="Tersedia">Tersedia</option>
+                                            <option value="Habis">Habis</option>
+                                        </select>
                                     </div>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="8" class="text-center text-muted py-5 bg-white">
-                                    <i class="fas fa-box-open fa-3x mb-3 text-secondary"></i>
-                                    <h6 class="font-weight-bold text-secondary mb-1">Belum Ada Katalog Produk</h6>
-                                    <small class="text-muted">Tambahkan produk kopi Anda untuk mulai menjual ke pembeli.</small>
-                                </td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label>Foto Produk (Opsional)</label>
+                                        <input type="file" name="foto_utama" class="form-control p-1"
+                                            accept=".jpg,.jpeg,.png">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-right mt-4 pt-3 border-top">
+                        <a href="<?= base_url('petani/produk'); ?>" class="btn btn-secondary-custom mr-2">Batal</a>
+                        <button type="submit" class="btn btn-primary-custom">
+                            <i class="bi bi-save mr-1"></i> Simpan Produk
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -395,4 +429,5 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

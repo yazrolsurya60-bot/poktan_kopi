@@ -22,7 +22,8 @@ class Produk_model extends CI_Model {
 
     public function insert($data)
     {
-        return $this->db->insert($this->table,$data);
+        $this->db->insert($this->table,$data);
+        return $this->db->insert_id();
     }
 
     public function update($id,$data)
@@ -37,5 +38,17 @@ class Produk_model extends CI_Model {
         return $this->db
                     ->where('id_produk',$id)
                     ->delete($this->table);
+    }
+
+    public function insert_galeri($data) {
+        return $this->db->insert('tb_produk_galeri', $data);
+    }
+
+    public function getGaleriByProduk($id) {
+        return $this->db->where('id_produk', $id)->get('tb_produk_galeri')->result();
+    }
+
+    public function delete_galeri($id_galeri) {
+        return $this->db->where('id_galeri', $id_galeri)->delete('tb_produk_galeri');
     }
 }
