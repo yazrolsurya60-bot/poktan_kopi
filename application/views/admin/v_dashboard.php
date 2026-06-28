@@ -857,7 +857,7 @@
                         <?php endif; ?>
                     </button>
 
-                    <!-- NOTIFICATION DROPDOWN -->
+                    <!-- NOTIFICATION DROPDOWN - SUDAH DIPERBAIKI -->
                     <div class="notif-dropdown" id="notifDropdown">
                         <div class="notif-dropdown-header">
                             <span>
@@ -873,9 +873,11 @@
                         <div class="notif-dropdown-list" id="notifList">
                             <?php if (!empty($notifikasi)): ?>
                                 <?php foreach ($notifikasi as $n): ?>
-                                    <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>" href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
+                                    <!-- ✅ PERBAIKAN: Akses OBJECT (->) bukan ARRAY (['']) -->
+                                    <a class="notif-item <?= (isset($n->status_baca) && $n->status_baca == 0) ? 'unread' : ''; ?>" 
+                                       href="<?= base_url('admin/dashboard/read/' . $n->id_notifikasi); ?>">
                                         <?php
-                                        $icon_type = $n['icon'] ?? 'info';
+                                        $icon_type = $n->icon ?? 'info';
                                         $icon_map = [
                                             'success' => 'bi-check-circle-fill',
                                             'warning' => 'bi-exclamation-triangle-fill',
@@ -888,10 +890,10 @@
                                             <i class="bi <?= $icon_class; ?>"></i>
                                         </div>
                                         <div class="notif-text">
-                                            <?= htmlspecialchars($n['isi_notifikasi']); ?>
-                                            <span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+                                            <?= htmlspecialchars($n->isi_notifikasi); ?>
+                                            <span class="notif-time"><?= date('d M Y, H:i', strtotime($n->tanggal_buat)); ?></span>
                                         </div>
-                                        <?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
+                                        <?php if (isset($n->status_baca) && $n->status_baca == 0): ?>
                                             <span class="notif-badge-new">Baru</span>
                                         <?php endif; ?>
                                     </a>
@@ -1029,7 +1031,7 @@
                                         <span class="badge" style="background: <?= $index === 0 ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= $index === 0 ? 'white' : 'var(--text-secondary)'; ?>; width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">
                                             <?= $index + 1; ?>
                                         </span>
-                                        <span style="font-weight:600; font-size:0.85rem;"><?= $product['nama']; ?></span>
+                                        <span style="font-weight:600; font-size:0.85rem;"><?= $product['nama_produk']; ?></span>
                                     </div>
                                     <div class="text-right">
                                         <span style="font-weight:600; font-size:0.85rem;"><?= $product['total_terjual']; ?> kg</span>
