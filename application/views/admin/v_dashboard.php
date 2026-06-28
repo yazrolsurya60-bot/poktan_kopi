@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Sistem Supply Chain Kopi</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
@@ -250,6 +251,7 @@
                 opacity: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -679,37 +681,46 @@
                 left: calc(-1 * var(--sidebar-width));
                 box-shadow: none;
             }
+
             .sidebar.open {
                 left: 0;
                 box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
             }
+
             .main-content {
                 margin-left: 0;
                 padding: 20px 16px 30px;
             }
+
             .page-header h2 {
                 font-size: 1.3rem;
             }
+
             .stat-num {
                 font-size: 1.3rem;
             }
+
             .action-card {
                 padding: 14px 16px;
                 font-size: 0.8rem;
             }
+
             .action-icon {
                 width: 36px;
                 height: 36px;
                 min-width: 36px;
                 font-size: 1rem;
             }
+
             .chart-container {
                 height: 200px;
             }
+
             .notif-dropdown {
                 width: calc(100vw - 32px);
                 right: -60px;
             }
+
             .sidebar-overlay.active {
                 display: block;
             }
@@ -719,12 +730,15 @@
             .main-content {
                 padding: 16px 12px 20px;
             }
+
             .stat-box {
                 padding: 16px 18px;
             }
+
             .stat-num {
                 font-size: 1.1rem;
             }
+
             .stat-badge {
                 width: 36px;
                 height: 36px;
@@ -732,9 +746,11 @@
                 right: 14px;
                 top: 14px;
             }
+
             .custom-card .card-body-custom {
                 padding: 16px;
             }
+
             .notif-dropdown {
                 width: calc(100vw - 24px);
                 right: -70px;
@@ -822,7 +838,7 @@
                 </li>
                 <li class="menu-item">
                     <a href="<?= base_url('admin/laporan'); ?>">
-                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan & Analytics
+                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
                     </a>
                 </li>
             </ul>
@@ -839,11 +855,15 @@
         <!-- PAGE HEADER -->
         <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
             <div>
-                <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle" style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
+                <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
+                    style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
                     <i class="bi bi-list"></i>
                 </button>
                 <h2 class="d-inline-block align-middle mb-0">Dashboard</h2>
-                <p class="subtitle mb-0 mt-1">Selamat datang, Admin! <span id="currentDateTime" style="color: var(--amber-cream); font-weight:500;"></span></p>
+                <p class="subtitle mb-0 mt-1">Selamat datang, <span
+                        style="color: var(--amber-cream); font-weight:600;"><?= $this->session->userdata('nama') ?? 'Admin' ?></span>!
+                    <span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span>
+                </p>
             </div>
             <div class="d-flex align-items-center gap-3" style="gap: 12px;">
                 <!-- NOTIFICATION BELL -->
@@ -865,15 +885,18 @@
                             </span>
                             <div>
                                 <?php if (isset($unread_count) && $unread_count > 0): ?>
-                                    <a href="#" id="markAllReadBtn" class="mr-2" style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
+                                    <a href="#" id="markAllReadBtn" class="mr-2"
+                                        style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
                                 <?php endif; ?>
-                                <a href="<?= base_url('admin/dashboard/history'); ?>" style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
+                                <a href="<?= base_url('admin/dashboard/history'); ?>"
+                                    style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
                             </div>
                         </div>
                         <div class="notif-dropdown-list" id="notifList">
                             <?php if (!empty($notifikasi)): ?>
                                 <?php foreach ($notifikasi as $n): ?>
-                                    <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>" href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
+                                    <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
+                                        href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
                                         <?php
                                         $icon_type = $n['icon'] ?? 'info';
                                         $icon_map = [
@@ -889,7 +912,8 @@
                                         </div>
                                         <div class="notif-text">
                                             <?= htmlspecialchars($n['isi_notifikasi']); ?>
-                                            <span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+                                            <span
+                                                class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
                                         </div>
                                         <?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
                                             <span class="notif-badge-new">Baru</span>
@@ -903,15 +927,18 @@
                                 </div>
                             <?php endif; ?>
                         </div>
-                        <div class="p-2 text-center border-top" style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
-                            <a href="<?= base_url('admin/dashboard/settings'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
+                        <div class="p-2 text-center border-top"
+                            style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+                            <a href="<?= base_url('admin/dashboard/settings'); ?>"
+                                class="small text-secondary font-weight-bold text-decoration-none">
                                 <i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
                             </a>
                         </div>
                     </div>
                 </div>
                 <!-- USER AVATAR -->
-                <div class="d-flex align-items-center gap-2" style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
+                <div class="d-flex align-items-center gap-2"
+                    style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
                     <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
                     <span style="font-weight:500; font-size:0.85rem;">Admin</span>
                 </div>
@@ -919,7 +946,8 @@
         </div>
 
         <!-- QUICK ACTION BUTTONS -->
-        <h5 class="font-weight-bold mb-3" style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
+        <h5 class="font-weight-bold mb-3"
+            style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
             <i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
         </h5>
         <div class="row mb-4">
@@ -955,23 +983,96 @@
             </div>
         </div>
 
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="sidebarMenu">
+            <div class="sidebar-brand">
+                <div class="brand-icon">
+                    <i class="bi bi-patch-check-fill"></i>
+                </div>
+                <span>POKTAN <br><small
+                        style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
+            </div>
+            <div class="sidebar-menu-wrapper">
+                <ul class="sidebar-menu">
+                    <li class="menu-item active">
+                        <a href="<?= base_url('admin/dashboard'); ?>">
+                            <i class="bi bi-grid-1x2-fill"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/user'); ?>">
+                            <i class="bi bi-people-fill"></i>Manajemen User
+                            <span class="menu-badge">12</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/petani'); ?>">
+                            <i class="bi bi-person-badge-fill"></i>Data Petani
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/lahan'); ?>">
+                            <i class="bi bi-map-fill"></i>Manajemen Lahan
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/panen'); ?>">
+                            <i class="bi bi-tree-fill"></i>Manajemen Panen
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/produk'); ?>">
+                            <i class="bi bi-box-seam-fill"></i>Manajemen Produk
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/transaksi'); ?>">
+                            <i class="bi bi-wallet2"></i>Transaksi
+                            <span class="menu-badge">8</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/kurir'); ?>">
+                            <i class="bi bi-truck"></i>Manajemen Kurir
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/mitra'); ?>">
+                            <i class="bi bi-shop"></i>Manajemen Mitra
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/laporan'); ?>">
+                            <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan & Analytics
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="sidebar-footer">
+                <button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
+                    <i class="bi bi-box-arrow-right"></i> Keluar
+                </button>
+            </div>
+        </div>
         <!-- KPI CARDS -->
+        <!-- KPI CARDS - DATA REAL -->
         <div class="row mb-4">
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Total Pendapatan</div>
-                    <h3 class="stat-num">Rp <?= number_format($kpi_total_revenue ?? 87500000, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 12.5% dari bulan lalu</div>
-                    <div class="stat-badge" style="background: var(--amber-cream); color: white;"><i class="bi bi-currency-dollar"></i></div>
+                    <h3 class="stat-num">Rp <?= number_format($kpi_total_revenue ?? 0, 0, ',', '.'); ?></h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
+                    <div class="stat-badge" style="background: var(--amber-cream); color: white;"><i
+                            class="bi bi-currency-dollar"></i></div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Total Transaksi</div>
-                    <h3 class="stat-num"><?= number_format($kpi_transaksi_aktif ?? 156, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 8.3% dari bulan lalu</div>
+                    <h3 class="stat-num"><?= $kpi_transaksi_aktif ?? 0; ?></h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge"><i class="bi bi-receipt"></i></div>
                 </div>
             </div>
@@ -979,8 +1080,8 @@
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Petani Aktif</div>
-                    <h3 class="stat-num"><?= number_format($kpi_petani_terverifikasi ?? 48, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 3 bergabung minggu ini</div>
+                    <h3 class="stat-num"><?= $kpi_petani_terverifikasi ?? 0; ?></h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge"><i class="bi bi-people-fill"></i></div>
                 </div>
             </div>
@@ -988,9 +1089,10 @@
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Mitra Aktif</div>
-                    <h3 class="stat-num"><?= number_format($kpi_mitra_cafe ?? 32, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 2 mitra baru</div>
-                    <div class="stat-badge" style="background: var(--dark-coffee); color: white;"><i class="bi bi-shop"></i></div>
+                    <h3 class="stat-num"><?= $kpi_mitra_cafe ?? 0; ?></h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
+                    <div class="stat-badge" style="background: var(--dark-coffee); color: white;"><i
+                            class="bi bi-shop"></i></div>
                 </div>
             </div>
         </div>
@@ -1002,8 +1104,10 @@
                     <div class="card-header-custom">
                         <h6><i class="bi bi-graph-up-arrow text-warning mr-2"></i> Grafik Penjualan Bulanan</h6>
                         <div>
-                            <span class="badge" style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;"><?= date('Y'); ?></span>
-                            <button class="btn btn-sm btn-link text-muted" onclick="refreshChart()" style="padding:0 4px;">
+                            <span class="badge"
+                                style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;"><?= date('Y'); ?></span>
+                            <button class="btn btn-sm btn-link text-muted" onclick="refreshChart()"
+                                style="padding:0 4px;">
                                 <i class="bi bi-arrow-repeat"></i>
                             </button>
                         </div>
@@ -1024,16 +1128,20 @@
                     <div class="card-body-custom" style="padding: 16px 20px;">
                         <?php if (!empty($produk_terlaris)): ?>
                             <?php foreach ($produk_terlaris as $index => $product): ?>
-                                <div class="d-flex align-items-center justify-content-between py-2 <?= $index < count($produk_terlaris) - 1 ? 'border-bottom' : ''; ?>" style="border-color: rgba(74,44,17,0.05);">
+                                <div class="d-flex align-items-center justify-content-between py-2 <?= $index < count($produk_terlaris) - 1 ? 'border-bottom' : ''; ?>"
+                                    style="border-color: rgba(74,44,17,0.05);">
                                     <div class="d-flex align-items-center gap-2">
-                                        <span class="badge" style="background: <?= $index === 0 ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= $index === 0 ? 'white' : 'var(--text-secondary)'; ?>; width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">
+                                        <span class="badge"
+                                            style="background: <?= $index === 0 ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= $index === 0 ? 'white' : 'var(--text-secondary)'; ?>; width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">
                                             <?= $index + 1; ?>
                                         </span>
                                         <span style="font-weight:600; font-size:0.85rem;"><?= $product['nama']; ?></span>
                                     </div>
                                     <div class="text-right">
-                                        <span style="font-weight:600; font-size:0.85rem;"><?= $product['total_terjual']; ?> kg</span>
-                                        <small class="d-block text-muted" style="font-size:0.7rem;">Rp <?= number_format($product['pendapatan'], 0, ',', '.'); ?></small>
+                                        <span style="font-weight:600; font-size:0.85rem;"><?= $product['total_terjual']; ?>
+                                            kg</span>
+                                        <small class="d-block text-muted" style="font-size:0.7rem;">Rp
+                                            <?= number_format($product['pendapatan'], 0, ',', '.'); ?></small>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -1051,26 +1159,36 @@
                 <div class="custom-card">
                     <div class="card-header-custom">
                         <h6><i class="bi bi-clock-history text-primary mr-2"></i> Pesanan Terbaru</h6>
-                        <a href="<?= base_url('admin/transaksi'); ?>" class="text-muted" style="font-size:0.75rem;">Lihat semua <i class="bi bi-chevron-right"></i></a>
+                        <a href="<?= base_url('admin/transaksi'); ?>" class="text-muted"
+                            style="font-size:0.75rem;">Lihat semua <i class="bi bi-chevron-right"></i></a>
                     </div>
                     <div class="card-body-custom" style="padding:0;">
                         <div class="table-responsive">
                             <table class="table table-custom mb-0">
                                 <thead>
-                                    <tr><th>Invoice</th><th>Metode Bayar</th><th>Total</th><th>Status</th></tr>
+                                    <tr>
+                                        <th>Invoice</th>
+                                        <th>Metode Bayar</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <?php if (!empty($pesanan_terbaru)): ?>
                                         <?php foreach ($pesanan_terbaru as $order): ?>
                                             <tr>
                                                 <td><b>#<?= $order['id_transaksi']; ?></b></td>
-                                                <td><?= $order['metode_bayar']; ?></td>
-                                                <td>Rp <?= number_format($order['total_harga'], 0, ',', '.'); ?></td>
-                                                <td><span class="status-badge <?= strtolower($order['status_pesanan']); ?>"><?= ucfirst($order['status_pesanan']); ?></span></td>
+                                                <td><?= $order['metode_bayar'] ?? 'Transfer'; ?></td>
+                                                <td>Rp <?= number_format($order['total_harga'] ?? 0, 0, ',', '.'); ?></td>
+                                                <td><span
+                                                        class="status-badge <?= strtolower($order['status_pesanan'] ?? 'pending'); ?>"><?= ucfirst($order['status_pesanan'] ?? 'Pending'); ?></span>
+                                                </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
-                                        <tr><td colspan="4" class="text-center py-3 text-muted">Belum ada pesanan</td></tr>
+                                        <tr>
+                                            <td colspan="4" class="text-center py-3 text-muted">Belum ada pesanan</td>
+                                        </tr>
                                     <?php endif; ?>
                                 </tbody>
                             </table>
@@ -1082,13 +1200,19 @@
                 <div class="custom-card">
                     <div class="card-header-custom">
                         <h6><i class="bi bi-person-plus-fill text-success mr-2"></i> Petani Baru</h6>
-                        <a href="<?= base_url('admin/petani'); ?>" class="text-muted" style="font-size:0.75rem;">Lihat semua <i class="bi bi-chevron-right"></i></a>
+                        <a href="<?= base_url('admin/petani'); ?>" class="text-muted" style="font-size:0.75rem;">Lihat
+                            semua <i class="bi bi-chevron-right"></i></a>
                     </div>
                     <div class="card-body-custom" style="padding:0;">
                         <div class="table-responsive">
                             <table class="table table-custom mb-0">
                                 <thead>
-                                    <tr><th>Nama Petani</th><th>Status</th><th>Tgl Daftar</th><th>Verifikasi</th></tr>
+                                    <tr>
+                                        <th>Nama Petani</th>
+                                        <th>Status</th>
+                                        <th>Tgl Daftar</th>
+                                        <th>Verifikasi</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <?php if (!empty($petani_baru)): ?>
@@ -1096,12 +1220,17 @@
                                             <tr>
                                                 <td><b><?= $farmer['nama_petani']; ?></b></td>
                                                 <td><?= $farmer['status_petani'] == 'Active' ? 'Aktif' : 'Menunggu'; ?></td>
-                                                <td><?= date('d-m-Y', strtotime($farmer['tanggal_daftar'])); ?></td>
-                                                <td><span class="status-badge <?= $farmer['status_petani'] === 'Active' ? 'complete' : 'pending'; ?>"><?= $farmer['status_petani'] === 'Active' ? 'Terverifikasi' : 'Review'; ?></span></td>
+                                                <td><?= date('d-m-Y', strtotime($farmer['tanggal_daftar'] ?? date('Y-m-d'))); ?>
+                                                </td>
+                                                <td><span
+                                                        class="status-badge <?= ($farmer['status_petani'] ?? 'Pending') === 'Active' ? 'complete' : 'pending'; ?>"><?= ($farmer['status_petani'] ?? 'Pending') === 'Active' ? 'Terverifikasi' : 'Review'; ?></span>
+                                                </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
-                                        <tr><td colspan="4" class="text-center py-3 text-muted">Belum ada petani baru</td></tr>
+                                        <tr>
+                                            <td colspan="4" class="text-center py-3 text-muted">Belum ada petani baru</td>
+                                        </tr>
                                     <?php endif; ?>
                                 </tbody>
                             </table>
@@ -1111,26 +1240,28 @@
             </div>
         </div>
 
-        <!-- SETTING NOTIFIKASI -->
+        <!-- SETTING NOTIFIKASI - SESUAI ROLE ADMIN -->
         <div class="row">
             <div class="col-12">
                 <div class="custom-card">
                     <div class="card-header-custom">
                         <h6><i class="bi bi-gear-fill text-secondary mr-2"></i> Preferensi Notifikasi</h6>
-                        <span class="badge" style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;">Pengaturan</span>
+                        <span class="badge"
+                            style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;">Pengaturan</span>
                     </div>
                     <div class="card-body-custom">
                         <?php
+                        // Default settings untuk Admin
                         $default_settings = [
-                            'notifTransaksi' => 1,
-                            'notifPembayaran' => 1,
-                            'notifStok' => 1,
-                            'notifLaporan' => 0,
-                            'notifPetani' => 1,
-                            'notifKurir' => 1,
-                            'notifPromo' => 0,
-                            'notifSistem' => 1
+                            'notif_transaksi' => 1,
+                            'notif_pembayaran' => 1,
+                            'notif_stok' => 1,
+                            'notif_petani' => 1,
+                            'notif_kurir' => 1,
+                            'notif_laporan' => 0,
+                            'notif_sistem' => 1
                         ];
+
                         if (!empty($settings)) {
                             foreach ($default_settings as $key => $value) {
                                 if (isset($settings[$key])) {
@@ -1143,58 +1274,68 @@
                             <div class="row">
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifTransaksi" name="notifTransaksi" <?= $default_settings['notifTransaksi'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifTransaksi" style="font-size:0.85rem;">Transaksi Baru</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_transaksi"
+                                            name="notif_transaksi" <?= $default_settings['notif_transaksi'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_transaksi"
+                                            style="font-size:0.85rem;">Transaksi Baru</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifPembayaran" name="notifPembayaran" <?= $default_settings['notifPembayaran'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifPembayaran" style="font-size:0.85rem;">Konfirmasi Bayar</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_pembayaran"
+                                            name="notif_pembayaran" <?= $default_settings['notif_pembayaran'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_pembayaran"
+                                            style="font-size:0.85rem;">Konfirmasi Bayar</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifStok" name="notifStok" <?= $default_settings['notifStok'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifStok" style="font-size:0.85rem;">Peringatan Stok</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_stok"
+                                            name="notif_stok" <?= $default_settings['notif_stok'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_stok"
+                                            style="font-size:0.85rem;">Peringatan Stok</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifLaporan" name="notifLaporan" <?= $default_settings['notifLaporan'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifLaporan" style="font-size:0.85rem;">Laporan Bulanan</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_petani"
+                                            name="notif_petani" <?= $default_settings['notif_petani'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_petani"
+                                            style="font-size:0.85rem;">Registrasi Petani</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifPetani" name="notifPetani" <?= $default_settings['notifPetani'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifPetani" style="font-size:0.85rem;">Registrasi Petani</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_kurir"
+                                            name="notif_kurir" <?= $default_settings['notif_kurir'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_kurir"
+                                            style="font-size:0.85rem;">Status Pengiriman</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifKurir" name="notifKurir" <?= $default_settings['notifKurir'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifKurir" style="font-size:0.85rem;">Status Pengiriman</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_laporan"
+                                            name="notif_laporan" <?= $default_settings['notif_laporan'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_laporan"
+                                            style="font-size:0.85rem;">Laporan Bulanan</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifPromo" name="notifPromo" <?= $default_settings['notifPromo'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifPromo" style="font-size:0.85rem;">Promo & Diskon</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6 mb-2">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifSistem" name="notifSistem" <?= $default_settings['notifSistem'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifSistem" style="font-size:0.85rem;">Update Sistem</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_sistem"
+                                            name="notif_sistem" <?= $default_settings['notif_sistem'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_sistem"
+                                            style="font-size:0.85rem;">Update Sistem</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="mt-3 pt-2 border-top" style="border-color: rgba(74,44,17,0.06);">
-                                <button type="submit" class="btn" style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
+                                <button type="submit" class="btn"
+                                    style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
                                     <i class="bi bi-save mr-1"></i> Simpan Pengaturan
                                 </button>
-                                <button type="button" class="btn btn-link text-muted" style="font-size:0.85rem;" onclick="markAllRead()">
+                                <button type="button" class="btn btn-link text-muted" style="font-size:0.85rem;"
+                                    onclick="markAllRead()">
                                     <i class="bi bi-check2-all mr-1"></i> Tandai Semua Dibaca
                                 </button>
                             </div>
@@ -1223,7 +1364,7 @@
         if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
         if (overlay) overlay.addEventListener('click', toggleSidebar);
 
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (window.innerWidth > 991.98) return;
             if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
                 if (sidebar.classList.contains('open')) toggleSidebar();
@@ -1235,13 +1376,13 @@
         const notifDropdown = document.getElementById('notifDropdown');
 
         if (notifToggle) {
-            notifToggle.addEventListener('click', function(e) {
+            notifToggle.addEventListener('click', function (e) {
                 e.stopPropagation();
                 notifDropdown.classList.toggle('show');
             });
         }
 
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
                 notifDropdown.classList.remove('show');
             }
@@ -1254,18 +1395,18 @@
                     url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
                     type: 'POST',
                     dataType: 'json',
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) location.reload();
                         else alert('Gagal menandai semua notifikasi.');
                     },
-                    error: function() {
+                    error: function () {
                         alert('Terjadi kesalahan. Silakan coba lagi.');
                     }
                 });
             }
         }
 
-        document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
+        document.getElementById('markAllReadBtn')?.addEventListener('click', function (e) {
             e.preventDefault();
             markAllRead();
         });
@@ -1278,7 +1419,7 @@
             if (!ctx) return;
 
             const chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
-            const chartData = <?= isset($grafik_values) ? json_encode($grafik_values) : json_encode([120, 150, 180, 140, 200, 230, 210, 250, 270, 240, 300, 280]); ?>;
+            const chartData = <?= isset($grafik_penjualan['values']) ? json_encode($grafik_penjualan['values']) : json_encode(array_fill(0, 12, 0)); ?>;
 
             salesChart = new Chart(ctx, {
                 type: 'line',
@@ -1311,7 +1452,7 @@
                             cornerRadius: 8,
                             padding: 10,
                             callbacks: {
-                                label: function(context) {
+                                label: function (context) {
                                     return context.parsed.y + ' kg';
                                 }
                             }
@@ -1321,7 +1462,7 @@
                         y: {
                             beginAtZero: true,
                             grid: { color: 'rgba(74, 44, 17, 0.06)', drawBorder: false },
-                            ticks: { font: { size: 10, family: 'Plus Jakarta Sans' }, color: '#70655E', stepSize: 50, callback: function(value) { return value + ' kg'; } }
+                            ticks: { font: { size: 10, family: 'Plus Jakarta Sans' }, color: '#70655E', stepSize: 50, callback: function (value) { return value + ' kg'; } }
                         },
                         x: {
                             grid: { display: false },
@@ -1335,7 +1476,7 @@
 
         function refreshChart() {
             if (salesChart) {
-                $.get('<?= base_url('admin/dashboard/get_chart_data'); ?>', function(data) {
+                $.get('<?= base_url('admin/dashboard/get_chart_data'); ?>', function (data) {
                     if (data.success) {
                         salesChart.data.datasets[0].data = data.values;
                         salesChart.update();
@@ -1344,7 +1485,7 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             initChart();
         });
 
@@ -1359,15 +1500,24 @@
         setInterval(updateDateTime, 60000);
 
         // Switch handling
-        document.querySelectorAll('.custom-control-input').forEach(function(switchEl) {
-            switchEl.addEventListener('change', function() {
+        document.querySelectorAll('.custom-control-input').forEach(function (switchEl) {
+            switchEl.addEventListener('change', function () {
                 const label = this.closest('.custom-control').querySelector('.custom-control-label');
                 const setting = label ? label.textContent.trim() : 'Unknown';
                 console.log('Notifikasi ' + setting + (this.checked ? ' diaktifkan' : ' dinonaktifkan'));
             });
         });
 
-        console.log('✅ Dashboard siap digunakan!');
+        console.log('✅ Dashboard Admin siap digunakan!');
+        console.log('📋 Fitur yang tersedia:');
+        console.log('   - KPI Cards (M11-F01) - Data Real');
+        console.log('   - Grafik Penjualan (M10-F02) - Data Real');
+        console.log('   - Produk Terlaris (M10-F04) - Data Real');
+        console.log('   - Pesanan Terbaru (M11-F01) - Data Real');
+        console.log('   - Petani Baru (M11-F01) - Data Real');
+        console.log('   - Quick Action (M11-F04)');
+        console.log('   - Notifikasi Real-time (M11-F01)');
+        console.log('   - Setting Notifikasi (M11-F03) - Sesuai Role Admin');
     </script>
 </body>
 
