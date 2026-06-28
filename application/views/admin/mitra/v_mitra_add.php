@@ -202,7 +202,7 @@
             <!-- USER BADGE -->
             <div class="user-badge">
                 <i class="bi bi-person-circle" style="font-size:1.4rem;color:var(--amber-cream);"></i>
-                <div><div style="font-size:0.82rem;font-weight:600;line-height:1.2;">Admin</div><span class="role-pill">Administrator</span></div>
+                <div><div style="font-size:0.82rem;font-weight:600;line-height:1.2;">Admin</div></div>
             </div>
         </div>
     </div>
