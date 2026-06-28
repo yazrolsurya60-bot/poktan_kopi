@@ -166,11 +166,7 @@
                     <span class="menu-badge">2</span>
                 </a>
             </li>
-            <li class="menu-item">
-                <a href="<?= base_url('pembeli/poin'); ?>">
-                    <i class="bi bi-gift-fill"></i>Tukar Poin Hadiah
-                </a>
-            </li>
+        
             <li class="menu-item">
                 <a href="<?= base_url('pembeli/profil'); ?>">
                     <i class="bi bi-person-fill"></i>Profil Saya

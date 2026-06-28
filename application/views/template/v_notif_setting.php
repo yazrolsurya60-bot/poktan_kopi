@@ -323,28 +323,61 @@
 
         <form method="POST" action="<?= base_url($this->session->userdata('role') . '/dashboard/settings'); ?>">
 
+            <?php 
+            $role = $this->session->userdata('role');
+            $is_admin = ($role == 'Admin');
+            $is_petani = ($role == 'Petani');
+            $is_pembeli = ($role == 'Pembeli');
+            ?>
+
+            <!-- ============================================ -->
             <!-- KATEGORI: TRANSAKSI & PEMBAYARAN -->
+            <!-- ============================================ -->
             <div class="category-header">
                 <i class="bi bi-credit-card"></i> TRANSAKSI & PEMBAYARAN
             </div>
 
-            <div class="switch-group">
-                <div class="switch-icon" style="background: #DBEAFE; color: #1E40AF;">
-                    <i class="bi bi-cart-plus"></i>
-                </div>
-                <div class="switch-content">
-                    <div class="switch-label">
-                        <span>Lansiran Transaksi Masuk Baru</span>
-                        <div class="custom-switch ml-auto">
-                            <input type="checkbox" class="custom-control-input" id="notif_transaksi" name="notif_transaksi"
-                                <?= isset($settings['notif_transaksi']) && $settings['notif_transaksi'] == 1 ? 'checked' : ''; ?>>
-                            <label class="custom-control-label" for="notif_transaksi"></label>
-                        </div>
+            <!-- Transaksi Baru (Admin & Petani) -->
+            <?php if ($is_admin || $is_petani): ?>
+                <div class="switch-group">
+                    <div class="switch-icon" style="background: #DBEAFE; color: #1E40AF;">
+                        <i class="bi bi-cart-plus"></i>
                     </div>
-                    <small class="switch-desc">Dapatkan pesan instan setiap kali ada order masuk atau pembayaran.</small>
+                    <div class="switch-content">
+                        <div class="switch-label">
+                            <span><?= $is_admin ? 'Lansiran Transaksi Masuk Baru' : 'Lansiran Pesanan Baru' ?></span>
+                            <div class="custom-switch ml-auto">
+                                <input type="checkbox" class="custom-control-input" id="notif_transaksi" name="notif_transaksi"
+                                    <?= isset($settings['notif_transaksi']) && $settings['notif_transaksi'] == 1 ? 'checked' : ''; ?>>
+                                <label class="custom-control-label" for="notif_transaksi"></label>
+                            </div>
+                        </div>
+                        <small class="switch-desc"><?= $is_admin ? 'Dapatkan pesan instan setiap kali ada order masuk.' : 'Notifikasi saat ada pesanan baru dari pembeli.' ?></small>
+                    </div>
                 </div>
-            </div>
+            <?php endif; ?>
 
+            <!-- Status Pesanan (Pembeli) -->
+            <?php if ($is_pembeli): ?>
+                <div class="switch-group">
+                    <div class="switch-icon" style="background: #DBEAFE; color: #1E40AF;">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    <div class="switch-content">
+                        <div class="switch-label">
+                            <span>Lansiran Status Pesanan</span>
+                            <div class="custom-switch ml-auto">
+                                <input type="checkbox" class="custom-control-input" id="notif_pesanan" name="notif_pesanan"
+                                    <?= isset($settings['notif_pesanan']) && $settings['notif_pesanan'] == 1 ? 'checked' : ''; ?>>
+                                <label class="custom-control-label" for="notif_pesanan"></label>
+                            </div>
+                        </div>
+                        <small class="switch-desc">Notifikasi setiap ada perubahan status pesanan Anda.</small>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Konfirmasi Pembayaran (Semua Role) -->
             <div class="switch-group">
                 <div class="switch-icon" style="background: #D1FAE5; color: #065F46;">
                     <i class="bi bi-check-circle"></i>
@@ -362,116 +395,144 @@
                 </div>
             </div>
 
+            <!-- ============================================ -->
             <!-- KATEGORI: STOK & PRODUK -->
-            <div class="category-header">
-                <i class="bi bi-box-seam"></i> STOK & PRODUK
-            </div>
-
-            <div class="switch-group">
-                <div class="switch-icon" style="background: #FEF3C7; color: #92400E;">
-                    <i class="bi bi-exclamation-triangle"></i>
+            <!-- ============================================ -->
+            <?php if ($is_admin || $is_petani): ?>
+                <div class="category-header">
+                    <i class="bi bi-box-seam"></i> STOK & PRODUK
                 </div>
-                <div class="switch-content">
-                    <div class="switch-label">
-                        <span>Lansiran Peringatan Minimum Stok</span>
-                        <div class="custom-switch ml-auto">
-                            <input type="checkbox" class="custom-control-input" id="notif_stok" name="notif_stok"
-                                <?= isset($settings['notif_stok']) && $settings['notif_stok'] == 1 ? 'checked' : ''; ?>>
-                            <label class="custom-control-label" for="notif_stok"></label>
-                        </div>
+
+                <!-- Peringatan Stok (Admin & Petani) -->
+                <div class="switch-group">
+                    <div class="switch-icon" style="background: #FEF3C7; color: #92400E;">
+                        <i class="bi bi-exclamation-triangle"></i>
                     </div>
-                    <small class="switch-desc">Kirim peringatan otomatis saat stok kopi di gudang mencapai batas minimum.</small>
+                    <div class="switch-content">
+                        <div class="switch-label">
+                            <span>Lansiran Peringatan Minimum Stok</span>
+                            <div class="custom-switch ml-auto">
+                                <input type="checkbox" class="custom-control-input" id="notif_stok" name="notif_stok"
+                                    <?= isset($settings['notif_stok']) && $settings['notif_stok'] == 1 ? 'checked' : ''; ?>>
+                                <label class="custom-control-label" for="notif_stok"></label>
+                            </div>
+                        </div>
+                        <small class="switch-desc">Kirim peringatan otomatis saat stok kopi di gudang mencapai batas minimum.</small>
+                    </div>
                 </div>
-            </div>
+            <?php endif; ?>
 
+            <!-- ============================================ -->
             <!-- KATEGORI: PENGIRIMAN & KURIR -->
-            <div class="category-header">
-                <i class="bi bi-truck"></i> PENGIRIMAN & KURIR
-            </div>
-
-            <div class="switch-group">
-                <div class="switch-icon" style="background: #EDE9FE; color: #5B21B6;">
-                    <i class="bi bi-geo-alt"></i>
+            <!-- ============================================ -->
+            <?php if ($is_admin || $is_petani || $is_pembeli): ?>
+                <div class="category-header">
+                    <i class="bi bi-truck"></i> PENGIRIMAN & KURIR
                 </div>
-                <div class="switch-content">
-                    <div class="switch-label">
-                        <span>Lansiran Status Pengiriman</span>
-                        <div class="custom-switch ml-auto">
-                            <input type="checkbox" class="custom-control-input" id="notif_kurir" name="notif_kurir"
-                                <?= isset($settings['notif_kurir']) && $settings['notif_kurir'] == 1 ? 'checked' : ''; ?>>
-                            <label class="custom-control-label" for="notif_kurir"></label>
-                        </div>
+
+                <!-- Status Pengiriman (Admin & Petani & Pembeli) -->
+                <div class="switch-group">
+                    <div class="switch-icon" style="background: #EDE9FE; color: #5B21B6;">
+                        <i class="bi bi-geo-alt"></i>
                     </div>
-                    <small class="switch-desc">Update tracking kurir dan status pengiriman pesanan Anda.</small>
+                    <div class="switch-content">
+                        <div class="switch-label">
+                            <span><?= $is_pembeli ? 'Lansiran Tracking Kiriman' : 'Lansiran Status Pengiriman' ?></span>
+                            <div class="custom-switch ml-auto">
+                                <input type="checkbox" class="custom-control-input" id="notif_kurir" name="notif_kurir"
+                                    <?= isset($settings['notif_kurir']) && $settings['notif_kurir'] == 1 ? 'checked' : ''; ?>>
+                                <label class="custom-control-label" for="notif_kurir"></label>
+                            </div>
+                        </div>
+                        <small class="switch-desc"><?= $is_pembeli ? 'Update tracking kurir dan status pengiriman pesanan Anda.' : 'Update tracking kurir dan status pengiriman.' ?></small>
+                    </div>
                 </div>
-            </div>
+            <?php endif; ?>
 
+            <!-- ============================================ -->
             <!-- KATEGORI: PENGGUNA & REGISTRASI -->
-            <div class="category-header">
-                <i class="bi bi-people"></i> PENGGUNA & REGISTRASI
-            </div>
-
-            <div class="switch-group">
-                <div class="switch-icon" style="background: #FDE68A; color: #78350F;">
-                    <i class="bi bi-person-plus"></i>
+            <!-- ============================================ -->
+            <?php if ($is_admin): ?>
+                <div class="category-header">
+                    <i class="bi bi-people"></i> PENGGUNA & REGISTRASI
                 </div>
-                <div class="switch-content">
-                    <div class="switch-label">
-                        <span>Lansiran Registrasi Petani Baru</span>
-                        <div class="custom-switch ml-auto">
-                            <input type="checkbox" class="custom-control-input" id="notif_petani" name="notif_petani"
-                                <?= isset($settings['notif_petani']) && $settings['notif_petani'] == 1 ? 'checked' : ''; ?>>
-                            <label class="custom-control-label" for="notif_petani"></label>
-                        </div>
+
+                <!-- Registrasi Petani (Hanya Admin) -->
+                <div class="switch-group">
+                    <div class="switch-icon" style="background: #FDE68A; color: #78350F;">
+                        <i class="bi bi-person-plus"></i>
                     </div>
-                    <small class="switch-desc">Notifikasi saat ada petani baru yang mendaftar di platform.</small>
+                    <div class="switch-content">
+                        <div class="switch-label">
+                            <span>Lansiran Registrasi Petani Baru</span>
+                            <div class="custom-switch ml-auto">
+                                <input type="checkbox" class="custom-control-input" id="notif_petani" name="notif_petani"
+                                    <?= isset($settings['notif_petani']) && $settings['notif_petani'] == 1 ? 'checked' : ''; ?>>
+                                <label class="custom-control-label" for="notif_petani"></label>
+                            </div>
+                        </div>
+                        <small class="switch-desc">Notifikasi saat ada petani baru yang mendaftar di platform.</small>
+                    </div>
                 </div>
-            </div>
+            <?php endif; ?>
 
+            <!-- ============================================ -->
             <!-- KATEGORI: PROMO & LAPORAN -->
-            <div class="category-header">
-                <i class="bi bi-megaphone"></i> PROMO & LAPORAN
-            </div>
-
-            <div class="switch-group">
-                <div class="switch-icon" style="background: #FCE4EC; color: #C62828;">
-                    <i class="bi bi-gift"></i>
+            <!-- ============================================ -->
+            <?php if ($is_admin || $is_petani || $is_pembeli): ?>
+                <div class="category-header">
+                    <i class="bi bi-megaphone"></i> PROMO & LAPORAN
                 </div>
-                <div class="switch-content">
-                    <div class="switch-label">
-                        <span>Lansiran Promo & Diskon</span>
-                        <div class="custom-switch ml-auto">
-                            <input type="checkbox" class="custom-control-input" id="notif_promo" name="notif_promo"
-                                <?= isset($settings['notif_promo']) && $settings['notif_promo'] == 1 ? 'checked' : ''; ?>>
-                            <label class="custom-control-label" for="notif_promo"></label>
+
+                <!-- Promo & Diskon (Hanya Pembeli) -->
+                <?php if ($is_pembeli): ?>
+                    <div class="switch-group">
+                        <div class="switch-icon" style="background: #FCE4EC; color: #C62828;">
+                            <i class="bi bi-gift"></i>
+                        </div>
+                        <div class="switch-content">
+                            <div class="switch-label">
+                                <span>Lansiran Promo & Diskon</span>
+                                <div class="custom-switch ml-auto">
+                                    <input type="checkbox" class="custom-control-input" id="notif_promo" name="notif_promo"
+                                        <?= isset($settings['notif_promo']) && $settings['notif_promo'] == 1 ? 'checked' : ''; ?>>
+                                    <label class="custom-control-label" for="notif_promo"></label>
+                                </div>
+                            </div>
+                            <small class="switch-desc">Informasi promo dan diskon spesial untuk pelanggan setia.</small>
                         </div>
                     </div>
-                    <small class="switch-desc">Informasi promo dan diskon spesial untuk pelanggan setia.</small>
-                </div>
-            </div>
+                <?php endif; ?>
 
-            <div class="switch-group">
-                <div class="switch-icon" style="background: #E8EAF6; color: #283593;">
-                    <i class="bi bi-file-earmark-text"></i>
-                </div>
-                <div class="switch-content">
-                    <div class="switch-label">
-                        <span>Lansiran Laporan Bulanan</span>
-                        <div class="custom-switch ml-auto">
-                            <input type="checkbox" class="custom-control-input" id="notif_laporan" name="notif_laporan"
-                                <?= isset($settings['notif_laporan']) && $settings['notif_laporan'] == 1 ? 'checked' : ''; ?>>
-                            <label class="custom-control-label" for="notif_laporan"></label>
+                <!-- Laporan Bulanan (Admin & Petani) -->
+                <?php if ($is_admin || $is_petani): ?>
+                    <div class="switch-group">
+                        <div class="switch-icon" style="background: #E8EAF6; color: #283593;">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                        <div class="switch-content">
+                            <div class="switch-label">
+                                <span>Lansiran Laporan Bulanan</span>
+                                <div class="custom-switch ml-auto">
+                                    <input type="checkbox" class="custom-control-input" id="notif_laporan" name="notif_laporan"
+                                        <?= isset($settings['notif_laporan']) && $settings['notif_laporan'] == 1 ? 'checked' : ''; ?>>
+                                    <label class="custom-control-label" for="notif_laporan"></label>
+                                </div>
+                            </div>
+                            <small class="switch-desc">Notifikasi saat laporan bulanan siap untuk diunduh.</small>
                         </div>
                     </div>
-                    <small class="switch-desc">Notifikasi saat laporan bulanan siap untuk diunduh.</small>
-                </div>
-            </div>
+                <?php endif; ?>
+            <?php endif; ?>
 
-            <!-- KATEGORI: SISTEM -->
+            <!-- ============================================ -->
+            <!-- KATEGORI: SISTEM (Semua Role) -->
+            <!-- ============================================ -->
             <div class="category-header">
                 <i class="bi bi-server"></i> SISTEM & MAINTENANCE
             </div>
 
+            <!-- Update Sistem (Semua Role) -->
             <div class="switch-group" style="border-bottom: none;">
                 <div class="switch-icon" style="background: #F3E5F5; color: #6A1B9A;">
                     <i class="bi bi-shield-check"></i>
@@ -497,10 +558,8 @@
 
                 <?php 
                 // ============================================
-                // 🔴 LOGIKA IF UNTUK MENENTUKAN DASHBOARD URL
+                // 🔴 TENTUKAN DASHBOARD URL BERDASARKAN ROLE
                 // ============================================
-                $role = $this->session->userdata('role');
-                
                 if ($role == 'Admin') {
                     $dashboard_url = base_url('admin/dashboard');
                 } elseif ($role == 'Petani') {
@@ -508,7 +567,6 @@
                 } elseif ($role == 'Pembeli') {
                     $dashboard_url = base_url('pembeli/dashboard');
                 } else {
-                    // Fallback: jika role tidak dikenali
                     $dashboard_url = base_url();
                 }
                 ?>

@@ -1,15 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Auth extends CI_Controller {
+class Auth extends CI_Controller
+{
 
-    public function __construct() {
-      parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
         $this->load->model('User_model');
         $this->load->library('form_validation');
     }
 
-    private function check_already_logged_in() {
+    private function check_already_logged_in()
+    {
         if ($this->session->userdata('id_user')) {
             $role = $this->session->userdata('role');
             if ($role === 'Admin') {
@@ -22,7 +25,8 @@ class Auth extends CI_Controller {
         }
     }
 
-    public function login() {
+    public function login()
+    {
         $this->check_already_logged_in();
 
         if ($this->input->post()) {
@@ -38,17 +42,17 @@ class Auth extends CI_Controller {
                 if ($user) {
                     if ($user['status'] === 'Active') {
                         $this->session->set_userdata([
-                            'id_user'   => $user['id_user'],
-                            'username'  => $user['username'],
-                            'nama'      => $user['nama'],
-                            'email'     => $user['email'],
-                            'role'      => $user['role'],
-                            'foto'      => $user['foto'],
-                            'status'    => $user['status']
+                            'id_user' => $user['id_user'],
+                            'username' => $user['username'],
+                            'nama' => $user['nama'],
+                            'email' => $user['email'],
+                            'role' => $user['role'],
+                            'foto' => $user['foto'],
+                            'status' => $user['status']
                         ]);
 
                         $this->session->set_flashdata('success', 'Selamat datang kembali, ' . $user['nama'] . '!');
-                        
+
                         if ($user['role'] === 'Admin') {
                             redirect('admin/dashboard');
                         } elseif ($user['role'] === 'Petani') {
@@ -67,7 +71,7 @@ class Auth extends CI_Controller {
                             ]);
                             $user['verification_token'] = $token;
                         }
-                        
+
                         $this->session->set_flashdata('verify_needed', [
                             'id_user' => $user['id_user'],
                             'email' => $user['email'],
@@ -86,7 +90,8 @@ class Auth extends CI_Controller {
         $this->load->view('auth/v_login');
     }
 
-    public function register() {
+    public function register()
+    {
         $this->check_already_logged_in();
 
         if ($this->input->post()) {
@@ -128,7 +133,8 @@ class Auth extends CI_Controller {
         $this->load->view('auth/v_register');
     }
 
-    public function verify($token) {
+    public function verify($token)
+    {
         $user = $this->User_model->verify_token($token, 'verification');
 
         if ($user) {
@@ -146,7 +152,8 @@ class Auth extends CI_Controller {
         }
     }
 
-    public function forgot_password() {
+    public function forgot_password()
+    {
         $this->check_already_logged_in();
 
         if ($this->input->post()) {
@@ -179,7 +186,8 @@ class Auth extends CI_Controller {
         $this->load->view('auth/v_forgot_password');
     }
 
-    public function reset_password($token) {
+    public function reset_password($token)
+    {
         $this->check_already_logged_in();
         $user = $this->User_model->verify_token($token, 'reset');
 
@@ -208,7 +216,8 @@ class Auth extends CI_Controller {
         $this->load->view('auth/v_reset_password', $data);
     }
 
-    public function profile() {
+    public function profile()
+    {
         if (!$this->session->userdata('id_user')) {
             redirect('auth/login');
         }
@@ -251,10 +260,10 @@ class Auth extends CI_Controller {
                         mkdir('./uploads/profile/', 0777, TRUE);
                     }
 
-                    $config['upload_path']   = './uploads/profile/';
+                    $config['upload_path'] = './uploads/profile/';
                     $config['allowed_types'] = 'gif|jpg|jpeg|png';
-                    $config['max_size']      = 2048;
-                    $config['encrypt_name']  = TRUE;
+                    $config['max_size'] = 2048;
+                    $config['encrypt_name'] = TRUE;
 
                     $this->load->library('upload', $config);
 
@@ -266,7 +275,7 @@ class Auth extends CI_Controller {
 
                         $uploadData = $this->upload->data();
                         $updateData['foto'] = $uploadData['file_name'];
-                        
+
                         // Update session foto
                         $this->session->set_userdata('foto', $uploadData['file_name']);
                     } else {
@@ -315,56 +324,58 @@ class Auth extends CI_Controller {
         }
 
         $data['user'] = $this->User_model->get_by_id($id_user);
-        
+
         // Load layout based on user role to keep the panel context consistent
         $this->load->model('Notifikasi_model');
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        
+
         $this->load->view('auth/v_profile', $data);
     }
 
-	// application/controllers/Auth.php
+    // application/controllers/Auth.php
 
-public function ubah_password() {
-    // Cek login
-    if (!$this->session->userdata('id_user')) {
-        redirect('auth/login');
-    }
+    public function ubah_password()
+    {
+        // Cek login
+        if (!$this->session->userdata('id_user')) {
+            redirect('auth/login');
+        }
 
-    $this->form_validation->set_rules('password_lama', 'Password Lama', 'required');
-    $this->form_validation->set_rules('password_baru', 'Password Baru', 'required|min_length[6]');
-    $this->form_validation->set_rules('konfirmasi_password', 'Konfirmasi Password', 'required|matches[password_baru]');
+        $this->form_validation->set_rules('password_lama', 'Password Lama', 'required');
+        $this->form_validation->set_rules('password_baru', 'Password Baru', 'required|min_length[6]');
+        $this->form_validation->set_rules('konfirmasi_password', 'Konfirmasi Password', 'required|matches[password_baru]');
 
-    if ($this->form_validation->run() == FALSE) {
-        $this->load->view('auth/v_ubah_password');
-    } else {
-        $id_user = $this->session->userdata('id_user');
-        $password_lama = md5($this->input->post('password_lama'));
-        $password_baru = md5($this->input->post('password_baru'));
-
-        // Cek password lama di DATABASE
-        $user = $this->db->get_where('tb_user', [
-            'id_user' => $id_user,
-            'password' => $password_lama
-        ])->row();
-
-        if ($user) {
-            // ✅ UPDATE PASSWORD DI DATABASE
-            $this->db->where('id_user', $id_user)
-                     ->update('tb_user', ['password' => $password_baru]);
-            
-            $this->session->set_flashdata('success', 'Password berhasil diubah!');
-            redirect('auth/ubah_password');
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('auth/v_ubah_password');
         } else {
-            $this->session->set_flashdata('error', 'Password lama salah!');
-            redirect('auth/ubah_password');
+            $id_user = $this->session->userdata('id_user');
+            $password_lama = md5($this->input->post('password_lama'));
+            $password_baru = md5($this->input->post('password_baru'));
+
+            // Cek password lama di DATABASE
+            $user = $this->db->get_where('tb_user', [
+                'id_user' => $id_user,
+                'password' => $password_lama
+            ])->row();
+
+            if ($user) {
+                // ✅ UPDATE PASSWORD DI DATABASE
+                $this->db->where('id_user', $id_user)
+                    ->update('tb_user', ['password' => $password_baru]);
+
+                $this->session->set_flashdata('success', 'Password berhasil diubah!');
+                redirect('auth/ubah_password');
+            } else {
+                $this->session->set_flashdata('error', 'Password lama salah!');
+                redirect('auth/ubah_password');
+            }
         }
     }
-}
 
 
-    public function logout() {
+    public function logout()
+    {
         $this->session->sess_destroy();
         redirect('beranda');
     }

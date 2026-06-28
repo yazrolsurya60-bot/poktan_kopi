@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil Saya - Member</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -20,7 +20,7 @@
             --sidebar-width: 260px;
             --shadow-soft: 0 8px 30px rgba(44, 24, 8, 0.08);
             --shadow-hover: 0 12px 40px rgba(44, 24, 8, 0.15);
-            --radius-card: 14px;
+            --radius-card: 16px;
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -37,9 +37,7 @@
             overflow-x: hidden;
         }
 
-        /* ============================================
-           SIDEBAR - SAMA DENGAN DASHBOARD PEMBELI
-           ============================================ */
+        /* ===== SIDEBAR ===== */
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -81,6 +79,14 @@
             flex: 1;
             overflow-y: auto;
             padding: 15px 0;
+        }
+
+        .sidebar-menu-wrapper::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-menu-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(230, 161, 92, 0.3);
+            border-radius: 10px;
         }
 
         .sidebar-menu {
@@ -172,9 +178,7 @@
             border-color: rgba(230, 161, 92, 0.2);
         }
 
-        /* ============================================
-           MAIN CONTENT
-           ============================================ */
+        /* ===== MAIN CONTENT ===== */
         .main-content {
             margin-left: var(--sidebar-width);
             padding: 30px 40px 40px;
@@ -200,9 +204,29 @@
             margin-top: 2px;
         }
 
-        /* ============================================
-           NOTIFICATION BELL
-           ============================================ */
+        .breadcrumb-custom {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb-custom .breadcrumb-item a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+
+        .breadcrumb-custom .breadcrumb-item a:hover {
+            color: var(--amber-cream);
+        }
+
+        .breadcrumb-custom .breadcrumb-item.active {
+            color: var(--dark-coffee);
+            font-weight: 600;
+        }
+
+        /* ===== NOTIFICATION ===== */
         .notif-btn {
             position: relative;
             background: var(--card-white);
@@ -237,11 +261,18 @@
             justify-content: center;
             font-weight: 700;
             border: 2px solid white;
+            animation: pulse-dot 2s infinite;
         }
 
-        /* ============================================
-           NOTIFICATION DROPDOWN
-           ============================================ */
+        .notif-dot.hidden {
+            display: none;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
         .notif-dropdown {
             position: absolute;
             right: 0;
@@ -263,14 +294,8 @@
         }
 
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .notif-dropdown-header {
@@ -286,6 +311,12 @@
             font-size: 0.75rem;
             color: var(--amber-cream);
             font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .notif-dropdown-header a:hover {
+            text-decoration: underline;
         }
 
         .notif-dropdown-list {
@@ -322,26 +353,11 @@
             font-size: 0.9rem;
         }
 
-        .notif-item .notif-icon.success {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-        .notif-item .notif-icon.warning {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-        .notif-item .notif-icon.info {
-            background: #DBEAFE;
-            color: #1E40AF;
-        }
-        .notif-item .notif-icon.danger {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-        .notif-item .notif-icon.primary {
-            background: #EDE9FE;
-            color: #5B21B6;
-        }
+        .notif-item .notif-icon.success { background: #D1FAE5; color: #065F46; }
+        .notif-item .notif-icon.warning { background: #FEF3C7; color: #92400E; }
+        .notif-item .notif-icon.info { background: #DBEAFE; color: #1E40AF; }
+        .notif-item .notif-icon.danger { background: #FEE2E2; color: #991B1B; }
+        .notif-item .notif-icon.primary { background: #EDE9FE; color: #5B21B6; }
 
         .notif-item .notif-text {
             flex: 1;
@@ -372,9 +388,6 @@
             align-self: center;
         }
 
-        /* ============================================
-           SIDEBAR OVERLAY
-           ============================================ */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -388,9 +401,6 @@
         }
 
         @media (max-width: 991.98px) {
-            .sidebar-overlay.active {
-                display: block;
-            }
             .sidebar {
                 left: calc(-1 * var(--sidebar-width));
                 box-shadow: none;
@@ -410,14 +420,14 @@
                 width: calc(100vw - 32px);
                 right: -60px;
             }
+            .sidebar-overlay.active {
+                display: block;
+            }
         }
 
         @media (max-width: 575.98px) {
             .main-content {
                 padding: 16px 12px 20px;
-            }
-            .profile-card {
-                padding: 20px !important;
             }
             .notif-dropdown {
                 width: calc(100vw - 24px);
@@ -425,45 +435,70 @@
             }
         }
 
-        .sidebar-menu-wrapper::-webkit-scrollbar {
-            width: 3px;
-        }
-        .sidebar-menu-wrapper::-webkit-scrollbar-thumb {
-            background: rgba(230, 161, 92, 0.3);
-            border-radius: 10px;
-        }
+        /* ============================================================
+           PROFIL STYLE - DESAIN BARU (TIDAK KETUTUPAN)
+           ============================================================ */
 
-        /* ============================================
-           PROFIL CUSTOM STYLE - PREMIUM COFFEE THEME
-           ============================================ */
-
-        /* Profile Cover */
+        /* --- COVER & AVATAR - DESAIN TERPISAH --- */
         .profile-cover {
-            background: linear-gradient(135deg, var(--roasted-brown), var(--dark-coffee));
+            background: linear-gradient(135deg, var(--roasted-brown) 0%, var(--dark-coffee) 100%);
             border-radius: var(--radius-card) var(--radius-card) 0 0;
-            padding: 30px 30px 70px 30px;
+            padding: 35px 35px 30px 35px;
             position: relative;
+            overflow: hidden;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
         }
 
-        .profile-cover .avatar-wrapper {
+        .profile-cover::before {
+            content: '';
             position: absolute;
-            bottom: -50px;
-            left: 30px;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(230, 161, 92, 0.05);
+            border-radius: 50%;
+            pointer-events: none;
         }
 
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
+        .profile-cover::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(230, 161, 92, 0.03);
             border-radius: 50%;
-            background: var(--amber-cream);
+            pointer-events: none;
+        }
+
+        /* AVATAR - Tidak overlap dengan cover */
+        .profile-avatar {
+            width: 110px;
+            height: 110px;
+            min-width: 110px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--amber-cream), #d48a42);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
+            font-size: 3.5rem;
             color: white;
-            border: 4px solid white;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            border: 5px solid white;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
             overflow: hidden;
+            transition: var(--transition-smooth);
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
         }
 
         .profile-avatar img {
@@ -472,59 +507,63 @@
             object-fit: cover;
         }
 
+        /* USER INFO - Sejajar dengan avatar */
         .profile-cover .user-info {
-            margin-left: 120px;
             color: white;
+            position: relative;
+            z-index: 2;
+            flex: 1;
         }
 
         .profile-cover .user-info h4 {
-            font-weight: 700;
-            margin-bottom: 2px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+            letter-spacing: -0.02em;
         }
 
         .profile-cover .user-info .badge-role {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.12);
             color: white;
             padding: 4px 16px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: inline-block;
         }
 
-        .profile-cover .user-info .level-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 14px;
+        .profile-cover .user-info .badge-role i {
+            margin-right: 4px;
+        }
+
+        .profile-cover .user-info .badge-status {
+            padding: 4px 16px;
             border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-block;
         }
 
-        .level-badge.bronze {
-            background: #FDE68A;
-            color: #78350F;
-        }
-        .level-badge.silver {
-            background: #E5E7EB;
-            color: #1F2937;
-        }
-        .level-badge.gold {
-            background: #FBBF24;
-            color: #78350F;
-        }
-        .level-badge.platinum {
-            background: #A78BFA;
-            color: #FFFFFF;
+        .badge-status.active {
+            background: #D1FAE5;
+            color: #065F46;
         }
 
+        .badge-status.inactive {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        /* --- CARD --- */
         .profile-card {
             background: var(--card-white);
             border-radius: var(--radius-card);
             box-shadow: var(--shadow-soft);
             overflow: hidden;
             transition: var(--transition-smooth);
-            margin-top: 50px;
+            margin-top: 0;
         }
 
         .profile-card:hover {
@@ -532,16 +571,45 @@
         }
 
         .profile-card .card-body-custom {
-            padding: 30px;
+            padding: 30px 35px 30px;
+        }
+
+        /* --- FORM --- */
+        .profile-card .form-group {
+            margin-bottom: 18px;
+        }
+
+        .profile-card label {
+            font-weight: 600;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-bottom: 4px;
+        }
+
+        .input-group-custom {
+            position: relative;
+        }
+
+        .input-group-custom .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1rem;
+            opacity: 0.5;
         }
 
         .profile-card .form-control {
             border-radius: 10px;
-            padding: 12px 16px;
+            padding: 12px 16px 12px 44px;
             border: 1px solid rgba(74, 44, 17, 0.08);
             font-size: 0.9rem;
             background: #FAF8F6;
             transition: var(--transition-smooth);
+            height: 48px;
         }
 
         .profile-card .form-control:focus {
@@ -556,23 +624,19 @@
             opacity: 0.8;
         }
 
-        .profile-card label {
-            font-weight: 600;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
+        /* --- TOMBOL --- */
         .btn-edit {
             background: var(--roasted-brown);
             color: white;
             border: none;
             border-radius: 10px;
-            padding: 8px 24px;
+            padding: 10px 28px;
             font-weight: 600;
             font-size: 0.85rem;
             transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-edit:hover {
@@ -582,33 +646,18 @@
             box-shadow: 0 8px 25px rgba(74, 44, 17, 0.15);
         }
 
-        .btn-edit-outline {
-            background: transparent;
-            color: var(--roasted-brown);
-            border: 2px solid var(--roasted-brown);
-            border-radius: 10px;
-            padding: 8px 20px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: var(--transition-smooth);
-        }
-
-        .btn-edit-outline:hover {
-            background: var(--roasted-brown);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(74, 44, 17, 0.15);
-        }
-
         .btn-save {
             background: var(--amber-cream);
             color: white;
             border-radius: 10px;
-            padding: 10px 28px;
+            padding: 12px 32px;
             font-weight: 600;
             font-size: 0.9rem;
             border: none;
             transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-save:hover {
@@ -623,10 +672,13 @@
             color: var(--text-secondary);
             border: 1px solid #EFEAE2;
             border-radius: 10px;
-            padding: 10px 28px;
+            padding: 12px 32px;
             font-weight: 600;
             font-size: 0.9rem;
             transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-cancel:hover {
@@ -634,57 +686,70 @@
             color: var(--dark-coffee);
         }
 
+        .btn-change-password {
+            background: transparent;
+            color: var(--roasted-brown);
+            border: 2px solid var(--roasted-brown);
+            border-radius: 8px;
+            padding: 4px 16px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-change-password:hover {
+            background: var(--roasted-brown);
+            color: white;
+            text-decoration: none;
+        }
+
+        /* --- STATISTIK MINI (3 KOLOM) --- */
         .stat-mini-card {
             background: var(--bg-cream);
-            border-radius: 10px;
-            padding: 16px 20px;
+            border-radius: 12px;
+            padding: 16px 12px;
             text-align: center;
             transition: var(--transition-smooth);
+            border: 1px solid rgba(74, 44, 17, 0.04);
+            height: 100%;
         }
 
         .stat-mini-card:hover {
             background: #f5eee6;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .stat-mini-card .stat-icon {
+            font-size: 1.3rem;
+            color: var(--amber-cream);
+            margin-bottom: 2px;
         }
 
         .stat-mini-card .number {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.6rem;
+            font-weight: 800;
             color: var(--roasted-brown);
+            line-height: 1.2;
         }
 
         .stat-mini-card .label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-weight: 600;
         }
 
-        .status-badge-user {
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-
-        .status-badge-user.active {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-        .status-badge-user.inactive {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-        .status-badge-user.pending {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
+        /* --- INFO ROW --- */
         .info-row {
             display: flex;
             align-items: center;
-            padding: 12px 0;
+            padding: 14px 0;
             border-bottom: 1px solid rgba(74, 44, 17, 0.05);
         }
 
@@ -693,17 +758,23 @@
         }
 
         .info-row .info-icon {
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
-            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 12px;
             background: var(--bg-cream);
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--amber-cream);
-            font-size: 1.1rem;
-            margin-right: 14px;
+            font-size: 1.2rem;
+            margin-right: 16px;
+            transition: var(--transition-smooth);
+        }
+
+        .info-row:hover .info-icon {
+            background: var(--amber-cream);
+            color: white;
         }
 
         .info-row .info-label {
@@ -720,44 +791,34 @@
             color: var(--dark-coffee);
         }
 
-        .upload-btn-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-
-        .upload-btn-wrapper input[type=file] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-
-        .upload-btn-wrapper .btn-upload {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            padding: 6px 16px;
-            font-size: 0.8rem;
+        /* --- BADGE EMAIL --- */
+        .badge-email-verified {
+            font-size: 0.6rem;
+            padding: 4px 12px;
+            border-radius: 20px;
             font-weight: 600;
-            transition: var(--transition-smooth);
+            margin-left: 8px;
         }
 
-        .upload-btn-wrapper .btn-upload:hover {
-            background: rgba(255, 255, 255, 0.3);
-            color: white;
+        .badge-email-verified.verified {
+            background: #D1FAE5;
+            color: #065F46;
         }
 
+        .badge-email-verified.unverified {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        /* --- ALERT --- */
         .alert-custom {
-            border-radius: 10px;
-            padding: 12px 16px;
-            font-size: 0.9rem;
+            border-radius: 12px;
+            padding: 14px 20px;
             font-weight: 600;
             border: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .alert-custom.success {
@@ -770,21 +831,161 @@
             color: #991B1B;
         }
 
-        .badge-email-verified {
-            font-size: 0.6rem;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 600;
+        /* --- SECTION TITLE --- */
+        .section-title {
+            font-weight: 700;
+            color: var(--roasted-brown);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
         }
 
-        .badge-email-verified.verified {
-            background: #D1FAE5;
-            color: #065F46;
+        .section-title i {
+            color: var(--amber-cream);
+            font-size: 1.1rem;
         }
 
-        .badge-email-verified.unverified {
-            background: #FEF3C7;
-            color: #92400E;
+        /* --- DIVIDER --- */
+        .divider-custom {
+            border: none;
+            border-top: 2px solid rgba(74, 44, 17, 0.06);
+            margin: 24px 0;
+        }
+
+        /* --- FOOTER --- */
+        .footer-bottom {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            border-top: 1px solid rgba(74, 44, 17, 0.06);
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        /* ============================================================
+           SCROLLBAR GLOBAL
+           ============================================================ */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-cream); }
+        ::-webkit-scrollbar-thumb { background: var(--amber-cream); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--roasted-brown); }
+
+        /* ============================================================
+           RESPONSIVE FIX
+           ============================================================ */
+        @media (max-width: 767.98px) {
+            .profile-cover {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 30px 20px 25px;
+                gap: 15px;
+            }
+
+            .profile-cover .user-info {
+                text-align: center;
+            }
+
+            .profile-avatar {
+                width: 90px;
+                height: 90px;
+                min-width: 90px;
+                font-size: 2.8rem;
+            }
+
+            .profile-cover .user-info h4 {
+                font-size: 1.2rem;
+            }
+
+            .profile-card .card-body-custom {
+                padding: 20px;
+            }
+
+            .stat-mini-card .number {
+                font-size: 1.3rem;
+            }
+
+            .btn-edit {
+                padding: 8px 18px;
+                font-size: 0.75rem;
+            }
+
+            .btn-save, .btn-cancel {
+                padding: 10px 20px;
+                font-size: 0.8rem;
+            }
+
+            .d-flex.justify-content-between.align-items-center.mb-4 {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 12px;
+            }
+
+            .info-row {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .info-row .info-icon {
+                width: 36px;
+                height: 36px;
+                min-width: 36px;
+                font-size: 1rem;
+            }
+
+            .info-row .info-value {
+                font-size: 0.85rem;
+            }
+
+            .btn-change-password {
+                margin-left: auto;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .main-content {
+                padding: 16px 12px 20px;
+            }
+
+            .profile-avatar {
+                width: 75px;
+                height: 75px;
+                min-width: 75px;
+                font-size: 2.2rem;
+            }
+
+            .profile-cover .user-info h4 {
+                font-size: 1rem;
+            }
+
+            .profile-cover .user-info .badge-role,
+            .profile-cover .user-info .badge-status {
+                font-size: 0.6rem;
+                padding: 2px 12px;
+            }
+
+            .stat-mini-card {
+                padding: 12px 8px;
+            }
+
+            .stat-mini-card .number {
+                font-size: 1.1rem;
+            }
+
+            .stat-mini-card .label {
+                font-size: 0.55rem;
+            }
+
+            .info-row .info-value {
+                font-size: 0.8rem;
+            }
+
+            .badge-email-verified {
+                font-size: 0.5rem;
+                padding: 2px 8px;
+                margin-left: 4px;
+            }
         }
     </style>
 </head>
@@ -794,7 +995,7 @@
     <!-- SIDEBAR OVERLAY -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- SIDEBAR - SAMA DENGAN DASHBOARD PEMBELI -->
+    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebarMenu">
         <div class="sidebar-brand">
             <div class="brand-icon"><i class="bi bi-cup-hot-fill"></i></div>
@@ -824,11 +1025,6 @@
                         <span class="menu-badge"><?= $pesanan_dikirim ?? 0 ?></span>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('pembeli/poin'); ?>">
-                        <i class="bi bi-gift-fill"></i>Tukar Poin Hadiah
-                    </a>
-                </li>
                 <li class="menu-item active">
                     <a href="<?= base_url('pembeli/profil'); ?>">
                         <i class="bi bi-person-fill"></i>Profil Saya
@@ -853,11 +1049,18 @@
                     style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
                     <i class="bi bi-list"></i>
                 </button>
-                <h2 class="d-inline-block align-middle mb-0">Profil Saya</h2>
-                <p class="subtitle mb-0 mt-1">Kelola data diri dan preferensi akun Anda</p>
+                <h2 class="d-inline-block align-middle mb-0">
+                    <i class="bi bi-person-fill" style="color: var(--amber-cream);"></i> Profil Saya
+                </h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-custom">
+                        <li class="breadcrumb-item"><a href="<?= base_url('pembeli/dashboard'); ?>">Beranda</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Profil Saya</li>
+                    </ol>
+                </nav>
             </div>
             <div class="d-flex align-items-center gap-3" style="gap: 12px;">
-                <!-- NOTIFICATION BELL -->
+                <!-- NOTIFICATION -->
                 <div style="position: relative;">
                     <button class="notif-btn" id="notifToggle">
                         <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
@@ -871,7 +1074,12 @@
                     <div class="notif-dropdown" id="notifDropdown">
                         <div class="notif-dropdown-header">
                             <span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
-                            <a href="<?= base_url('pembeli/dashboard/history'); ?>" style="font-size:0.75rem; color: var(--amber-cream); font-weight:500; text-decoration:none;">Lihat Semua</a>
+                            <div>
+                                <?php if (isset($unread_count) && $unread_count > 0): ?>
+                                    <a href="#" id="markAllReadBtn" class="mr-2" style="font-size:0.7rem;">Tandai semua</a>
+                                <?php endif; ?>
+                                <a href="<?= base_url('pembeli/dashboard/history'); ?>" style="font-size:0.7rem;">Lihat Semua</a>
+                            </div>
                         </div>
                         <div class="notif-dropdown-list" id="notifList">
                             <?php if (!empty($notifikasi)): ?>
@@ -893,8 +1101,7 @@
                                             <i class="bi <?= $icon_class; ?>"></i>
                                         </div>
                                         <div class="notif-text">
-                                            <?= htmlspecialchars($n->judul ?? 'Notifikasi'); ?><br>
-                                            <small><?= htmlspecialchars($n->isi_notifikasi); ?></small>
+                                            <?= htmlspecialchars($n->isi_notifikasi ?? 'Notifikasi'); ?>
                                             <span class="notif-time"><?= date('d M Y, H:i', strtotime($n->tanggal_buat)); ?></span>
                                         </div>
                                         <?php if (isset($n->status_baca) && $n->status_baca == 0): ?>
@@ -916,6 +1123,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- USER AVATAR -->
                 <div class="d-flex align-items-center gap-2"
                     style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
                     <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
@@ -927,37 +1136,35 @@
         <!-- ALERT -->
         <?php if ($this->session->flashdata('success')): ?>
             <div class="alert-custom success mb-3">
-                <i class="bi bi-check-circle-fill mr-2"></i> <?= $this->session->flashdata('success') ?>
+                <i class="bi bi-check-circle-fill"></i> <?= $this->session->flashdata('success') ?>
             </div>
         <?php endif; ?>
 
         <?php if ($this->session->flashdata('error')): ?>
             <div class="alert-custom error mb-3">
-                <i class="bi bi-exclamation-triangle-fill mr-2"></i> <?= $this->session->flashdata('error') ?>
+                <i class="bi bi-exclamation-triangle-fill"></i> <?= $this->session->flashdata('error') ?>
             </div>
         <?php endif; ?>
 
         <!-- === PROFIL CARD === -->
         <div class="profile-card">
 
-            <!-- COVER -->
+            <!-- COVER - DESAIN BARU (AVATAR & USER INFO SEJAJAR) -->
             <div class="profile-cover">
-                <div class="avatar-wrapper">
-                    <div class="profile-avatar">
-                        <?php if (!empty($user->foto) && file_exists('./uploads/profil/' . $user->foto)): ?>
-                            <img src="<?= base_url('uploads/profil/' . $user->foto) ?>" alt="Foto Profil">
-                        <?php else: ?>
-                            <i class="bi bi-person-fill"></i>
-                        <?php endif; ?>
-                    </div>
+                <div class="profile-avatar">
+                    <?php if (!empty($user->foto) && file_exists('./uploads/profil/' . $user->foto)): ?>
+                        <img src="<?= base_url('uploads/profil/' . $user->foto) ?>" alt="Foto Profil">
+                    <?php else: ?>
+                        <i class="bi bi-person-fill"></i>
+                    <?php endif; ?>
                 </div>
                 <div class="user-info">
                     <h4><?= $user->nama ?? 'Budi Pembeli' ?></h4>
                     <div>
-                        <span class="badge-role"><i class="bi bi-person mr-1"></i><?= $user->role ?? 'Pembeli' ?></span>
-                        <span class="badge-role ml-2"><i class="bi bi-shield-check mr-1"></i><?= ucfirst($user->status ?? 'Active') ?></span>
-                        <span class="level-badge <?= $level_class ?? 'bronze' ?> ml-2">
-                            <i class="bi bi-award-fill"></i> <?= $level_name ?? 'Bronze' ?>
+                        <span class="badge-role"><i class="bi bi-person"></i> <?= $user->role ?? 'Pembeli' ?></span>
+                        <span class="badge-status <?= strtolower($user->status ?? 'Active') == 'active' ? 'active' : 'inactive'; ?> ml-2">
+                            <i class="bi bi-circle-fill" style="font-size:0.4rem; margin-right:4px;"></i>
+                            <?= ucfirst($user->status ?? 'Active') ?>
                         </span>
                     </div>
                 </div>
@@ -966,86 +1173,85 @@
             <!-- BODY -->
             <div class="card-body-custom">
 
-                <!-- STATISTIK MINI -->
+                <!-- STATISTIK MINI (3 KOLOM - TANPA POIN) -->
                 <div class="row mb-4">
                     <div class="col-4">
                         <div class="stat-mini-card">
+                            <div class="stat-icon"><i class="bi bi-receipt"></i></div>
                             <div class="number"><?= $total_transaksi ?? 0 ?></div>
                             <div class="label">Transaksi</div>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="stat-mini-card">
-                            <div class="number"><?= $total_poin ?? 0 ?></div>
-                            <div class="label">Poin</div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="stat-mini-card">
+                            <div class="stat-icon"><i class="bi bi-truck"></i></div>
                             <div class="number"><?= $pesanan_dikirim ?? 0 ?></div>
                             <div class="label">Dikirim</div>
                         </div>
                     </div>
+                    <div class="col-4">
+                        <div class="stat-mini-card">
+                            <div class="stat-icon"><i class="bi bi-check-circle"></i></div>
+                            <div class="number"><?= $pesanan_selesai ?? 0 ?></div>
+                            <div class="label">Selesai</div>
+                        </div>
+                    </div>
                 </div>
 
-                <hr style="border-color: rgba(74,44,17,0.06);">
+                <hr class="divider-custom">
 
                 <!-- FORM DATA DIRI -->
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h6 class="font-weight-bold mb-0" style="color: var(--roasted-brown);">
-                        <i class="bi bi-person-gear mr-2" style="color: var(--amber-cream);"></i> Data Diri
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap" style="gap: 12px;">
+                    <h6 class="section-title">
+                        <i class="bi bi-person-gear"></i> Data Diri
                     </h6>
                     <button class="btn-edit" id="btnEdit" onclick="toggleEdit()">
-                        <i class="bi bi-pencil mr-1"></i> Ubah Data
+                        <i class="bi bi-pencil"></i> Ubah Data
                     </button>
                 </div>
 
-                <form id="profileForm" method="POST" action="<?= base_url('pembeli/profil/update'); ?>"
-                    enctype="multipart/form-data">
-
-                    <!-- Upload Foto -->
-                    <div class="form-group">
-                        <label>Foto Profil</label>
-                        <div class="upload-btn-wrapper">
-                            <button class="btn-upload" type="button">
-                                <i class="bi bi-camera mr-1"></i> Ganti Foto
-                            </button>
-                            <input type="file" accept="image/*" name="foto" id="inputFoto" onchange="previewFoto(this)">
-                        </div>
-                        <small class="text-muted">Format: JPG, PNG, GIF. Maks: 2MB</small>
-                        <div id="previewFoto" class="mt-2" style="display:none;">
-                            <img id="previewImg" src="#" alt="Preview Foto" style="max-width:150px; border-radius:10px; border:2px solid var(--amber-cream);">
-                        </div>
-                    </div>
+                <form id="profileForm" method="POST" action="<?= base_url('pembeli/profil/update'); ?>">
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nama Lengkap</label>
-                                <input type="text" name="nama" class="form-control" id="inputNama"
-                                    value="<?= $user->nama ?? '' ?>" disabled>
+                                <div class="input-group-custom">
+                                    <span class="input-icon"><i class="bi bi-person"></i></span>
+                                    <input type="text" name="nama" class="form-control" id="inputNama"
+                                        value="<?= $user->nama ?? 'Budi Pembeli' ?>" disabled>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" name="username" class="form-control" id="inputUsername"
-                                    value="<?= $user->username ?? '' ?>" disabled>
+                                <div class="input-group-custom">
+                                    <span class="input-icon"><i class="bi bi-at"></i></span>
+                                    <input type="text" name="username" class="form-control" id="inputUsername"
+                                        value="<?= $user->username ?? 'pembeli' ?>" disabled>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="email" name="email" class="form-control" id="inputEmail"
-                                    value="<?= $user->email ?? '' ?>" disabled>
+                                <div class="input-group-custom">
+                                    <span class="input-icon"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" name="email" class="form-control" id="inputEmail"
+                                        value="<?= $user->email ?? 'pembeli@poktan.com' ?>" disabled>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Bergabung Sejak</label>
-                                <input type="text" class="form-control" id="inputJoined"
-                                    value="<?= !empty($user->created_at) ? date('d F Y', strtotime($user->created_at)) : date('d F Y') ?>"
-                                    disabled>
+                                <div class="input-group-custom">
+                                    <span class="input-icon"><i class="bi bi-calendar3"></i></span>
+                                    <input type="text" class="form-control" id="inputJoined"
+                                        value="<?= !empty($user->created_at) ? date('d F Y', strtotime($user->created_at)) : '21 June 2026' ?>"
+                                        disabled>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1053,19 +1259,19 @@
                     <!-- TOMBOL AKSI (hidden by default) -->
                     <div id="editActions" style="display: none;" class="mt-3 pt-3 border-top">
                         <button type="submit" class="btn-save">
-                            <i class="bi bi-check-circle mr-1"></i> Simpan Perubahan
+                            <i class="bi bi-check-circle"></i> Simpan Perubahan
                         </button>
                         <button type="button" class="btn-cancel ml-2" onclick="cancelEdit()">
-                            <i class="bi bi-x-circle mr-1"></i> Batal
+                            <i class="bi bi-x-circle"></i> Batal
                         </button>
                     </div>
                 </form>
 
-                <hr style="border-color: rgba(74,44,17,0.06);">
+                <hr class="divider-custom">
 
                 <!-- KEAMANAN AKUN -->
-                <h6 class="font-weight-bold mb-3" style="color: var(--roasted-brown);">
-                    <i class="bi bi-shield-lock mr-2" style="color: var(--amber-cream);"></i> Keamanan Akun
+                <h6 class="section-title mb-3">
+                    <i class="bi bi-shield-lock"></i> Keamanan Akun
                 </h6>
 
                 <div class="info-row">
@@ -1074,9 +1280,8 @@
                         <div class="info-label">Password</div>
                         <div class="info-value">••••••••</div>
                     </div>
-                    <a href="<?= base_url('auth/ubah_password'); ?>" class="btn btn-sm btn-edit-outline"
-                        style="font-size:0.7rem; padding:4px 14px;">
-                        Ubah Password
+                    <a href="<?= base_url('auth/ubah_password'); ?>" class="btn-change-password">
+                        <i class="bi bi-pencil"></i> Ubah
                     </a>
                 </div>
 
@@ -1085,11 +1290,11 @@
                     <div style="flex:1;">
                         <div class="info-label">Email Terverifikasi</div>
                         <div class="info-value">
-                            <?= $user->email ?? 'email@domain.com' ?>
+                            <?= $user->email ?? 'pembeli@poktan.com' ?>
                             <?php if (!empty($user->email_verified_at)): ?>
-                                <span class="badge-email-verified verified">Terverifikasi</span>
+                                <span class="badge-email-verified verified"><i class="bi bi-check-circle-fill"></i> Terverifikasi</span>
                             <?php else: ?>
-                                <span class="badge-email-verified unverified">Belum Verifikasi</span>
+                                <span class="badge-email-verified unverified"><i class="bi bi-exclamation-circle-fill"></i> Belum Verifikasi</span>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -1104,6 +1309,11 @@
                 </div>
 
             </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer-bottom">
+            &copy; <?= date('Y'); ?> POKTAN Liberchain. All rights reserved.
         </div>
 
     </div>
@@ -1125,19 +1335,13 @@
             document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
         }
 
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', toggleSidebar);
-        }
-        if (overlay) {
-            overlay.addEventListener('click', toggleSidebar);
-        }
+        if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+        if (overlay) overlay.addEventListener('click', toggleSidebar);
 
         document.addEventListener('click', function(e) {
             if (window.innerWidth > 991.98) return;
             if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
-                if (sidebar.classList.contains('open')) {
-                    toggleSidebar();
-                }
+                if (sidebar.classList.contains('open')) toggleSidebar();
             }
         });
 
@@ -1161,7 +1365,32 @@
         });
 
         // ============================================
-        // 3. EDIT PROFILE - INTERAKTIF
+        // 3. MARK ALL READ
+        // ============================================
+        function markAllRead() {
+            if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+                $.ajax({
+                    url: '<?= base_url('pembeli/dashboard/mark_all_read'); ?>',
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) location.reload();
+                        else alert('Gagal menandai semua notifikasi.');
+                    },
+                    error: function() {
+                        alert('Terjadi kesalahan. Silakan coba lagi.');
+                    }
+                });
+            }
+        }
+
+        document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            markAllRead();
+        });
+
+        // ============================================
+        // 4. EDIT PROFILE
         // ============================================
         let isEditing = false;
 
@@ -1173,25 +1402,24 @@
 
             inputs.forEach(input => {
                 input.disabled = !isEditing;
-                if (isEditing) {
-                    input.style.background = 'white';
-                    input.style.opacity = '1';
-                } else {
-                    input.style.background = '#F3F0EB';
-                    input.style.opacity = '0.8';
+                input.style.background = isEditing ? 'white' : '#F3F0EB';
+                input.style.opacity = isEditing ? '1' : '0.8';
+                const icon = input.closest('.input-group-custom')?.querySelector('.input-icon');
+                if (icon) {
+                    icon.style.opacity = isEditing ? '0.5' : '0.3';
                 }
             });
 
             if (isEditing) {
                 actions.style.display = 'block';
-                btnEdit.innerHTML = '<i class="bi bi-x-circle mr-1"></i> Batalkan';
+                btnEdit.innerHTML = '<i class="bi bi-x-circle"></i> Batalkan';
                 btnEdit.className = 'btn-cancel';
                 btnEdit.style.background = 'transparent';
                 btnEdit.style.color = 'var(--text-secondary)';
                 btnEdit.style.border = '1px solid #EFEAE2';
             } else {
                 actions.style.display = 'none';
-                btnEdit.innerHTML = '<i class="bi bi-pencil mr-1"></i> Ubah Data';
+                btnEdit.innerHTML = '<i class="bi bi-pencil"></i> Ubah Data';
                 btnEdit.className = 'btn-edit';
                 btnEdit.style.background = 'var(--roasted-brown)';
                 btnEdit.style.color = 'white';
@@ -1200,59 +1428,20 @@
         }
 
         function cancelEdit() {
-            isEditing = true;
-            toggleEdit();
-            // Reset nilai input ke nilai awal
-            document.getElementById('inputNama').value = '<?= $user->nama ?? '' ?>';
-            document.getElementById('inputUsername').value = '<?= $user->username ?? '' ?>';
-            document.getElementById('inputEmail').value = '<?= $user->email ?? '' ?>';
-            // Reset file input
-            document.getElementById('inputFoto').value = '';
-            // Hide preview
-            document.getElementById('previewFoto').style.display = 'none';
-        }
-
-        // ============================================
-        // 4. PREVIEW FOTO SEBELUM UPLOAD
-        // ============================================
-        function previewFoto(input) {
-            var preview = document.getElementById('previewFoto');
-            var previewImg = document.getElementById('previewImg');
-
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-
-                reader.readAsDataURL(input.files[0]);
+            if (isEditing) {
+                toggleEdit();
+                document.getElementById('inputNama').value = '<?= $user->nama ?? 'Budi Pembeli' ?>';
+                document.getElementById('inputUsername').value = '<?= $user->username ?? 'pembeli' ?>';
+                document.getElementById('inputEmail').value = '<?= $user->email ?? 'pembeli@poktan.com' ?>';
             }
         }
-
-        // ============================================
-        // 5. CURRENT DATE TIME
-        // ============================================
-        function updateDateTime() {
-            const now = new Date();
-            const options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-            const el = document.getElementById('currentDateTime');
-            if (el) {
-                el.textContent = '• ' + now.toLocaleDateString('id-ID', options);
-            }
-        }
-        updateDateTime();
-        setInterval(updateDateTime, 60000);
 
         console.log('✅ Halaman Profil Pembeli siap digunakan!');
+        console.log('📋 Fitur:');
+        console.log('   - Edit Profil (toggle)');
+        console.log('   - Notifikasi Real-time');
+        console.log('   - Statistik Transaksi (3 kolom)');
+        console.log('   - Keamanan Akun');
     </script>
 </body>
 
