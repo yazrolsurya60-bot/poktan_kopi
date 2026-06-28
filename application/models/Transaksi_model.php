@@ -102,7 +102,7 @@ class Transaksi_model extends CI_Model {
     public function verifikasi_bukti($id_transaksi, $status, $keterangan = null) {
         $data = array(
             'status_verifikasi' => $status,
-            'verified_at' => date('Y-m-d H:i:s')
+            'verified_at'       => date('Y-m-d H:i:s')
         );
         if ($keterangan) {
             $data['keterangan'] = $keterangan;
@@ -117,6 +117,59 @@ class Transaksi_model extends CI_Model {
         $this->db->where('kota_asal', $kota_asal);
         $this->db->where('kota_tujuan', $kota_tujuan);
         return $this->db->get('tb_ongkir')->row_array();
+    }
+
+    public function hitung_ongkir_server($kota_asal, $kota_tujuan, $berat_gram = 1000) {
+        $this->db->where('kota_asal', $kota_asal);
+        $this->db->where('kota_tujuan', $kota_tujuan);
+        $ongkir = $this->db->get('tb_ongkir')->row_array();
+
+        if (!$ongkir) {
+            return array(
+                'success' => false,
+                'message' => 'Rute pengiriman tidak ditemukan.',
+                'ongkir'  => 0,
+            );
+        }
+
+        // ============================================================
+        // PENTING: cek nama kolom asli di tabel tb_ongkir kamu
+        // (buka phpMyAdmin -> tabel tb_ongkir -> lihat nama kolomnya).
+        // Kode di bawah ini coba beberapa kemungkinan nama kolom yang
+        // umum dipakai, supaya tidak error walau namanya beda dari
+        // 'harga_per_kg'. Setelah tahu nama kolom aslinya, sebaiknya
+        // sederhanakan jadi satu baris saja, misal:
+        //   $harga_per_kg = (int) $ongkir['nama_kolom_asli'];
+        // ============================================================
+        $kemungkinan_kolom = array('harga_per_kg', 'tarif_per_kg', 'harga_kg', 'tarif', 'harga');
+        $harga_per_kg = null;
+        foreach ($kemungkinan_kolom as $kolom) {
+            if (isset($ongkir[$kolom])) {
+                $harga_per_kg = (int) $ongkir[$kolom];
+                break;
+            }
+        }
+
+        if ($harga_per_kg === null) {
+            return array(
+                'success' => false,
+                'message' => 'Konfigurasi tarif ongkir tidak valid (nama kolom harga tidak ditemukan).',
+                'ongkir'  => 0,
+            );
+        }
+
+        // Hitung biaya berdasarkan berat, minimal 1 kg
+        $kg    = max(1, ceil($berat_gram / 1000));
+        $biaya = $kg * $harga_per_kg;
+
+        return array(
+            'success'     => true,
+            'kota_asal'   => $kota_asal,
+            'kota_tujuan' => $kota_tujuan,
+            'berat_gram'  => $berat_gram,
+            'estimasi'    => isset($ongkir['estimasi']) ? $ongkir['estimasi'] : '-',
+            'ongkir'      => $biaya,
+        );
     }
 
     // ==================== NOMOR INVOICE ====================

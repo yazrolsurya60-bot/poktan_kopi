@@ -153,15 +153,20 @@ class Transaksi extends CI_Controller {
 
         $hasil = $this->Transaksi_model->hitung_ongkir_server($kota_asal, $kota_tujuan);
 
-        if ($hasil !== null) {
+        // hitung_ongkir_server() SELALU return array dengan key 'success',
+        // bukan null. Jadi cek pakai $hasil['success'], bukan !== null.
+        if ($hasil['success']) {
             echo json_encode([
                 'status' => 'success',
-                'tarif' => $hasil['tarif'],
+                'tarif' => $hasil['ongkir'],
                 'estimasi' => $hasil['estimasi'],
-                'tarif_formatted' => 'Rp ' . number_format($hasil['tarif'], 0, ',', '.')
+                'tarif_formatted' => 'Rp ' . number_format($hasil['ongkir'], 0, ',', '.')
             ]);
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Ongkir tidak tersedia untuk rute ini, silakan hubungi admin']);
+            echo json_encode([
+                'status' => 'error',
+                'message' => isset($hasil['message']) ? $hasil['message'] : 'Ongkir tidak tersedia untuk rute ini, silakan hubungi admin'
+            ]);
         }
     }
 
@@ -201,12 +206,12 @@ class Transaksi extends CI_Controller {
         $kota_tujuan = $this->input->post('kota_kirim');
         $hasil_ongkir = $this->Transaksi_model->hitung_ongkir_server($kota_asal, $kota_tujuan);
 
-        if ($hasil_ongkir === null) {
+        if (!$hasil_ongkir['success']) {
             $this->session->set_flashdata('error', 'Ongkir untuk kota tujuan "' . $kota_tujuan . '" belum tersedia. Silakan pilih kota lain atau hubungi admin.');
             redirect('transaksi/checkout');
         }
 
-        $ongkir = $hasil_ongkir['tarif'];
+        $ongkir = $hasil_ongkir['ongkir'];
         $grand_total = $subtotal + $ongkir;
 
         $data_transaksi = array(
