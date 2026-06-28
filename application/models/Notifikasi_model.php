@@ -164,14 +164,16 @@ class Notifikasi_model extends CI_Model
         $this->db->where_in('status_pesanan', ['Diproses', 'Dikirim']);
         $pesanan_dikirim = $this->db->count_all_results('tb_transaksi');
 
-        // Poin (tidak ada kolom di tb_user, default 0)
-        $poin = 0;
+    
 
         return [
             'total_transaksi' => $total_transaksi,
             'total_belanja' => $total_belanja,
             'pesanan_dikirim' => $pesanan_dikirim,
+<<<<<<< HEAD
             'poin' => $poin
+=======
+>>>>>>> 8684cedb29ed139d96a656cab9cd0d5651550d18
         ];
     }
 

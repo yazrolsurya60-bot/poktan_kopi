@@ -537,9 +537,7 @@ $base_url = base_url();
                 <li class="menu-item <?= strpos(current_url(), 'pembeli/tracking') !== false ? 'active' : '' ?>">
                     <a href="<?= base_url('pembeli/tracking'); ?>"><i class="bi bi-geo-alt-fill"></i>Lacak Pengiriman <span class="menu-badge">2</span></a>
                 </li>
-                <li class="menu-item <?= strpos(current_url(), 'pembeli/poin') !== false ? 'active' : '' ?>">
-                    <a href="<?= base_url('pembeli/poin'); ?>"><i class="bi bi-gift-fill"></i>Tukar Poin Hadiah</a>
-                </li>
+    
                 <li class="menu-item <?= strpos(current_url(), 'pembeli/profil') !== false ? 'active' : '' ?>">
                     <a href="<?= base_url('pembeli/profil'); ?>"><i class="bi bi-person-fill"></i>Profil Saya</a>
                 </li>
