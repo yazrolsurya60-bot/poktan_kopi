@@ -30,14 +30,14 @@ class Auth extends CI_Controller
         $this->check_already_logged_in();
 
         if ($this->input->post()) {
-            $username_or_email = $this->input->post('username_or_email', TRUE);
+            $username_or_no_telepon = $this->input->post('username_or_no_telepon', TRUE);
             $password = $this->input->post('password');
 
-            $this->form_validation->set_rules('username_or_email', 'Username atau Email', 'required');
+            $this->form_validation->set_rules('username_or_no_telepon', 'Username atau No. Telepon', 'required');
             $this->form_validation->set_rules('password', 'Password', 'required');
 
             if ($this->form_validation->run() == TRUE) {
-                $user = $this->User_model->login($username_or_email, $password);
+                $user = $this->User_model->login($username_or_no_telepon, $password);
 
                 if ($user) {
                     if ($user['status'] === 'Active') {
@@ -51,7 +51,6 @@ class Auth extends CI_Controller
                             'id_user' => $user['id_user'],
                             'username' => $user['username'],
                             'nama' => $user['nama'],
-                            'email' => $user['email'],
                             'no_telepon' => $user['no_telepon'],
                             'role' => $user['role'],
                             'foto' => $user['foto'],
@@ -74,7 +73,7 @@ class Auth extends CI_Controller
                         $this->session->set_flashdata('error', 'Akun Anda dinonaktifkan. Silakan hubungi Administrator.');
                     }
                 } else {
-                    $this->session->set_flashdata('error', 'Username/Email atau Password salah.');
+                    $this->session->set_flashdata('error', 'Username/No. Telepon atau Password salah.');
                 }
             }
         }
@@ -147,17 +146,17 @@ class Auth extends CI_Controller
             // Step 2: Verifikasi OTP
             else if ($action === 'verify_otp') {
                 $register_step = $this->session->userdata('register_step');
-                
+
                 if ($register_step !== 'otp_verification') {
                     $this->session->set_flashdata('error', 'Silakan mulai registrasi dari awal.');
                     redirect('auth/register');
                 }
 
                 $kode_otp = $this->input->post('kode_otp', TRUE);
-                
+
                 // Debug: Log what we received
                 log_message('debug', 'OTP Verification - Received kode_otp: ' . $kode_otp);
-                
+
                 $this->form_validation->set_rules('kode_otp', 'Kode OTP', 'required|numeric|exact_length[6]');
 
                 if ($this->form_validation->run() == FALSE) {
@@ -221,7 +220,7 @@ class Auth extends CI_Controller
             // Action resend OTP
             else if ($action === 'resend_otp') {
                 $register_step = $this->session->userdata('register_step');
-                
+
                 if ($register_step !== 'otp_verification') {
                     $this->session->set_flashdata('error', 'Silakan mulai registrasi dari awal.');
                     redirect('auth/register');
@@ -336,7 +335,7 @@ class Auth extends CI_Controller
             // Step 2: Verifikasi OTP
             else if ($action === 'verify_otp_reset') {
                 $reset_step = $this->session->userdata('reset_step');
-                
+
                 if ($reset_step !== 'otp_verification') {
                     $this->session->set_flashdata('error', 'Silakan mulai proses reset password dari awal.');
                     redirect('auth/forgot_password');
@@ -363,7 +362,7 @@ class Auth extends CI_Controller
             // Step 3: Ubah password
             else if ($action === 'change_password') {
                 $reset_step = $this->session->userdata('reset_step');
-                
+
                 if ($reset_step !== 'password_change') {
                     $this->session->set_flashdata('error', 'Silakan verifikasi OTP terlebih dahulu.');
                     redirect('auth/forgot_password');
@@ -375,9 +374,11 @@ class Auth extends CI_Controller
                 if ($this->form_validation->run() == TRUE) {
                     $id_user = $this->session->userdata('reset_id_user');
 
-                    if ($this->User_model->update_user($id_user, [
-                        'password' => $this->input->post('password')
-                    ])) {
+                    if (
+                        $this->User_model->update_user($id_user, [
+                            'password' => $this->input->post('password')
+                        ])
+                    ) {
                         // Clear session reset
                         $this->session->unset_userdata([
                             'reset_no_telepon',
@@ -397,7 +398,7 @@ class Auth extends CI_Controller
             // Action resend OTP
             else if ($action === 'resend_otp_reset') {
                 $reset_step = $this->session->userdata('reset_step');
-                
+
                 if ($reset_step !== 'otp_verification' && $reset_step !== 'password_change') {
                     $this->session->set_flashdata('error', 'Silakan mulai proses reset password dari awal.');
                     redirect('auth/forgot_password');

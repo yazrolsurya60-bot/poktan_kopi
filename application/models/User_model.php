@@ -11,12 +11,29 @@ class User_model extends CI_Model
     }
 
     // Authenticate user by username/email and md5 password
-    public function login($username_or_email, $password)
+    public function login($username_or_phone, $password)
     {
         $this->db->group_start()
-            ->where('username', $username_or_email)
-            ->or_where('email', $username_or_email)
-            ->group_end();
+            ->where('username', $username_or_phone);
+
+        // Hanya cari di no_telepon jika inputnya berupa angka untuk menghindari bug implicit type casting di MySQL
+        if (is_numeric($username_or_phone)) {
+            $this->db->or_where('no_telepon', $username_or_phone);
+
+            // Allow login using 62 format if user entered 08
+            if (substr($username_or_phone, 0, 1) == '0') {
+                $phone_fonnte = '62' . substr($username_or_phone, 1);
+                $this->db->or_where('no_telepon', $phone_fonnte);
+            }
+            
+            // Allow login using 08 format if user entered 62
+            if (substr($username_or_phone, 0, 2) == '62') {
+                $phone_local = '0' . substr($username_or_phone, 2);
+                $this->db->or_where('no_telepon', $phone_local);
+            }
+        }
+
+        $this->db->group_end();
         $user = $this->db->get('tb_user')->row_array();
 
         if ($user && $user['password'] === md5($password)) {
