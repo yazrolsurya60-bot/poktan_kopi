@@ -520,12 +520,28 @@
             <div class="card-body-custom">
                 <form method="post" action="<?= site_url('admin/user/edit/' . ($user['id_user'] ?? '')) ?>" class="form-custom">
                     <div class="form-group">
+                        <label for="nama">
+                            <i class="bi bi-person mr-1 text-muted"></i> Nama Lengkap
+                        </label>
+                        <input type="text" name="nama" id="nama" class="form-control" 
+                               value="<?= htmlspecialchars($user['nama'] ?? '') ?>" 
+                               placeholder="Masukkan nama lengkap" required />
+                    </div>
+                    <div class="form-group">
                         <label for="username">
-                            <i class="bi bi-person mr-1 text-muted"></i> Username
+                            <i class="bi bi-at mr-1 text-muted"></i> Username
                         </label>
                         <input type="text" name="username" id="username" class="form-control" 
                                value="<?= htmlspecialchars($user['username'] ?? '') ?>" 
                                placeholder="Masukkan username" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="no_telepon">
+                            <i class="bi bi-telephone mr-1 text-muted"></i> Nomor Telepon
+                        </label>
+                        <input type="tel" name="no_telepon" id="no_telepon" class="form-control" 
+                               value="<?= htmlspecialchars($user['no_telepon'] ?? '') ?>" 
+                               placeholder="0812345678 atau 62812345678" />
                     </div>
                     <div class="form-group">
                         <label for="email">
@@ -557,6 +573,20 @@
                             <option value="Guest" <?= (isset($user['role']) && $user['role'] === 'Guest') ? 'selected' : '' ?>>Guest</option>
                         </select>
                     </div>
+                    <?php if (isset($user['role']) && $user['role'] === 'Petani'): ?>
+                    <div class="form-group">
+                        <label for="is_verified">
+                            <i class="bi bi-patch-check mr-1 text-muted"></i> Status Verifikasi
+                        </label>
+                        <select name="is_verified" id="is_verified" class="form-select">
+                            <option value="0" <?= (isset($user['is_verified']) && $user['is_verified'] === '0') ? 'selected' : '' ?>>Belum Terverifikasi</option>
+                            <option value="1" <?= (isset($user['is_verified']) && $user['is_verified'] === '1') ? 'selected' : '' ?>>Terverifikasi</option>
+                        </select>
+                        <small class="form-text">
+                            <i class="bi bi-info-circle mr-1"></i> Hanya untuk akun Petani
+                        </small>
+                    </div>
+                    <?php endif; ?>
                     <div class="d-flex gap-2 btn-group-custom" style="gap: 10px; margin-top: 24px;">
                         <button type="submit" class="btn-custom-primary">
                             <i class="bi bi-pencil-square mr-1"></i> Update
