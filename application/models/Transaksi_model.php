@@ -35,6 +35,65 @@ class Transaksi_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 
+    // ============================================================
+    // 🔥 METHOD BARU 1: Ambil transaksi MEMBER saja (untuk admin)
+    // ============================================================
+    public function get_all_transaksi_member($filter = array()) {
+        $this->db->select('t.*, u.nama as nama_pembeli');
+        $this->db->from('tb_transaksi t');
+        $this->db->join('tb_user u', 't.id_user = u.id_user', 'left');
+        
+        // 🔥 HANYA MEMBER (id_user NOT NULL)
+        $this->db->where('t.id_user IS NOT NULL');
+        
+        if (!empty($filter['status_pesanan'])) {
+            $this->db->where('t.status_pesanan', $filter['status_pesanan']);
+        }
+        if (!empty($filter['id_user'])) {
+            $this->db->where('t.id_user', $filter['id_user']);
+        }
+        if (!empty($filter['tanggal_awal']) && !empty($filter['tanggal_akhir'])) {
+            $this->db->where('DATE(t.tanggal_transaksi) >=', $filter['tanggal_awal']);
+            $this->db->where('DATE(t.tanggal_transaksi) <=', $filter['tanggal_akhir']);
+        }
+        
+        $this->db->order_by('t.tanggal_transaksi', 'DESC');
+        return $this->db->get()->result_array();
+    }
+
+    // ============================================================
+    // 🔥 METHOD BARU 2: Cari transaksi GUEST (untuk tracking guest)
+    // ============================================================
+    public function get_guest_transaksi($invoice, $email) {
+        $this->db->select('t.*');
+        $this->db->from('tb_transaksi t');
+        $this->db->where('t.invoice', $invoice);
+        $this->db->where('t.email_pembeli', $email);
+        $this->db->where('t.id_user IS NULL'); // 🔥 GUEST
+        return $this->db->get()->row_array();
+    }
+
+    // ============================================================
+    // 🔥 METHOD BARU 3: Ambil transaksi user dengan daftar produk
+    // ============================================================
+    public function get_transaksi_by_user_with_products($id_user, $limit = null) {
+        $this->db->select('t.*, 
+                           (SELECT GROUP_CONCAT(p.nama_produk SEPARATOR ", ") 
+                            FROM tb_detail_transaksi d 
+                            JOIN tb_produk p ON d.id_produk = p.id_produk 
+                            WHERE d.id_transaksi = t.id_transaksi) as produk_list');
+        $this->db->from('tb_transaksi t');
+        $this->db->where('t.id_user', $id_user);
+        $this->db->order_by('t.tanggal_transaksi', 'DESC');
+        if ($limit) {
+            $this->db->limit($limit);
+        }
+        return $this->db->get()->result_array();
+    }
+
+    // ============================================================
+    // METHOD LAMA (tetap dipertahankan)
+    // ============================================================
     public function get_all_transaksi($filter = array()) {
         $this->db->select('t.*, u.nama as nama_pembeli');
         $this->db->from('tb_transaksi t');
@@ -119,6 +178,9 @@ class Transaksi_model extends CI_Model {
         return $this->db->get('tb_ongkir')->row_array();
     }
 
+    // ============================================================
+    // 🔥 FIX: HITUNG ONGKIR - PAKAI KOLOM 'tarif' & 'estimasi_hari'
+    // ============================================================
     public function hitung_ongkir_server($kota_asal, $kota_tujuan, $berat_gram = 1000) {
         $this->db->where('kota_asal', $kota_asal);
         $this->db->where('kota_tujuan', $kota_tujuan);
@@ -127,47 +189,35 @@ class Transaksi_model extends CI_Model {
         if (!$ongkir) {
             return array(
                 'success' => false,
-                'message' => 'Rute pengiriman tidak ditemukan.',
+                'message' => 'Rute pengiriman ' . $kota_asal . ' → ' . $kota_tujuan . ' tidak ditemukan.',
                 'ongkir'  => 0,
             );
         }
 
-        // ============================================================
-        // PENTING: cek nama kolom asli di tabel tb_ongkir kamu
-        // (buka phpMyAdmin -> tabel tb_ongkir -> lihat nama kolomnya).
-        // Kode di bawah ini coba beberapa kemungkinan nama kolom yang
-        // umum dipakai, supaya tidak error walau namanya beda dari
-        // 'harga_per_kg'. Setelah tahu nama kolom aslinya, sebaiknya
-        // sederhanakan jadi satu baris saja, misal:
-        //   $harga_per_kg = (int) $ongkir['nama_kolom_asli'];
-        // ============================================================
-        $kemungkinan_kolom = array('harga_per_kg', 'tarif_per_kg', 'harga_kg', 'tarif', 'harga');
-        $harga_per_kg = null;
-        foreach ($kemungkinan_kolom as $kolom) {
-            if (isset($ongkir[$kolom])) {
-                $harga_per_kg = (int) $ongkir[$kolom];
-                break;
-            }
-        }
+        // 🔥 PAKAI KOLOM 'tarif' (sesuai struktur tb_ongkir terbaru)
+        $tarif = isset($ongkir['tarif']) ? (int) $ongkir['tarif'] : 0;
 
-        if ($harga_per_kg === null) {
+        if ($tarif <= 0) {
             return array(
                 'success' => false,
-                'message' => 'Konfigurasi tarif ongkir tidak valid (nama kolom harga tidak ditemukan).',
+                'message' => 'Tarif ongkir untuk rute ini tidak valid.',
                 'ongkir'  => 0,
             );
         }
 
         // Hitung biaya berdasarkan berat, minimal 1 kg
         $kg    = max(1, ceil($berat_gram / 1000));
-        $biaya = $kg * $harga_per_kg;
+        $biaya = $kg * $tarif;
+
+        // 🔥 PAKAI KOLOM 'estimasi_hari'
+        $estimasi = isset($ongkir['estimasi_hari']) ? $ongkir['estimasi_hari'] : 1;
 
         return array(
             'success'     => true,
             'kota_asal'   => $kota_asal,
             'kota_tujuan' => $kota_tujuan,
             'berat_gram'  => $berat_gram,
-            'estimasi'    => isset($ongkir['estimasi']) ? $ongkir['estimasi'] : '-',
+            'estimasi'    => $estimasi,
             'ongkir'      => $biaya,
         );
     }

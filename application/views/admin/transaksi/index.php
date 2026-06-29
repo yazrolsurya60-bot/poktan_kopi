@@ -244,7 +244,7 @@
 			font-weight: 600;
 		}
 
-		/* ===== NOTIFICATION - SAMA DENGAN DASHBOARD ===== */
+		/* ===== NOTIFICATION ===== */
 		.notif-btn {
 			position: relative;
 			background: var(--card-white);
@@ -941,69 +941,69 @@
 			</div>
 			<div class="d-flex align-items-center gap-3">
 
-			            <!-- NOTIFIKASI BELL -->
-            <div style="position: relative;">
-                <button class="notif-btn" id="notifToggle">
-                    <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
-                    <?php if (isset($unread_count) && $unread_count > 0): ?>
-                        <span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
-                    <?php else: ?>
-                        <span class="notif-dot" id="notifCount" style="display:none;">0</span>
-                    <?php endif; ?>
-                </button>
+				<!-- NOTIFIKASI BELL -->
+				<div style="position: relative;">
+					<button class="notif-btn" id="notifToggle">
+						<i class="bi bi-bell" style="font-size: 1.2rem;"></i>
+						<?php if (isset($unread_count) && $unread_count > 0): ?>
+							<span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
+						<?php else: ?>
+							<span class="notif-dot" id="notifCount" style="display:none;">0</span>
+						<?php endif; ?>
+					</button>
 
-                <div class="notif-dropdown" id="notifDropdown">
-                    <div class="notif-dropdown-header">
-                        <span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Belum Dibaca' : 'Semua Notifikasi'; ?></span>
-                        <a href="<?= base_url('notifikasi/history'); ?>">Lihat Semua</a>
-                    </div>
-                    <div class="notif-dropdown-list">
-                        <?php if (!empty($notifikasi)): ?>
-                            <?php foreach ($notifikasi as $n): ?>
-                                <?php
-                                    $icon_type = $n['icon'] ?? 'info';
-                                    $icon_map  = ['success' => 'bi-check-circle-fill', 'warning' => 'bi-exclamation-triangle-fill', 'danger' => 'bi-x-circle-fill', 'info' => 'bi-info-circle-fill'];
-                                    $icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
-                                ?>
-                                <a class="notif-item-drop <?= ($n['status_baca'] ?? '0') == '0' ? 'unread' : ''; ?>"
-                                   href="<?= base_url('notifikasi/read/' . $n['id_notifikasi']); ?>">
-                                    <div class="notif-icon <?= $icon_type; ?>">
-                                        <i class="bi <?= $icon_class; ?>"></i>
-                                    </div>
-                                    <div style="flex:1; font-size:0.85rem;">
-                                        <?= htmlspecialchars($n['isi_notifikasi']); ?>
-                                        <span style="font-size:0.7rem; color:var(--text-secondary); display:block; margin-top:2px;"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
-                                    </div>
-                                </a>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="text-center text-muted py-4">
-                                <i class="bi bi-bell-slash d-block mb-1" style="font-size:1.8rem;"></i>
-                                <small>Tidak ada notifikasi</small>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="p-2 text-center border-top" style="background:#FAF6F0;">
-                        <a href="<?= base_url('notifikasi/setting'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
-                            <i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
-                        </a>
-                    </div>
-                </div>
-            </div>
+					<div class="notif-dropdown" id="notifDropdown">
+						<div class="notif-dropdown-header">
+							<span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Belum Dibaca' : 'Semua Notifikasi'; ?></span>
+							<a href="<?= base_url('notifikasi/history'); ?>">Lihat Semua</a>
+						</div>
+						<div class="notif-dropdown-list">
+							<?php if (!empty($notifikasi)): ?>
+								<?php foreach ($notifikasi as $n): ?>
+									<?php
+										$icon_type = $n['icon'] ?? 'info';
+										$icon_map  = ['success' => 'bi-check-circle-fill', 'warning' => 'bi-exclamation-triangle-fill', 'danger' => 'bi-x-circle-fill', 'info' => 'bi-info-circle-fill'];
+										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+									?>
+									<a class="notif-item-drop <?= ($n['status_baca'] ?? '0') == '0' ? 'unread' : ''; ?>"
+									   href="<?= base_url('notifikasi/read/' . $n['id_notifikasi']); ?>">
+										<div class="notif-icon <?= $icon_type; ?>">
+											<i class="bi <?= $icon_class; ?>"></i>
+										</div>
+										<div style="flex:1; font-size:0.85rem;">
+											<?= htmlspecialchars($n['isi_notifikasi']); ?>
+											<span style="font-size:0.7rem; color:var(--text-secondary); display:block; margin-top:2px;"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+										</div>
+									</a>
+								<?php endforeach; ?>
+							<?php else: ?>
+								<div class="text-center text-muted py-4">
+									<i class="bi bi-bell-slash d-block mb-1" style="font-size:1.8rem;"></i>
+									<small>Tidak ada notifikasi</small>
+								</div>
+							<?php endif; ?>
+						</div>
+						<div class="p-2 text-center border-top" style="background:#FAF6F0;">
+							<a href="<?= base_url('notifikasi/setting'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
+								<i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
+							</a>
+						</div>
+					</div>
+				</div>
 
-            <!-- USER AVATAR -->
-            <div class="d-flex align-items-center" style="cursor:pointer; padding:6px 12px; border-radius:10px; background:var(--card-white); border:1px solid rgba(74,44,17,0.06);">
-                <i class="bi bi-person-circle" style="font-size:1.5rem; color:var(--amber-cream);"></i>
-                <span class="ml-2" style="font-weight:500; font-size:0.85rem;">Admin</span>
-            </div>
+				<!-- USER AVATAR -->
+				<div class="d-flex align-items-center" style="cursor:pointer; padding:6px 12px; border-radius:10px; background:var(--card-white); border:1px solid rgba(74,44,17,0.06);">
+					<i class="bi bi-person-circle" style="font-size:1.5rem; color:var(--amber-cream);"></i>
+					<span class="ml-2" style="font-weight:500; font-size:0.85rem;">Admin</span>
+				</div>
 			</div>
 		</div>
 
-		<!-- QUICK ACTION - RAPI & TIDAK BERDEMPET -->
+		<!-- QUICK ACTION -->
 		<div class="row mb-4 fade-in">
 			<div class="col-12">
 				<div class="d-flex flex-wrap" style="gap: 10px;">
-					<a href="<?= base_url('admin/transaksi'); ?>" class="quick-action-btn" style="padding: 10px 20px;">
+										<a href="<?= base_url('admin/transaksi'); ?>" class="quick-action-btn" style="padding: 10px 20px;">
 						<i class="bi bi-arrow-repeat"></i> Refresh
 					</a>
 					<a href="<?= base_url('admin/transaksi/export_excel'); ?>" class="quick-action-btn btn-excel" style="padding: 10px 20px;" onclick="return confirm('Download laporan Excel?')">
@@ -1112,7 +1112,17 @@
 												<?= $t['status_bayar'] ?? 'Pending'; ?>
 											</span>
 										</td>
-										<td><?= $t['metode_bayar'] ?? 'Transfer'; ?></td>
+										<td>
+											<?php 
+											// 🔥 FIX: Ganti Transfer Bank menjadi Virtual Account
+											$metode = $t['metode_bayar'] ?? 'Transfer';
+											if ($metode == 'Transfer Bank' || $metode == 'Transfer') {
+												echo 'Virtual Account';
+											} else {
+												echo $metode;
+											}
+											?>
+										</td>
 										<td><span style="font-size:0.8rem; color:var(--text-secondary);"><?= date('d/m/Y', strtotime($t['tanggal_transaksi'] ?? date('Y-m-d'))); ?></span></td>
 										<td class="text-center">
 											<a href="<?= base_url('admin/transaksi/detail/' . $t['id_transaksi']); ?>"
