@@ -495,9 +495,9 @@
                             <input type="text" class="otp-input" id="otp5" maxlength="1" inputmode="numeric" />
                             <input type="text" class="otp-input" id="otp6" maxlength="1" inputmode="numeric" />
                         </div>
-                        <input type="hidden" id="kode_otp" name="kode_otp" />
-                        <?php if (form_error('kode_otp')): ?>
-                            <small class="text-danger"><?= form_error('kode_otp'); ?></small>
+                        <input type="hidden" id="otp" name="otp" />
+                        <?php if (form_error('otp')): ?>
+                            <small class="text-danger"><?= form_error('otp'); ?></small>
                         <?php endif; ?>
                     </div>
 
@@ -548,7 +548,7 @@
                 const otpValue = Array.from(document.querySelectorAll('.otp-input'))
                     .map(input => input.value)
                     .join('');
-                document.getElementById('kode_otp').value = otpValue;
+                document.getElementById('otp').value = otpValue;
             });
 
             input.addEventListener('input', function () {
@@ -558,31 +558,6 @@
                 }
             });
         });
-
-        // Form submit handler to ensure OTP is combined before submission
-        // Find the form that has the verify_otp action hidden input
-        const verifyForms = Array.from(document.querySelectorAll('form')).filter(form => 
-            form.querySelector('input[name="action"][value="verify_otp"]')
-        );
-        
-        if (verifyForms.length > 0) {
-            verifyForms[0].addEventListener('submit', function(e) {
-                const otpValue = Array.from(document.querySelectorAll('.otp-input'))
-                    .map(input => input.value)
-                    .join('');
-                document.getElementById('kode_otp').value = otpValue;
-                
-                // Log for debugging
-                console.log('Submitting OTP:', otpValue);
-                
-                // If OTP is empty, prevent submission
-                if (otpValue.length !== 6) {
-                    e.preventDefault();
-                    alert('Mohon masukkan kode OTP 6 digit yang lengkap.');
-                    return false;
-                }
-            });
-        }
     </script>
 
 </body>

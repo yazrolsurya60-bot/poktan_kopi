@@ -41,14 +41,22 @@ class Auth extends CI_Controller
 
                 if ($user) {
                     if ($user['status'] === 'Active') {
+                        // Cek apakah petani sudah diverifikasi oleh admin
+                        if ($user['role'] === 'Petani' && $user['is_verified'] === '0') {
+                            $this->session->set_flashdata('error', 'Akun Anda sebagai Petani masih menunggu verifikasi dari Administrator. Silakan tunggu.');
+                            redirect('auth/login');
+                        }
+
                         $this->session->set_userdata([
                             'id_user' => $user['id_user'],
                             'username' => $user['username'],
                             'nama' => $user['nama'],
                             'email' => $user['email'],
+                            'no_telepon' => $user['no_telepon'],
                             'role' => $user['role'],
                             'foto' => $user['foto'],
-                            'status' => $user['status']
+                            'status' => $user['status'],
+                            'is_verified' => $user['is_verified']
                         ]);
 
                         $this->session->set_flashdata('success', 'Selamat datang kembali, ' . $user['nama'] . '!');
@@ -61,23 +69,7 @@ class Auth extends CI_Controller
                             redirect('pembeli/dashboard');
                         }
                     } elseif ($user['status'] === 'Pending') {
-                        // Generate mock verification token in case they need to verify
-                        if (empty($user['verification_token'])) {
-                            $token = md5($user['email'] . time());
-                            $expiry = date('Y-m-d H:i:s', strtotime('+1 hour'));
-                            $this->User_model->update_user($user['id_user'], [
-                                'verification_token' => $token,
-                                'token_expiry' => $expiry
-                            ]);
-                            $user['verification_token'] = $token;
-                        }
-
-                        $this->session->set_flashdata('verify_needed', [
-                            'id_user' => $user['id_user'],
-                            'email' => $user['email'],
-                            'token' => $user['verification_token']
-                        ]);
-                        $this->session->set_flashdata('error', 'Akun Anda belum aktif. Silakan verifikasi email Anda terlebih dahulu.');
+                        $this->session->set_flashdata('error', 'Akun Anda belum aktif.');
                     } else {
                         $this->session->set_flashdata('error', 'Akun Anda dinonaktifkan. Silakan hubungi Administrator.');
                     }
@@ -95,59 +87,193 @@ class Auth extends CI_Controller
         $this->check_already_logged_in();
 
         if ($this->input->post()) {
-            $this->form_validation->set_rules('nama', 'Nama Lengkap', 'required|trim|max_length[100]');
-            $this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[4]|max_length[50]|is_unique[tb_user.username]');
-            $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[tb_user.email]');
-            $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
-            $this->form_validation->set_rules('role', 'Role', 'required|in_list[Petani,Pembeli]');
+            $action = $this->input->post('action');
 
-            if ($this->form_validation->run() == TRUE) {
-                $token = md5($this->input->post('email') . time());
-                $expiry = date('Y-m-d H:i:s', strtotime('+1 hour'));
+            // Step 1: Form registrasi awal
+            if ($action === 'register_form') {
+                $this->form_validation->set_rules('nama', 'Nama Lengkap', 'required|trim|max_length[100]');
+                $this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[4]|max_length[50]|is_unique[tb_user.username]');
+                $this->form_validation->set_rules('no_telepon', 'Nomor Telepon', 'required|trim');
+                $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
+                $this->form_validation->set_rules('role', 'Role', 'required|in_list[Petani,Pembeli]');
 
-                $userData = [
-                    'nama' => $this->input->post('nama', TRUE),
-                    'username' => strtolower($this->input->post('username', TRUE)),
-                    'email' => $this->input->post('email', TRUE),
-                    'password' => $this->input->post('password'),
-                    'role' => $this->input->post('role'),
-                    'status' => 'Pending',
-                    'verification_token' => $token,
-                    'token_expiry' => $expiry
-                ];
+                if ($this->form_validation->run() == TRUE) {
+                    // Validasi nomor telepon
+                    $no_telepon = $this->input->post('no_telepon', TRUE);
+                    if (!validate_phone_number($no_telepon)) {
+                        $this->session->set_flashdata('error', 'Nomor telepon tidak valid.');
+                        redirect('auth/register');
+                    }
 
-                $userId = $this->User_model->insert_user($userData);
+                    // Format nomor telepon ke format Fonnte (62xxx)
+                    $no_telepon_formatted = format_phone_number($no_telepon);
 
-                if ($userId) {
-                    $this->session->set_flashdata('register_success', [
-                        'email' => $userData['email'],
-                        'token' => $token
-                    ]);
+                    // Cek apakah nomor telepon sudah terdaftar
+                    $existing_user = $this->User_model->get_by_phone($no_telepon_formatted);
+                    if ($existing_user) {
+                        $this->session->set_flashdata('error', 'Nomor telepon sudah terdaftar.');
+                        redirect('auth/register');
+                    }
+
+                    // Generate OTP
+                    $otp = generate_otp();
+
+                    // Simpan OTP ke database (gunakan nomor telepon sebagai tujuan)
+                    $this->User_model->insert_otp($no_telepon_formatted, $otp, 'whatsapp');
+
+                    // Kirim OTP via WhatsApp menggunakan Fonnte
+                    $send_result = send_otp_fonnte($no_telepon_formatted, $otp);
+
+                    if ($send_result['status'] === 'success') {
+                        // Simpan data registrasi sementara di session
+                        $this->session->set_userdata([
+                            'register_nama' => $this->input->post('nama', TRUE),
+                            'register_username' => strtolower($this->input->post('username', TRUE)),
+                            'register_no_telepon' => $no_telepon_formatted,
+                            'register_password' => $this->input->post('password'),
+                            'register_role' => $this->input->post('role'),
+                            'register_step' => 'otp_verification'
+                        ]);
+
+                        $this->session->set_flashdata('success', 'OTP telah dikirim ke WhatsApp Anda. Silakan masukkan kode OTP untuk melanjutkan.');
+                        redirect('auth/register');
+                    } else {
+                        $this->session->set_flashdata('error', 'Gagal mengirim OTP. ' . $send_result['message']);
+                        redirect('auth/register');
+                    }
+                }
+            }
+
+            // Step 2: Verifikasi OTP
+            else if ($action === 'verify_otp') {
+                $register_step = $this->session->userdata('register_step');
+                
+                if ($register_step !== 'otp_verification') {
+                    $this->session->set_flashdata('error', 'Silakan mulai registrasi dari awal.');
+                    redirect('auth/register');
+                }
+
+                $kode_otp = $this->input->post('kode_otp', TRUE);
+                
+                // Debug: Log what we received
+                log_message('debug', 'OTP Verification - Received kode_otp: ' . $kode_otp);
+                
+                $this->form_validation->set_rules('kode_otp', 'Kode OTP', 'required|numeric|exact_length[6]');
+
+                if ($this->form_validation->run() == FALSE) {
+                    // Validation failed - form_error() will display errors in view
+                    log_message('debug', 'OTP Verification - Validation failed');
+                    // Don't redirect, just fall through to load the view with errors
+                    // The view will show form_error('kode_otp') if there's an error
+                } else if (empty($kode_otp)) {
+                    // OTP field is empty even though validation passed (shouldn't happen, but just in case)
+                    $this->session->set_flashdata('error', 'Mohon masukkan kode OTP.');
                     redirect('auth/register');
                 } else {
-                    $this->session->set_flashdata('error', 'Pendaftaran gagal. Silakan coba lagi.');
+                    // Validation passed, verify OTP
+                    log_message('debug', 'OTP Verification - Validation passed, verifying OTP');
+                    $no_telepon = $this->session->userdata('register_no_telepon');
+
+                    // Verifikasi OTP
+                    if ($this->User_model->verify_otp($no_telepon, $kode_otp, 'whatsapp')) {
+                        log_message('debug', 'OTP Verification - OTP verified successfully');
+                        // Buat akun user
+                        $userData = [
+                            'nama' => $this->session->userdata('register_nama'),
+                            'username' => $this->session->userdata('register_username'),
+                            'no_telepon' => $no_telepon,
+                            'password' => $this->session->userdata('register_password'),
+                            'role' => $this->session->userdata('register_role'),
+                            'status' => 'Active',
+                            'is_verified' => ($this->session->userdata('register_role') === 'Petani') ? '0' : '1'
+                        ];
+
+                        $userId = $this->User_model->insert_user($userData);
+
+                        if ($userId) {
+                            log_message('debug', 'OTP Verification - User created with ID: ' . $userId);
+                            // Clear session registrasi
+                            $this->session->unset_userdata([
+                                'register_nama',
+                                'register_username',
+                                'register_no_telepon',
+                                'register_password',
+                                'register_role',
+                                'register_step'
+                            ]);
+
+                            $role_text = ($userData['role'] === 'Petani') ? 'Petani (Menunggu verifikasi admin)' : 'Pembeli';
+                            $this->session->set_flashdata('success', 'Akun Anda berhasil dibuat sebagai ' . $role_text . '. Silakan login.');
+                            redirect('auth/login');
+                        } else {
+                            log_message('error', 'OTP Verification - Failed to create user');
+                            $this->session->set_flashdata('error', 'Gagal membuat akun. Silakan coba lagi.');
+                            redirect('auth/register');
+                        }
+                    } else {
+                        log_message('debug', 'OTP Verification - Invalid or expired OTP');
+                        $this->session->set_flashdata('error', 'Kode OTP tidak valid atau telah kedaluwarsa.');
+                        redirect('auth/register');
+                    }
                 }
+            }
+
+            // Action resend OTP
+            else if ($action === 'resend_otp') {
+                $register_step = $this->session->userdata('register_step');
+                
+                if ($register_step !== 'otp_verification') {
+                    $this->session->set_flashdata('error', 'Silakan mulai registrasi dari awal.');
+                    redirect('auth/register');
+                }
+
+                $no_telepon = $this->session->userdata('register_no_telepon');
+
+                // Hapus OTP lama
+                $this->User_model->delete_otp($no_telepon, 'whatsapp');
+
+                // Generate OTP baru
+                $otp = generate_otp();
+
+                // Simpan OTP baru ke database
+                $this->User_model->insert_otp($no_telepon, $otp, 'whatsapp');
+
+                // Kirim OTP via WhatsApp
+                $send_result = send_otp_fonnte($no_telepon, $otp);
+
+                if ($send_result['status'] === 'success') {
+                    $this->session->set_flashdata('success', 'OTP baru telah dikirim ke WhatsApp Anda.');
+                } else {
+                    $this->session->set_flashdata('error', 'Gagal mengirim ulang OTP.');
+                }
+                redirect('auth/register');
             }
         }
 
-        $this->load->view('auth/v_register');
+        $data['register_step'] = $this->session->userdata('register_step');
+        $this->load->view('auth/v_register', $data);
     }
 
-    public function verify($token)
+    public function verify($token = null)
     {
-        $user = $this->User_model->verify_token($token, 'verification');
+        // Untuk backward compatibility, jika ada token parameter gunakan token-based verification
+        if (!empty($token)) {
+            $user = $this->User_model->verify_token($token, 'verification');
 
-        if ($user) {
-            $this->User_model->update_user($user['id_user'], [
-                'status' => 'Active',
-                'verification_token' => NULL,
-                'token_expiry' => NULL
-            ]);
+            if ($user) {
+                $this->User_model->update_user($user['id_user'], [
+                    'status' => 'Active',
+                    'verification_token' => NULL,
+                    'token_expiry' => NULL
+                ]);
 
-            $this->session->set_flashdata('success', 'Email berhasil diverifikasi! Silakan login.');
-            redirect('auth/login');
+                $this->session->set_flashdata('success', 'Email berhasil diverifikasi! Silakan login.');
+                redirect('auth/login');
+            } else {
+                $this->session->set_flashdata('error', 'Token verifikasi tidak valid atau telah kedaluwarsa.');
+                redirect('auth/login');
+            }
         } else {
-            $this->session->set_flashdata('error', 'Token verifikasi tidak valid atau telah kedaluwarsa.');
             redirect('auth/login');
         }
     }
@@ -157,63 +283,153 @@ class Auth extends CI_Controller
         $this->check_already_logged_in();
 
         if ($this->input->post()) {
-            $email = $this->input->post('email', TRUE);
-            $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+            $action = $this->input->post('action');
 
-            if ($this->form_validation->run() == TRUE) {
-                $user = $this->User_model->get_by_email($email);
+            // Step 1: Input nomor telepon untuk reset password
+            if ($action === 'request_otp') {
+                $no_telepon = $this->input->post('no_telepon', TRUE);
+                $this->form_validation->set_rules('no_telepon', 'Nomor Telepon', 'required|trim');
 
-                if ($user) {
-                    $token = md5($email . time());
-                    $expiry = date('Y-m-d H:i:s', strtotime('+1 hour'));
+                if ($this->form_validation->run() == TRUE) {
+                    // Validasi nomor telepon
+                    if (!validate_phone_number($no_telepon)) {
+                        $this->session->set_flashdata('error', 'Nomor telepon tidak valid.');
+                        redirect('auth/forgot_password');
+                    }
 
-                    $this->User_model->update_user($user['id_user'], [
-                        'reset_token' => $token,
-                        'token_expiry' => $expiry
-                    ]);
+                    // Format nomor telepon
+                    $no_telepon_formatted = format_phone_number($no_telepon);
 
-                    $this->session->set_flashdata('reset_success', [
-                        'email' => $email,
-                        'token' => $token
-                    ]);
-                    redirect('auth/forgot_password');
-                } else {
-                    $this->session->set_flashdata('error', 'Email tidak ditemukan.');
+                    // Cek apakah nomor telepon terdaftar
+                    $user = $this->User_model->get_by_phone($no_telepon_formatted);
+                    if (!$user) {
+                        $this->session->set_flashdata('error', 'Nomor telepon tidak ditemukan dalam sistem.');
+                        redirect('auth/forgot_password');
+                    }
+
+                    // Generate OTP
+                    $otp = generate_otp();
+
+                    // Simpan OTP ke database dengan metode whatsapp dan id_user
+                    $this->User_model->insert_otp($no_telepon_formatted, $otp, 'whatsapp', $user['id_user']);
+
+                    // Kirim OTP via WhatsApp
+                    $send_result = send_otp_fonnte($no_telepon_formatted, $otp);
+
+                    if ($send_result['status'] === 'success') {
+                        // Simpan data sementara di session
+                        $this->session->set_userdata([
+                            'reset_no_telepon' => $no_telepon_formatted,
+                            'reset_id_user' => $user['id_user'],
+                            'reset_step' => 'otp_verification'
+                        ]);
+
+                        $this->session->set_flashdata('success', 'OTP telah dikirim ke WhatsApp Anda.');
+                        redirect('auth/forgot_password');
+                    } else {
+                        $this->session->set_flashdata('error', 'Gagal mengirim OTP: ' . $send_result['message']);
+                        redirect('auth/forgot_password');
+                    }
                 }
             }
-        }
 
-        $this->load->view('auth/v_forgot_password');
-    }
+            // Step 2: Verifikasi OTP
+            else if ($action === 'verify_otp_reset') {
+                $reset_step = $this->session->userdata('reset_step');
+                
+                if ($reset_step !== 'otp_verification') {
+                    $this->session->set_flashdata('error', 'Silakan mulai proses reset password dari awal.');
+                    redirect('auth/forgot_password');
+                }
 
-    public function reset_password($token)
-    {
-        $this->check_already_logged_in();
-        $user = $this->User_model->verify_token($token, 'reset');
+                $otp = $this->input->post('otp', TRUE);
+                $this->form_validation->set_rules('otp', 'Kode OTP', 'required|numeric|exact_length[6]');
 
-        if (!$user) {
-            $this->session->set_flashdata('error', 'Link reset password tidak valid atau telah kedaluwarsa.');
-            redirect('auth/forgot_password');
-        }
+                if ($this->form_validation->run() == TRUE) {
+                    $no_telepon = $this->session->userdata('reset_no_telepon');
 
-        if ($this->input->post()) {
-            $this->form_validation->set_rules('password', 'Password Baru', 'required|min_length[6]');
-            $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password Baru', 'required|matches[password]');
+                    // Verifikasi OTP
+                    if ($this->User_model->verify_otp($no_telepon, $otp, 'whatsapp')) {
+                        $this->session->set_userdata('reset_step', 'password_change');
+                        $this->session->set_flashdata('success', 'OTP terverifikasi. Silakan masukkan password baru.');
+                        redirect('auth/forgot_password');
+                    } else {
+                        $this->session->set_flashdata('error', 'Kode OTP tidak valid atau telah kedaluwarsa.');
+                        redirect('auth/forgot_password');
+                    }
+                }
+            }
 
-            if ($this->form_validation->run() == TRUE) {
-                $this->User_model->update_user($user['id_user'], [
-                    'password' => $this->input->post('password'),
-                    'reset_token' => NULL,
-                    'token_expiry' => NULL
-                ]);
+            // Step 3: Ubah password
+            else if ($action === 'change_password') {
+                $reset_step = $this->session->userdata('reset_step');
+                
+                if ($reset_step !== 'password_change') {
+                    $this->session->set_flashdata('error', 'Silakan verifikasi OTP terlebih dahulu.');
+                    redirect('auth/forgot_password');
+                }
 
-                $this->session->set_flashdata('success', 'Password Anda berhasil diperbarui. Silakan login dengan password baru.');
-                redirect('auth/login');
+                $this->form_validation->set_rules('password', 'Password Baru', 'required|min_length[6]');
+                $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password', 'required|matches[password]');
+
+                if ($this->form_validation->run() == TRUE) {
+                    $id_user = $this->session->userdata('reset_id_user');
+
+                    if ($this->User_model->update_user($id_user, [
+                        'password' => $this->input->post('password')
+                    ])) {
+                        // Clear session reset
+                        $this->session->unset_userdata([
+                            'reset_no_telepon',
+                            'reset_id_user',
+                            'reset_step'
+                        ]);
+
+                        $this->session->set_flashdata('success', 'Password Anda berhasil diperbarui. Silakan login dengan password baru.');
+                        redirect('auth/login');
+                    } else {
+                        $this->session->set_flashdata('error', 'Gagal memperbarui password.');
+                        redirect('auth/forgot_password');
+                    }
+                }
+            }
+
+            // Action resend OTP
+            else if ($action === 'resend_otp_reset') {
+                $reset_step = $this->session->userdata('reset_step');
+                
+                if ($reset_step !== 'otp_verification' && $reset_step !== 'password_change') {
+                    $this->session->set_flashdata('error', 'Silakan mulai proses reset password dari awal.');
+                    redirect('auth/forgot_password');
+                }
+
+                $no_telepon = $this->session->userdata('reset_no_telepon');
+                $id_user = $this->session->userdata('reset_id_user');
+
+                // Hapus OTP lama
+                $this->User_model->delete_otp($no_telepon, 'whatsapp');
+
+                // Generate OTP baru
+                $otp = generate_otp();
+
+                // Simpan OTP baru
+                $this->User_model->insert_otp($no_telepon, $otp, 'whatsapp', $id_user);
+
+                // Kirim OTP
+                $send_result = send_otp_fonnte($no_telepon, $otp);
+
+                if ($send_result['status'] === 'success') {
+                    $this->session->set_userdata('reset_step', 'otp_verification');
+                    $this->session->set_flashdata('success', 'OTP baru telah dikirim ke WhatsApp Anda.');
+                } else {
+                    $this->session->set_flashdata('error', 'Gagal mengirim ulang OTP.');
+                }
+                redirect('auth/forgot_password');
             }
         }
 
-        $data['token'] = $token;
-        $this->load->view('auth/v_reset_password', $data);
+        $data['reset_step'] = $this->session->userdata('reset_step');
+        $this->load->view('auth/v_forgot_password', $data);
     }
 
     public function profile()
