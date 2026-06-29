@@ -110,6 +110,11 @@
         .logo-placeholder { width: 46px; height: 46px; border-radius: 10px; border: 1px dashed rgba(74,44,17,0.2); background: var(--bg-cream); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 1.1rem; }
         .mitra-name { font-weight: 700; color: var(--dark-coffee); margin: 0; font-size: 0.875rem; }
         .mitra-meta { font-size: 0.7rem; color: var(--text-secondary); margin: 0; }
+        .kontak-line { font-size: 0.78rem; color: var(--dark-coffee); margin: 0 0 3px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+        .kontak-line:last-child { margin-bottom: 0; }
+        .kontak-line i { color: var(--amber-cream); font-size: 0.75rem; width: 13px; }
+        .kontak-line.muted { color: var(--text-secondary); font-weight: 400; }
+        .kontak-empty { color: var(--text-secondary); font-size: 0.8rem; }
         .kategori-pill { display: inline-block; padding: 3px 10px; border-radius: 20px; background: rgba(74,44,17,0.07); color: var(--roasted-brown); font-size: 0.7rem; font-weight: 600; }
 
         .urutan-input { width: 64px; text-align: center; font-weight: 700; font-size: 0.875rem; color: var(--dark-coffee); background: rgba(250,246,240,0.7); border: 1px solid rgba(230,161,92,0.25); border-radius: 8px; padding: 5px 6px; height: auto; transition: var(--transition-smooth); }
@@ -352,17 +357,18 @@
                 <thead>
                     <tr>
                         <th style="width:4%">#</th>
-                        <th style="width:7%">Logo</th>
-                        <th style="width:26%">Nama Mitra</th>
-                        <th style="width:16%">Kategori</th>
-                        <th style="width:11%">Urutan</th>
-                        <th style="width:13%">Status</th>
-                        <th style="width:23%;text-align:right;">Aksi</th>
+                        <th style="width:6%">Logo</th>
+                        <th style="width:19%">Nama Mitra</th>
+                        <th style="width:12%">Kategori</th>
+                        <th style="width:17%">Kontak</th>
+                        <th style="width:8%">Urutan</th>
+                        <th style="width:11%">Status</th>
+                        <th style="width:19%;text-align:right;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($mitra)): ?>
-                    <tr><td colspan="7">
+                    <tr><td colspan="8">
                         <div class="empty-state">
                             <div class="empty-icon"><i class="bi bi-shop"></i></div>
                             <h6>Belum Ada Data Mitra</h6>
@@ -385,6 +391,17 @@
                             <p class="mitra-meta">ID #<?= $m['id_mitra']; ?></p>
                         </td>
                         <td><span class="kategori-pill"><?= htmlspecialchars($m['kategori_mitra']); ?></span></td>
+                        <td>
+                            <?php if (!empty($m['no_telepon'])): ?>
+                                <p class="kontak-line"><i class="bi bi-telephone-fill"></i> <?= htmlspecialchars($m['no_telepon']); ?></p>
+                            <?php endif; ?>
+                            <?php if (!empty($m['email'])): ?>
+                                <p class="kontak-line muted"><i class="bi bi-envelope-fill"></i> <?= htmlspecialchars($m['email']); ?></p>
+                            <?php endif; ?>
+                            <?php if (empty($m['no_telepon']) && empty($m['email'])): ?>
+                                <span class="kontak-empty">&mdash;</span>
+                            <?php endif; ?>
+                        </td>
                         <td>
                             <input type="number" class="form-control urutan-input" data-id="<?= $m['id_mitra']; ?>" value="<?= (int)$m['urutan_tampil']; ?>" min="1" title="Edit urutan">
                         </td>

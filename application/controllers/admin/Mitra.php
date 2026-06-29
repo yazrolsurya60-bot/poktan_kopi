@@ -43,8 +43,13 @@ class Mitra extends CI_Controller {
             $data = [
                 'nama_mitra' => $this->input->post('nama_mitra'),
                 'kategori_mitra' => $this->input->post('kategori_mitra'),
+                'email' => $this->input->post('email'),
+                'no_telepon' => $this->input->post('no_telepon'),
+                'website' => $this->input->post('website'),
+                'alamat' => $this->input->post('alamat'),
+                'deskripsi' => $this->input->post('deskripsi'),
                 'urutan_tampil' => $this->input->post('urutan_tampil') ?? 1,
-                'status_mitra' => 'Active',
+                'status_mitra' => ($this->input->post('status_mitra') === 'Inactive') ? 'Inactive' : 'Active',
             ];
 
             // Handle file upload
@@ -79,6 +84,11 @@ class Mitra extends CI_Controller {
             $data = [
                 'nama_mitra' => $this->input->post('nama_mitra'),
                 'kategori_mitra' => $this->input->post('kategori_mitra'),
+                'email' => $this->input->post('email'),
+                'no_telepon' => $this->input->post('no_telepon'),
+                'website' => $this->input->post('website'),
+                'alamat' => $this->input->post('alamat'),
+                'deskripsi' => $this->input->post('deskripsi'),
                 'urutan_tampil' => $this->input->post('urutan_tampil') ?? 1,
             ];
 
