@@ -1069,10 +1069,30 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Alamat <span class="text-danger">*</span></label>
-                        <textarea name="alamat" class="form-control rounded-3 py-2" rows="4" placeholder="Masukkan alamat lengkap" required><?= set_value('alamat'); ?></textarea>
+                       <textarea name="alamat" class="form-control rounded-3 py-2" rows="4" placeholder="Masukkan alamat lengkap" required><?= set_value('alamat'); ?></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Wilayah <span class="text-danger">*</span></label>
+                        <div class="border rounded-3 p-3" style="background-color: #fafafa;">
+                            <?php if (!empty($semua_wilayah)): ?>
+                                <?php foreach ($semua_wilayah as $w): ?>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="wilayah[]" value="<?= $w['id_wilayah']; ?>" id="wilayah_<?= $w['id_wilayah']; ?>" <?= set_checkbox('wilayah[]', $w['id_wilayah']); ?>>
+                                        <label class="form-check-label" for="wilayah_<?= $w['id_wilayah']; ?>" style="font-size: 0.85rem;">
+                                            <?= htmlspecialchars($w['nama_wilayah']); ?>
+                                            <?php if (!empty($w['alamat_wilayah'])): ?>
+                                                <div class="text-muted" style="font-size: 0.72rem; font-weight: 400;"><?= htmlspecialchars($w['alamat_wilayah']); ?></div>
+                                            <?php endif; ?>
+                                        </label>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <small class="text-muted">Belum ada data wilayah.</small>
+                            <?php endif; ?>
+                        </div>
+                        <small class="text-muted" style="font-size: 0.75rem;">Centang satu atau lebih wilayah tempat petani ini terdaftar.</small>
                     </div>
                 </div>
-
                 <!-- KANAN -->
                 <div class="col-md-6">
                     <div class="mb-3">
