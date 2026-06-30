@@ -11,11 +11,30 @@ class Notifikasi_model extends CI_Model
     }
 
     // ============================================
-    // NOTIFIKASI CRUD (Modul 11 & Modul 7)
+    // 🔴 NOTIFIKASI CRUD (Modul 11 & Modul 7)
     // ============================================
+    
+    /**
+     * Insert notification (dipakai oleh helper send_notifikasi)
+     */
+    public function insert_notification($data)
+    {
+        $notif_data = [
+            'id_user' => $data['id_user'],
+            'judul' => $data['judul'] ?? 'Notifikasi',
+            'isi_notifikasi' => $data['pesan'] ?? $data['isi_notifikasi'] ?? '',
+            'link' => $data['link'] ?? null,
+            'icon' => $data['tipe'] ?? $data['icon'] ?? 'info',
+            'status_baca' => $data['is_read'] ?? 0,
+            'tanggal_buat' => $data['created_at'] ?? date('Y-m-d H:i:s')
+        ];
+        
+        $this->db->insert('tb_notifikasi', $notif_data);
+        return $this->db->affected_rows() > 0;
+    }
 
     /**
-     * Save notification
+     * Save notification (alternatif)
      */
     public function save_notifikasi($data)
     {
@@ -87,25 +106,17 @@ class Notifikasi_model extends CI_Model
     }
 
     /**
-     * Get notification settings (DIPERTAHANKAN untuk Modul 7)
+     * Get notification settings (M11-F03)
      */
     public function get_settings($id_user)
     {
         $this->db->where('id_user', $id_user);
         $query = $this->db->get('tb_setting_notifikasi');
+        
         if ($query->num_rows() == 0) {
-            // Default settings (termasuk notif_kurir untuk Modul 7)
-            $default = [
-                'id_user' => $id_user,
-                'notif_transaksi' => 1,
-                'notif_pembayaran' => 1,
-                'notif_stok' => 1,
-                'notif_kurir' => 1,
-                'notif_petani' => 1,
-                'notif_promo' => 0,
-                'notif_laporan' => 0,
-                'notif_sistem' => 1
-            ];
+            $role = $this->get_user_role($id_user);
+            $default = $this->get_default_settings($role);
+            $default['id_user'] = $id_user;
             $this->db->insert('tb_setting_notifikasi', $default);
             return $default;
         }
@@ -113,24 +124,71 @@ class Notifikasi_model extends CI_Model
     }
 
     /**
-     * Update notification settings
+     * Get default settings based on role
+     */
+    private function get_default_settings($role)
+    {
+        $base = [
+            'notif_transaksi' => 1,
+            'notif_pembayaran' => 1,
+            'notif_stok' => 1,
+            'notif_kurir' => 1,
+            'notif_petani' => 0,
+            'notif_promo' => 0,
+            'notif_laporan' => 0,
+            'notif_sistem' => 1,
+            'notif_pesanan' => 1
+        ];
+
+        if ($role == 'Admin') {
+            $base['notif_petani'] = 1;
+            $base['notif_laporan'] = 1;
+        } elseif ($role == 'Petani') {
+            $base['notif_stok'] = 1;
+            $base['notif_transaksi'] = 1;
+        } elseif ($role == 'Pembeli') {
+            $base['notif_promo'] = 1;
+            $base['notif_pesanan'] = 1;
+        }
+
+        return $base;
+    }
+
+    /**
+     * Get user role
+     */
+    private function get_user_role($id_user)
+    {
+        $this->db->select('role');
+        $this->db->where('id_user', $id_user);
+        $query = $this->db->get('tb_user');
+        return $query->row()->role ?? 'Pembeli';
+    }
+
+    /**
+     * Update notification settings (M11-F03)
      */
     public function update_settings($id_user, $data)
     {
-        // Map nama field form (camelCase) ke nama kolom DB (snake_case)
         $mapped = [
-            'notif_transaksi' => isset($data['notifTransaksi']) ? 1 : (isset($data['notif_transaksi']) ? 1 : 0),
-            'notif_pembayaran' => isset($data['notifPembayaran']) ? 1 : (isset($data['notif_pembayaran']) ? 1 : 0),
-            'notif_stok' => isset($data['notifStok']) ? 1 : (isset($data['notif_stok']) ? 1 : 0),
-            'notif_laporan' => isset($data['notifLaporan']) ? 1 : (isset($data['notif_laporan']) ? 1 : 0),
-            'notif_petani' => isset($data['notifPetani']) ? 1 : (isset($data['notif_petani']) ? 1 : 0),
-            'notif_kurir' => isset($data['notifKurir']) ? 1 : (isset($data['notif_kurir']) ? 1 : 0),
-            'notif_promo' => isset($data['notifPromo']) ? 1 : (isset($data['notif_promo']) ? 1 : 0),
-            'notif_sistem' => isset($data['notifSistem']) ? 1 : (isset($data['notif_sistem']) ? 1 : 0),
+            'notif_transaksi' => isset($data['notif_transaksi']) ? 1 : 0,
+            'notif_pembayaran' => isset($data['notif_pembayaran']) ? 1 : 0,
+            'notif_stok' => isset($data['notif_stok']) ? 1 : 0,
+            'notif_laporan' => isset($data['notif_laporan']) ? 1 : 0,
+            'notif_petani' => isset($data['notif_petani']) ? 1 : 0,
+            'notif_kurir' => isset($data['notif_kurir']) ? 1 : 0,
+            'notif_promo' => isset($data['notif_promo']) ? 1 : 0,
+            'notif_sistem' => isset($data['notif_sistem']) ? 1 : 0,
+            'notif_pesanan' => isset($data['notif_pesanan']) ? 1 : 0,
         ];
+
+        if (isset($data['notif_pesanan'])) {
+            $mapped['notif_transaksi'] = $data['notif_pesanan'] ? 1 : 0;
+        }
 
         $this->db->where('id_user', $id_user);
         $query = $this->db->get('tb_setting_notifikasi');
+        
         if ($query->num_rows() > 0) {
             $this->db->where('id_user', $id_user);
             return $this->db->update('tb_setting_notifikasi', $mapped);
@@ -141,30 +199,25 @@ class Notifikasi_model extends CI_Model
     }
 
     // ============================================
-    // KPI DASHBOARD (Modul 11) - TANPA TABEL TESTING
+    // KPI DASHBOARD (M11-F01)
     // ============================================
 
     /**
-     * Get KPI for Pembeli
+     * Get KPI for Pembeli (M11-F01)
      */
     public function get_pembeli_kpi($id_user)
     {
-        // Total transaksi
         $this->db->where('id_user', $id_user);
         $total_transaksi = $this->db->count_all_results('tb_transaksi');
 
-        // Total belanja
         $this->db->select_sum('total_harga');
         $this->db->where('id_user', $id_user);
         $query = $this->db->get('tb_transaksi');
         $total_belanja = $query->row()->total_harga ?? 0;
 
-        // Pesanan dalam pengiriman
         $this->db->where('id_user', $id_user);
         $this->db->where_in('status_pesanan', ['Diproses', 'Dikirim']);
         $pesanan_dikirim = $this->db->count_all_results('tb_transaksi');
-
-
 
         return [
             'total_transaksi' => $total_transaksi,
@@ -174,26 +227,30 @@ class Notifikasi_model extends CI_Model
     }
 
     /**
-     * Get KPI for Petani
+     * Get KPI for Petani (M11-F01)
      */
     public function get_petani_kpi($id_user)
     {
-        // Total panen
+        // Total panen dari tb_panen
         $this->db->select_sum('jumlah_panen');
         $this->db->where('id_user', $id_user);
         $query = $this->db->get('tb_panen');
         $total_panen = $query->row()->jumlah_panen ?? 0;
 
-        // Omset (tidak bisa dihitung tanpa tb_transaksi_detail)
-        $omset = 0;
+        // Omset dari tb_transaksi (status selesai)
+        $this->db->select_sum('total_harga');
+        $this->db->where('id_petani', $id_user);
+        $this->db->where('status_pesanan', 'Selesai');
+        $query = $this->db->get('tb_transaksi');
+        $omset = $query->row()->total_harga ?? 0;
 
-        // Lahan aktif
+        // Lahan aktif dari tb_lahan
         $this->db->where('id_user', $id_user);
         $this->db->where('status_lahan', 'Active');
         $lahan_aktif = $this->db->count_all_results('tb_lahan');
 
-        // Pesanan masuk (sederhana, hanya hitung transaksi dengan status tertentu)
-        $this->db->where('id_user', $id_user);
+        // Pesanan masuk dari tb_transaksi
+        $this->db->where('id_petani', $id_user);
         $this->db->where_in('status_pesanan', ['Pending', 'Diproses']);
         $pesanan_masuk = $this->db->count_all_results('tb_transaksi');
 
@@ -206,7 +263,7 @@ class Notifikasi_model extends CI_Model
     }
 
     /**
-     * Get KPI for Admin
+     * Get KPI for Admin (M11-F01)
      */
     public function get_admin_kpi()
     {
@@ -220,13 +277,17 @@ class Notifikasi_model extends CI_Model
         $this->db->where_in('status_pesanan', ['Pending', 'Diproses', 'Dikirim']);
         $transaksi_aktif = $this->db->count_all_results('tb_transaksi');
 
-        // Petani terverifikasi
-        $this->db->where('status_petani', 'Active');
-        $petani_terverifikasi = $this->db->count_all_results('tb_petani');
+        // Petani terverifikasi dari tb_user
+        $this->db->where('role', 'Petani');
+        $this->db->where('is_verified', '1');
+        $petani_terverifikasi = $this->db->count_all_results('tb_user');
 
-        // Mitra cafe aktif
-        $this->db->where('status_mitra', 'Active');
-        $mitra_cafe = $this->db->count_all_results('tb_mitra');
+        // Mitra cafe aktif (jika ada tabel tb_mitra)
+        $mitra_cafe = 0;
+        if ($this->db->table_exists('tb_mitra')) {
+            $this->db->where('status_mitra', 'Active');
+            $mitra_cafe = $this->db->count_all_results('tb_mitra');
+        }
 
         return [
             'total_revenue' => $total_revenue,
@@ -237,34 +298,54 @@ class Notifikasi_model extends CI_Model
     }
 
     // ============================================
-    // CHART DATA (Modul 10 & 11)
+    // CHART DATA (M10-F02, M11-F01)
     // ============================================
 
     /**
-     * Sales chart (Admin)
+     * Sales chart (Admin) - Total pendapatan per bulan
      */
     public function get_sales_chart()
     {
         $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
         $values = [];
-        for ($i = 0; $i < 12; $i++) {
+        
+        for ($i = 11; $i >= 0; $i--) {
             $bulan = date('Y-m', strtotime("-$i month"));
             $this->db->select_sum('total_harga');
             $this->db->where("DATE_FORMAT(created_at, '%Y-%m') = '{$bulan}'", NULL, FALSE);
             $query = $this->db->get('tb_transaksi');
             $values[] = (int) ($query->row()->total_harga ?? 0);
         }
-        return ['labels' => array_reverse($labels), 'values' => array_reverse($values)];
+        
+        return ['labels' => $labels, 'values' => $values];
     }
 
     /**
-     * Harvest chart (Petani)
+     * Sales chart (Admin) - Jumlah transaksi per bulan
+     */
+    public function get_sales_count_chart()
+    {
+        $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+        $values = [];
+        
+        for ($i = 11; $i >= 0; $i--) {
+            $bulan = date('Y-m', strtotime("-$i month"));
+            $this->db->where("DATE_FORMAT(created_at, '%Y-%m') = '{$bulan}'", NULL, FALSE);
+            $values[] = $this->db->count_all_results('tb_transaksi');
+        }
+        
+        return ['labels' => $labels, 'values' => $values];
+    }
+
+    /**
+     * Harvest chart (Petani) - Jumlah panen per bulan
      */
     public function get_harvest_chart($id_user)
     {
         $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
         $values = [];
-        for ($i = 0; $i < 12; $i++) {
+        
+        for ($i = 11; $i >= 0; $i--) {
             $bulan = date('Y-m', strtotime("-$i month"));
             $this->db->select_sum('jumlah_panen');
             $this->db->where('id_user', $id_user);
@@ -272,17 +353,19 @@ class Notifikasi_model extends CI_Model
             $query = $this->db->get('tb_panen');
             $values[] = (int) ($query->row()->jumlah_panen ?? 0);
         }
-        return ['labels' => array_reverse($labels), 'values' => array_reverse($values)];
+        
+        return ['labels' => $labels, 'values' => $values];
     }
 
     /**
-     * Shopping chart (Pembeli)
+     * Shopping chart (Pembeli) - Total belanja per bulan
      */
     public function get_shopping_chart($id_user)
     {
         $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
         $values = [];
-        for ($i = 0; $i < 12; $i++) {
+        
+        for ($i = 11; $i >= 0; $i--) {
             $bulan = date('Y-m', strtotime("-$i month"));
             $this->db->select_sum('total_harga');
             $this->db->where('id_user', $id_user);
@@ -290,11 +373,12 @@ class Notifikasi_model extends CI_Model
             $query = $this->db->get('tb_transaksi');
             $values[] = (int) ($query->row()->total_harga ?? 0);
         }
-        return ['labels' => array_reverse($labels), 'values' => array_reverse($values)];
+        
+        return ['labels' => $labels, 'values' => $values];
     }
 
     // ============================================
-    // TOP PRODUCTS (Modul 10 & 11) - TANPA DEPENDENSI TABEL TESTING
+    // TOP PRODUCTS (M10-F04, M11-F01)
     // ============================================
 
     /**
@@ -302,7 +386,23 @@ class Notifikasi_model extends CI_Model
      */
     public function get_top_products($limit = 5)
     {
-        $this->db->select('id_produk, nama_produk, stok_produk as total_terjual, 0 as pendapatan');
+        // Cek apakah ada tb_transaksi_detail
+        if ($this->db->table_exists('tb_transaksi_detail')) {
+            $this->db->select('p.nama_produk, SUM(td.jumlah) as total_terjual, SUM(td.jumlah * td.harga) as pendapatan');
+            $this->db->from('tb_transaksi_detail td');
+            $this->db->join('tb_produk p', 'p.id_produk = td.id_produk');
+            $this->db->group_by('td.id_produk');
+            $this->db->order_by('total_terjual', 'DESC');
+            $this->db->limit($limit);
+            $result = $this->db->get()->result_array();
+            
+            if (!empty($result)) {
+                return $result;
+            }
+        }
+
+        // Fallback: dari tb_produk
+        $this->db->select('id_produk as id, nama_produk as nama, stok_produk as total_terjual, 0 as pendapatan');
         $this->db->from('tb_produk');
         $this->db->where('stok_produk >', 0);
         $this->db->order_by('stok_produk', 'DESC');
@@ -315,7 +415,7 @@ class Notifikasi_model extends CI_Model
      */
     public function get_petani_top_products($id_user, $limit = 5)
     {
-        $this->db->select('id_produk, nama_produk, stok_produk as total_terjual, 0 as pendapatan');
+        $this->db->select('id_produk as id, nama_produk as nama, stok_produk as total_terjual, 0 as pendapatan');
         $this->db->from('tb_produk');
         $this->db->where('id_user', $id_user);
         $this->db->where('stok_produk >', 0);
@@ -335,5 +435,107 @@ class Notifikasi_model extends CI_Model
         $this->db->order_by('id_produk', 'RANDOM');
         $this->db->limit($limit);
         return $this->db->get()->result_array();
+    }
+
+    // ============================================
+    // SIDEBAR BADGE (M11-F01)
+    // ============================================
+
+    /**
+     * Get total pendapatan untuk admin
+     */
+    public function get_total_pendapatan()
+    {
+        $this->db->select_sum('total_harga');
+        $this->db->where('status_pesanan', 'Selesai');
+        $query = $this->db->get('tb_transaksi');
+        return (int) ($query->row()->total_harga ?? 0);
+    }
+
+    /**
+     * Get total transaksi untuk admin
+     */
+    public function get_total_transaksi()
+    {
+        return $this->db->count_all('tb_transaksi');
+    }
+
+    /**
+     * Get total petani terverifikasi
+     */
+    public function get_total_petani_terverifikasi()
+    {
+        $this->db->where('role', 'Petani');
+        $this->db->where('is_verified', '1');
+        return $this->db->count_all_results('tb_user');
+    }
+
+    /**
+     * Get total user
+     */
+    public function get_total_users()
+    {
+        return $this->db->count_all('tb_user');
+    }
+
+    /**
+     * Get total lahan untuk petani tertentu
+     */
+    public function get_total_lahan($id_user)
+    {
+        $this->db->where('id_user', $id_user);
+        return $this->db->count_all_results('tb_lahan');
+    }
+
+    /**
+     * Get total panen untuk petani tertentu
+     */
+    public function get_total_panen($id_user)
+    {
+        $this->db->where('id_user', $id_user);
+        return $this->db->count_all_results('tb_panen');
+    }
+
+    /**
+     * Get total produk untuk petani tertentu
+     */
+    public function get_total_produk($id_user)
+    {
+        $this->db->where('id_user', $id_user);
+        return $this->db->count_all_results('tb_produk');
+    }
+
+    /**
+     * Get pesanan masuk untuk petani tertentu
+     */
+    public function get_pesanan_masuk($id_user)
+    {
+        $this->db->where('id_petani', $id_user);
+        $this->db->where_in('status_pesanan', ['Pending', 'Diproses']);
+        return $this->db->count_all_results('tb_transaksi');
+    }
+
+    /**
+     * Get notifikasi stok menipis untuk petani tertentu
+     */
+    public function get_stok_menipis($id_user, $limit = 5)
+    {
+        $this->db->where('id_user', $id_user);
+        $this->db->where('stok_produk <', 20);
+        $this->db->order_by('stok_produk', 'ASC');
+        $this->db->limit($limit);
+        return $this->db->get('tb_produk')->result_array();
+    }
+
+    /**
+     * Get jadwal panen mendatang untuk petani tertentu
+     */
+    public function get_jadwal_panen($id_user, $limit = 5)
+    {
+        $this->db->where('id_user', $id_user);
+        $this->db->where('tanggal_panen >=', date('Y-m-d'));
+        $this->db->order_by('tanggal_panen', 'ASC');
+        $this->db->limit($limit);
+        return $this->db->get('tb_panen')->result_array();
     }
 }

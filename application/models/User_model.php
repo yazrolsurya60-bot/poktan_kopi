@@ -10,23 +10,39 @@ class User_model extends CI_Model
         $this->load->database();
     }
 
+    // ============================================
+    // 🔴 TAMBAHKAN METHOD INI (UNTUK NOTIFIKASI)
+    // ============================================
+    
+    /**
+     * Get users by role (dipakai untuk notifikasi ke admin)
+     */
+    public function get_users_by_role($role)
+    {
+        $this->db->where('role', $role);
+        $this->db->where('status', 'Active');
+        $query = $this->db->get('tb_user');
+        return $query->result_array();
+    }
+
+    // ============================================
+    // METHOD YANG SUDAH ADA (PERTAHANKAN)
+    // ============================================
+
     // Authenticate user by username/email and md5 password
     public function login($username_or_phone, $password)
     {
         $this->db->group_start()
             ->where('username', $username_or_phone);
 
-        // Hanya cari di no_telepon jika inputnya berupa angka untuk menghindari bug implicit type casting di MySQL
         if (is_numeric($username_or_phone)) {
             $this->db->or_where('no_telepon', $username_or_phone);
 
-            // Allow login using 62 format if user entered 08
             if (substr($username_or_phone, 0, 1) == '0') {
                 $phone_fonnte = '62' . substr($username_or_phone, 1);
                 $this->db->or_where('no_telepon', $phone_fonnte);
             }
             
-            // Allow login using 08 format if user entered 62
             if (substr($username_or_phone, 0, 2) == '62') {
                 $phone_local = '0' . substr($username_or_phone, 2);
                 $this->db->or_where('no_telepon', $phone_local);
@@ -60,6 +76,12 @@ class User_model extends CI_Model
         return $this->db->get_where('tb_user', ['username' => $username])->row_array();
     }
 
+    // Get user by phone number
+    public function get_by_phone($no_telepon)
+    {
+        return $this->db->get_where('tb_user', ['no_telepon' => $no_telepon])->row_array();
+    }
+
     // Insert new user
     public function insert_user($data)
     {
@@ -79,7 +101,7 @@ class User_model extends CI_Model
         if (isset($data['password']) && !empty($data['password'])) {
             $data['password'] = md5($data['password']);
         } else {
-            unset($data['password']); // Don't overwrite if empty
+            unset($data['password']);
         }
         $data['updated_at'] = date('Y-m-d H:i:s');
 
@@ -92,7 +114,7 @@ class User_model extends CI_Model
         return $this->db->where('id_user', $id)->delete('tb_user');
     }
 
-    // Retrieve all users with optional filtering (Admin User Management)
+    // Retrieve all users with optional filtering
     public function get_all_users($search = '', $role = '', $status = '')
     {
         $this->db->select('*');
@@ -141,22 +163,14 @@ class User_model extends CI_Model
 
     // ===== OTP Functions =====
 
-    // Get user by phone number
-    public function get_by_phone($no_telepon)
-    {
-        return $this->db->get_where('tb_user', ['no_telepon' => $no_telepon])->row_array();
-    }
-
-    // Insert OTP ke database (disesuaikan dengan struktur tb_otp)
+    // Insert OTP ke database
     public function insert_otp($tujuan, $kode_otp, $metode = 'whatsapp', $id_user = NULL)
     {
-        // Hapus OTP lama & expired untuk tujuan ini
         $this->db->where('tujuan', $tujuan);
         $this->db->where('metode', $metode);
         $this->db->where('status !=', 'Verified');
         $this->db->delete('tb_otp');
 
-        // Insert OTP baru
         $data = [
             'id_user' => $id_user,
             'tujuan' => $tujuan,
@@ -171,7 +185,7 @@ class User_model extends CI_Model
         return $this->db->insert('tb_otp', $data);
     }
 
-    // Verify OTP (disesuaikan dengan struktur tb_otp)
+    // Verify OTP
     public function verify_otp($tujuan, $kode_otp, $metode = 'whatsapp')
     {
         $this->db->where('tujuan', $tujuan);
@@ -183,14 +197,12 @@ class User_model extends CI_Model
         $result = $this->db->get('tb_otp')->row_array();
 
         if ($result) {
-            // Update status OTP menjadi Verified
             $this->db->where('id_otp', $result['id_otp'])->update('tb_otp', [
                 'status' => 'Verified',
                 'diverifikasi_pada' => date('Y-m-d H:i:s')
             ]);
             return true;
         } else {
-            // Increment percobaan jika OTP ada tapi tidak sesuai
             $this->db->where('tujuan', $tujuan);
             $this->db->where('metode', $metode);
             $this->db->where('status', 'Pending');
@@ -206,7 +218,7 @@ class User_model extends CI_Model
         return false;
     }
 
-    // Delete OTP by tujuan and metode
+    // Delete OTP
     public function delete_otp($tujuan, $metode = 'whatsapp')
     {
         return $this->db->delete('tb_otp', [
@@ -269,7 +281,7 @@ class User_model extends CI_Model
             ]);
     }
 
-    // Get unverified petani (for admin)
+    // Get unverified petani
     public function get_unverified_petani()
     {
         return $this->db->where('role', 'Petani')
@@ -279,7 +291,7 @@ class User_model extends CI_Model
             ->result_array();
     }
 
-    // Get verified petani (for admin)
+    // Get verified petani
     public function get_verified_petani()
     {
         return $this->db->where('role', 'Petani')
@@ -291,7 +303,7 @@ class User_model extends CI_Model
 
     // ===== User Status Management =====
 
-    // Toggle user active/inactive status (improved)
+    // Toggle user active/inactive status
     public function set_user_status($id_user, $status)
     {
         $allowed_status = ['Active', 'Inactive', 'Pending'];
