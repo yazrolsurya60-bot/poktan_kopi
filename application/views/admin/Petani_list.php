@@ -1130,6 +1130,7 @@
                         <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">Nama Petani</th>
                         <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">NIK</th>
                         <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">No HP</th>
+                        <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">Wilayah</th>
                         <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem;">Status</th>
                         <th class="border-0 text-muted pb-3" style="font-weight: 600; font-size: 0.85rem; text-align: center;">Aksi</th>
                     </tr>
@@ -1152,6 +1153,17 @@
                                 <td class="border-0 text-muted"><?= htmlspecialchars($p['nik']); ?></td>
                                 <td class="border-0 text-muted"><?= htmlspecialchars($p['no_hp']); ?></td>
                                 <td class="border-0">
+                                    <?php if (!empty($p['wilayah'])): ?>
+                                        <?php foreach ($p['wilayah'] as $w): ?>
+                                            <span class="badge rounded-pill px-2 py-1 mb-1 d-inline-block" style="background-color: #F5E6D3; color: #8D6E63; font-weight: 600; font-size: 0.7rem;">
+                                                <?= htmlspecialchars($w['nama_wilayah']); ?>
+                                            </span>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <span class="text-muted" style="font-size: 0.75rem;">-</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="border-0">
                                     <?php 
                                         $badge_color = 'bg-secondary';
                                         $text_color = 'text-white';
@@ -1168,6 +1180,9 @@
                                         <a href="<?= base_url('admin/petani/detail/' . $p['id_petani']); ?>" class="btn btn-sm" style="background-color: #F5E6D3; color: #8D6E63; border-radius: 6px;">
                                             <i class="bi bi-eye-fill"></i>
                                         </a>
+                                        <a href="<?= base_url('admin/petani/verifikasi/' . $p['id_petani']); ?>" title="Verifikasi" class="btn btn-sm" style="background-color: #E8F5E9; color: #4CAF50; border-radius: 6px;">
+                                            <i class="bi bi-patch-check-fill"></i>
+                                        </a>
                                         <a href="<?= base_url('admin/petani/edit/' . $p['id_petani']); ?>" class="btn btn-sm" style="background-color: #FFF3E0; color: #FF9800; border-radius: 6px;">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
@@ -1179,7 +1194,7 @@
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <tr><td colspan="7" class="text-center py-4 border-0">Belum ada data petani.</td></tr>
+                        <tr><td colspan="8" class="text-center py-4 border-0">Belum ada data petani.</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>
