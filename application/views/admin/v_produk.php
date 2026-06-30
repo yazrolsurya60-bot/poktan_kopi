@@ -17,7 +17,7 @@
 			--card-white: #FFFFFF;
 			--text-secondary: #70655E;
 			--sidebar-width: 260px;
-			--shadow-soft: 0 8px 30px rgba(44, 24, 8, 0.08);
+			--shadow-soft: 0 8px 30px rgba(16, 9, 3, 0.08);
 			--shadow-hover: 0 12px 40px rgba(44, 24, 8, 0.15);
 			--radius-card: 14px;
 			--transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -36,7 +36,10 @@
 			overflow-x: hidden;
 		}
 
-		/* ===== SIDEBAR ===== */
+		/* ============================================ */
+		/* SIDEBAR */
+		/* ============================================ */
+
 		.sidebar {
 			width: var(--sidebar-width);
 			height: 100vh;
@@ -56,6 +59,7 @@
 			padding: 28px 24px 20px;
 			font-size: 1.1rem;
 			font-weight: 700;
+			letter-spacing: 0.5px;
 			border-bottom: 1px solid rgba(250, 246, 240, 0.08);
 			color: var(--amber-cream);
 			display: flex;
@@ -93,8 +97,8 @@
 			color: #A8988A;
 			font-weight: 500;
 			font-size: 0.9rem;
-			text-decoration: none;
 			transition: var(--transition-smooth);
+			text-decoration: none;
 			position: relative;
 			margin: 2px 10px;
 			border-radius: 10px;
@@ -115,6 +119,16 @@
 			padding: 2px 10px;
 			border-radius: 20px;
 			font-weight: 600;
+		}
+
+		.menu-item a .menu-badge.danger {
+			background: #EF4444;
+			color: white;
+		}
+
+		.menu-item a .menu-badge.warning {
+			background: #F59E0B;
+			color: white;
 		}
 
 		.menu-item.active a,
@@ -169,7 +183,22 @@
 			border-color: rgba(230, 161, 92, 0.2);
 		}
 
-		/* ===== MAIN CONTENT ===== */
+		.sidebar-overlay {
+			display: none;
+			position: fixed;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.4);
+			z-index: 99;
+		}
+
+		.sidebar-overlay.active {
+			display: block;
+		}
+
+		/* ============================================ */
+		/* MAIN CONTENT */
+		/* ============================================ */
+
 		.main-content {
 			margin-left: var(--sidebar-width);
 			padding: 30px 40px 40px;
@@ -177,10 +206,18 @@
 			transition: var(--transition-smooth);
 		}
 
+		/* ============================================ */
+		/* PAGE HEADER */
+		/* ============================================ */
+
 		.page-header {
 			border-bottom: 1px solid rgba(74, 44, 17, 0.08);
 			padding-bottom: 20px;
 			margin-bottom: 30px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			flex-wrap: wrap;
 		}
 
 		.page-header h2 {
@@ -195,7 +232,58 @@
 			margin-top: 2px;
 		}
 
-		/* ===== NOTIFICATION ===== */
+		/* ============================================ */
+		/* HEADER RIGHT - NOTIF + USER BADGE */
+		/* ============================================ */
+
+		.header-right {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			flex-shrink: 0;
+		}
+
+		/* ============================================ */
+		/* USER BADGE - SAMA DENGAN DASHBOARD */
+		/* ============================================ */
+
+		.user-badge {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			padding: 6px 12px;
+			border-radius: 10px;
+			background: var(--card-white);
+			border: 1px solid rgba(74, 44, 17, 0.06);
+			font-weight: 500;
+			font-size: 0.85rem;
+			cursor: default;
+			min-width: 90px;
+		}
+
+		.user-badge i {
+			font-size: 1.4rem;
+			color: var(--amber-cream);
+		}
+
+		.user-badge .user-name {
+			font-weight: 600;
+			font-size: 0.82rem;
+			color: var(--dark-coffee);
+			line-height: 1.2;
+		}
+
+		.user-badge .user-role {
+			font-size: 0.6rem;
+			color: var(--text-secondary);
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		/* ============================================ */
+		/* NOTIFICATION BELL & DROPDOWN */
+		/* ============================================ */
+
 		.notif-btn {
 			position: relative;
 			background: var(--card-white);
@@ -278,11 +366,6 @@
 			color: var(--amber-cream);
 			font-weight: 500;
 			text-decoration: none;
-			cursor: pointer;
-		}
-
-		.notif-dropdown-header a:hover {
-			text-decoration: underline;
 		}
 
 		.notif-dropdown-list {
@@ -298,10 +381,14 @@
 			gap: 12px;
 			transition: var(--transition-smooth);
 			cursor: pointer;
+			text-decoration: none;
+			color: inherit;
 		}
 
 		.notif-item:hover {
 			background: var(--bg-cream);
+			text-decoration: none;
+			color: inherit;
 		}
 
 		.notif-item .notif-icon {
@@ -364,7 +451,10 @@
 			align-self: center;
 		}
 
-		/* ===== TABLE ===== */
+		/* ============================================ */
+		/* TABLE */
+		/* ============================================ */
+
 		.table-custom {
 			font-size: 0.85rem;
 			width: 100%;
@@ -372,6 +462,7 @@
 			border-radius: var(--radius-card);
 			overflow: hidden;
 			box-shadow: var(--shadow-soft);
+			border: 1px solid rgba(74, 44, 17, 0.06);
 		}
 
 		.table-custom thead th {
@@ -383,6 +474,7 @@
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
 			padding: 14px 16px;
+			white-space: nowrap;
 		}
 
 		.table-custom tbody td {
@@ -400,7 +492,10 @@
 			border-bottom: none;
 		}
 
-		/* ===== STATUS BADGE ===== */
+		/* ============================================ */
+		/* STATUS BADGE */
+		/* ============================================ */
+
 		.status-badge {
 			padding: 4px 14px;
 			border-radius: 20px;
@@ -434,7 +529,10 @@
 			color: #991B1B;
 		}
 
-		/* ===== TOMBOL ===== */
+		/* ============================================ */
+		/* TOMBOL */
+		/* ============================================ */
+
 		.btn-detail {
 			background: #DBEAFE;
 			color: #1E40AF;
@@ -444,11 +542,16 @@
 			font-size: 0.75rem;
 			font-weight: 600;
 			transition: var(--transition-smooth);
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			text-decoration: none;
 		}
 
 		.btn-detail:hover {
 			background: #1E40AF;
 			color: white;
+			text-decoration: none;
 		}
 
 		.btn-edit {
@@ -460,11 +563,16 @@
 			font-size: 0.75rem;
 			font-weight: 600;
 			transition: var(--transition-smooth);
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			text-decoration: none;
 		}
 
 		.btn-edit:hover {
 			background: #92400E;
 			color: white;
+			text-decoration: none;
 		}
 
 		.btn-hapus {
@@ -476,11 +584,16 @@
 			font-size: 0.75rem;
 			font-weight: 600;
 			transition: var(--transition-smooth);
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			text-decoration: none;
 		}
 
 		.btn-hapus:hover {
 			background: #991B1B;
 			color: white;
+			text-decoration: none;
 		}
 
 		.btn-tambah {
@@ -495,6 +608,7 @@
 			display: inline-flex;
 			align-items: center;
 			gap: 8px;
+			text-decoration: none;
 		}
 
 		.btn-tambah:hover {
@@ -505,7 +619,10 @@
 			text-decoration: none;
 		}
 
-		/* ===== SEARCH ===== */
+		/* ============================================ */
+		/* SEARCH */
+		/* ============================================ */
+
 		.search-input {
 			border: 1px solid rgba(74, 44, 17, 0.1);
 			border-radius: 10px;
@@ -531,11 +648,16 @@
 			font-weight: 600;
 			font-size: 0.85rem;
 			transition: var(--transition-smooth);
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			text-decoration: none;
 		}
 
 		.btn-search:hover {
 			background: var(--dark-coffee);
 			color: white;
+			text-decoration: none;
 		}
 
 		.btn-reset {
@@ -547,6 +669,10 @@
 			font-weight: 600;
 			font-size: 0.85rem;
 			transition: var(--transition-smooth);
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			text-decoration: none;
 		}
 
 		.btn-reset:hover {
@@ -555,73 +681,10 @@
 			text-decoration: none;
 		}
 
-		/* ===== SIDEBAR OVERLAY ===== */
-		.sidebar-overlay {
-			display: none;
-			position: fixed;
-			inset: 0;
-			background: rgba(0, 0, 0, 0.4);
-			z-index: 99;
-		}
-
-		.sidebar-overlay.active {
-			display: block;
-		}
-
-		/* ===== RESPONSIVE ===== */
-		@media (max-width: 991.98px) {
-			.sidebar {
-				left: calc(-1 * var(--sidebar-width));
-				box-shadow: none;
-			}
-
-			.sidebar.open {
-				left: 0;
-				box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
-			}
-
-			.main-content {
-				margin-left: 0;
-				padding: 20px 16px 30px;
-			}
-
-			.page-header h2 {
-				font-size: 1.3rem;
-			}
-
-			.notif-dropdown {
-				width: calc(100vw - 32px);
-				right: -60px;
-			}
-
-			.sidebar-overlay.active {
-				display: block;
-			}
-		}
-
-		@media (max-width: 575.98px) {
-			.main-content {
-				padding: 16px 12px 20px;
-			}
-
-			.table-custom thead th,
-			.table-custom tbody td {
-				padding: 10px 12px;
-				font-size: 0.75rem;
-			}
-
-			.notif-dropdown {
-				width: calc(100vw - 24px);
-				right: -70px;
-			}
-
-			.btn-tambah {
-				padding: 8px 16px;
-				font-size: 0.75rem;
-			}
-		}
-
+		/* ============================================ */
 		/* SCROLLBAR */
+		/* ============================================ */
+
 		.sidebar-menu-wrapper::-webkit-scrollbar,
 		.notif-dropdown-list::-webkit-scrollbar {
 			width: 3px;
@@ -636,6 +699,349 @@
 		.notif-dropdown-list::-webkit-scrollbar-thumb {
 			background: rgba(230, 161, 92, 0.3);
 			border-radius: 10px;
+		}
+
+		/* ============================================ */
+		/* RESPONSIVE - SAMA DENGAN DASHBOARD */
+		/* ============================================ */
+
+		@media (max-width: 1199.98px) {
+
+			.table-custom thead th,
+			.table-custom tbody td {
+				padding: 12px 14px;
+				font-size: 0.8rem;
+			}
+		}
+
+		@media (max-width: 991.98px) {
+			.sidebar {
+				left: calc(-1 * var(--sidebar-width));
+				box-shadow: none;
+			}
+
+			.sidebar.open {
+				left: 0;
+				box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+			}
+
+			.sidebar-overlay.active {
+				display: block;
+			}
+
+			.main-content {
+				margin-left: 0;
+				padding: 20px 16px 30px;
+			}
+
+			.page-header h2 {
+				font-size: 1.3rem;
+			}
+
+			.page-header .subtitle {
+				font-size: 0.8rem;
+			}
+
+			.notif-dropdown {
+				width: calc(100vw - 32px);
+				right: -60px;
+			}
+
+			.user-badge {
+				padding: 4px 10px;
+				min-width: 70px;
+			}
+
+			.user-badge i {
+				font-size: 1.1rem;
+			}
+
+			.user-badge .user-name {
+				font-size: 0.7rem;
+			}
+
+			.user-badge .user-role {
+				font-size: 0.5rem;
+			}
+
+			.header-right {
+				gap: 8px;
+			}
+
+			.table-custom thead th,
+			.table-custom tbody td {
+				padding: 10px 12px;
+				font-size: 0.75rem;
+			}
+
+			.table-custom thead th {
+				font-size: 0.6rem;
+			}
+
+			.btn-tambah {
+				padding: 8px 18px;
+				font-size: 0.8rem;
+			}
+
+			.search-input {
+				padding: 8px 14px;
+				font-size: 0.8rem;
+			}
+
+			.btn-search,
+			.btn-reset {
+				padding: 8px 16px;
+				font-size: 0.8rem;
+			}
+		}
+
+		@media (max-width: 575.98px) {
+			.main-content {
+				padding: 16px 12px 20px;
+			}
+
+			.page-header h2 {
+				font-size: 1.1rem;
+			}
+
+			.page-header .subtitle {
+				font-size: 0.7rem;
+			}
+
+			.notif-dropdown {
+				width: calc(100vw - 24px);
+				right: -70px;
+			}
+
+			.user-badge {
+				padding: 4px 8px;
+				min-width: 60px;
+				gap: 5px;
+			}
+
+			.user-badge i {
+				font-size: 0.9rem;
+			}
+
+			.user-badge .user-name {
+				font-size: 0.6rem;
+			}
+
+			.user-badge .user-role {
+				display: none;
+			}
+
+			.header-right {
+				gap: 6px;
+			}
+
+			.table-custom thead th {
+				font-size: 0.55rem;
+				padding: 8px 8px;
+				white-space: normal;
+			}
+
+			.table-custom tbody td {
+				padding: 8px 8px;
+				font-size: 0.7rem;
+			}
+
+			.table-custom tbody td img {
+				width: 40px !important;
+				height: 40px !important;
+			}
+
+			.btn-detail,
+			.btn-edit,
+			.btn-hapus {
+				font-size: 0.6rem;
+				padding: 3px 8px;
+			}
+
+			.btn-tambah {
+				padding: 6px 14px;
+				font-size: 0.7rem;
+			}
+
+			.search-input {
+				padding: 6px 10px;
+				font-size: 0.7rem;
+			}
+
+			.btn-search,
+			.btn-reset {
+				padding: 6px 12px;
+				font-size: 0.7rem;
+			}
+
+			.d-flex.justify-content-between.mb-4 {
+				flex-direction: column;
+				align-items: stretch !important;
+			}
+
+			.d-flex.justify-content-between.mb-4 form {
+				max-width: 100% !important;
+				flex-wrap: wrap;
+			}
+
+			.d-flex.justify-content-between.mb-4 form input {
+				flex: 1 1 100%;
+				margin-bottom: 6px;
+			}
+
+			.btn-tambah {
+				width: 100%;
+				justify-content: center;
+				margin-top: 4px;
+			}
+
+			.btn-detail i,
+			.btn-edit i,
+			.btn-hapus i {
+				font-size: 0.6rem;
+			}
+		}
+
+		/* ============================================ */
+		/* UTILITY */
+		/* ============================================ */
+
+		.text-truncate {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.gap-1 {
+			gap: 4px;
+		}
+
+		.gap-2 {
+			gap: 8px;
+		}
+
+		.gap-3 {
+			gap: 12px;
+		}
+
+		.gap-4 {
+			gap: 16px;
+		}
+
+		.gap-5 {
+			gap: 24px;
+		}
+
+		.d-flex-center {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		/* ============================================ */
+		/* EMPTY STATE */
+		/* ============================================ */
+
+		.empty-state {
+			padding: 60px 20px;
+			text-align: center;
+		}
+
+		.empty-state i {
+			font-size: 3rem;
+			color: #D1C9C0;
+			display: block;
+			margin-bottom: 16px;
+		}
+
+		.empty-state h5 {
+			font-weight: 700;
+			color: var(--dark-coffee);
+		}
+
+		.empty-state p {
+			color: var(--text-secondary);
+			font-size: 0.9rem;
+		}
+
+		.empty-state a {
+			color: var(--amber-cream);
+			font-weight: 600;
+			text-decoration: none;
+		}
+
+		.empty-state a:hover {
+			text-decoration: underline;
+		}
+
+		/* ============================================ */
+		/* FOTO PRODUK */
+		/* ============================================ */
+
+		.product-thumb {
+			width: 55px;
+			height: 55px;
+			object-fit: cover;
+			border-radius: 10px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+			border: 1px solid rgba(74, 44, 17, 0.06);
+		}
+
+		.product-thumb-placeholder {
+			width: 55px;
+			height: 55px;
+			background: var(--bg-cream);
+			border-radius: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: var(--text-secondary);
+			font-size: 0.65rem;
+			border: 1px dashed rgba(74, 44, 17, 0.15);
+		}
+
+		/* ============================================ */
+		/* GRADE BADGE DI TABEL */
+		/* ============================================ */
+
+		.grade-badge {
+			background: var(--bg-cream);
+			padding: 4px 12px;
+			border-radius: 6px;
+			font-size: 0.75rem;
+			font-weight: 600;
+			color: var(--text-secondary);
+			display: inline-block;
+		}
+
+		/* ============================================ */
+		/* STOK DI TABEL */
+		/* ============================================ */
+
+		.stok-number {
+			font-weight: 600;
+			color: var(--dark-coffee);
+		}
+
+		.stok-unit {
+			font-size: 0.65rem;
+			color: var(--text-secondary);
+		}
+
+		/* ============================================ */
+		/* FONT WEIGHT */
+		/* ============================================ */
+
+		.fw-600 {
+			font-weight: 600;
+		}
+
+		.fw-700 {
+			font-weight: 700;
+		}
+
+		.text-amber {
+			color: var(--amber-cream);
 		}
 	</style>
 </head>
@@ -735,7 +1141,7 @@
 				</p>
 			</div>
 			<div class="d-flex align-items-center gap-3" style="gap: 12px;">
-				<!-- NOTIFICATION -->
+				<!-- NOTIFICATION BELL -->
 				<div style="position: relative;">
 					<button class="notif-btn" id="notifToggle">
 						<i class="bi bi-bell" style="font-size: 1.2rem;"></i>
@@ -746,6 +1152,7 @@
 						<?php endif; ?>
 					</button>
 
+					<!-- NOTIFICATION DROPDOWN -->
 					<div class="notif-dropdown" id="notifDropdown">
 						<div class="notif-dropdown-header">
 							<span>
@@ -753,9 +1160,11 @@
 							</span>
 							<div>
 								<?php if (isset($unread_count) && $unread_count > 0): ?>
-									<a href="#" id="markAllReadBtn" class="mr-2" style="font-size:0.7rem;">Tandai semua</a>
+									<a href="#" id="markAllReadBtn" class="mr-2"
+										style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
 								<?php endif; ?>
-								<a href="<?= base_url('admin/dashboard/history'); ?>" style="font-size:0.7rem;">Lihat Semua</a>
+								<a href="<?= base_url('admin/dashboard/history'); ?>"
+									style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
 							</div>
 						</div>
 						<div class="notif-dropdown-list" id="notifList">
@@ -792,19 +1201,27 @@
 								</div>
 							<?php endif; ?>
 						</div>
-						<div class="p-2 text-center border-top" style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
-							<a href="<?= base_url('admin/dashboard/settings'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
+						<div class="p-2 text-center border-top"
+							style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+							<a href="<?= base_url('admin/dashboard/settings'); ?>"
+								class="small text-secondary font-weight-bold text-decoration-none">
 								<i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
 							</a>
 						</div>
 					</div>
 				</div>
 
-				<!-- USER AVATAR -->
-				<div class="d-flex align-items-center gap-2"
-					style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
-					<i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-					<span style="font-weight:500; font-size:0.85rem;">Admin</span>
+				<!-- USER BADGE -->
+				<?php
+				$nama = $this->session->userdata('nama') ?? 'User';
+				$role = $this->session->userdata('role') ?? 'Member';
+				?>
+				<div class="user-badge">
+					<i class="bi bi-person-circle"></i>
+					<div>
+						<div class="user-name"><?= $nama; ?></div>
+						<div class="user-role"><?= $role; ?></div>
+					</div>
 				</div>
 			</div>
 		</div>

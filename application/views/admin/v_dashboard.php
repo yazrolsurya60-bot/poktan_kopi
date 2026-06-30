@@ -225,37 +225,51 @@
 		}
 
 		/* ============================================ */
-		/* USER PROFILE - DIPERBAIKI */
+		/* HEADER RIGHT - NOTIF + USER BADGE */
 		/* ============================================ */
 
-		.user-profile {
+		.header-right {
 			display: flex;
 			align-items: center;
-			gap: 10px;
-			padding: 6px 16px;
+			gap: 12px;
+			flex-shrink: 0;
+		}
+
+		/* ============================================ */
+		/* USER BADGE - SEDERHANA (SAMA DENGAN MITRA) */
+		/* ============================================ */
+
+		.user-badge {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			padding: 6px 12px;
 			border-radius: 10px;
 			background: var(--card-white);
 			border: 1px solid rgba(74, 44, 17, 0.06);
-			min-width: 110px;
-			cursor: pointer;
-			transition: var(--transition-smooth);
+			font-weight: 500;
+			font-size: 0.85rem;
+			cursor: default;
+			min-width: 90px;
 		}
 
-		.user-profile:hover {
-			background: var(--bg-cream);
-			border-color: var(--amber-cream);
-		}
-
-		.user-profile .avatar {
-			font-size: 1.5rem;
+		.user-badge i {
+			font-size: 1.4rem;
 			color: var(--amber-cream);
 		}
 
-		.user-profile .name {
-			font-weight: 500;
-			font-size: 0.85rem;
-			white-space: nowrap;
+		.user-badge .user-name {
+			font-weight: 600;
+			font-size: 0.82rem;
 			color: var(--dark-coffee);
+			line-height: 1.2;
+		}
+
+		.user-badge .user-role {
+			font-size: 0.6rem;
+			color: var(--text-secondary);
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
 		}
 
 		/* ============================================ */
@@ -433,7 +447,6 @@
 		/* STAT BOX - DIPERBAIKI */
 		/* ============================================ */
 
-		/* Perbaiki stat-box agar konten tidak tertutup badge */
 		.stat-box {
 			background: var(--card-white);
 			border: 1px solid rgba(74, 44, 17, 0.06);
@@ -454,14 +467,11 @@
 			color: var(--dark-coffee);
 			padding-right: 55px;
 			word-break: keep-all;
-			/* Mencegah angka pecah */
 			white-space: nowrap;
-			/* Mencegah turun ke bawah */
 			overflow: hidden;
 			text-overflow: ellipsis;
 		}
 
-		/* Untuk card Total Pendapatan - ukuran lebih kecil */
 		.stat-box .stat-num.rupiah {
 			font-size: 1.3rem;
 			letter-spacing: -0.5px;
@@ -545,7 +555,6 @@
 				font-size: 1rem;
 				padding-right: 40px;
 				white-space: normal;
-				/* Di mobile boleh wrap */
 			}
 
 			.stat-box .stat-num.rupiah {
@@ -903,13 +912,25 @@
 				right: -60px;
 			}
 
-			.user-profile {
-				padding: 4px 12px;
-				min-width: 90px;
+			.user-badge {
+				padding: 4px 10px;
+				min-width: 70px;
 			}
 
-			.user-profile .name {
-				font-size: 0.75rem;
+			.user-badge i {
+				font-size: 1.1rem;
+			}
+
+			.user-badge .user-name {
+				font-size: 0.7rem;
+			}
+
+			.user-badge .user-role {
+				font-size: 0.5rem;
+			}
+
+			.header-right {
+				gap: 8px;
 			}
 		}
 
@@ -948,17 +969,26 @@
 				right: -70px;
 			}
 
-			.user-profile {
-				padding: 4px 10px;
-				min-width: 70px;
+			.user-badge {
+				padding: 4px 8px;
+				min-width: 60px;
+				gap: 5px;
 			}
 
-			.user-profile .avatar {
-				font-size: 1.2rem;
+			.user-badge i {
+				font-size: 0.9rem;
 			}
 
-			.user-profile .name {
-				font-size: 0.7rem;
+			.user-badge .user-name {
+				font-size: 0.6rem;
+			}
+
+			.user-badge .user-role {
+				display: none;
+			}
+
+			.header-right {
+				gap: 6px;
 			}
 
 			.page-header .subtitle {
@@ -1018,7 +1048,7 @@
 	<!-- MAIN CONTENT -->
 	<div class="main-content">
 		<!-- PAGE HEADER -->
-		<div class="page-header d-flex justify-content-between align-items-center flex-wrap">
+		<div class="page-header">
 			<div>
 				<button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
 					style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
@@ -1030,7 +1060,7 @@
 					<span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span>
 				</p>
 			</div>
-			<div class="d-flex align-items-center" style="gap: 12px;">
+			<div class="header-right">
 				<!-- NOTIFICATION BELL -->
 				<div style="position: relative;">
 					<button class="notif-btn" id="notifToggle">
@@ -1102,52 +1132,18 @@
 					</div>
 				</div>
 
-				<!-- USER AVATAR - DIPERBAIKI -->
-				<div class="d-flex align-items-center gap-2"
-					style="cursor: pointer; padding: 6px 14px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06); min-width: 100px;">
-					<i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-					<span style="font-weight:500; font-size:0.85rem; white-space: nowrap;">
-						Admin
-					</span>
+				<!-- USER BADGE - SEDERHANA (SAMA DENGAN MITRA) -->
+				<?php 
+					$nama = $this->session->userdata('nama') ?? 'Admin';
+					$role = $this->session->userdata('role') ?? 'Admin';
+				?>
+				<div class="user-badge">
+					<i class="bi bi-person-circle"></i>
+					<div>
+						<div class="user-name"><?= $nama; ?></div>
+						<div class="user-role"><?= $role; ?></div>
+					</div>
 				</div>
-			</div>
-		</div>
-
-		<!-- QUICK ACTION BUTTONS -->
-		<h5 class="font-weight-bold mb-3"
-			style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
-			<i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
-		</h5>
-		<div class="row mb-4">
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/petani'); ?>" class="quick-action-btn">
-					<i class="bi bi-person-check-fill"></i> Verifikasi Petani
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/transaksi/konfirmasi'); ?>" class="quick-action-btn">
-					<i class="bi bi-credit-card-fill"></i> Konfirmasi Bayar
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/kurir/assign'); ?>" class="quick-action-btn">
-					<i class="bi bi-truck"></i> Assign Kurir
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/laporan/'); ?>" class="quick-action-btn">
-					<i class="bi bi-file-earmark-pdf-fill"></i> Buat Laporan
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/produk/tambah'); ?>" class="quick-action-btn">
-					<i class="bi bi-plus-circle-fill"></i> Tambah Produk
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/mitra/add'); ?>" class="quick-action-btn">
-					<i class="bi bi-shop"></i> Tambah Mitra
-				</a>
 			</div>
 		</div>
 
@@ -1250,6 +1246,44 @@
 			</div>
 		</div>
 
+		<!-- QUICK ACTION BUTTONS -->
+		<h5 class="font-weight-bold mb-3"
+			style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
+			<i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
+		</h5>
+		<div class="row mb-4">
+			<div class="col-lg-2 col-md-4 col-6 mb-2">
+				<a href="<?= base_url('admin/petani'); ?>" class="quick-action-btn">
+					<i class="bi bi-person-check-fill"></i> Verifikasi Petani
+				</a>
+			</div>
+			<div class="col-lg-2 col-md-4 col-6 mb-2">
+				<a href="<?= base_url('admin/transaksi/konfirmasi'); ?>" class="quick-action-btn">
+					<i class="bi bi-credit-card-fill"></i> Konfirmasi Bayar
+				</a>
+			</div>
+			<div class="col-lg-2 col-md-4 col-6 mb-2">
+				<a href="<?= base_url('admin/kurir/assign'); ?>" class="quick-action-btn">
+					<i class="bi bi-truck"></i> Assign Kurir
+				</a>
+			</div>
+			<div class="col-lg-2 col-md-4 col-6 mb-2">
+				<a href="<?= base_url('admin/laporan/'); ?>" class="quick-action-btn">
+					<i class="bi bi-file-earmark-pdf-fill"></i> Buat Laporan
+				</a>
+			</div>
+			<div class="col-lg-2 col-md-4 col-6 mb-2">
+				<a href="<?= base_url('admin/produk/tambah'); ?>" class="quick-action-btn">
+					<i class="bi bi-plus-circle-fill"></i> Tambah Produk
+				</a>
+			</div>
+			<div class="col-lg-2 col-md-4 col-6 mb-2">
+				<a href="<?= base_url('admin/mitra/add'); ?>" class="quick-action-btn">
+					<i class="bi bi-shop"></i> Tambah Mitra
+				</a>
+			</div>
+		</div>
+
 		<!-- KPI CARDS -->
 		<div class="row mb-4">
 			<!-- Total Pendapatan -->
@@ -1257,9 +1291,9 @@
 				<div class="stat-box">
 					<div class="stat-decoration"></div>
 					<div class="stat-title">Total Pendapatan</div>
-					<h3 class="stat-num" style="padding-right: 50px;">Rp <?= number_format($kpi_total_revenue ?? 0, 0, ',', '.'); ?></h3>
+					<h3 class="stat-num">Rp <?= number_format($kpi_total_revenue ?? 0, 0, ',', '.'); ?></h3>
 					<div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
-					<div class="stat-badge" style="background: var(--amber-cream); color: white; width: 40px; height: 40px; font-size: 1rem;">
+					<div class="stat-badge" style="background: var(--amber-cream); color: white;">
 						<i class="bi bi-currency-dollar"></i>
 					</div>
 				</div>
@@ -1294,7 +1328,9 @@
 					<div class="stat-title">Mitra Aktif</div>
 					<h3 class="stat-num"><?= $kpi_mitra_cafe ?? 0; ?></h3>
 					<div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
-					<div class="stat-badge" style="background: var(--dark-coffee); color: white;"><i class="bi bi-shop"></i></div>
+					<div class="stat-badge" style="background: var(--dark-coffee); color: white;">
+						<i class="bi bi-shop"></i>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -1657,7 +1693,7 @@
 							padding: 10,
 							callbacks: {
 								label: function(context) {
-									return context.parsed.y + ' kg';
+									return context.parsed.y.toLocaleString('id-ID') + ' kg';
 								}
 							}
 						}
@@ -1677,7 +1713,7 @@
 								color: '#70655E',
 								stepSize: 50,
 								callback: function(value) {
-									return value + ' kg';
+									return value.toLocaleString('id-ID') + ' kg';
 								}
 							}
 						},
