@@ -70,10 +70,12 @@ class Kurir_model extends CI_Model
     // ======== MILIK MODUL 08 (Anisya — Manajemen Kurir) ==========
     // ============================================================
 
-    // M08-F01: Ambil semua kurir, bisa difilter status & dicari keyword
+    // M08-F02: Ambil semua kurir (yang belum dihapus), bisa difilter status & dicari keyword
     public function get_all($status = null, $keyword = null)
     {
-        if ($status && in_array($status, ['Active', 'Inactive', 'Offline'])) {
+        $this->db->where('deleted_at', null);
+
+        if ($status && in_array($status, ['Active', 'Inactive'])) {
             $this->db->where('status', $status);
         }
 
@@ -90,9 +92,58 @@ class Kurir_model extends CI_Model
     }
 
     // Ambil satu kurir berdasarkan ID (versi array, dipakai Controller Modul 08)
-    public function get_by_id($id_kurir)
+    // Hanya mengambil kurir yang belum di-soft-delete, kecuali $with_deleted = true
+    public function get_by_id($id_kurir, $with_deleted = false)
     {
-        return $this->db->get_where($this->table, ['id_kurir' => $id_kurir])->row_array();
+        $this->db->where('id_kurir', $id_kurir);
+        if (!$with_deleted) {
+            $this->db->where('deleted_at', null);
+        }
+        return $this->db->get($this->table)->row_array();
+    }
+
+    // M08-F03: Detail kurir + seluruh history pengiriman yang pernah ia tangani
+    // Menggabungkan tb_tracking (status saat ini per transaksi) dengan
+    // tb_tracking_history (jejak perubahan status per waktu)
+    public function get_detail_with_history($id_kurir)
+    {
+        $kurir = $this->get_by_id($id_kurir, true);
+        if (!$kurir) {
+            return null;
+        }
+
+        // Daftar pengiriman yang pernah ditangani kurir ini
+        $this->db->select('
+                tb_tracking.id_tracking,
+                tb_tracking.id_transaksi,
+                tb_tracking.status_pengiriman,
+                tb_tracking.estimasi_tiba,
+                tb_tracking.tanggal_kirim,
+                tb_tracking.tanggal_terima,
+                tb_tracking.created_at AS tracking_created_at,
+                tb_transaksi.invoice,
+                tb_transaksi.total_harga
+            ')
+            ->from('tb_tracking')
+            ->join('tb_transaksi', 'tb_transaksi.id_tracking = tb_tracking.id_tracking', 'left')
+            ->where('tb_tracking.id_kurir', $id_kurir)
+            ->order_by('tb_tracking.created_at', 'DESC');
+
+        $pengiriman = $this->db->get()->result_array();
+
+        // Ambil history detail (jejak status) untuk setiap tracking milik kurir ini
+        foreach ($pengiriman as &$p) {
+            $p['history'] = $this->db
+                ->where('id_tracking', $p['id_tracking'])
+                ->order_by('created_at', 'ASC')
+                ->get('tb_tracking_history')
+                ->result_array();
+        }
+
+        return [
+            'kurir'      => $kurir,
+            'pengiriman' => $pengiriman,
+        ];
     }
 
     // M08-F02: Tambah kurir baru
@@ -108,21 +159,32 @@ class Kurir_model extends CI_Model
         return $this->db->update($this->table, $data);
     }
 
-    // M08-F04: Hapus kurir
+    // M08-F05: Soft delete kurir — tidak benar-benar hapus baris,
+    // hanya menandai deleted_at dengan waktu sekarang
     public function delete($id_kurir)
     {
-        return $this->db->delete($this->table, ['id_kurir' => $id_kurir]);
+        return $this->db->where('id_kurir', $id_kurir)
+            ->update($this->table, ['deleted_at' => date('Y-m-d H:i:s')]);
     }
 
-    // M08-F01: Hitung jumlah kurir per status (summary card)
+    // Restore kurir yang sudah di-soft-delete (jaga-jaga kalau dibutuhkan nanti)
+    public function restore($id_kurir)
+    {
+        return $this->db->where('id_kurir', $id_kurir)
+            ->update($this->table, ['deleted_at' => null]);
+    }
+
+    // M08-F02 / F07: Hitung jumlah kurir per status (summary card), exclude yang dihapus
     public function count_by_status($status)
     {
-        return $this->db->where('status', $status)->count_all_results($this->table);
+        return $this->db->where('status', $status)
+            ->where('deleted_at', null)
+            ->count_all_results($this->table);
     }
 
     public function count_all()
     {
-        return $this->db->count_all_results($this->table);
+        return $this->db->where('deleted_at', null)->count_all_results($this->table);
     }
 
     // M08-F04: Cek apakah kurir masih punya pengiriman aktif (sebelum hapus)
@@ -141,12 +203,14 @@ class Kurir_model extends CI_Model
     public function get_kurir_aktif()
     {
         return $this->db->where('status', 'Active')
+            ->where('deleted_at', null)
             ->order_by('nama_kurir', 'ASC')
             ->get($this->table)
             ->result_array();
     }
 
     // M08-F06: Daftar pengiriman yang belum ada kurirnya
+    // (versi Admin — bisa lihat & assign semua transaksi)
     public function get_pengiriman_belum_assign()
     {
         $this->db->select('
@@ -168,6 +232,75 @@ class Kurir_model extends CI_Model
             ->order_by('tb_tracking.created_at', 'ASC');
 
         return $this->db->get()->result_array();
+    }
+
+    // M08-F06: Daftar pengiriman yang belum ada kurirnya
+    // (versi Petani — HANYA transaksi miliknya sendiri, filter pakai id_user)
+    public function get_pengiriman_belum_assign_by_user($id_user)
+    {
+        $this->db->select('
+                tb_tracking.id_tracking,
+                tb_tracking.id_transaksi,
+                tb_tracking.id_kurir,
+                tb_tracking.status_pengiriman,
+                tb_tracking.estimasi_tiba,
+                tb_tracking.created_at,
+                tb_transaksi.invoice,
+                tb_transaksi.total_harga,
+                tb_user.nama AS nama_pembeli
+            ')
+            ->from('tb_tracking')
+            ->join('tb_transaksi', 'tb_transaksi.id_tracking = tb_tracking.id_tracking', 'left')
+            ->join('tb_user', 'tb_user.id_user = tb_transaksi.id_user', 'left')
+            ->where('tb_transaksi.id_user', $id_user)
+            ->where('tb_tracking.id_kurir IS NULL', null, false)
+            ->where_not_in('tb_tracking.status_pengiriman', ['delivered', 'diterima', 'dibatalkan'])
+            ->order_by('tb_tracking.created_at', 'ASC');
+
+        return $this->db->get()->result_array();
+    }
+
+    // M08-F08: Performance / laporan kinerja kurir
+    // Menghitung: total pengiriman ditangani, jumlah selesai (delivered/diterima),
+    // jumlah dibatalkan, dan rata-rata lama pengiriman (dari tanggal_kirim ke tanggal_terima)
+    public function get_performance_kurir()
+    {
+        $kurir_list = $this->db->where('deleted_at', null)
+            ->order_by('nama_kurir', 'ASC')
+            ->get($this->table)
+            ->result_array();
+
+        foreach ($kurir_list as &$k) {
+            $id_kurir = $k['id_kurir'];
+
+            $k['total_pengiriman'] = $this->db
+                ->where('id_kurir', $id_kurir)
+                ->count_all_results('tb_tracking');
+
+            $k['selesai'] = $this->db
+                ->where('id_kurir', $id_kurir)
+                ->where_in('status_pengiriman', ['delivered', 'diterima'])
+                ->count_all_results('tb_tracking');
+
+            $k['dibatalkan'] = $this->db
+                ->where('id_kurir', $id_kurir)
+                ->where('status_pengiriman', 'dibatalkan')
+                ->count_all_results('tb_tracking');
+
+            $k['sedang_berjalan'] = $k['total_pengiriman'] - $k['selesai'] - $k['dibatalkan'];
+
+            // Rata-rata lama pengiriman (jam) dari yang sudah selesai & punya kedua tanggal
+            $avg = $this->db->select('AVG(TIMESTAMPDIFF(HOUR, tanggal_kirim, tanggal_terima)) AS avg_jam', false)
+                ->where('id_kurir', $id_kurir)
+                ->where('tanggal_kirim IS NOT NULL', null, false)
+                ->where('tanggal_terima IS NOT NULL', null, false)
+                ->get('tb_tracking')
+                ->row_array();
+
+            $k['rata_rata_jam_kirim'] = $avg['avg_jam'] !== null ? round($avg['avg_jam'], 1) : null;
+        }
+
+        return $kurir_list;
     }
 
     // M08-F06: Proses assign kurir ke 1 pengiriman + catat riwayat
