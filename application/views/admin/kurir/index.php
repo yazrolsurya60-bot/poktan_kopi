@@ -348,6 +348,8 @@
 			text-decoration: none;
 		}
 
+		.btn-detail { background: #DBEAFE; color: #1E40AF; }
+		.btn-detail:hover { background: #1E40AF; color: #fff; }
 		.btn-toggle { background: #EDE9FE; color: #5B21B6; }
 		.btn-toggle:hover { background: #5B21B6; color: #fff; }
 		.btn-edit   { background: #FEF3C7; color: #92400E; }
@@ -509,7 +511,7 @@
 				</li>
 				<li class="menu-item">
 					<a href="<?= base_url('admin/laporan'); ?>">
-						<i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
+						<i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan & Analytics
 					</a>
 				</li>
 			</ul>
@@ -536,8 +538,7 @@
 			<div class="d-flex align-items-center" style="gap: 12px;">
 				<div class="d-flex align-items-center gap-2" style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
 					<i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-					<span style="font-weight:500; font-size:0.85rem;"></span>
-					<span style="font-weight:500;font-size:0.85rem;">Admin</span>
+					<span style="font-weight:500; font-size:0.85rem;"><?= $this->session->userdata('nama') ?? 'Admin'; ?></span>
 				</div>
 			</div>
 		</div>
@@ -559,7 +560,7 @@
 
 		<!-- SUMMARY CARDS -->
 		<div class="row mb-4">
-			<div class="col-md-4 mb-3">
+			<div class="col-md-6 mb-3">
 				<div class="stat-box">
 					<div class="stat-icon-box bg-success-soft"><i class="bi bi-person-check-fill"></i></div>
 					<div>
@@ -568,21 +569,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-4 mb-3">
+			<div class="col-md-6 mb-3">
 				<div class="stat-box">
 					<div class="stat-icon-box bg-warning-soft"><i class="bi bi-pause-circle-fill"></i></div>
 					<div>
 						<p class="stat-title">Inactive</p>
 						<h3 class="stat-num"><?= $kurir_inactive ?? 0; ?></h3>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4 mb-3">
-				<div class="stat-box">
-					<div class="stat-icon-box bg-danger-soft"><i class="bi bi-wifi-off"></i></div>
-					<div>
-						<p class="stat-title">Offline</p>
-						<h3 class="stat-num"><?= $kurir_offline ?? 0; ?></h3>
 					</div>
 				</div>
 			</div>
@@ -598,6 +590,9 @@
 					</form>
 					<a href="<?= base_url('admin/kurir/assign'); ?>" class="btn-outline-custom">
 						<i class="bi bi-truck"></i> Assign Kurir
+					</a>
+					<a href="<?= base_url('admin/kurir/performance'); ?>" class="btn-outline-custom">
+						<i class="bi bi-bar-chart-fill"></i> Performance
 					</a>
 					<button type="button" class="btn-primary-custom" data-toggle="modal" data-target="#modalTambah">
 						<i class="bi bi-plus-circle-fill"></i> Tambah Kurir
@@ -638,14 +633,16 @@
 											$badge_class = [
 												'Active'   => 'badge-active',
 												'Inactive' => 'badge-inactive',
-												'Offline'  => 'badge-offline',
 											];
-											$cls = $badge_class[$row['status']] ?? 'badge-offline';
+											$cls = $badge_class[$row['status']] ?? 'badge-inactive';
 											?>
 											<span class="status-badge <?= $cls; ?>"><?= $row['status']; ?></span>
 										</td>
 										<td class="text-muted small"><?= date('d M Y', strtotime($row['created_at'])); ?></td>
 										<td class="text-center">
+											<a href="<?= base_url('admin/kurir/detail/' . $row['id_kurir']); ?>" class="btn-icon btn-detail" title="Detail & History">
+												<i class="bi bi-eye"></i>
+											</a>
 											<a href="<?= base_url('admin/kurir/toggle/' . $row['id_kurir']); ?>" class="btn-icon btn-toggle" title="Toggle Active/Inactive">
 												<i class="bi bi-arrow-repeat"></i>
 											</a>
@@ -691,7 +688,6 @@
 															<select name="status" class="form-control form-control-custom">
 																<option value="Active" <?= $row['status'] == 'Active' ? 'selected' : ''; ?>>Active</option>
 																<option value="Inactive" <?= $row['status'] == 'Inactive' ? 'selected' : ''; ?>>Inactive</option>
-																<option value="Offline" <?= $row['status'] == 'Offline' ? 'selected' : ''; ?>>Offline</option>
 															</select>
 														</div>
 													</div>
@@ -746,8 +742,7 @@
 							<label class="small font-weight-bold" style="color:var(--dark-coffee);">Status <span class="text-danger">*</span></label>
 							<select name="status" class="form-control form-control-custom">
 								<option value="Active">Active</option>
-								<option value="Inactive">Inactive</option>
-								<option value="Offline" selected>Offline</option>
+								<option value="Inactive" selected>Inactive</option>
 							</select>
 						</div>
 					</div>
