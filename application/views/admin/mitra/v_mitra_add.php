@@ -84,6 +84,12 @@
         .field-hint i { color:var(--amber-cream); }
         .form-divider { height:1px; background:rgba(74,44,17,0.06); margin:22px 0; }
 
+        /* Status radio */
+        .status-radio-group { display:flex; align-items:center; gap:18px; padding:10px 14px; background:var(--bg-cream); border:1px solid rgba(74,44,17,0.12); border-radius:10px; height:auto; }
+        .status-radio { display:flex; align-items:center; gap:7px; font-size:0.85rem; font-weight:600; color:var(--dark-coffee); cursor:pointer; margin:0; }
+        .status-radio input[type="radio"] { accent-color: var(--forest-green); width:15px; height:15px; cursor:pointer; margin:0; }
+        .status-radio-dot { display:none; }
+
         /* Upload zone */
         .upload-zone { border:2px dashed rgba(74,44,17,0.15); border-radius:12px; padding:22px 16px; text-align:center; background:rgba(250,246,240,0.5); transition:var(--transition-smooth); cursor:pointer; position:relative; }
         .upload-zone:hover { border-color:var(--amber-cream); background:rgba(230,161,92,0.04); }
@@ -202,7 +208,7 @@
             <!-- USER BADGE -->
             <div class="user-badge">
                 <i class="bi bi-person-circle" style="font-size:1.4rem;color:var(--amber-cream);"></i>
-                <div><div style="font-size:0.82rem;font-weight:600;line-height:1.2;">Admin</div><span class="role-pill">Administrator</span></div>
+                <div><div style="font-size:0.82rem;font-weight:600;line-height:1.2;">Admin</div></div>
             </div>
         </div>
     </div>
@@ -241,11 +247,72 @@
                             <p class="field-hint"><i class="bi bi-lightbulb"></i> Kategori digunakan sebagai filter di Landing Page.</p>
                         </div>
 
+                        <div class="row" style="margin:0 -10px;">
+                            <div class="col-md-6" style="padding:0 10px;">
+                                <div class="field-group">
+                                    <label class="field-label" for="email"><i class="bi bi-envelope-fill"></i> Email</label>
+                                    <input type="email" id="email" name="email" class="field-input"
+                                           placeholder="contoh: info@mitra.id"
+                                           value="<?= set_value('email'); ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-6" style="padding:0 10px;">
+                                <div class="field-group">
+                                    <label class="field-label" for="no_telepon"><i class="bi bi-telephone-fill"></i> No Telepon</label>
+                                    <input type="text" id="no_telepon" name="no_telepon" class="field-input"
+                                           placeholder="contoh: 0812-3456-7890"
+                                           value="<?= set_value('no_telepon'); ?>">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="field-group">
-                            <label class="field-label" for="urutan_tampil"><i class="bi bi-sort-numeric-down"></i> Urutan Tampil <span class="req">*</span></label>
-                            <input type="number" id="urutan_tampil" name="urutan_tampil" class="field-input"
-                                   value="<?= set_value('urutan_tampil','1'); ?>" min="1" style="max-width:140px;" required>
-                            <p class="field-hint"><i class="bi bi-info-circle"></i> Angka lebih kecil = tampil lebih awal di Landing Page.</p>
+                            <label class="field-label" for="website"><i class="bi bi-globe2"></i> Website</label>
+                            <input type="text" id="website" name="website" class="field-input"
+                                   placeholder="contoh: https://www.mitra.id (opsional)"
+                                   value="<?= set_value('website'); ?>">
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="alamat"><i class="bi bi-geo-alt-fill"></i> Alamat</label>
+                            <textarea id="alamat" name="alamat" class="field-input" rows="2"
+                                      placeholder="Masukkan alamat lengkap mitra"
+                                      style="resize:vertical;"><?= set_value('alamat'); ?></textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="deskripsi"><i class="bi bi-card-text"></i> Deskripsi</label>
+                            <textarea id="deskripsi" name="deskripsi" class="field-input" rows="3"
+                                      placeholder="Ceritakan singkat tentang mitra ini"
+                                      style="resize:vertical;"><?= set_value('deskripsi'); ?></textarea>
+                        </div>
+
+                        <div class="form-divider"></div>
+
+                        <div class="row" style="margin:0 -10px;">
+                            <div class="col-md-6" style="padding:0 10px;">
+                                <div class="field-group" style="margin-bottom:0;">
+                                    <label class="field-label"><i class="bi bi-toggle-on"></i> Status <span class="req">*</span></label>
+                                    <div class="status-radio-group">
+                                        <label class="status-radio">
+                                            <input type="radio" name="status_mitra" value="Active" <?= (set_value('status_mitra','Active') === 'Active') ? 'checked' : ''; ?>>
+                                            <span class="status-radio-dot active-dot"></span> Aktif
+                                        </label>
+                                        <label class="status-radio">
+                                            <input type="radio" name="status_mitra" value="Inactive" <?= (set_value('status_mitra') === 'Inactive') ? 'checked' : ''; ?>>
+                                            <span class="status-radio-dot inactive-dot"></span> Tidak Aktif
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6" style="padding:0 10px;">
+                                <div class="field-group" style="margin-bottom:0;">
+                                    <label class="field-label" for="urutan_tampil"><i class="bi bi-sort-numeric-down"></i> Urutan Tampil <span class="req">*</span></label>
+                                    <input type="number" id="urutan_tampil" name="urutan_tampil" class="field-input"
+                                           value="<?= set_value('urutan_tampil','1'); ?>" min="1" required>
+                                    <p class="field-hint"><i class="bi bi-info-circle"></i> Semakin kecil angka, semakin di awal.</p>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-divider"></div>

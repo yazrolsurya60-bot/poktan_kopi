@@ -2,16 +2,22 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Kurir Controller
+ * Kurir Controller (ADMIN)
  * ============================================
  * Modul 08: Manajemen Kurir — (Anisya)
  * ============================================
- * - M08-F01 : List, filter status & cari kurir
- * - M08-F02 : Tambah kurir (modal di halaman index)
- * - M08-F03 : Edit kurir (modal di halaman index)
- * - M08-F04 : Hapus kurir
- * - M08-F05 : Toggle status kurir
- * - M08-F06 : Assign kurir ke pengiriman
+ * Sesuai PRD M-08:
+ * - M08-F01 : Tambah Kurir            -> tambah()
+ * - M08-F02 : Lihat Kurir (daftar)    -> index()
+ * - M08-F03 : Detail Kurir + history  -> detail($id_kurir)
+ * - M08-F04 : Edit Kurir              -> edit($id_kurir)
+ * - M08-F05 : Hapus Kurir (SOFT DELETE) -> hapus($id_kurir)
+ * - M08-F06 : Assign Kurir (sisi Admin) -> assign(), proses_assign()
+ * - M08-F07 : Status Kurir (Active/Inactive) -> toggle($id_kurir)
+ * - M08-F08 : Performance Kurir (laporan kinerja) -> performance()
+ *
+ * Untuk role Petani, lihat controller terpisah:
+ * application/controllers/petani/Kurir.php (hanya fitur assign, F06)
  *
  * View dibuat full-page (sidebar + header + isi + script jadi satu file),
  * mengikuti pola v_dashboard.php (Modul 11 - Putri).
@@ -22,12 +28,12 @@ class Kurir extends CI_Controller
     {
         parent::__construct();
 
-        // 🔴 Cek apakah user sudah login
+        // Cek apakah user sudah login
         if (!$this->session->userdata('id_user')) {
             redirect('auth/login');
         }
 
-        // 🔴 Hanya Admin yang boleh mengakses modul ini
+        // Hanya Admin yang boleh mengakses controller ini
         $current_role = $this->session->userdata('role');
 
         if ($current_role != 'Admin') {
@@ -46,25 +52,24 @@ class Kurir extends CI_Controller
     }
 
     // ============================================
-    // M08-F01: INDEX - LIST KURIR + MODAL TAMBAH/EDIT
+    // M08-F02: INDEX - LIST KURIR + MODAL TAMBAH/EDIT
     // ============================================
     public function index()
     {
         $status_filter = $this->input->get('status');
         $keyword       = $this->input->get('keyword');
 
-        $data['list_kurir']  = $this->Kurir_model->get_all($status_filter, $keyword);
-        $data['keyword']     = $keyword;
+        $data['list_kurir'] = $this->Kurir_model->get_all($status_filter, $keyword);
+        $data['keyword']    = $keyword;
 
         $data['kurir_active']   = $this->Kurir_model->count_by_status('Active');
         $data['kurir_inactive'] = $this->Kurir_model->count_by_status('Inactive');
-        $data['kurir_offline']  = $this->Kurir_model->count_by_status('Offline');
 
         $this->load->view('admin/kurir/index', $data);
     }
 
     // ============================================
-    // M08-F02: TAMBAH KURIR (proses dari modal index)
+    // M08-F01: TAMBAH KURIR (proses dari modal index)
     // ============================================
     public function tambah()
     {
@@ -94,7 +99,25 @@ class Kurir extends CI_Controller
     }
 
     // ============================================
-    // M08-F03: EDIT KURIR (proses dari modal index)
+    // M08-F03: DETAIL KURIR + HISTORY PENGIRIMAN
+    // ============================================
+    public function detail($id_kurir = null)
+    {
+        $detail = $this->Kurir_model->get_detail_with_history($id_kurir);
+
+        if (!$detail) {
+            $this->session->set_flashdata('error', 'Data kurir tidak ditemukan.');
+            redirect('admin/kurir');
+        }
+
+        $data['kurir']      = $detail['kurir'];
+        $data['pengiriman'] = $detail['pengiriman'];
+
+        $this->load->view('admin/kurir/detail', $data);
+    }
+
+    // ============================================
+    // M08-F04: EDIT KURIR (proses dari modal index)
     // ============================================
     public function edit($id_kurir = null)
     {
@@ -131,7 +154,9 @@ class Kurir extends CI_Controller
     }
 
     // ============================================
-    // M08-F04: HAPUS KURIR
+    // M08-F05: HAPUS KURIR (SOFT DELETE)
+    // Baris tidak benar-benar dihapus dari database,
+    // hanya ditandai deleted_at supaya tidak muncul lagi di daftar.
     // ============================================
     public function hapus($id_kurir = null)
     {
@@ -154,7 +179,7 @@ class Kurir extends CI_Controller
     }
 
     // ============================================
-    // M08-F05: TOGGLE STATUS (Active <-> Inactive)
+    // M08-F07: STATUS KURIR (toggle Active <-> Inactive)
     // ============================================
     public function toggle($id_kurir = null)
     {
@@ -173,7 +198,7 @@ class Kurir extends CI_Controller
     }
 
     // ============================================
-    // M08-F06: HALAMAN ASSIGN KURIR
+    // M08-F06: HALAMAN ASSIGN KURIR (sisi Admin — bisa lihat semua transaksi)
     // ============================================
     public function assign()
     {
@@ -219,20 +244,23 @@ class Kurir extends CI_Controller
     }
 
     // ============================================
+    // M08-F08: PERFORMANCE KURIR (laporan kinerja)
+    // ============================================
+    public function performance()
+    {
+        $data['performance'] = $this->Kurir_model->get_performance_kurir();
+
+        $this->load->view('admin/kurir/performance', $data);
+    }
+
+    // ============================================
     // VALIDASI FORM (tambah & edit)
     // ============================================
     private function _validate()
     {
-        // Mengatur pesan bahasa Indonesia untuk semua kolom sekaligus
-$this->form_validation->set_message('required', 'Kolom {field} wajib diisi.');
-$this->form_validation->set_message('min_length', 'Kolom {field} harus memiliki minimal {param} karakter.');
-$this->form_validation->set_message('max_length', 'Kolom {field} tidak boleh lebih dari {param} karakter.');
-$this->form_validation->set_message('numeric', 'Kolom {field} harus berupa angka.');
-$this->form_validation->set_message('valid_email', 'Format {field} tidak valid.');
-$this->form_validation->set_message('in_list', '{field} yang dipilih tidak sesuai dengan pilihan yang tersedia.');
         $this->form_validation->set_rules('nama_kurir', 'Nama Kurir', 'required|trim|min_length[3]|max_length[100]');
         $this->form_validation->set_rules('no_telepon', 'No. Telepon', 'required|trim|numeric|min_length[9]|max_length[20]');
         $this->form_validation->set_rules('email', 'Email', 'trim|valid_email|max_length[100]');
-        $this->form_validation->set_rules('status', 'Status', 'required|in_list[Active,Inactive,Offline]');
+        $this->form_validation->set_rules('status', 'Status', 'required|in_list[Active,Inactive]');
     }
 }

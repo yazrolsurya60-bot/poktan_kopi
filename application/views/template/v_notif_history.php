@@ -14,12 +14,13 @@
             --amber-cream: #E6A15C;
             --bg-cream: #FAF6F0;
             --card-white: #FFFFFF;
+            --text-secondary: #70655E;
         }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-cream); color: var(--dark-coffee); }
         .box-container { background: var(--card-white); border: 1px solid #EFEAE2; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.01); padding: 30px; margin-top: 40px; }
         .notif-item { border: 1px solid #EFEAE2; border-radius: 10px; transition: all 0.2s ease; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
         .notif-item:hover { border-color: var(--amber-cream); background-color: #FDF5ED; }
-        .notif-item.unread { background-color: #FDF5ED; border-color: rgba(230, 161, 92, 0.35); font-weight: 600; border-left: 4px solid var(--amber-cream); }
+        .notif-item.unread { background-color: #FDF5ED; border-color: rgba(230, 161, 92, 0.35); border-left: 4px solid var(--amber-cream); }
         .notif-item.read { background-color: var(--card-white); border-color: #EFEAE2; }
         .back-btn { background-color: var(--roasted-brown); color: white; font-weight: 600; border-radius: 8px; padding: 8px 16px; transition: opacity 0.2s; text-decoration: none; }
         .back-btn:hover { color: white; opacity: 0.9; text-decoration: none; }
@@ -34,6 +35,56 @@
         .notif-icon-default { background: #FDF5ED; color: var(--amber-cream); }
         
         .icon-circle { width: 40px; height: 40px; min-width: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        
+        .notif-empty {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .notif-empty i {
+            font-size: 4rem;
+            color: #D1C9C0;
+            display: block;
+            margin-bottom: 16px;
+        }
+        .notif-empty h5 {
+            color: var(--dark-coffee);
+            font-weight: 600;
+        }
+        .notif-empty p {
+            color: var(--text-secondary);
+        }
+        
+        .notif-judul {
+            font-weight: 700;
+            color: var(--dark-coffee);
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+        .notif-isi {
+            color: #4a3a2e;
+            font-size: 0.9rem;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+        .notif-tanggal {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            min-width: 130px;
+            text-align: right;
+        }
+        .notif-badge-baru {
+            background: var(--amber-cream);
+            color: white;
+            font-size: 0.55rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-left: 8px;
+            font-weight: 600;
+        }
+        @media (max-width: 576px) {
+            .notif-item { flex-wrap: wrap; }
+            .notif-tanggal { text-align: left; margin-top: 8px; min-width: auto; }
+        }
     </style>
 </head>
 <body>
@@ -65,8 +116,13 @@
             $total = count($history);
             $unread = 0;
             foreach($history as $h) {
-                // ✅ PERBAIKAN: Gunakan object (->) 
-                if(($h->is_read ?? $h->status_baca ?? 0) == 0) $unread++;
+                // Support object dan array
+                if (is_object($h)) {
+                    $status = $h->status_baca ?? 0;
+                } else {
+                    $status = $h['status_baca'] ?? 0;
+                }
+                if($status == 0) $unread++;
             }
         ?>
             <div class="d-flex flex-wrap gap-3 mb-4" style="gap: 16px;">
@@ -89,9 +145,28 @@
         <div class="list-group mt-3">
             <?php if(!empty($history)): ?>
                 <?php foreach($history as $h): 
-                    // ✅ PERBAIKAN: Semua akses pakai object (->)
-                    $is_read = $h->is_read ?? $h->status_baca ?? 0;
-                    $icon_type = $h->icon ?? 'default';
+                    // ============================================
+                    // AMBIL DATA - Support object dan array
+                    // ============================================
+                    if (is_object($h)) {
+                        $is_read = $h->status_baca ?? 0;
+                        $icon_type = $h->icon ?? 'default';
+                        $judul = $h->judul ?? 'Notifikasi';
+                        $isi = $h->isi_notifikasi ?? $h->pesan ?? '';
+                        $tanggal = isset($h->tanggal_buat) ? date('d M Y, H:i', strtotime($h->tanggal_buat)) : 
+                                   (isset($h->created_at) ? date('d M Y, H:i', strtotime($h->created_at)) : '');
+                        $link = $h->link ?? '#';
+                    } else {
+                        $is_read = $h['status_baca'] ?? 0;
+                        $icon_type = $h['icon'] ?? 'default';
+                        $judul = $h['judul'] ?? 'Notifikasi';
+                        $isi = $h['isi_notifikasi'] ?? $h['pesan'] ?? '';
+                        $tanggal = isset($h['tanggal_buat']) ? date('d M Y, H:i', strtotime($h['tanggal_buat'])) : 
+                                   (isset($h['created_at']) ? date('d M Y, H:i', strtotime($h['created_at'])) : '');
+                        $link = $h['link'] ?? '#';
+                    }
+
+                    // Map icon
                     $icon_map = [
                         'success' => 'bi-check-circle-fill',
                         'warning' => 'bi-exclamation-triangle-fill',
@@ -100,15 +175,7 @@
                         'primary' => 'bi-star-fill',
                         'default' => 'bi-envelope-fill'
                     ];
-                    $icon_class = isset($icon_map[$icon_type]) ? $icon_map[$icon_type] : 'bi-envelope-fill';
-                    
-                    // Ambil tanggal
-                    $tanggal = isset($h->created_at) ? date('d M Y, H:i', strtotime($h->created_at)) : 
-                               (isset($h->tanggal_buat) ? date('d M Y, H:i', strtotime($h->tanggal_buat)) : '');
-                    
-                    // Ambil judul & isi
-                    $judul = $h->judul ?? '';
-                    $isi = $h->pesan ?? $h->isi_notifikasi ?? '';
+                    $icon_class = $icon_map[$icon_type] ?? 'bi-envelope-fill';
                 ?>
                     <div class="notif-item <?= $is_read == 0 ? 'unread' : 'read'; ?>">
                         <div class="d-flex align-items-center flex-wrap" style="flex: 1; min-width: 0;">
@@ -117,26 +184,29 @@
                             </div>
                             <div style="flex: 1; min-width: 0;">
                                 <?php if(!empty($judul)): ?>
-                                    <div class="font-weight-bold small" style="color: var(--dark-coffee);"><?= htmlspecialchars($judul); ?></div>
+                                    <div class="notif-judul">
+                                        <?= htmlspecialchars($judul); ?>
+                                        <?php if($is_read == 0): ?>
+                                            <span class="notif-badge-baru">Baru</span>
+                                        <?php endif; ?>
+                                    </div>
                                 <?php endif; ?>
-                                <span class="text-dark small" style="font-size: 0.9rem; word-wrap: break-word;">
+                                <div class="notif-isi">
                                     <?= htmlspecialchars($isi); ?>
-                                </span>
-                                <?php if($is_read == 0): ?>
-                                    <span class="badge badge-pill ml-2" style="background: var(--amber-cream); color: white; font-size: 0.55rem; padding: 3px 8px;">Baru</span>
-                                <?php endif; ?>
+                                </div>
                             </div>
                         </div>
-                        <small class="text-muted ml-3 font-weight-normal text-right" style="min-width: 120px; font-size: 0.7rem;">
+                        <div class="notif-tanggal">
                             <i class="bi bi-calendar3 mr-1"></i>
                             <?= $tanggal; ?>
-                        </small>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div class="text-center py-5">
-                    <i class="bi bi-folder-x text-muted d-block" style="font-size: 3rem;"></i>
-                    <p class="text-muted mt-2">Belum ada riwayat notifikasi masuk ke akun ini.</p>
+                <div class="notif-empty">
+                    <i class="bi bi-inbox"></i>
+                    <h5>Kotak Masuk Kosong</h5>
+                    <p>Belum ada riwayat notifikasi masuk ke akun Anda.</p>
                 </div>
             <?php endif; ?>
         </div>
@@ -171,10 +241,12 @@ $(document).ready(function() {
                 success: function(response) {
                     if(response.success) {
                         location.reload();
+                    } else {
+                        alert('Gagal menandai semua notifikasi.');
                     }
                 },
                 error: function() {
-                    alert('Gagal menandai semua notifikasi. Silakan coba lagi.');
+                    alert('Terjadi kesalahan. Silakan coba lagi.');
                 }
             });
         }

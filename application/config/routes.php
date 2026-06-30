@@ -126,6 +126,13 @@ $route['pembeli/transaksi/upload_bukti'] = 'pembeli/transaksi/upload_bukti';
 $route['pembeli/transaksi/invoice/(:num)'] = 'pembeli/transaksi/invoice/$1';
 
 // ============================================
+// 🔥 GUEST TRACKING (BARU)
+// ============================================
+$route['guest/tracking'] = 'Guest_tracking/index';
+$route['guest/tracking/cek'] = 'Guest_tracking/cek';
+$route['guest/tracking/detail/(:num)'] = 'Guest_tracking/detail/$1';
+
+// ============================================
 // LANDING PRODUK
 // ============================================
 $route['landing/produk'] = 'produk/index';
@@ -168,3 +175,14 @@ $route['verifikasi/cek'] = 'Verifikasi/cek';
 // Profile Pembeli
 $route['pembeli/profil'] = 'pembeli/Profil/index';
 $route['pembeli/profil/update'] = 'pembeli/Profil/update';
+
+// Admin
+$route['admin/kurir/toggle/(:num)']     = 'admin/Kurir/toggle/$1';
+$route['admin/kurir/detail/(:num)']     = 'admin/Kurir/detail/$1';
+$route['admin/kurir/performance']       = 'admin/Kurir/performance';
+$route['admin/kurir/assign']            = 'admin/Kurir/assign';
+$route['admin/kurir/proses_assign']     = 'admin/Kurir/proses_assign';
+
+// Petani
+$route['petani/kurir/assign']           = 'petani/Kurir/assign';
+$route['petani/kurir/proses_assign']    = 'petani/Kurir/proses_assign';

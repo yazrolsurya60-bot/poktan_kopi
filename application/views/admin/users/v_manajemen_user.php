@@ -544,6 +544,60 @@
             </div>
         <?php endif; ?>
 
+        <!-- SEARCH & FILTER -->
+        <div class="custom-card" style="max-width: 100%; margin-bottom: 20px;">
+            <div class="card-body-custom">
+                <form method="get" action="<?= site_url('admin/user') ?>" class="form-custom">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-0">
+                                <label for="search">
+                                    <i class="bi bi-search mr-1"></i> Cari User
+                                </label>
+                                <input type="text" name="search" id="search" class="form-control" 
+                                       placeholder="Nama, username, atau nomor telepon" 
+                                       value="<?= htmlspecialchars($search ?? '') ?>" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <label for="role">Role</label>
+                                <select name="role" id="role" class="form-select">
+                                    <option value="">Semua Role</option>
+                                    <option value="Admin" <?= ($role ?? '') === 'Admin' ? 'selected' : '' ?>>Admin</option>
+                                    <option value="Petani" <?= ($role ?? '') === 'Petani' ? 'selected' : '' ?>>Petani</option>
+                                    <option value="Pembeli" <?= ($role ?? '') === 'Pembeli' ? 'selected' : '' ?>>Pembeli</option>
+                                    <option value="Guest" <?= ($role ?? '') === 'Guest' ? 'selected' : '' ?>>Guest</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <label for="status">Status</label>
+                                <select name="status" id="status" class="form-select">
+                                    <option value="">Semua Status</option>
+                                    <option value="Active" <?= ($status ?? '') === 'Active' ? 'selected' : '' ?>>Aktif</option>
+                                    <option value="Inactive" <?= ($status ?? '') === 'Inactive' ? 'selected' : '' ?>>Nonaktif</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn-custom-primary" style="width: 100%;">
+                                <i class="bi bi-search mr-1"></i> Cari
+                            </button>
+                        </div>
+                    </div>
+                    <?php if (!empty($search) || !empty($role) || !empty($status)): ?>
+                        <div class="mt-3">
+                            <a href="<?= site_url('admin/user') ?>" class="btn-custom-secondary" style="font-size: 0.8rem; padding: 6px 14px;">
+                                <i class="bi bi-x-circle mr-1"></i> Reset Filter
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                </form>
+            </div>
+        </div>
+
         <!-- USER TABLE -->
         <div class="custom-card">
             <div class="card-header-custom">
@@ -585,17 +639,45 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <span class="status-badge <?= $user['status'] === 'active' ? 'active' : 'inactive' ?> status-toggle" 
-                                                  data-id="<?= $user['id_user'] ?>" 
-                                                  data-status="<?= $user['status'] ?>"
-                                                  style="cursor: pointer;">
-                                                <?= ucfirst($user['status']) ?>
-                                            </span>
+                                            <?php if ($user['status'] === 'Active'): ?>
+                                                <span class="status-badge active" style="cursor: default;">
+                                                    <i class="bi bi-check-circle mr-1"></i>Aktif
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="status-badge inactive" style="cursor: default;">
+                                                    <i class="bi bi-x-circle mr-1"></i>Nonaktif
+                                                </span>
+                                            <?php endif; ?>
                                         </td>
                                         <td class="text-center">
                                             <a href="<?= site_url('admin/user/edit/' . $user['id_user']) ?>" class="btn-custom-outline me-1" title="Edit">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
+                                            <?php if ($user['role'] !== 'Admin'): ?>
+                                                <?php if ($user['status'] === 'Active'): ?>
+                                                    <a href="<?= site_url('admin/user/deactivate/' . $user['id_user']) ?>" 
+                                                       class="btn-custom-outline me-1" 
+                                                       title="Nonaktifkan"
+                                                       onclick="return confirm('Apakah Anda yakin ingin menonaktifkan user ini?')">
+                                                        <i class="bi bi-pause-circle"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <a href="<?= site_url('admin/user/activate/' . $user['id_user']) ?>" 
+                                                       class="btn-custom-outline me-1" 
+                                                       title="Aktifkan"
+                                                       onclick="return confirm('Apakah Anda yakin ingin mengaktifkan user ini?')">
+                                                        <i class="bi bi-play-circle"></i>
+                                                    </a>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                            <?php if ($user['role'] === 'Petani' && $user['is_verified'] === '0'): ?>
+                                                <a href="<?= site_url('admin/users/verify_petani/' . $user['id_user']) ?>" 
+                                                   class="btn-custom-outline me-1" 
+                                                   title="Verifikasi Petani"
+                                                   onclick="return confirm('Apakah Anda yakin ingin memverifikasi akun Petani ini?')">
+                                                    <i class="bi bi-patch-check"></i>
+                                                </a>
+                                            <?php endif; ?>
                                             <a href="javascript:void(0)" class="btn-custom-outline-danger" 
                                                onclick="if(confirm('Apakah Anda yakin ingin menghapus user ini?')){ window.location.href='<?= site_url('admin/user/delete/' . $user['id_user']) ?>'; }" 
                                                title="Hapus">

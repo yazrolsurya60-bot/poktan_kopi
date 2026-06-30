@@ -49,7 +49,8 @@ class Petani extends CI_Controller {
 
     // ── 3. FORM Tambah ───────────────────────────────────────────────
     public function tambah() {
-        $this->load->view('admin/Petani_form');
+        $data['semua_wilayah'] = $this->Petani_model->get_all_wilayah();
+        $this->load->view('admin/Petani_form', $data);
     }
 
     // ── 4. PROSES Tambah ─────────────────────────────────────────────
@@ -58,9 +59,11 @@ class Petani extends CI_Controller {
         $this->form_validation->set_rules('nik',         'NIK',         'required|trim|numeric|exact_length[16]');
         $this->form_validation->set_rules('no_hp',       'No HP',       'required|trim|numeric|min_length[9]|max_length[15]');
         $this->form_validation->set_rules('alamat',      'Alamat',      'required|trim');
+        $this->form_validation->set_rules('wilayah[]',   'Wilayah',     'required');
 
         if ($this->form_validation->run() === FALSE) {
-            $this->load->view('admin/Petani_form');
+            $data['semua_wilayah'] = $this->Petani_model->get_all_wilayah();
+            $this->load->view('admin/Petani_form', $data);
             return;
         }
 
@@ -90,7 +93,12 @@ class Petani extends CI_Controller {
             }
         }
 
-        $this->Petani_model->insert_petani($data);
+        $id_petani_baru = $this->Petani_model->insert_petani($data);
+
+        // Simpan relasi wilayah (boleh lebih dari 1, mis. Sempadian Tekarang & Sendoyan Batu Layar)
+        $wilayah_dipilih = $this->input->post('wilayah') ?: [];
+        $this->Petani_model->simpan_wilayah_petani($id_petani_baru, $wilayah_dipilih);
+
         $this->session->set_flashdata('pesan', 'Data petani berhasil ditambahkan!');
         redirect('admin/petani');
     }
@@ -99,6 +107,7 @@ class Petani extends CI_Controller {
     public function edit($id) {
         $data['petani'] = $this->Petani_model->get_petani_by_id($id);
         if (!$data['petani']) { show_404(); }
+        $data['semua_wilayah'] = $this->Petani_model->get_all_wilayah();
 
         $this->load->view('admin/Petani_edit', $data);
     }
@@ -134,6 +143,11 @@ class Petani extends CI_Controller {
         }
 
         $this->Petani_model->update_petani($id, $data);
+
+        // Simpan ulang relasi wilayah (boleh lebih dari 1)
+        $wilayah_dipilih = $this->input->post('wilayah') ?: [];
+        $this->Petani_model->simpan_wilayah_petani($id, $wilayah_dipilih);
+
         $this->session->set_flashdata('pesan', 'Data berhasil diperbarui!');
         redirect('admin/petani');
     }

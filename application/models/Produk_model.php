@@ -51,4 +51,18 @@ class Produk_model extends CI_Model {
     public function delete_galeri($id_galeri) {
         return $this->db->where('id_galeri', $id_galeri)->delete('tb_produk_galeri');
     }
+
+    // ==================== STOK ====================
+
+    public function kurangi_stok($id_produk, $jumlah) {
+        $this->db->set('stok_produk', 'stok_produk - ' . (int) $jumlah, FALSE);
+        $this->db->where('id_produk', $id_produk);
+        return $this->db->update($this->table, NULL);
+    }
+
+    public function tambah_stok($id_produk, $jumlah) {
+        $this->db->set('stok_produk', 'stok_produk + ' . (int) $jumlah, FALSE);
+        $this->db->where('id_produk', $id_produk);
+        return $this->db->update($this->table, NULL);
+    }
 }
