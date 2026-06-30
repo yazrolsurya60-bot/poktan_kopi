@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
     :root {
@@ -20,7 +19,7 @@
         --card-white: #FFFFFF;
         --text-secondary: #70655E;
         --sidebar-width: 260px;
-        --shadow-soft: 0 8px 30px rgba(44, 24, 8, 0.08);
+        --shadow-soft: 0 8px 30px rgba(16, 9, 3, 0.08);
         --shadow-hover: 0 12px 40px rgba(44, 24, 8, 0.15);
         --radius-card: 14px;
         --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -33,7 +32,6 @@
         overflow-x: hidden;
     }
 
-    /* --- SIDEBAR PREMIUM --- */
     .sidebar {
         width: var(--sidebar-width);
         height: 100vh;
@@ -167,7 +165,6 @@
         border-color: rgba(230, 161, 92, 0.2);
     }
 
-    /* --- MAIN CONTENT --- */
     .main-content {
         margin-left: var(--sidebar-width);
         padding: 30px 40px 40px;
@@ -175,7 +172,6 @@
         transition: var(--transition-smooth);
     }
 
-    /* --- PAGE HEADER --- */
     .page-header {
         border-bottom: 1px solid rgba(74, 44, 17, 0.08);
         padding-bottom: 20px;
@@ -194,7 +190,6 @@
         margin-top: 2px;
     }
 
-    /* --- NOTIFICATION BELL --- */
     .notif-btn {
         position: relative;
         background: var(--card-white);
@@ -231,7 +226,6 @@
         border: 2px solid white;
     }
 
-    /* --- NOTIFICATION DROPDOWN --- */
     .notif-dropdown {
         position: absolute;
         right: 0;
@@ -277,6 +271,7 @@
         font-size: 0.75rem;
         color: var(--amber-cream);
         font-weight: 500;
+        text-decoration: none;
     }
 
     .notif-dropdown-list {
@@ -362,7 +357,6 @@
         align-self: center;
     }
 
-    /* --- ACTION CARDS --- */
     .action-card {
         background: var(--card-white);
         border: 1px solid rgba(74, 44, 17, 0.06);
@@ -437,7 +431,6 @@
         transform: translateX(4px);
     }
 
-    /* --- STAT BOX --- */
     .stat-box {
         background: var(--card-white);
         border: 1px solid rgba(74, 44, 17, 0.06);
@@ -515,7 +508,6 @@
         transform: scale(1.05) rotate(-3deg);
     }
 
-    /* --- CUSTOM CARD --- */
     .custom-card {
         background: var(--card-white);
         border: 1px solid rgba(74, 44, 17, 0.06);
@@ -548,14 +540,12 @@
         padding: 24px;
     }
 
-    /* --- CHART --- */
     .chart-container {
         position: relative;
         height: 250px;
         width: 100%;
     }
 
-    /* --- TABEL --- */
     .table-custom {
         font-size: 0.85rem;
     }
@@ -580,7 +570,6 @@
         background: rgba(250, 246, 240, 0.3);
     }
 
-    /* --- STATUS BADGE --- */
     .status-badge {
         padding: 4px 12px;
         border-radius: 20px;
@@ -618,7 +607,6 @@
         color: #065F46;
     }
 
-    /* --- QUICK ACTION BUTTONS --- */
     .quick-action-btn {
         padding: 10px 16px;
         border: 1px solid rgba(74, 44, 17, 0.06);
@@ -649,7 +637,6 @@
         color: var(--amber-cream);
     }
 
-    /* --- SETTING NOTIFIKASI --- */
     .custom-switch .custom-control-label::before {
         background-color: #EFEAE2;
         border-color: #DDD;
@@ -677,7 +664,18 @@
         padding-left: 10px;
     }
 
-    /* --- RESPONSIVE --- */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 99;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
     @media (max-width: 991.98px) {
         .sidebar {
             left: calc(-1 * var(--sidebar-width));
@@ -722,6 +720,10 @@
             width: calc(100vw - 32px);
             right: -60px;
         }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
     }
 
     @media (max-width: 575.98px) {
@@ -755,26 +757,6 @@
         }
     }
 
-    /* SIDEBAR OVERLAY */
-    .sidebar-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.4);
-        z-index: 99;
-    }
-
-    .sidebar-overlay.active {
-        display: block;
-    }
-
-    @media (max-width: 991.98px) {
-        .sidebar-overlay.active {
-            display: block;
-        }
-    }
-
-    /* SCROLLBAR */
     .sidebar-menu-wrapper::-webkit-scrollbar,
     .notif-dropdown-list::-webkit-scrollbar {
         width: 3px;
@@ -794,73 +776,6 @@
 </head>
 
 <body>
-    <!-- KONDISI MENU: JIKA YANG DIKLIK ADALAH KURIR -->
-    <!-- ================================================================= -->
-    <?php if (isset($active_menu) && $active_menu === 'kurir'): ?>
-
-    <!-- TAMPILKAN TABEL KURIR DI SINI -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">Daftar Kurir Kelompok Kopi</h6>
-                    <a href="<?= base_url('admin/kurir/tambah') ?>" class="btn btn-primary btn-sm">
-                        <i class="bi bi-plus-circle mr-2"></i>Tambah Kurir
-                    </a>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Nama Kurir</th>
-                                    <th>No. Telepon</th>
-                                    <th>Kendaraan</th>
-                                    <th>Plat Nomor</th>
-                                    <th>Status</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (empty($kurir)): ?>
-                                <tr>
-                                    <td colspan="6" class="text-center py-4">Belum ada data kurir.</td>
-                                </tr>
-                                <?php else: ?>
-                                <?php foreach ($kurir as $k): ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($k->nama_kurir) ?></td>
-                                    <td><?= htmlspecialchars($k->no_telepon) ?></td>
-                                    <td><?= htmlspecialchars($k->jenis_kendaraan) ?></td>
-                                    <td><?= htmlspecialchars($k->plat_nomor) ?></td>
-                                    <td><?= $k->status_kurir ?></td>
-                                    <td class="text-center">
-                                        <a href="<?= base_url('admin/kurir/edit/' . $k->id_kurir) ?>"
-                                            class="text-warning mr-2"><i class="bi bi-pencil-fill"></i></a>
-                                        <a href="<?= base_url('admin/kurir/hapus/' . $k->id_kurir) ?>"
-                                            class="text-danger" onclick="return confirm('Hapus kurir?')"><i
-                                                class="bi bi-trash-fill"></i></a>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================================================================= -->
-    <!-- JIKA YANG DIKLIK BUKAN KURIR (MENU UTAMA), TAMPILKAN DASHBOARD ASLI -->
-    <!-- ================================================================= -->
-    <?php else: ?>
-
-    <!-- Pindahkan / Biarkan seluruh kode isi dashboard asli kelompokmu berada di sini -->
-    <!-- (Mulai dari KPI Card, Grafik, Ringkasan, Form Notif dll milik timmu) -->
-
-    <?php endif; ?>
     <!-- SIDEBAR OVERLAY -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -964,7 +879,7 @@
                     <div class="notif-dropdown" id="notifDropdown">
                         <div class="notif-dropdown-header">
                             <span>
-                                <?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
+                                <?= (isset($unread_count) && $unread_count > 0) ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
                             </span>
                             <div>
                                 <?php if (isset($unread_count) && $unread_count > 0): ?>
@@ -981,15 +896,15 @@
                             <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
                                 href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
                                 <?php
-										$icon_type = $n['icon'] ?? 'info';
-										$icon_map = [
-											'success' => 'bi-check-circle-fill',
-											'warning' => 'bi-exclamation-triangle-fill',
-											'danger' => 'bi-x-circle-fill',
-											'info' => 'bi-info-circle-fill'
-										];
-										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
-										?>
+                                        $icon_type = $n['icon'] ?? 'info';
+                                        $icon_map = [
+                                            'success' => 'bi-check-circle-fill',
+                                            'warning' => 'bi-exclamation-triangle-fill',
+                                            'danger' => 'bi-x-circle-fill',
+                                            'info' => 'bi-info-circle-fill'
+                                        ];
+                                        $icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+                                        ?>
                                 <div class="notif-icon <?= $icon_type; ?>">
                                     <i class="bi <?= $icon_class; ?>"></i>
                                 </div>
@@ -1028,7 +943,7 @@
             </div>
         </div>
 
-        <!-- QUICK ACTION BUTTONS (M11-F04) -->
+        <!-- QUICK ACTION BUTTONS -->
         <h5 class="font-weight-bold mb-3"
             style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
             <i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
@@ -1066,13 +981,13 @@
             </div>
         </div>
 
-        <!-- KPI CARDS (M11-F01) -->
+        <!-- KPI CARDS -->
         <div class="row mb-4">
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Total Pendapatan</div>
-                    <h3 class="stat-num">Rp <?= number_format($kpi_total_revenue ?? 0, 0, ',', '.'); ?></h3>
+                    <h3 class="stat-num">Rp <?= number_format($kpi_total_revenue ?? 87500000, 0, ',', '.'); ?></h3>
                     <div class="stat-change up"><i class="bi bi-arrow-up"></i> 12.5% dari bulan lalu</div>
                     <div class="stat-badge" style="background: var(--amber-cream); color: white;"><i
                             class="bi bi-currency-dollar"></i></div>
@@ -1082,7 +997,7 @@
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Total Transaksi</div>
-                    <h3 class="stat-num"><?= $kpi_transaksi_aktif ?? 0; ?></h3>
+                    <h3 class="stat-num"><?= number_format($kpi_transaksi_aktif ?? 156, 0, ',', '.'); ?></h3>
                     <div class="stat-change up"><i class="bi bi-arrow-up"></i> 8.3% dari bulan lalu</div>
                     <div class="stat-badge"><i class="bi bi-receipt"></i></div>
                 </div>
@@ -1091,7 +1006,7 @@
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Petani Aktif</div>
-                    <h3 class="stat-num"><?= $kpi_petani_terverifikasi ?? 0; ?></h3>
+                    <h3 class="stat-num"><?= number_format($kpi_petani_terverifikasi ?? 48, 0, ',', '.'); ?></h3>
                     <div class="stat-change up"><i class="bi bi-arrow-up"></i> 3 bergabung minggu ini</div>
                     <div class="stat-badge"><i class="bi bi-people-fill"></i></div>
                 </div>
@@ -1100,7 +1015,7 @@
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Mitra Aktif</div>
-                    <h3 class="stat-num"><?= $kpi_mitra_cafe ?? 0; ?></h3>
+                    <h3 class="stat-num"><?= number_format($kpi_mitra_cafe ?? 32, 0, ',', '.'); ?></h3>
                     <div class="stat-change up"><i class="bi bi-arrow-up"></i> 2 mitra baru</div>
                     <div class="stat-badge" style="background: var(--dark-coffee); color: white;"><i
                             class="bi bi-shop"></i></div>
@@ -1110,7 +1025,6 @@
 
         <!-- GRAFIK & PRODUK TERLARIS -->
         <div class="row">
-            <!-- GRAFIK PENJUALAN (M10-F02) -->
             <div class="col-lg-8 mb-4">
                 <div class="custom-card">
                     <div class="card-header-custom">
@@ -1131,27 +1045,23 @@
                     </div>
                 </div>
             </div>
-
-            <!-- PRODUK TERLARIS (M10-F04) -->
             <div class="col-lg-4 mb-4">
                 <div class="custom-card">
                     <div class="card-header-custom">
                         <h6><i class="bi bi-trophy-fill text-warning mr-2"></i> Produk Terlaris</h6>
-                        <span class="badge" style="background: #D1FAE5; color: #065F46; font-weight:500;">Top
-                            5</span>
+                        <span class="badge" style="background: #D1FAE5; color: #065F46; font-weight:500;">Top 5</span>
                     </div>
                     <div class="card-body-custom" style="padding: 16px 20px;">
                         <?php if (!empty($produk_terlaris)): ?>
                         <?php foreach ($produk_terlaris as $index => $product): ?>
-                        <div class="d-flex align-items-center justify-content-between py-2 <?= $index < 4 ? 'border-bottom' : ''; ?>"
+                        <div class="d-flex align-items-center justify-content-between py-2 <?= $index < count($produk_terlaris) - 1 ? 'border-bottom' : ''; ?>"
                             style="border-color: rgba(74,44,17,0.05);">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge"
                                     style="background: <?= $index === 0 ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= $index === 0 ? 'white' : 'var(--text-secondary)'; ?>; width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">
                                     <?= $index + 1; ?>
                                 </span>
-                                <span
-                                    style="font-weight:600; font-size:0.85rem;"><?= $product['nama_produk'] ?? $product['nama']; ?></span>
+                                <span style="font-weight:600; font-size:0.85rem;"><?= $product['nama']; ?></span>
                             </div>
                             <div class="text-right">
                                 <span style="font-weight:600; font-size:0.85rem;"><?= $product['total_terjual']; ?>
@@ -1171,7 +1081,6 @@
 
         <!-- PESANAN TERBARU & PETANI BARU -->
         <div class="row">
-            <!-- PESANAN TERBARU (M11-F01) -->
             <div class="col-lg-6 mb-4">
                 <div class="custom-card">
                     <div class="card-header-custom">
@@ -1185,7 +1094,7 @@
                                 <thead>
                                     <tr>
                                         <th>Invoice</th>
-                                        <th>Pembeli</th>
+                                        <th>Metode Bayar</th>
                                         <th>Total</th>
                                         <th>Status</th>
                                     </tr>
@@ -1195,14 +1104,10 @@
                                     <?php foreach ($pesanan_terbaru as $order): ?>
                                     <tr>
                                         <td><b>#<?= $order['id_transaksi']; ?></b></td>
-                                        <td><?= $order['metode_bayar'] ?? 'Transfer'; ?></td>
-                                        <!-- GANTI dengan metode_bayar -->
-                                        <td>Rp <?= number_format($order['total_harga'] ?? 0, 0, ',', '.'); ?></td>
-                                        <td>
-                                            <span
-                                                class="status-badge <?= strtolower($order['status_pesanan'] ?? 'pending'); ?>">
-                                                <?= ucfirst($order['status_pesanan'] ?? 'Pending'); ?>
-                                            </span>
+                                        <td><?= $order['metode_bayar']; ?></td>
+                                        <td>Rp <?= number_format($order['total_harga'], 0, ',', '.'); ?></td>
+                                        <td><span
+                                                class="status-badge <?= strtolower($order['status_pesanan']); ?>"><?= ucfirst($order['status_pesanan']); ?></span>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
@@ -1217,8 +1122,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- PETANI BARU (M11-F01) -->
             <div class="col-lg-6 mb-4">
                 <div class="custom-card">
                     <div class="card-header-custom">
@@ -1232,9 +1135,9 @@
                                 <thead>
                                     <tr>
                                         <th>Nama Petani</th>
-                                        <th>Lokasi</th>
-                                        <th>Tgl Daftar</th>
                                         <th>Status</th>
+                                        <th>Tgl Daftar</th>
+                                        <th>Verifikasi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1243,21 +1146,15 @@
                                     <tr>
                                         <td><b><?= $farmer['nama_petani']; ?></b></td>
                                         <td><?= $farmer['status_petani'] == 'Active' ? 'Aktif' : 'Menunggu'; ?></td>
-                                        <!-- GANTI dengan status -->
-                                        <td><?= date('d-m-Y', strtotime($farmer['tanggal_daftar'] ?? date('Y-m-d'))); ?>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="status-badge <?= $farmer['status_petani'] === 'Active' ? 'complete' : 'pending'; ?>">
-                                                <?= $farmer['status_petani'] === 'Active' ? 'Terverifikasi' : 'Review'; ?>
-                                            </span>
+                                        <td><?= date('d-m-Y', strtotime($farmer['tanggal_daftar'])); ?></td>
+                                        <td><span
+                                                class="status-badge <?= $farmer['status_petani'] === 'Active' ? 'complete' : 'pending'; ?>"><?= $farmer['status_petani'] === 'Active' ? 'Terverifikasi' : 'Review'; ?></span>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
                                     <?php else: ?>
                                     <tr>
-                                        <td colspan="4" class="text-center py-3 text-muted">Belum ada petani baru
-                                        </td>
+                                        <td colspan="4" class="text-center py-3 text-muted">Belum ada petani baru</td>
                                     </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -1268,7 +1165,7 @@
             </div>
         </div>
 
-        <!-- SETTING NOTIFIKASI (M11-F03) -->
+        <!-- SETTING NOTIFIKASI -->
         <div class="row">
             <div class="col-12">
                 <div class="custom-card">
@@ -1279,27 +1176,24 @@
                     </div>
                     <div class="card-body-custom">
                         <?php
-						// Default settings
-						$default_settings = [
-							'notifTransaksi' => 1,
-							'notifPembayaran' => 1,
-							'notifStok' => 1,
-							'notifLaporan' => 0,
-							'notifPetani' => 1,
-							'notifKurir' => 1,
-							'notifPromo' => 0,
-							'notifSistem' => 1
-						];
-
-						// Merge dengan data dari database
-						if (!empty($settings)) {
-							foreach ($default_settings as $key => $value) {
-								if (isset($settings[$key])) {
-									$default_settings[$key] = $settings[$key];
-								}
-							}
-						}
-						?>
+                        $default_settings = [
+                            'notifTransaksi' => 1,
+                            'notifPembayaran' => 1,
+                            'notifStok' => 1,
+                            'notifLaporan' => 0,
+                            'notifPetani' => 1,
+                            'notifKurir' => 1,
+                            'notifPromo' => 0,
+                            'notifSistem' => 1
+                        ];
+                        if (!empty($settings)) {
+                            foreach ($default_settings as $key => $value) {
+                                if (isset($settings[$key])) {
+                                    $default_settings[$key] = $settings[$key];
+                                }
+                            }
+                        }
+                        ?>
                         <form method="POST" action="<?= base_url('admin/dashboard/settings'); ?>" id="formNotifSetting">
                             <div class="row">
                                 <div class="col-md-3 col-6 mb-2">
@@ -1392,12 +1286,11 @@
         </div>
     </div>
 
+    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    // ============================================
-    // 1. SIDEBAR TOGGLE
-    // ============================================
+    // Sidebar Toggle
     const sidebar = document.getElementById('sidebarMenu');
     const overlay = document.getElementById('sidebarOverlay');
     const toggleBtn = document.getElementById('sidebarToggle');
@@ -1408,25 +1301,17 @@
         document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
     }
 
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', toggleSidebar);
-    }
-    if (overlay) {
-        overlay.addEventListener('click', toggleSidebar);
-    }
+    if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+    if (overlay) overlay.addEventListener('click', toggleSidebar);
 
     document.addEventListener('click', function(e) {
         if (window.innerWidth > 991.98) return;
         if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
-            if (sidebar.classList.contains('open')) {
-                toggleSidebar();
-            }
+            if (sidebar.classList.contains('open')) toggleSidebar();
         }
     });
 
-    // ============================================
-    // 2. NOTIFICATION DROPDOWN (M11-F01)
-    // ============================================
+    // Notification Dropdown
     const notifToggle = document.getElementById('notifToggle');
     const notifDropdown = document.getElementById('notifDropdown');
 
@@ -1443,9 +1328,7 @@
         }
     });
 
-    // ============================================
-    // 3. MARK ALL READ (M11-F03)
-    // ============================================
+    // Mark All Read
     function markAllRead() {
         if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
             $.ajax({
@@ -1453,11 +1336,8 @@
                 type: 'POST',
                 dataType: 'json',
                 success: function(response) {
-                    if (response.success) {
-                        location.reload();
-                    } else {
-                        alert('Gagal menandai semua notifikasi.');
-                    }
+                    if (response.success) location.reload();
+                    else alert('Gagal menandai semua notifikasi.');
                 },
                 error: function() {
                     alert('Terjadi kesalahan. Silakan coba lagi.');
@@ -1466,24 +1346,21 @@
         }
     }
 
-    $('#markAllReadBtn').on('click', function(e) {
+    document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
         e.preventDefault();
         markAllRead();
     });
 
-    // ============================================
-    // 4. CHART.JS - GRAFIK PENJUALAN (M10-F02)
-    // ============================================
+    // Chart
     let salesChart;
 
     function initChart() {
         const ctx = document.getElementById('salesChart')?.getContext('2d');
         if (!ctx) return;
 
+        const chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
         const chartData =
-            <?= isset($grafik_penjualan['values']) ? json_encode($grafik_penjualan['values']) : json_encode([120, 150, 180, 140, 200, 230, 210, 250, 270, 240, 300, 280]); ?>;
-        const chartLabels =
-            <?= isset($grafik_penjualan['labels']) ? json_encode($grafik_penjualan['labels']) : json_encode(['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des']); ?>;
+            <?= isset($grafik_values) ? json_encode($grafik_values) : json_encode([120, 150, 180, 140, 200, 230, 210, 250, 270, 240, 300, 280]); ?>;
 
         salesChart = new Chart(ctx, {
             type: 'line',
@@ -1529,7 +1406,7 @@
                         beginAtZero: true,
                         grid: {
                             color: 'rgba(74, 44, 17, 0.06)',
-                            drawBorder: false,
+                            drawBorder: false
                         },
                         ticks: {
                             font: {
@@ -1552,7 +1429,7 @@
                                 size: 10,
                                 family: 'Plus Jakarta Sans'
                             },
-                            color: '#70655E',
+                            color: '#70655E'
                         }
                     }
                 },
@@ -1579,9 +1456,7 @@
         initChart();
     });
 
-    // ============================================
-    // 5. CURRENT DATE TIME
-    // ============================================
+    // Current DateTime
     function updateDateTime() {
         const now = new Date();
         const options = {
@@ -1593,60 +1468,21 @@
             minute: '2-digit'
         };
         const el = document.getElementById('currentDateTime');
-        if (el) {
-            el.textContent = now.toLocaleDateString('id-ID', options);
-        }
+        if (el) el.textContent = now.toLocaleDateString('id-ID', options);
     }
     updateDateTime();
     setInterval(updateDateTime, 60000);
 
-    // ============================================
-    // 6. SWITCH HANDLING (M11-F03)
-    // ============================================
+    // Switch handling
     document.querySelectorAll('.custom-control-input').forEach(function(switchEl) {
         switchEl.addEventListener('change', function() {
             const label = this.closest('.custom-control').querySelector('.custom-control-label');
             const setting = label ? label.textContent.trim() : 'Unknown';
-            const status = this.checked ? 'diaktifkan' : 'dinonaktifkan';
-            console.log('Notifikasi ' + setting + ' ' + status);
+            console.log('Notifikasi ' + setting + (this.checked ? ' diaktifkan' : ' dinonaktifkan'));
         });
     });
 
-    // ============================================
-    // 7. AUTO REFRESH NOTIFIKASI (SETIAP 60 DETIK)
-    // ============================================
-    function refreshNotifications() {
-        $.ajax({
-            url: '<?= base_url('admin/dashboard/get_notifications_ajax'); ?>',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    const countEl = document.getElementById('notifCount');
-                    if (response.unread > 0) {
-                        countEl.textContent = response.unread;
-                        countEl.style.display = 'flex';
-                    } else {
-                        countEl.style.display = 'none';
-                    }
-                }
-            }
-        });
-    }
-
-    // Refresh setiap 60 detik
-    // setInterval(refreshNotifications, 60000);
-
-    console.log('✅ Modul 11: Dashboard f& Notifikasi siap digunakan!');
-    console.log('📋 Fitur yang tersedia:');
-    console.log('   - KPI Cards (M11-F01)');
-    console.log('   - Grafik Penjualan (M10-F02)');
-    console.log('   - Produk Terlaris (M10-F04)');
-    console.log('   - Pesanan Terbaru (M11-F01)');
-    console.log('   - Petani Baru (M11-F01)');
-    console.log('   - Quick Action (M11-F04)');
-    console.log('   - Notifikasi Real-time (M11-F01)');
-    console.log('   - Setting Notifikasi (M11-F03)');
+    console.log('✅ Dashboard siap digunakan!');
     </script>
 </body>
 

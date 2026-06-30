@@ -3,28 +3,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Lahan_model extends CI_Model {
 
-    // Fungsi get_all_lahan sudah benar
-    public function get_all_lahan($id_user = null, $filters = []) {
-        $this->db->select('tb_lahan.*, tb_user.nama as nama_petani');
-        $this->db->from('tb_lahan');
-        $this->db->join('tb_user', 'tb_user.id_user = tb_lahan.id_user', 'left');
-        
-        if ($id_user !== null) {
-            $this->db->where('tb_lahan.id_user', $id_user);
-        }
-
-        if (empty($filters['status_lahan'])) {
-            $this->db->where('tb_lahan.status_lahan', 'Active');
-        } else {
-            $this->db->where('tb_lahan.status_lahan', $filters['status_lahan']);
-        }
-
-        if (!empty($filters['lokasi'])) {
-            $this->db->like('tb_lahan.lokasi', $filters['lokasi']);
-        }
-
-        return $this->db->get()->result_array();
+public function get_all_lahan($id_user = null, $filters = []) {
+    $this->db->select('tb_lahan.*, tb_user.nama as nama_petani');
+    $this->db->from('tb_lahan');
+    $this->db->join('tb_user', 'tb_user.id_user = tb_lahan.id_user', 'left');
+    
+    // Jika ada ID User, filter berdasarkan user tersebut
+    if ($id_user !== null) {
+        $this->db->where('tb_lahan.id_user', $id_user);
     }
+
+    // Filter status hanya dijalankan jika user memilih salah satu (Active/Inactive)
+    if (!empty($filters['status_lahan'])) {
+        $this->db->where('tb_lahan.status_lahan', $filters['status_lahan']);
+    }
+
+    // Filter lokasi (pencarian)
+    if (!empty($filters['lokasi'])) {
+        $this->db->like('tb_lahan.lokasi', $filters['lokasi']);
+    }
+
+    return $this->db->get()->result_array();
+}
 
     // --- PERBAIKAN: Hanya gunakan SATU fungsi get_detail yang benar ---
     public function get_detail($id) {

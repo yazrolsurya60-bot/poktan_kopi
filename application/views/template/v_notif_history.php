@@ -26,7 +26,6 @@
         .mark-all-btn { background: transparent; border: 1px solid var(--amber-cream); color: var(--roasted-brown); border-radius: 8px; padding: 8px 16px; font-weight: 600; font-size: 0.85rem; transition: all 0.2s; cursor: pointer; }
         .mark-all-btn:hover { background: var(--amber-cream); color: white; }
         
-        /* Icon color mapping */
         .notif-icon-success { background: #D1FAE5; color: #065F46; }
         .notif-icon-warning { background: #FEF3C7; color: #92400E; }
         .notif-icon-danger { background: #FEE2E2; color: #991B1B; }
@@ -66,7 +65,8 @@
             $total = count($history);
             $unread = 0;
             foreach($history as $h) {
-                if(($h['is_read'] ?? $h['status_baca'] ?? 0) == 0) $unread++;
+                // ✅ PERBAIKAN: Gunakan object (->) 
+                if(($h->is_read ?? $h->status_baca ?? 0) == 0) $unread++;
             }
         ?>
             <div class="d-flex flex-wrap gap-3 mb-4" style="gap: 16px;">
@@ -89,8 +89,9 @@
         <div class="list-group mt-3">
             <?php if(!empty($history)): ?>
                 <?php foreach($history as $h): 
-                    $is_read = $h['is_read'] ?? $h['status_baca'] ?? 0;
-                    $icon_type = $h['icon'] ?? 'default';
+                    // ✅ PERBAIKAN: Semua akses pakai object (->)
+                    $is_read = $h->is_read ?? $h->status_baca ?? 0;
+                    $icon_type = $h->icon ?? 'default';
                     $icon_map = [
                         'success' => 'bi-check-circle-fill',
                         'warning' => 'bi-exclamation-triangle-fill',
@@ -100,6 +101,14 @@
                         'default' => 'bi-envelope-fill'
                     ];
                     $icon_class = isset($icon_map[$icon_type]) ? $icon_map[$icon_type] : 'bi-envelope-fill';
+                    
+                    // Ambil tanggal
+                    $tanggal = isset($h->created_at) ? date('d M Y, H:i', strtotime($h->created_at)) : 
+                               (isset($h->tanggal_buat) ? date('d M Y, H:i', strtotime($h->tanggal_buat)) : '');
+                    
+                    // Ambil judul & isi
+                    $judul = $h->judul ?? '';
+                    $isi = $h->pesan ?? $h->isi_notifikasi ?? '';
                 ?>
                     <div class="notif-item <?= $is_read == 0 ? 'unread' : 'read'; ?>">
                         <div class="d-flex align-items-center flex-wrap" style="flex: 1; min-width: 0;">
@@ -107,11 +116,11 @@
                                 <i class="bi <?= $icon_class; ?>"></i>
                             </div>
                             <div style="flex: 1; min-width: 0;">
-                                <?php if(isset($h['judul']) && !empty($h['judul'])): ?>
-                                    <div class="font-weight-bold small" style="color: var(--dark-coffee);"><?= htmlspecialchars($h['judul']); ?></div>
+                                <?php if(!empty($judul)): ?>
+                                    <div class="font-weight-bold small" style="color: var(--dark-coffee);"><?= htmlspecialchars($judul); ?></div>
                                 <?php endif; ?>
                                 <span class="text-dark small" style="font-size: 0.9rem; word-wrap: break-word;">
-                                    <?= htmlspecialchars($h['pesan'] ?? $h['isi_notifikasi']); ?>
+                                    <?= htmlspecialchars($isi); ?>
                                 </span>
                                 <?php if($is_read == 0): ?>
                                     <span class="badge badge-pill ml-2" style="background: var(--amber-cream); color: white; font-size: 0.55rem; padding: 3px 8px;">Baru</span>
@@ -120,7 +129,7 @@
                         </div>
                         <small class="text-muted ml-3 font-weight-normal text-right" style="min-width: 120px; font-size: 0.7rem;">
                             <i class="bi bi-calendar3 mr-1"></i>
-                            <?= isset($h['created_at']) ? date('d M Y, H:i', strtotime($h['created_at'])) : (isset($h['tanggal_buat']) ? date('d M Y, H:i', strtotime($h['tanggal_buat'])) : ''); ?>
+                            <?= $tanggal; ?>
                         </small>
                     </div>
                 <?php endforeach; ?>

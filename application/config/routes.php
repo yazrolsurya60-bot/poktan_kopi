@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$route['default_controller'] = 'Landing';
+$route['default_controller'] = 'Beranda';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
@@ -35,15 +35,26 @@ $route['api/notifikasi/update_setting'] = 'api/Notifikasi/update_setting';
 $route['api/notifikasi/get_settings'] = 'api/Notifikasi/get_settings';
 
 // ============================================
-// MODUL 5: MANAJEMEN PRODUK
+// MODUL 5: MANAJEMEN PRODUK (Admin)
 // ============================================
-$route['admin/produk'] = 'petani/Produk/index';
-$route['admin/produk/tambah'] = 'petani/Produk/tambah';
-$route['admin/produk/simpan'] = 'petani/Produk/simpan';
-$route['admin/produk/detail/(:num)'] = 'petani/Produk/detail/$1';
-$route['admin/produk/edit/(:num)'] = 'petani/Produk/edit/$1';
-$route['admin/produk/update/(:num)'] = 'petani/Produk/update/$1';
-$route['admin/produk/hapus/(:num)'] = 'petani/Produk/hapus/$1';
+$route['admin/produk'] = 'admin/Produk/index';
+$route['admin/produk/tambah'] = 'admin/Produk/tambah';
+$route['admin/produk/simpan'] = 'admin/Produk/simpan';
+$route['admin/produk/detail/(:num)'] = 'admin/Produk/detail/$1';
+$route['admin/produk/edit/(:num)'] = 'admin/Produk/edit/$1';
+$route['admin/produk/update/(:num)'] = 'admin/Produk/update/$1';
+$route['admin/produk/hapus/(:num)'] = 'admin/Produk/hapus/$1';
+
+// ============================================
+// MODUL 5: MANAJEMEN PRODUK (Petani)
+// ============================================
+$route['petani/produk'] = 'petani/Produk/index';
+$route['petani/produk/tambah'] = 'petani/Produk/tambah';
+$route['petani/produk/simpan'] = 'petani/Produk/simpan';
+$route['petani/produk/detail/(:num)'] = 'petani/Produk/detail/$1';
+$route['petani/produk/edit/(:num)'] = 'petani/Produk/edit/$1';
+$route['petani/produk/update/(:num)'] = 'petani/Produk/update/$1';
+$route['petani/produk/hapus/(:num)'] = 'petani/Produk/hapus/$1';
 
 // ============================================
 // AUTHENTICATION
@@ -77,6 +88,9 @@ $route['admin/mitra/delete/(:num)'] = 'admin/Mitra/delete/$1';
 $route['admin/mitra/toggle/(:num)'] = 'admin/Mitra/toggle/$1';
 
 $route['landing'] = 'Landing/index';
+$route['landing/mitra'] = 'Landing/mitra';
+$route['produk'] = 'Landing/index';
+$route['tentang'] = 'Tentang/index';
 
 // ============================================================
 // MODUL 6: TRANSAKSI
@@ -109,6 +123,7 @@ $route['pembeli/transaksi/history'] = 'pembeli/transaksi/history';
 $route['pembeli/transaksi/detail/(:num)'] = 'pembeli/transaksi/detail/$1';
 $route['pembeli/transaksi/batalkan/(:num)'] = 'pembeli/transaksi/batalkan/$1';
 $route['pembeli/transaksi/upload_bukti'] = 'pembeli/transaksi/upload_bukti';
+$route['pembeli/transaksi/invoice/(:num)'] = 'pembeli/transaksi/invoice/$1';
 
 // ============================================
 // LANDING PRODUK
@@ -142,3 +157,14 @@ $route['admin/kurir/hapus/(:num)']       = 'admin/Kurir/hapus/$1';
 $route['admin/kurir/toggle/(:num)']      = 'admin/Kurir/toggle/$1';
 $route['admin/kurir/assign']             = 'admin/Kurir/assign';
 $route['admin/kurir/proses_assign']      = 'admin/Kurir/proses_assign';
+
+// ============================================================
+// VERIFIKASI OTP (sebelum checkout)
+// ============================================================
+$route['verifikasi'] = 'Verifikasi/index';
+$route['verifikasi/kirim'] = 'Verifikasi/kirim';
+$route['verifikasi/cek'] = 'Verifikasi/cek';
+
+// Profile Pembeli
+$route['pembeli/profil'] = 'pembeli/Profil/index';
+$route['pembeli/profil/update'] = 'pembeli/Profil/update';

@@ -349,7 +349,7 @@
                 <button type="submit" class="btn btn-custom">
                     <i class="bi bi-box-arrow-in-right mr-1"></i> Masuk Sekarang
                 </button>
-                <a href="<?= base_url('landing'); ?>" class="btn btn-custom mt-3">
+                <a href="<?= base_url('Beranda'); ?>" class="btn btn-custom mt-3">
                     <i class="bi bi-arrow-left mr-1"></i> Kembali ke Halaman Landing
                 </a>
             </form>
