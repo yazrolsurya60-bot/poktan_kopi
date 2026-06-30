@@ -510,16 +510,32 @@
             <div class="card-body-custom">
                 <form method="post" action="<?= site_url('admin/user/add') ?>" class="form-custom">
                     <div class="form-group">
-                        <label for="username">
-                            <i class="bi bi-person mr-1 text-muted"></i> Username
+                        <label for="nama">
+                            <i class="bi bi-person mr-1 text-muted"></i> Nama Lengkap
                         </label>
-                        <input type="text" name="username" id="username" class="form-control" placeholder="Masukkan username" required />
+                        <input type="text" name="nama" id="nama" class="form-control" placeholder="Masukkan nama lengkap" required 
+                               value="<?= set_value('nama') ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label for="username">
+                            <i class="bi bi-at mr-1 text-muted"></i> Username
+                        </label>
+                        <input type="text" name="username" id="username" class="form-control" placeholder="Masukkan username" required 
+                               value="<?= set_value('username') ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label for="no_telepon">
+                            <i class="bi bi-telephone mr-1 text-muted"></i> Nomor Telepon
+                        </label>
+                        <input type="tel" name="no_telepon" id="no_telepon" class="form-control" placeholder="0812345678 atau 62812345678" required 
+                               value="<?= set_value('no_telepon') ?>" />
                     </div>
                     <div class="form-group">
                         <label for="email">
                             <i class="bi bi-envelope mr-1 text-muted"></i> Email
                         </label>
-                        <input type="email" name="email" id="email" class="form-control" placeholder="Masukkan email" required />
+                        <input type="email" name="email" id="email" class="form-control" placeholder="Masukkan email" required 
+                               value="<?= set_value('email') ?>" />
                     </div>
                     <div class="form-group">
                         <label for="password">
@@ -533,10 +549,10 @@
                         </label>
                         <select name="role" id="role" class="form-select" required>
                             <option value="">-- Pilih Role --</option>
-                            <option value="Admin">Admin</option>
-                            <option value="Petani">Petani</option>
-                            <option value="Pembeli">Pembeli</option>
-                            <option value="Guest">Guest</option>
+                            <option value="Admin" <?= set_value('role') === 'Admin' ? 'selected' : '' ?>>Admin</option>
+                            <option value="Petani" <?= set_value('role') === 'Petani' ? 'selected' : '' ?>>Petani</option>
+                            <option value="Pembeli" <?= set_value('role') === 'Pembeli' ? 'selected' : '' ?>>Pembeli</option>
+                            <option value="Guest" <?= set_value('role') === 'Guest' ? 'selected' : '' ?>>Guest</option>
                         </select>
                     </div>
                     <div class="d-flex gap-2 btn-group-custom" style="gap: 10px; margin-top: 24px;">

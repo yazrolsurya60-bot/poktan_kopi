@@ -15,6 +15,8 @@ class Verifikasi extends CI_Controller {
      * pop-up verifikasi di Shopee. Kalau kontak user sudah pernah
      * lolos verifikasi (kontak_terverifikasi = 1) atau sesi sudah
      * verified, langsung lempar balik ke tujuan asal.
+     * 
+     * 🔥 FIX: Support untuk GUEST (id_user = NULL)
      */
     public function index() {
         $redirect_to = $this->session->userdata('redirect_after_otp') ?: 'transaksi/checkout';
@@ -22,23 +24,31 @@ class Verifikasi extends CI_Controller {
         $id_user = $this->session->userdata('id_user');
         $user = $id_user ? $this->User_model->get_by_id($id_user) : null;
 
-        // Sudah pernah verifikasi sebelumnya -> tidak perlu OTP lagi
-        if ($user && !empty($user['kontak_terverifikasi'])) {
+        // 🔥 Cek apakah sudah terverifikasi
+        $sudah_terverifikasi = $this->session->userdata('otp_verified');
+
+        // Untuk member: cek di database
+        if (!$sudah_terverifikasi && $user && !empty($user['kontak_terverifikasi'])) {
+            $sudah_terverifikasi = true;
             $this->session->set_userdata('otp_verified', true);
-            redirect($redirect_to);
         }
-        if (!$user && $this->session->userdata('otp_verified')) {
+
+        // 🔥 Jika sudah terverifikasi, langsung redirect
+        if ($sudah_terverifikasi) {
             redirect($redirect_to);
         }
 
-        $data['title'] = 'Verifikasi Akun';
+        $data['title'] = 'Verifikasi Keamanan';
         $data['user'] = $user;
         $data['redirect_to'] = $redirect_to;
+        $data['is_guest'] = ($id_user === null);
+        
         $this->load->view('verifikasi/index', $data);
     }
 
     /**
      * AJAX: kirim kode OTP ke email atau WhatsApp.
+     * 🔥 FIX: Support untuk GUEST
      */
     public function kirim() {
         $metode = $this->input->post('metode'); // 'email' | 'whatsapp'
@@ -49,6 +59,7 @@ class Verifikasi extends CI_Controller {
             return;
         }
 
+        // 🔥 Untuk guest, metode default adalah email
         if ($metode === 'email' && !filter_var($tujuan, FILTER_VALIDATE_EMAIL)) {
             echo json_encode(['status' => 'error', 'message' => 'Format email tidak valid.']);
             return;
@@ -69,9 +80,11 @@ class Verifikasi extends CI_Controller {
         $id_user = $this->session->userdata('id_user');
         $session_id = $this->session->userdata('session_id') ?: session_id();
 
+        // 🔥 Buat OTP (support guest dengan id_user = null)
         $kode = $this->Otp_model->buat_otp($tujuan, $metode, $id_user, $session_id);
         $hasil_kirim = kirim_otp($metode, $tujuan, $kode);
 
+        // Simpan tujuan di session untuk verifikasi nanti
         $this->session->set_userdata('otp_tujuan', $tujuan);
         $this->session->set_userdata('otp_metode', $metode);
 
@@ -82,12 +95,11 @@ class Verifikasi extends CI_Controller {
                 : 'Kode verifikasi telah dikirim ke WhatsApp kamu.',
         ];
 
-        // Karena belum ada gateway WA/SMTP asli terpasang, tampilkan kode
-        // di response untuk keperluan demo/testing (mode simulasi).
+        // 🔥 Mode simulasi: tampilkan kode untuk testing
         if (!empty($hasil_kirim['simulasi'])) {
             $response['simulasi'] = true;
             $response['kode_demo'] = $kode;
-            $response['message'] .= ' (Mode simulasi: gateway WA/Email asli belum dipasang, kode ditampilkan langsung untuk testing.)';
+            $response['message'] .= ' (Mode simulasi: kode ditampilkan untuk testing)';
         }
 
         echo json_encode($response);
@@ -95,6 +107,7 @@ class Verifikasi extends CI_Controller {
 
     /**
      * AJAX: cek kode OTP yang diinput user.
+     * 🔥 FIX: Support untuk GUEST
      */
     public function cek() {
         $kode_input = trim($this->input->post('kode'));
@@ -110,33 +123,38 @@ class Verifikasi extends CI_Controller {
 
         switch ($hasil) {
             case 'success':
+                // 🔥 Tandai sesi sebagai terverifikasi
                 $this->session->set_userdata('otp_verified', true);
 
                 $id_user = $this->session->userdata('id_user');
+                
+                // 🔥 Jika member, tandai di database
                 if ($id_user) {
                     $this->Otp_model->tandai_user_terverifikasi($id_user, $tujuan, $metode);
                 }
 
                 $redirect_to = $this->session->userdata('redirect_after_otp') ?: 'transaksi/checkout';
                 $this->session->unset_userdata('redirect_after_otp');
+                $this->session->unset_userdata('otp_tujuan');
+                $this->session->unset_userdata('otp_metode');
 
                 echo json_encode([
                     'status' => 'success',
-                    'message' => 'Verifikasi berhasil!',
+                    'message' => '✅ Verifikasi berhasil!',
                     'redirect' => base_url($redirect_to),
                 ]);
                 break;
 
             case 'invalid':
-                echo json_encode(['status' => 'error', 'message' => 'Kode OTP salah, coba lagi.']);
+                echo json_encode(['status' => 'error', 'message' => '❌ Kode OTP salah, coba lagi.']);
                 break;
 
             case 'too_many_attempts':
-                echo json_encode(['status' => 'error', 'message' => 'Terlalu banyak salah input. Silakan kirim ulang kode baru.']);
+                echo json_encode(['status' => 'error', 'message' => '❌ Terlalu banyak salah input. Silakan kirim ulang kode baru.']);
                 break;
 
             default: // expired
-                echo json_encode(['status' => 'error', 'message' => 'Kode OTP sudah kedaluwarsa. Silakan kirim ulang.']);
+                echo json_encode(['status' => 'error', 'message' => '❌ Kode OTP sudah kedaluwarsa. Silakan kirim ulang.']);
                 break;
         }
     }

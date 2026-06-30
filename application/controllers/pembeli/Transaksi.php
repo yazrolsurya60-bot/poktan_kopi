@@ -20,10 +20,15 @@ class Transaksi extends CI_Controller {
         redirect('pembeli/transaksi/history');
     }
 
+    // ============================================================
+    // 🔥 FIX: HISTORY - PAKAI METHOD DENGAN PRODUK LIST
+    // ============================================================
     public function history() {
         $data['title'] = 'Riwayat Transaksi';
         $id_user = $this->session->userdata('id_user');
-        $data['transaksi'] = $this->Transaksi_model->get_transaksi_by_user($id_user);
+        
+        // 🔥 GANTI: panggil method dengan produk list
+        $data['transaksi'] = $this->Transaksi_model->get_transaksi_by_user_with_products($id_user);
         
         $data['total_transaksi'] = count($data['transaksi']);
         $data['total_selesai'] = 0;
@@ -64,6 +69,9 @@ class Transaksi extends CI_Controller {
         $this->load->view('pembeli/transaksi/history', $data);
     }
 
+    // ============================================================
+    // DETAIL TRANSAKSI
+    // ============================================================
     public function detail($id_transaksi) {
         $data['title'] = 'Detail Transaksi';
         
@@ -116,16 +124,6 @@ class Transaksi extends CI_Controller {
         $data['transaksi']['grand_total'] = $data['transaksi']['total_harga'] + $ongkir;
         
         // ============================================
-        // DEBUG: Log untuk melihat data sebenarnya
-        // ============================================
-        log_message('debug', '=== DETAIL TRANSAKSI #' . $id_transaksi . ' ===');
-        log_message('debug', 'Total dari detail: ' . $total_dari_detail);
-        log_message('debug', 'Ongkir: ' . $ongkir);
-        log_message('debug', 'Total_harga dari DB: ' . ($data['transaksi']['total_harga'] ?? 0));
-        log_message('debug', 'Grand Total hasil: ' . $data['transaksi']['grand_total']);
-        log_message('debug', 'Jumlah detail: ' . count($data['details']));
-        
-        // ============================================
         // SET DEFAULT VALUES UNTUK VIEW
         // ============================================
         $data['transaksi']['status_pesanan'] = $data['transaksi']['status_pesanan'] ?? 'Pending';
@@ -144,6 +142,9 @@ class Transaksi extends CI_Controller {
         $this->load->view('pembeli/transaksi/detail', $data);
     }
 
+    // ============================================================
+    // INVOICE
+    // ============================================================
     public function invoice($id_transaksi) {
         $data['title'] = 'Invoice';
         
@@ -200,17 +201,12 @@ class Transaksi extends CI_Controller {
         $data['transaksi']['id_transaksi'] = $data['transaksi']['id_transaksi'] ?? $id_transaksi;
         $data['transaksi']['tanggal_transaksi'] = $data['transaksi']['tanggal_transaksi'] ?? date('Y-m-d H:i:s');
         
-        // ============================================
-        // DEBUG LOG
-        // ============================================
-        log_message('debug', '=== INVOICE #' . $id_transaksi . ' ===');
-        log_message('debug', 'Total dari detail: ' . $total_dari_detail);
-        log_message('debug', 'Ongkir: ' . $ongkir);
-        log_message('debug', 'Grand Total: ' . $data['transaksi']['grand_total']);
-        
         $this->load->view('pembeli/transaksi/invoice', $data);
     }
 
+    // ============================================================
+    // BATALKAN PESANAN
+    // ============================================================
     public function batalkan($id_transaksi) {
         $transaksi = $this->Transaksi_model->get_transaksi($id_transaksi);
         if (!$transaksi) {
@@ -274,112 +270,12 @@ class Transaksi extends CI_Controller {
         redirect('pembeli/transaksi/history');
     }
 
-    public function upload_bukti() {
-        $id_transaksi = $this->input->post('id_transaksi');
-        
-        if (empty($id_transaksi)) {
-            $this->session->set_flashdata('error', '❌ ID transaksi tidak valid');
-            redirect('pembeli/transaksi/history');
-        }
-        
-        $transaksi = $this->Transaksi_model->get_transaksi($id_transaksi);
-        if (!$transaksi) {
-            show_404();
-        }
-        
-        $id_user = $transaksi['id_user'] ?? null;
-        if ($id_user != $this->session->userdata('id_user')) {
-            show_404();
-        }
-        
-        $status_pesanan = $transaksi['status_pesanan'] ?? 'Pending';
-        $status_bayar = $transaksi['status_bayar'] ?? 'Belum Bayar';
-        
-        if (!in_array($status_pesanan, ['Pending', 'Diproses', 'Menunggu Pembayaran'])) {
-            $this->session->set_flashdata('error', '❌ Transaksi sudah ' . $status_pesanan . ', tidak bisa upload bukti');
-            redirect('pembeli/transaksi/detail/' . $id_transaksi);
-        }
-        
-        if ($status_bayar == 'Lunas') {
-            $this->session->set_flashdata('error', '❌ Transaksi sudah lunas');
-            redirect('pembeli/transaksi/detail/' . $id_transaksi);
-        }
-        
-        $bukti_existing = $this->Transaksi_model->get_bukti_by_transaksi($id_transaksi);
-        if (!empty($bukti_existing) && ($bukti_existing['status_verifikasi'] ?? '') == 'Pending') {
-            $this->session->set_flashdata('error', '❌ Bukti sedang menunggu verifikasi');
-            redirect('pembeli/transaksi/detail/' . $id_transaksi);
-        }
-        
-        $config['upload_path'] = './uploads/bukti/';
-        $config['allowed_types'] = 'jpg|jpeg|png|pdf';
-        $config['max_size'] = 2048;
-        $config['max_width'] = 4000;
-        $config['max_height'] = 4000;
-        $config['encrypt_name'] = TRUE;
-        $config['remove_spaces'] = TRUE;
-        
-        if (!is_dir('./uploads/bukti/')) {
-            mkdir('./uploads/bukti/', 0777, TRUE);
-        }
-        
-        $this->load->library('upload', $config);
-        
-        if (empty($_FILES['file_bukti']['name'])) {
-            $this->session->set_flashdata('error', '❌ Silakan pilih file bukti');
-            redirect('pembeli/transaksi/detail/' . $id_transaksi);
-        }
-        
-        if (!$this->upload->do_upload('file_bukti')) {
-            $error_msg = $this->upload->display_errors('', '');
-            $this->session->set_flashdata('error', '❌ Upload gagal: ' . $error_msg);
-            redirect('pembeli/transaksi/detail/' . $id_transaksi);
-        }
-        
-        $upload_data = $this->upload->data();
-        $file_name = $upload_data['file_name'];
-        
-        $nama_bank = trim($this->input->post('nama_bank'));
-        $nama_pengirim = trim($this->input->post('nama_pengirim'));
-        $tanggal_transfer = $this->input->post('tanggal_transfer');
-        $jumlah_transfer = (float) $this->input->post('jumlah_transfer');
-        
-        if (empty($nama_bank) || empty($nama_pengirim) || empty($tanggal_transfer) || $jumlah_transfer <= 0) {
-            if (file_exists('./uploads/bukti/' . $file_name)) {
-                unlink('./uploads/bukti/' . $file_name);
-            }
-            $this->session->set_flashdata('error', '❌ Semua field harus diisi dengan benar');
-            redirect('pembeli/transaksi/detail/' . $id_transaksi);
-        }
-        
-        $data_bukti = array(
-            'id_transaksi' => $id_transaksi,
-            'nama_bank' => $nama_bank,
-            'nama_pengirim' => $nama_pengirim,
-            'tanggal_transfer' => $tanggal_transfer,
-            'jumlah_transfer' => $jumlah_transfer,
-            'file_bukti' => $file_name,
-            'status_verifikasi' => 'Pending',
-            'created_at' => date('Y-m-d H:i:s')
-        );
-        
-        if (!empty($bukti_existing) && ($bukti_existing['status_verifikasi'] ?? '') == 'Ditolak') {
-            $this->Transaksi_model->update_bukti($id_transaksi, $data_bukti);
-        } else {
-            $this->Transaksi_model->upload_bukti($data_bukti);
-        }
-        
-        $this->Transaksi_model->update_status_bayar($id_transaksi, 'Pending');
-        
-        $this->Notifikasi_model->save_notifikasi([
-            'id_user' => 1,
-            'judul' => '📷 Bukti Pembayaran Baru',
-            'isi_notifikasi' => 'Pembeli ' . ($transaksi['nama_pembeli'] ?? 'User') . ' mengupload bukti untuk transaksi #' . $id_transaksi,
-            'link' => 'admin/transaksi/detail/' . $id_transaksi,
-            'icon' => 'success'
-        ]);
-        
-        $this->session->set_flashdata('success', '✅ Bukti pembayaran berhasil diupload');
-        redirect('pembeli/transaksi/detail/' . $id_transaksi);
-    }
+    // ============================================================
+    // ❌ UPLOAD BUKTI - DIHAPUS (pindah ke modul kurir)
+    // ============================================================
+    // Method upload_bukti() telah dihapus karena form upload bukti
+    // sudah tidak digunakan lagi di halaman detail transaksi.
+    // Bukti pembayaran akan di-handle oleh admin/kurir di modul selanjutnya.
+    // ============================================================
 }
+?>

@@ -148,34 +148,59 @@
         .detail-body { padding: 45px 40px 50px; }
         .detail-body h4 { font-weight: 700; margin-bottom: 22px; }
 
-        .info-box {
-            background: var(--bg-cream);
-            padding: 22px;
-            border-radius: 16px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(111, 78, 55, 0.07);
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            transition: var(--transition-smooth);
+        /* --- PROFILE TWO-COLUMN LAYOUT --- */
+        .profile-layout { display: flex; gap: 30px; align-items: flex-start; }
+        .profile-side { width: 230px; flex-shrink: 0; text-align: center; }
+        .profile-side-logo {
+            width: 110px; height: 110px; margin: 0 auto 14px; border-radius: 50%;
+            background: var(--card-white); display: flex; align-items: center; justify-content: center;
+            padding: 14px; box-shadow: var(--shadow-soft); border: 1px solid rgba(111,78,55,0.08);
         }
-        .info-box:hover { box-shadow: var(--shadow-soft); transform: translateY(-2px); }
-
-        .info-icon {
-            width: 48px; height: 48px;
-            background: rgba(139, 94, 60, 0.15);
-            color: var(--roasted-brown);
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem;
-            flex-shrink: 0;
+        .profile-side-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .profile-side-name { font-size: 1.15rem; font-weight: 800; color: var(--dark-coffee); margin-bottom: 8px; line-height: 1.3; }
+        .profile-side-status {
+            display: inline-flex; align-items: center; gap: 5px; padding: 4px 14px; border-radius: 50px;
+            background: rgba(45,106,79,0.12); color: var(--forest-green); font-size: 0.75rem; font-weight: 700;
+            margin-bottom: 18px;
         }
-        .info-icon.green { background: rgba(45,106,79,0.12); color: var(--forest-green); }
+        .profile-side-meta { text-align: left; border-top: 1px solid rgba(111,78,55,0.08); padding-top: 16px; }
+        .profile-meta-row { display: flex; justify-content: space-between; padding: 7px 0; font-size: 0.8rem; }
+        .profile-meta-row span:first-child { color: var(--text-secondary); font-weight: 500; }
+        .profile-meta-row span:last-child { color: var(--dark-coffee); font-weight: 700; text-align: right; }
 
-        .info-text h5 { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .info-text p { font-size: 1.05rem; font-weight: 700; color: var(--dark-coffee); margin-bottom: 0; }
+        .profile-main { flex: 1; min-width: 0; }
+        .profile-row {
+            display: flex; gap: 18px; padding: 14px 0; border-bottom: 1px solid rgba(111,78,55,0.07);
+        }
+        .profile-row:last-child { border-bottom: none; }
+        .profile-row-label { width: 130px; flex-shrink: 0; font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; padding-top: 1px; }
+        .profile-row-label i { color: var(--roasted-brown); font-size: 0.95rem; flex-shrink: 0; margin-top: 1px; }
+        .profile-row-value { flex: 1; font-size: 0.92rem; font-weight: 600; color: var(--dark-coffee); line-height: 1.55; word-break: break-word; }
+        .profile-row-value a { color: var(--roasted-brown); text-decoration: underline; }
 
-        .badge-aktif { color: var(--forest-green); }
+        .profile-doc-box {
+            display: flex; align-items: center; gap: 14px; margin-top: 22px;
+            padding: 14px 16px; background: var(--bg-cream); border: 1px solid rgba(111,78,55,0.08); border-radius: 14px;
+        }
+        .profile-doc-icon {
+            width: 44px; height: 44px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(111,78,55,0.08);
+            display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;
+        }
+        .profile-doc-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .profile-doc-info { flex: 1; min-width: 0; }
+        .profile-doc-name { font-size: 0.85rem; font-weight: 700; color: var(--dark-coffee); word-break: break-all; }
+        .profile-doc-meta { font-size: 0.72rem; color: var(--text-secondary); }
+        .profile-doc-dl { width: 36px; height: 36px; border-radius: 9px; background: var(--card-white); border: 1px solid rgba(111,78,55,0.1); display: flex; align-items: center; justify-content: center; color: var(--roasted-brown); flex-shrink: 0; text-decoration: none; transition: var(--transition-smooth); }
+        .profile-doc-dl:hover { background: var(--roasted-brown); color: #fff; }
+
+        @media (max-width: 767px) {
+            .profile-layout { flex-direction: column; align-items: center; }
+            .profile-side { width: 100%; }
+            .profile-side-meta { text-align: center; }
+            .profile-meta-row { justify-content: center; gap: 8px; }
+            .profile-row { flex-direction: column; gap: 4px; }
+            .profile-row-label { width: 100%; }
+        }
 
         .cta-mini {
             margin-top: 8px;
@@ -221,7 +246,7 @@
             </a>
 
             <div class="row justify-content-center">
-                <div class="col-lg-8">
+                <div class="col-lg-10">
                     <div class="detail-card">
                         <div class="detail-header">
                             <div class="detail-logo-wrapper">
@@ -234,46 +259,95 @@
                         <div class="detail-body">
                             <h4>Informasi Mitra</h4>
 
-                            <div class="info-box">
-                                <div class="info-icon"><i class="bi bi-hash"></i></div>
-                                <div class="info-text">
-                                    <h5>ID Mitra</h5>
-                                    <p>#<?= htmlspecialchars($mitra['id_mitra']); ?></p>
-                                </div>
-                            </div>
+                            <div class="profile-layout">
+                                <!-- SISI KIRI: Logo, Nama, Status, Meta -->
+                                <div class="profile-side">
+                                    <div class="profile-side-logo">
+                                        <img src="<?= base_url('assets/uploads/mitra/'.$mitra['logo_mitra']); ?>" alt="Logo <?= htmlspecialchars($mitra['nama_mitra']); ?>" onerror="this.src='<?= base_url('assets/uploads/mitra/default.png'); ?>'">
+                                    </div>
+                                    <div class="profile-side-name"><?= htmlspecialchars($mitra['nama_mitra']); ?></div>
+                                    <span class="profile-side-status"><i class="bi bi-check-circle-fill"></i> Aktif</span>
 
-                            <div class="info-box">
-                                <div class="info-icon"><i class="bi bi-shop"></i></div>
-                                <div class="info-text">
-                                    <h5>Kategori Bisnis</h5>
-                                    <p><?= htmlspecialchars($mitra['kategori_mitra']); ?></p>
+                                    <div class="profile-side-meta">
+                                        <div class="profile-meta-row"><span>Kategori</span><span><?= htmlspecialchars($mitra['kategori_mitra']); ?></span></div>
+                                        <?php if (isset($mitra['urutan_tampil'])): ?>
+                                        <div class="profile-meta-row"><span>Urutan Tampil</span><span><?= (int)$mitra['urutan_tampil']; ?></span></div>
+                                        <?php endif; ?>
+                                        <?php if (!empty($mitra['created_at'])): ?>
+                                        <div class="profile-meta-row"><span>Bergabung</span><span><?= date('d M Y', strtotime($mitra['created_at'])); ?></span></div>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="info-box">
-                                <div class="info-icon green"><i class="bi bi-award"></i></div>
-                                <div class="info-text">
-                                    <h5>Status Kemitraan</h5>
-                                    <p class="badge-aktif"><i class="bi bi-check-circle-fill mr-1"></i> Aktif Tersertifikasi</p>
+                                <!-- SISI KANAN: Detail Field per Baris -->
+                                <div class="profile-main">
+
+                                    <div class="profile-row">
+                                        <div class="profile-row-label"><i class="bi bi-building"></i> Nama Mitra</div>
+                                        <div class="profile-row-value"><?= htmlspecialchars($mitra['nama_mitra']); ?></div>
+                                    </div>
+
+                                    <?php if (!empty($mitra['email'])): ?>
+                                    <div class="profile-row">
+                                        <div class="profile-row-label"><i class="bi bi-envelope-fill"></i> Email</div>
+                                        <div class="profile-row-value"><?= htmlspecialchars($mitra['email']); ?></div>
+                                    </div>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($mitra['no_telepon'])): ?>
+                                    <div class="profile-row">
+                                        <div class="profile-row-label"><i class="bi bi-telephone-fill"></i> No Telepon</div>
+                                        <div class="profile-row-value"><?= htmlspecialchars($mitra['no_telepon']); ?></div>
+                                    </div>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($mitra['website'])): ?>
+                                    <div class="profile-row">
+                                        <div class="profile-row-label"><i class="bi bi-globe2"></i> Website</div>
+                                        <div class="profile-row-value">
+                                            <a href="<?= (strpos($mitra['website'], 'http') === 0) ? htmlspecialchars($mitra['website']) : 'https://'.htmlspecialchars($mitra['website']); ?>" target="_blank" rel="noopener"><?= htmlspecialchars($mitra['website']); ?></a>
+                                        </div>
+                                    </div>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($mitra['alamat'])): ?>
+                                    <div class="profile-row">
+                                        <div class="profile-row-label"><i class="bi bi-geo-alt-fill"></i> Alamat</div>
+                                        <div class="profile-row-value"><?= nl2br(htmlspecialchars($mitra['alamat'])); ?></div>
+                                    </div>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($mitra['deskripsi'])): ?>
+                                    <div class="profile-row">
+                                        <div class="profile-row-label"><i class="bi bi-card-text"></i> Deskripsi</div>
+                                        <div class="profile-row-value"><?= nl2br(htmlspecialchars($mitra['deskripsi'])); ?></div>
+                                    </div>
+                                    <?php endif; ?>
+
+                                    <!-- Dokumen / Logo Mitra -->
+                                    <?php if (!empty($mitra['logo_mitra']) && $mitra['logo_mitra'] !== 'default.png'): ?>
+                                    <div class="profile-doc-box">
+                                        <div class="profile-doc-icon">
+                                            <img src="<?= base_url('assets/uploads/mitra/'.$mitra['logo_mitra']); ?>" alt="Logo Mitra">
+                                        </div>
+                                        <div class="profile-doc-info">
+                                            <div class="profile-doc-name"><?= htmlspecialchars($mitra['logo_mitra']); ?></div>
+                                            <div class="profile-doc-meta">Logo / Dokumen Mitra</div>
+                                        </div>
+                                        <a href="<?= base_url('assets/uploads/mitra/'.$mitra['logo_mitra']); ?>" download class="profile-doc-dl" title="Unduh"><i class="bi bi-download"></i></a>
+                                    </div>
+                                    <?php endif; ?>
+
+                                    <div class="cta-mini">
+                                        <p>Tertarik bermitra dengan POKTAN Liberchain seperti <?= htmlspecialchars($mitra['nama_mitra']); ?>?</p>
+                                        <a href="<?= base_url('auth/login'); ?>" class="btn-mini"><i class="bi bi-handshake"></i> Hubungi Kami</a>
+                                    </div>
+
                                 </div>
-                            </div>
-
-                            <?php if (!empty($mitra['created_at'])): ?>
-                            <div class="info-box">
-                                <div class="info-icon"><i class="bi bi-calendar-check"></i></div>
-                                <div class="info-text">
-                                    <h5>Tanggal Bergabung</h5>
-                                    <p><?= date('d M Y', strtotime($mitra['created_at'])); ?></p>
-                                </div>
-                            </div>
-                            <?php endif; ?>
-
-                            <div class="cta-mini">
-                                <p>Tertarik bermitra dengan POKTAN Liberchain seperti <?= htmlspecialchars($mitra['nama_mitra']); ?>?</p>
-                                <a href="<?= base_url('auth/login'); ?>" class="btn-mini"><i class="bi bi-handshake"></i> Hubungi Kami</a>
                             </div>
 
                         </div>
+
                     </div>
                 </div>
             </div>

@@ -25,12 +25,22 @@
         --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
     body {
         font-family: 'Plus Jakarta Sans', sans-serif;
         background-color: var(--bg-cream);
         color: var(--dark-coffee);
         overflow-x: hidden;
     }
+
+    /* ============================================ */
+    /* SIDEBAR */
+    /* ============================================ */
 
     .sidebar {
         width: var(--sidebar-width);
@@ -165,6 +175,22 @@
         border-color: rgba(230, 161, 92, 0.2);
     }
 
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 99;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    /* ============================================ */
+    /* MAIN CONTENT */
+    /* ============================================ */
+
     .main-content {
         margin-left: var(--sidebar-width);
         padding: 30px 40px 40px;
@@ -172,10 +198,18 @@
         transition: var(--transition-smooth);
     }
 
+    /* ============================================ */
+    /* PAGE HEADER */
+    /* ============================================ */
+
     .page-header {
         border-bottom: 1px solid rgba(74, 44, 17, 0.08);
         padding-bottom: 20px;
         margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
     }
 
     .page-header h2 {
@@ -189,6 +223,44 @@
         font-size: 0.9rem;
         margin-top: 2px;
     }
+
+    /* ============================================ */
+    /* USER PROFILE - DIPERBAIKI */
+    /* ============================================ */
+
+    .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 16px;
+        border-radius: 10px;
+        background: var(--card-white);
+        border: 1px solid rgba(74, 44, 17, 0.06);
+        min-width: 110px;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+    }
+
+    .user-profile:hover {
+        background: var(--bg-cream);
+        border-color: var(--amber-cream);
+    }
+
+    .user-profile .avatar {
+        font-size: 1.5rem;
+        color: var(--amber-cream);
+    }
+
+    .user-profile .name {
+        font-weight: 500;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        color: var(--dark-coffee);
+    }
+
+    /* ============================================ */
+    /* NOTIFICATION BELL & DROPDOWN */
+    /* ============================================ */
 
     .notif-btn {
         position: relative;
@@ -357,6 +429,294 @@
         align-self: center;
     }
 
+    /* ============================================ */
+    /* STAT BOX - DIPERBAIKI */
+    /* ============================================ */
+
+    /* Perbaiki stat-box agar konten tidak tertutup badge */
+    .stat-box {
+        background: var(--card-white);
+        border: 1px solid rgba(74, 44, 17, 0.06);
+        border-radius: var(--radius-card);
+        padding: 22px 24px;
+        position: relative;
+        box-shadow: var(--shadow-soft);
+        transition: var(--transition-smooth);
+        overflow: hidden;
+        min-height: 130px;
+    }
+
+    .stat-box .stat-num {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-top: 6px;
+        margin-bottom: 0;
+        color: var(--dark-coffee);
+        padding-right: 55px;
+        word-break: keep-all;
+        /* Mencegah angka pecah */
+        white-space: nowrap;
+        /* Mencegah turun ke bawah */
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Untuk card Total Pendapatan - ukuran lebih kecil */
+    .stat-box .stat-num.rupiah {
+        font-size: 1.3rem;
+        letter-spacing: -0.5px;
+    }
+
+    .stat-change {
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 4px;
+    }
+
+    .stat-change.up {
+        color: #10b981;
+    }
+
+    .stat-change.down {
+        color: #EF4444;
+    }
+
+    .stat-badge {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--bg-cream);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: var(--roasted-brown);
+        transition: var(--transition-smooth);
+    }
+
+    .stat-box:hover .stat-badge {
+        transform: translateY(-50%) scale(1.05) rotate(-3deg);
+    }
+
+    /* ============================================ */
+    /* RESPONSIVE UNTUK KPI */
+    /* ============================================ */
+
+    @media (max-width: 1199.98px) {
+        .stat-box .stat-num {
+            font-size: 1.3rem;
+            padding-right: 50px;
+        }
+
+        .stat-box .stat-num.rupiah {
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 991.98px) {
+        .stat-box .stat-num {
+            font-size: 1.2rem;
+            padding-right: 45px;
+        }
+
+        .stat-box .stat-num.rupiah {
+            font-size: 1rem;
+        }
+
+        .stat-badge {
+            width: 38px;
+            height: 38px;
+            font-size: 1rem;
+            right: 12px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .stat-box {
+            padding: 16px 18px;
+            min-height: 110px;
+        }
+
+        .stat-box .stat-num {
+            font-size: 1rem;
+            padding-right: 40px;
+            white-space: normal;
+            /* Di mobile boleh wrap */
+        }
+
+        .stat-box .stat-num.rupiah {
+            font-size: 0.9rem;
+        }
+
+        .stat-badge {
+            width: 34px;
+            height: 34px;
+            font-size: 0.85rem;
+            right: 10px;
+        }
+
+        .stat-title {
+            font-size: 0.6rem;
+        }
+    }
+
+    /* ============================================ */
+    /* CUSTOM CARD */
+    /* ============================================ */
+
+    .custom-card {
+        background: var(--card-white);
+        border: 1px solid rgba(74, 44, 17, 0.06);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-soft);
+        transition: var(--transition-smooth);
+        overflow: hidden;
+    }
+
+    .custom-card:hover {
+        box-shadow: var(--shadow-hover);
+    }
+
+    .custom-card .card-header-custom {
+        padding: 18px 24px;
+        border-bottom: 1px solid rgba(74, 44, 17, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .custom-card .card-header-custom h6 {
+        font-weight: 700;
+        color: var(--dark-coffee);
+        margin: 0;
+        font-size: 0.85rem;
+    }
+
+    .custom-card .card-body-custom {
+        padding: 24px;
+    }
+
+    /* ============================================ */
+    /* CHART */
+    /* ============================================ */
+
+    .chart-container {
+        position: relative;
+        height: 250px;
+        width: 100%;
+    }
+
+    /* ============================================ */
+    /* TABLE */
+    /* ============================================ */
+
+    .table-custom {
+        font-size: 0.85rem;
+    }
+
+    .table-custom thead th {
+        border-bottom: 2px solid rgba(74, 44, 17, 0.06);
+        color: var(--text-secondary);
+        font-weight: 600;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 10px 8px;
+    }
+
+    .table-custom tbody td {
+        padding: 10px 8px;
+        border-bottom: 1px solid rgba(74, 44, 17, 0.04);
+        vertical-align: middle;
+    }
+
+    .table-custom tbody tr:hover {
+        background: rgba(250, 246, 240, 0.3);
+    }
+
+    /* ============================================ */
+    /* STATUS BADGE */
+    /* ============================================ */
+
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    .status-badge.pending {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    .status-badge.processing {
+        background: #DBEAFE;
+        color: #1E40AF;
+    }
+
+    .status-badge.delivery {
+        background: #EDE9FE;
+        color: #5B21B6;
+    }
+
+    .status-badge.complete {
+        background: #D1FAE5;
+        color: #065F46;
+    }
+
+    .status-badge.cancelled {
+        background: #FEE2E2;
+        color: #991B1B;
+    }
+
+    .status-badge.verified {
+        background: #D1FAE5;
+        color: #065F46;
+    }
+
+    /* ============================================ */
+    /* QUICK ACTION BUTTONS */
+    /* ============================================ */
+
+    .quick-action-btn {
+        padding: 10px 16px;
+        border: 1px solid rgba(74, 44, 17, 0.06);
+        border-radius: 10px;
+        background: var(--card-white);
+        color: var(--dark-coffee);
+        transition: var(--transition-smooth);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        cursor: pointer;
+        width: 100%;
+        text-decoration: none;
+    }
+
+    .quick-action-btn:hover {
+        background: var(--bg-cream);
+        border-color: var(--amber-cream);
+        transform: translateX(4px);
+        text-decoration: none;
+        color: var(--dark-coffee);
+    }
+
+    .quick-action-btn i {
+        font-size: 1.1rem;
+        color: var(--amber-cream);
+    }
+
+    /* ============================================ */
+    /* ACTION CARD */
+    /* ============================================ */
+
     .action-card {
         background: var(--card-white);
         border: 1px solid rgba(74, 44, 17, 0.06);
@@ -431,211 +791,9 @@
         transform: translateX(4px);
     }
 
-    .stat-box {
-        background: var(--card-white);
-        border: 1px solid rgba(74, 44, 17, 0.06);
-        border-radius: var(--radius-card);
-        padding: 22px 24px;
-        position: relative;
-        box-shadow: var(--shadow-soft);
-        transition: var(--transition-smooth);
-        overflow: hidden;
-    }
-
-    .stat-box:hover {
-        transform: translateY(-3px);
-        box-shadow: var(--shadow-hover);
-    }
-
-    .stat-box .stat-decoration {
-        position: absolute;
-        right: -20px;
-        top: -20px;
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background: rgba(230, 161, 92, 0.05);
-        pointer-events: none;
-    }
-
-    .stat-title {
-        font-size: 0.7rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: var(--text-secondary);
-        letter-spacing: 0.7px;
-    }
-
-    .stat-num {
-        font-size: 1.7rem;
-        font-weight: 700;
-        margin-top: 6px;
-        margin-bottom: 0;
-        color: var(--dark-coffee);
-    }
-
-    .stat-change {
-        font-size: 0.75rem;
-        font-weight: 600;
-        margin-top: 4px;
-    }
-
-    .stat-change.up {
-        color: #10b981;
-    }
-
-    .stat-change.down {
-        color: #EF4444;
-    }
-
-    .stat-badge {
-        position: absolute;
-        right: 20px;
-        top: 20px;
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        background: var(--bg-cream);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        color: var(--roasted-brown);
-        transition: var(--transition-smooth);
-    }
-
-    .stat-box:hover .stat-badge {
-        transform: scale(1.05) rotate(-3deg);
-    }
-
-    .custom-card {
-        background: var(--card-white);
-        border: 1px solid rgba(74, 44, 17, 0.06);
-        border-radius: var(--radius-card);
-        box-shadow: var(--shadow-soft);
-        transition: var(--transition-smooth);
-        overflow: hidden;
-    }
-
-    .custom-card:hover {
-        box-shadow: var(--shadow-hover);
-    }
-
-    .custom-card .card-header-custom {
-        padding: 18px 24px;
-        border-bottom: 1px solid rgba(74, 44, 17, 0.06);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .custom-card .card-header-custom h6 {
-        font-weight: 700;
-        color: var(--dark-coffee);
-        margin: 0;
-        font-size: 0.85rem;
-    }
-
-    .custom-card .card-body-custom {
-        padding: 24px;
-    }
-
-    .chart-container {
-        position: relative;
-        height: 250px;
-        width: 100%;
-    }
-
-    .table-custom {
-        font-size: 0.85rem;
-    }
-
-    .table-custom thead th {
-        border-bottom: 2px solid rgba(74, 44, 17, 0.06);
-        color: var(--text-secondary);
-        font-weight: 600;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        padding: 10px 8px;
-    }
-
-    .table-custom tbody td {
-        padding: 10px 8px;
-        border-bottom: 1px solid rgba(74, 44, 17, 0.04);
-        vertical-align: middle;
-    }
-
-    .table-custom tbody tr:hover {
-        background: rgba(250, 246, 240, 0.3);
-    }
-
-    .status-badge {
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.7rem;
-        font-weight: 600;
-    }
-
-    .status-badge.pending {
-        background: #FEF3C7;
-        color: #92400E;
-    }
-
-    .status-badge.processing {
-        background: #DBEAFE;
-        color: #1E40AF;
-    }
-
-    .status-badge.delivery {
-        background: #EDE9FE;
-        color: #5B21B6;
-    }
-
-    .status-badge.complete {
-        background: #D1FAE5;
-        color: #065F46;
-    }
-
-    .status-badge.cancelled {
-        background: #FEE2E2;
-        color: #991B1B;
-    }
-
-    .status-badge.verified {
-        background: #D1FAE5;
-        color: #065F46;
-    }
-
-    .quick-action-btn {
-        padding: 10px 16px;
-        border: 1px solid rgba(74, 44, 17, 0.06);
-        border-radius: 10px;
-        background: var(--card-white);
-        color: var(--dark-coffee);
-        transition: var(--transition-smooth);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-weight: 500;
-        font-size: 0.85rem;
-        cursor: pointer;
-        width: 100%;
-        text-decoration: none;
-    }
-
-    .quick-action-btn:hover {
-        background: var(--bg-cream);
-        border-color: var(--amber-cream);
-        transform: translateX(4px);
-        text-decoration: none;
-        color: var(--dark-coffee);
-    }
-
-    .quick-action-btn i {
-        font-size: 1.1rem;
-        color: var(--amber-cream);
-    }
+    /* ============================================ */
+    /* CUSTOM SWITCH */
+    /* ============================================ */
 
     .custom-switch .custom-control-label::before {
         background-color: #EFEAE2;
@@ -664,17 +822,29 @@
         padding-left: 10px;
     }
 
-    .sidebar-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.4);
-        z-index: 99;
+    /* ============================================ */
+    /* SCROLLBAR */
+    /* ============================================ */
+
+    .sidebar-menu-wrapper::-webkit-scrollbar,
+    .notif-dropdown-list::-webkit-scrollbar {
+        width: 3px;
     }
 
-    .sidebar-overlay.active {
-        display: block;
+    .sidebar-menu-wrapper::-webkit-scrollbar-track,
+    .notif-dropdown-list::-webkit-scrollbar-track {
+        background: transparent;
     }
+
+    .sidebar-menu-wrapper::-webkit-scrollbar-thumb,
+    .notif-dropdown-list::-webkit-scrollbar-thumb {
+        background: rgba(230, 161, 92, 0.3);
+        border-radius: 10px;
+    }
+
+    /* ============================================ */
+    /* RESPONSIVE */
+    /* ============================================ */
 
     @media (max-width: 991.98px) {
         .sidebar {
@@ -685,6 +855,10 @@
         .sidebar.open {
             left: 0;
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar-overlay.active {
+            display: block;
         }
 
         .main-content {
@@ -698,6 +872,14 @@
 
         .stat-num {
             font-size: 1.3rem;
+            padding-right: 45px;
+        }
+
+        .stat-badge {
+            width: 38px;
+            height: 38px;
+            font-size: 1rem;
+            right: 12px;
         }
 
         .action-card {
@@ -721,8 +903,13 @@
             right: -60px;
         }
 
-        .sidebar-overlay.active {
-            display: block;
+        .user-profile {
+            padding: 4px 12px;
+            min-width: 90px;
+        }
+
+        .user-profile .name {
+            font-size: 0.75rem;
         }
     }
 
@@ -733,18 +920,23 @@
 
         .stat-box {
             padding: 16px 18px;
+            min-height: 110px;
         }
 
         .stat-num {
             font-size: 1.1rem;
+            padding-right: 40px;
         }
 
         .stat-badge {
-            width: 36px;
-            height: 36px;
-            font-size: 1rem;
-            right: 14px;
-            top: 14px;
+            width: 34px;
+            height: 34px;
+            font-size: 0.85rem;
+            right: 10px;
+        }
+
+        .stat-title {
+            font-size: 0.6rem;
         }
 
         .custom-card .card-body-custom {
@@ -755,100 +947,73 @@
             width: calc(100vw - 24px);
             right: -70px;
         }
+
+        .user-profile {
+            padding: 4px 10px;
+            min-width: 70px;
+        }
+
+        .user-profile .avatar {
+            font-size: 1.2rem;
+        }
+
+        .user-profile .name {
+            font-size: 0.7rem;
+        }
+
+        .page-header .subtitle {
+            font-size: 0.75rem;
+        }
+
+        .quick-action-btn {
+            font-size: 0.75rem;
+            padding: 8px 12px;
+        }
+
+        .quick-action-btn i {
+            font-size: 0.9rem;
+        }
     }
 
-    .sidebar-menu-wrapper::-webkit-scrollbar,
-    .notif-dropdown-list::-webkit-scrollbar {
-        width: 3px;
+    /* ============================================ */
+    /* UTILITY */
+    /* ============================================ */
+
+    .text-truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
-    .sidebar-menu-wrapper::-webkit-scrollbar-track,
-    .notif-dropdown-list::-webkit-scrollbar-track {
-        background: transparent;
+    .gap-1 {
+        gap: 4px;
     }
 
-    .sidebar-menu-wrapper::-webkit-scrollbar-thumb,
-    .notif-dropdown-list::-webkit-scrollbar-thumb {
-        background: rgba(230, 161, 92, 0.3);
-        border-radius: 10px;
+    .gap-2 {
+        gap: 8px;
+    }
+
+    .gap-3 {
+        gap: 12px;
+    }
+
+    .gap-4 {
+        gap: 16px;
+    }
+
+    .gap-5 {
+        gap: 24px;
+    }
+
+    .d-flex-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     </style>
 </head>
 
 <body>
-    <!-- SIDEBAR OVERLAY -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <!-- SIDEBAR -->
-    <div class="sidebar" id="sidebarMenu">
-        <div class="sidebar-brand">
-            <div class="brand-icon">
-                <i class="bi bi-patch-check-fill"></i>
-            </div>
-            <span>POKTAN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
-        </div>
-        <div class="sidebar-menu-wrapper">
-            <ul class="sidebar-menu">
-                <li class="menu-item active">
-                    <a href="<?= base_url('admin/dashboard'); ?>">
-                        <i class="bi bi-grid-1x2-fill"></i>Dashboard
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/user'); ?>">
-                        <i class="bi bi-people-fill"></i>Manajemen User
-                        <span class="menu-badge">12</span>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/petani'); ?>">
-                        <i class="bi bi-person-badge-fill"></i>Data Petani
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/lahan'); ?>">
-                        <i class="bi bi-map-fill"></i>Manajemen Lahan
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/panen'); ?>">
-                        <i class="bi bi-tree-fill"></i>Manajemen Panen
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/produk'); ?>">
-                        <i class="bi bi-box-seam-fill"></i>Manajemen Produk
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/transaksi'); ?>">
-                        <i class="bi bi-wallet2"></i>Transaksi
-                        <span class="menu-badge">8</span>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/kurir'); ?>">
-                        <i class="bi bi-truck"></i>Manajemen Kurir
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/mitra'); ?>">
-                        <i class="bi bi-shop"></i>Manajemen Mitra
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('admin/laporan'); ?>">
-                        <i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan & Analytics
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="sidebar-footer">
-            <button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
-                <i class="bi bi-box-arrow-right"></i> Keluar
-            </button>
-        </div>
-    </div>
 
     <!-- MAIN CONTENT -->
     <div class="main-content">
@@ -860,10 +1025,12 @@
                     <i class="bi bi-list"></i>
                 </button>
                 <h2 class="d-inline-block align-middle mb-0">Dashboard</h2>
-                <p class="subtitle mb-0 mt-1">Selamat datang, Admin! <span id="currentDateTime"
-                        style="color: var(--amber-cream); font-weight:500;"></span></p>
+                <p class="subtitle mb-0 mt-1">Selamat datang, <span
+                        style="color: var(--amber-cream); font-weight:600;"><?= $this->session->userdata('nama') ?? 'Admin' ?></span>!
+                    <span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span>
+                </p>
             </div>
-            <div class="d-flex align-items-center gap-3" style="gap: 12px;">
+            <div class="d-flex align-items-center" style="gap: 12px;">
                 <!-- NOTIFICATION BELL -->
                 <div style="position: relative;">
                     <button class="notif-btn" id="notifToggle">
@@ -896,15 +1063,15 @@
                             <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
                                 href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
                                 <?php
-                                        $icon_type = $n['icon'] ?? 'info';
-                                        $icon_map = [
-                                            'success' => 'bi-check-circle-fill',
-                                            'warning' => 'bi-exclamation-triangle-fill',
-                                            'danger' => 'bi-x-circle-fill',
-                                            'info' => 'bi-info-circle-fill'
-                                        ];
-                                        $icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
-                                        ?>
+										$icon_type = $n['icon'] ?? 'info';
+										$icon_map = [
+											'success' => 'bi-check-circle-fill',
+											'warning' => 'bi-exclamation-triangle-fill',
+											'danger' => 'bi-x-circle-fill',
+											'info' => 'bi-info-circle-fill'
+										];
+										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+										?>
                                 <div class="notif-icon <?= $icon_type; ?>">
                                     <i class="bi <?= $icon_class; ?>"></i>
                                 </div>
@@ -934,11 +1101,14 @@
                         </div>
                     </div>
                 </div>
-                <!-- USER AVATAR -->
+
+                <!-- USER AVATAR - DIPERBAIKI -->
                 <div class="d-flex align-items-center gap-2"
-                    style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
+                    style="cursor: pointer; padding: 6px 14px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06); min-width: 100px;">
                     <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-                    <span style="font-weight:500; font-size:0.85rem;">Admin</span>
+                    <span style="font-weight:500; font-size:0.85rem; white-space: nowrap;">
+                        Admin
+                    </span>
                 </div>
             </div>
         </div>
@@ -950,7 +1120,7 @@
         </h5>
         <div class="row mb-4">
             <div class="col-lg-2 col-md-4 col-6 mb-2">
-                <a href="<?= base_url('admin/petani/verifikasi'); ?>" class="quick-action-btn">
+                <a href="<?= base_url('admin/petani'); ?>" class="quick-action-btn">
                     <i class="bi bi-person-check-fill"></i> Verifikasi Petani
                 </a>
             </div>
@@ -965,7 +1135,7 @@
                 </a>
             </div>
             <div class="col-lg-2 col-md-4 col-6 mb-2">
-                <a href="<?= base_url('admin/laporan/generate'); ?>" class="quick-action-btn">
+                <a href="<?= base_url('admin/laporan/'); ?>" class="quick-action-btn">
                     <i class="bi bi-file-earmark-pdf-fill"></i> Buat Laporan
                 </a>
             </div>
@@ -975,48 +1145,162 @@
                 </a>
             </div>
             <div class="col-lg-2 col-md-4 col-6 mb-2">
-                <a href="<?= base_url('admin/mitra/tambah'); ?>" class="quick-action-btn">
+                <a href="<?= base_url('admin/mitra/add'); ?>" class="quick-action-btn">
                     <i class="bi bi-shop"></i> Tambah Mitra
                 </a>
             </div>
         </div>
 
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="sidebarMenu">
+            <div class="sidebar-brand">
+                <div class="brand-icon">
+                    <i class="bi bi-patch-check-fill"></i>
+                </div>
+                <span>POKTAN <br><small
+                        style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
+            </div>
+            <div class="sidebar-menu-wrapper">
+                <ul class="sidebar-menu">
+                    <li class="menu-item active">
+                        <a href="<?= base_url('admin/dashboard'); ?>">
+                            <i class="bi bi-grid-1x2-fill"></i>Dashboard
+                        </a>
+                    </li>
+
+                    <!-- MANAJEMEN USER - Badge User Baru -->
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/user'); ?>">
+                            <i class="bi bi-people-fill"></i>Manajemen User
+                            <?php if (isset($user_baru) && $user_baru > 0): ?>
+                            <span class="menu-badge"
+                                style="background: #EF4444; color: white;"><?= $user_baru; ?></span>
+                            <?php endif; ?>
+                        </a>
+                    </li>
+
+                    <!-- DATA PETANI - Badge Petani Belum Diverifikasi -->
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/petani'); ?>">
+                            <i class="bi bi-person-badge-fill"></i>Data Petani
+                            <?php if (isset($petani_baru_count) && $petani_baru_count > 0): ?>
+                            <span class="menu-badge"
+                                style="background: #F59E0B; color: white;"><?= $petani_baru_count; ?></span>
+                            <?php endif; ?>
+                        </a>
+                    </li>
+
+                    <!-- MANAJEMEN LAHAN -->
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/lahan'); ?>">
+                            <i class="bi bi-map-fill"></i>Manajemen Lahan
+                        </a>
+                    </li>
+
+                    <!-- MANAJEMEN PANEN -->
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/panen'); ?>">
+                            <i class="bi bi-tree-fill"></i>Manajemen Panen
+                        </a>
+                    </li>
+
+                    <!-- MANAJEMEN PRODUK -->
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/produk'); ?>">
+                            <i class="bi bi-box-seam-fill"></i>Manajemen Produk
+                        </a>
+                    </li>
+
+                    <!-- TRANSAKSI - Badge Pending -->
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/transaksi'); ?>">
+                            <i class="bi bi-wallet2"></i>Transaksi
+                            <?php if (isset($transaksi_pending) && $transaksi_pending > 0): ?>
+                            <span class="menu-badge"
+                                style="background: #EF4444; color: white;"><?= $transaksi_pending; ?></span>
+                            <?php endif; ?>
+                        </a>
+                    </li>
+
+                    <!-- MANAJEMEN KURIR -->
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/kurir'); ?>">
+                            <i class="bi bi-truck"></i>Manajemen Kurir
+                        </a>
+                    </li>
+
+                    <!-- MANAJEMEN MITRA - Badge Mitra Baru -->
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/mitra'); ?>">
+                            <i class="bi bi-shop"></i>Manajemen Mitra
+                            <?php if (isset($mitra_baru) && $mitra_baru > 0): ?>
+                            <span class="menu-badge"
+                                style="background: #F59E0B; color: white;"><?= $mitra_baru; ?></span>
+                            <?php endif; ?>
+                        </a>
+                    </li>
+
+                    <!-- LAPORAN -->
+                    <li class="menu-item">
+                        <a href="<?= base_url('admin/laporan'); ?>">
+                            <i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="sidebar-footer">
+                <button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
+                    <i class="bi bi-box-arrow-right"></i> Keluar
+                </button>
+            </div>
+        </div>
+
         <!-- KPI CARDS -->
         <div class="row mb-4">
+            <!-- Total Pendapatan -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Total Pendapatan</div>
-                    <h3 class="stat-num">Rp <?= number_format($kpi_total_revenue ?? 87500000, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 12.5% dari bulan lalu</div>
-                    <div class="stat-badge" style="background: var(--amber-cream); color: white;"><i
-                            class="bi bi-currency-dollar"></i></div>
+                    <h3 class="stat-num" style="padding-right: 50px;">Rp
+                        <?= number_format($kpi_total_revenue ?? 0, 0, ',', '.'); ?></h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
+                    <div class="stat-badge"
+                        style="background: var(--amber-cream); color: white; width: 40px; height: 40px; font-size: 1rem;">
+                        <i class="bi bi-currency-dollar"></i>
+                    </div>
                 </div>
             </div>
+
+            <!-- Total Transaksi -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Total Transaksi</div>
-                    <h3 class="stat-num"><?= number_format($kpi_transaksi_aktif ?? 156, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 8.3% dari bulan lalu</div>
+                    <h3 class="stat-num"><?= $kpi_transaksi_aktif ?? 0; ?></h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge"><i class="bi bi-receipt"></i></div>
                 </div>
             </div>
+
+            <!-- Petani Aktif -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Petani Aktif</div>
-                    <h3 class="stat-num"><?= number_format($kpi_petani_terverifikasi ?? 48, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 3 bergabung minggu ini</div>
+                    <h3 class="stat-num"><?= $kpi_petani_terverifikasi ?? 0; ?></h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge"><i class="bi bi-people-fill"></i></div>
                 </div>
             </div>
+
+            <!-- Mitra Aktif -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Mitra Aktif</div>
-                    <h3 class="stat-num"><?= number_format($kpi_mitra_cafe ?? 32, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 2 mitra baru</div>
+                    <h3 class="stat-num"><?= $kpi_mitra_cafe ?? 0; ?></h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge" style="background: var(--dark-coffee); color: white;"><i
                             class="bi bi-shop"></i></div>
                 </div>
@@ -1104,10 +1388,10 @@
                                     <?php foreach ($pesanan_terbaru as $order): ?>
                                     <tr>
                                         <td><b>#<?= $order['id_transaksi']; ?></b></td>
-                                        <td><?= $order['metode_bayar']; ?></td>
-                                        <td>Rp <?= number_format($order['total_harga'], 0, ',', '.'); ?></td>
+                                        <td><?= $order['metode_bayar'] ?? 'Transfer'; ?></td>
+                                        <td>Rp <?= number_format($order['total_harga'] ?? 0, 0, ',', '.'); ?></td>
                                         <td><span
-                                                class="status-badge <?= strtolower($order['status_pesanan']); ?>"><?= ucfirst($order['status_pesanan']); ?></span>
+                                                class="status-badge <?= strtolower($order['status_pesanan'] ?? 'pending'); ?>"><?= ucfirst($order['status_pesanan'] ?? 'Pending'); ?></span>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
@@ -1146,9 +1430,10 @@
                                     <tr>
                                         <td><b><?= $farmer['nama_petani']; ?></b></td>
                                         <td><?= $farmer['status_petani'] == 'Active' ? 'Aktif' : 'Menunggu'; ?></td>
-                                        <td><?= date('d-m-Y', strtotime($farmer['tanggal_daftar'])); ?></td>
+                                        <td><?= date('d-m-Y', strtotime($farmer['tanggal_daftar'] ?? date('Y-m-d'))); ?>
+                                        </td>
                                         <td><span
-                                                class="status-badge <?= $farmer['status_petani'] === 'Active' ? 'complete' : 'pending'; ?>"><?= $farmer['status_petani'] === 'Active' ? 'Terverifikasi' : 'Review'; ?></span>
+                                                class="status-badge <?= ($farmer['status_petani'] ?? 'Pending') === 'Active' ? 'complete' : 'pending'; ?>"><?= ($farmer['status_petani'] ?? 'Pending') === 'Active' ? 'Terverifikasi' : 'Review'; ?></span>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
@@ -1165,7 +1450,7 @@
             </div>
         </div>
 
-        <!-- SETTING NOTIFIKASI -->
+        <!-- SETTING NOTIFIKASI - SESUAI ROLE ADMIN -->
         <div class="row">
             <div class="col-12">
                 <div class="custom-card">
@@ -1176,95 +1461,87 @@
                     </div>
                     <div class="card-body-custom">
                         <?php
-                        $default_settings = [
-                            'notifTransaksi' => 1,
-                            'notifPembayaran' => 1,
-                            'notifStok' => 1,
-                            'notifLaporan' => 0,
-                            'notifPetani' => 1,
-                            'notifKurir' => 1,
-                            'notifPromo' => 0,
-                            'notifSistem' => 1
-                        ];
-                        if (!empty($settings)) {
-                            foreach ($default_settings as $key => $value) {
-                                if (isset($settings[$key])) {
-                                    $default_settings[$key] = $settings[$key];
-                                }
-                            }
-                        }
-                        ?>
+						// Default settings untuk Admin
+						$default_settings = [
+							'notif_transaksi' => 1,
+							'notif_pembayaran' => 1,
+							'notif_stok' => 1,
+							'notif_petani' => 1,
+							'notif_kurir' => 1,
+							'notif_laporan' => 0,
+							'notif_sistem' => 1
+						];
+
+						if (!empty($settings)) {
+							foreach ($default_settings as $key => $value) {
+								if (isset($settings[$key])) {
+									$default_settings[$key] = $settings[$key];
+								}
+							}
+						}
+						?>
                         <form method="POST" action="<?= base_url('admin/dashboard/settings'); ?>" id="formNotifSetting">
                             <div class="row">
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifTransaksi"
-                                            name="notifTransaksi"
-                                            <?= $default_settings['notifTransaksi'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifTransaksi"
+                                        <input type="checkbox" class="custom-control-input" id="notif_transaksi"
+                                            name="notif_transaksi"
+                                            <?= $default_settings['notif_transaksi'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_transaksi"
                                             style="font-size:0.85rem;">Transaksi Baru</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifPembayaran"
-                                            name="notifPembayaran"
-                                            <?= $default_settings['notifPembayaran'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifPembayaran"
+                                        <input type="checkbox" class="custom-control-input" id="notif_pembayaran"
+                                            name="notif_pembayaran"
+                                            <?= $default_settings['notif_pembayaran'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_pembayaran"
                                             style="font-size:0.85rem;">Konfirmasi Bayar</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifStok"
-                                            name="notifStok"
-                                            <?= $default_settings['notifStok'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifStok"
+                                        <input type="checkbox" class="custom-control-input" id="notif_stok"
+                                            name="notif_stok"
+                                            <?= $default_settings['notif_stok'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_stok"
                                             style="font-size:0.85rem;">Peringatan Stok</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifLaporan"
-                                            name="notifLaporan"
-                                            <?= $default_settings['notifLaporan'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifLaporan"
-                                            style="font-size:0.85rem;">Laporan Bulanan</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6 mb-2">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifPetani"
-                                            name="notifPetani"
-                                            <?= $default_settings['notifPetani'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifPetani"
+                                        <input type="checkbox" class="custom-control-input" id="notif_petani"
+                                            name="notif_petani"
+                                            <?= $default_settings['notif_petani'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_petani"
                                             style="font-size:0.85rem;">Registrasi Petani</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifKurir"
-                                            name="notifKurir"
-                                            <?= $default_settings['notifKurir'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifKurir"
+                                        <input type="checkbox" class="custom-control-input" id="notif_kurir"
+                                            name="notif_kurir"
+                                            <?= $default_settings['notif_kurir'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_kurir"
                                             style="font-size:0.85rem;">Status Pengiriman</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifPromo"
-                                            name="notifPromo"
-                                            <?= $default_settings['notifPromo'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifPromo"
-                                            style="font-size:0.85rem;">Promo & Diskon</label>
+                                        <input type="checkbox" class="custom-control-input" id="notif_laporan"
+                                            name="notif_laporan"
+                                            <?= $default_settings['notif_laporan'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_laporan"
+                                            style="font-size:0.85rem;">Laporan Bulanan</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notifSistem"
-                                            name="notifSistem"
-                                            <?= $default_settings['notifSistem'] == 1 ? 'checked' : ''; ?>>
-                                        <label class="custom-control-label" for="notifSistem"
+                                        <input type="checkbox" class="custom-control-input" id="notif_sistem"
+                                            name="notif_sistem"
+                                            <?= $default_settings['notif_sistem'] == 1 ? 'checked' : ''; ?>>
+                                        <label class="custom-control-label" for="notif_sistem"
                                             style="font-size:0.85rem;">Update Sistem</label>
                                     </div>
                                 </div>
@@ -1360,7 +1637,7 @@
 
         const chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
         const chartData =
-            <?= isset($grafik_values) ? json_encode($grafik_values) : json_encode([120, 150, 180, 140, 200, 230, 210, 250, 270, 240, 300, 280]); ?>;
+            <?= isset($grafik_penjualan['values']) ? json_encode($grafik_penjualan['values']) : json_encode(array_fill(0, 12, 0)); ?>;
 
         salesChart = new Chart(ctx, {
             type: 'line',
@@ -1482,7 +1759,16 @@
         });
     });
 
-    console.log('✅ Dashboard siap digunakan!');
+    console.log('✅ Dashboard Admin siap digunakan!');
+    console.log('📋 Fitur yang tersedia:');
+    console.log('   - KPI Cards (M11-F01) - Data Real');
+    console.log('   - Grafik Penjualan (M10-F02) - Data Real');
+    console.log('   - Produk Terlaris (M10-F04) - Data Real');
+    console.log('   - Pesanan Terbaru (M11-F01) - Data Real');
+    console.log('   - Petani Baru (M11-F01) - Data Real');
+    console.log('   - Quick Action (M11-F04)');
+    console.log('   - Notifikasi Real-time (M11-F01)');
+    console.log('   - Setting Notifikasi (M11-F03) - Sesuai Role Admin');
     </script>
 </body>
 

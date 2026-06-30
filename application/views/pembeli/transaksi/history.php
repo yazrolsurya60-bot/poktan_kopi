@@ -80,12 +80,14 @@
         .notif-item.unread { background: rgba(230, 161, 92, 0.05); }
         .notif-item.unread .notif-text { font-weight: 600; }
 
-        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; display: inline-block; }
         .status-badge.pending { background: #FEF3C7; color: #92400E; }
         .status-badge.processing { background: #DBEAFE; color: #1E40AF; }
         .status-badge.delivery { background: #EDE9FE; color: #5B21B6; }
         .status-badge.complete { background: #D1FAE5; color: #065F46; }
         .status-badge.cancelled { background: #FEE2E2; color: #991B1B; }
+        .status-badge.lunas { background: #D1FAE5; color: #065F46; }
+        .status-badge.belum-bayar { background: #FEF3C7; color: #92400E; }
 
         .custom-card { background: var(--card-white); border: 1px solid rgba(74, 44, 17, 0.06); border-radius: var(--radius-card); box-shadow: var(--shadow-soft); transition: var(--transition-smooth); overflow: hidden; }
         .custom-card:hover { box-shadow: var(--shadow-hover); }
@@ -166,11 +168,7 @@
                     <span class="menu-badge">2</span>
                 </a>
             </li>
-            <li class="menu-item">
-                <a href="<?= base_url('pembeli/poin'); ?>">
-                    <i class="bi bi-gift-fill"></i>Tukar Poin Hadiah
-                </a>
-            </li>
+        
             <li class="menu-item">
                 <a href="<?= base_url('pembeli/profil'); ?>">
                     <i class="bi bi-person-fill"></i>Profil Saya
@@ -197,7 +195,7 @@
             <p class="subtitle mb-0 mt-1">Kelola dan lihat semua pesanan Anda</p>
         </div>
         <div class="d-flex align-items-center gap-3" style="gap: 12px;">
-            <!-- NOTIFICATION BELL (M11-F01) - DINAMIS DARI DATABASE -->
+            <!-- NOTIFICATION BELL -->
             <div style="position: relative;">
                 <button class="notif-btn" id="notifToggle">
                     <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
@@ -341,9 +339,18 @@
                                 <td><?= isset($t['tanggal_transaksi']) ? date('d/m/Y H:i', strtotime($t['tanggal_transaksi'])) : date('d/m/Y H:i'); ?></td>
                                 <td>
                                     <?php 
-                                        $nama_produk = $t['nama_produk'] ?? '-';
-                                        $jml = $t['jumlah_item'] ?? 1;
-                                        echo $nama_produk . ($jml > 1 ? ' +' . ($jml - 1) . ' lainnya' : '');
+                                    // 🔥 FIX: Tampilkan daftar produk dari produk_list
+                                    $produk_list = $t['produk_list'] ?? '';
+                                    if (!empty($produk_list)) {
+                                        $produk_array = explode(', ', $produk_list);
+                                        if (count($produk_array) > 2) {
+                                            echo implode(', ', array_slice($produk_array, 0, 2)) . ' ...';
+                                        } else {
+                                            echo $produk_list;
+                                        }
+                                    } else {
+                                        echo '<span class="text-muted">-</span>';
+                                    }
                                     ?>
                                 </td>
                                 <td>Rp <?= number_format($t['grand_total'] ?? $t['total_harga'] ?? 0, 0, ',', '.'); ?></td>
@@ -363,7 +370,7 @@
                                 <td>
                                     <?php
                                         $status_bayar = $t['status_bayar'] ?? 'Belum Bayar';
-                                        $bayar_class = $status_bayar == 'Lunas' ? 'complete' : 'pending';
+                                        $bayar_class = $status_bayar == 'Lunas' ? 'lunas' : 'belum-bayar';
                                     ?>
                                     <span class="status-badge <?= $bayar_class; ?>">
                                         <?= $status_bayar; ?>

@@ -274,23 +274,7 @@
 
     <div class="login-container">
 
-        <!-- Simulation Email verification block if needed -->
-        <?php if ($this->session->flashdata('verify_needed')): 
-            $verifyData = $this->session->flashdata('verify_needed');
-        ?>
-        <div class="simulation-card">
-            <div class="simulation-title">
-                <i class="bi bi-envelope-exclamation-fill"></i> MOCK INBOX: Verifikasi Email
-            </div>
-            <p style="font-size: 0.8rem; color: #0c4a6e; margin-bottom: 10px;">
-                Kami mensimulasikan email verifikasi yang dikirimkan ke <b><?= $verifyData['email']; ?></b>.
-            </p>
-            <a href="<?= base_url('auth/verify/' . $verifyData['token']); ?>"
-                class="btn btn-sm btn-info text-white font-weight-bold" style="border-radius: 8px;">
-                <i class="bi bi-patch-check-fill mr-1"></i> Klik untuk Verifikasi Akun
-            </a>
-        </div>
-        <?php endif; ?>
+        <!-- Mock inbox removed because email verification is no longer used -->
 
         <?php if ($this->session->flashdata('success')): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert"
@@ -323,14 +307,14 @@
 
             <form method="POST" action="<?= base_url('auth/login'); ?>">
                 <div class="form-group">
-                    <label for="username_or_email">Username atau Email</label>
+                    <label for="username_or_no_telepon">Username atau No. Telepon</label>
                     <div class="input-group-custom">
-                        <input type="text" name="username_or_email" id="username_or_email" class="form-control-custom"
-                            placeholder="Masukkan username atau email" value="<?= set_value('username_or_email'); ?>"
-                            required>
+                        <input type="text" name="username_or_no_telepon" id="username_or_no_telepon"
+                            class="form-control-custom" placeholder="Masukkan username atau no. telepon"
+                            value="<?= set_value('username_or_no_telepon'); ?>" required>
                         <i class="bi bi-person"></i>
                     </div>
-                    <?= form_error('username_or_email', '<small class="text-danger">', '</small>'); ?>
+                    <?= form_error('username_or_no_telepon', '<small class="text-danger">', '</small>'); ?>
                 </div>
 
                 <div class="form-group mb-4">

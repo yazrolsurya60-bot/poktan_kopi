@@ -1,5 +1,4 @@
-﻿﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -137,7 +136,6 @@
         border-radius: 0 3px 3px 0;
     }
 
-    /* Sidebar Footer - Tombol Keluar */
     .sidebar-footer {
         padding: 16px 20px;
         border-top: 1px solid rgba(250, 246, 240, 0.06);
@@ -346,6 +344,15 @@
 
     .notif-item.unread .notif-text {
         font-weight: 600;
+    }
+
+    .notif-badge-new {
+        background: var(--amber-cream);
+        color: white;
+        font-size: 0.55rem;
+        padding: 2px 8px;
+        border-radius: 10px;
+        align-self: center;
     }
 
     /* --- ACTION CARDS --- */
@@ -645,7 +652,7 @@
         color: var(--amber-cream);
     }
 
-    /* --- CALENDAR / JADWAL PANEN (M11-F01) --- */
+    /* --- CALENDAR / JADWAL PANEN --- */
     .harvest-schedule-item {
         display: flex;
         align-items: center;
@@ -841,13 +848,12 @@
                 <li class="menu-item">
                     <a href="<?= base_url('petani/produk'); ?>">
                         <i class="bi bi-box-seam"></i>Katalog Produk
-                        <span class="menu-badge">5</span>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="<?= base_url('petani/transaksi'); ?>">
                         <i class="bi bi-cart-check-fill"></i>Pesanan Masuk
-                        <span class="menu-badge">8</span>
+                        <span class="menu-badge">4</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -874,73 +880,88 @@
                     <i class="bi bi-list"></i>
                 </button>
                 <h2 class="d-inline-block align-middle mb-0">Panel Produksi</h2>
-                <p class="subtitle mb-0 mt-1">Selamat datang, Petani! <span id="currentDateTime"
-                        style="color: var(--amber-cream); font-weight:500;"></span></p>
+                <p class="subtitle mb-0 mt-1">Selamat datang, <span
+                        style="color: var(--amber-cream); font-weight:600;">Petani Kopi</span>!
+                    <span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span>
+                </p>
             </div>
             <div class="d-flex align-items-center gap-3" style="gap: 12px;">
                 <!-- NOTIFICATION BELL (M11-F01) -->
                 <div style="position: relative;">
                     <button class="notif-btn" id="notifToggle">
                         <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
-                        <span class="notif-dot" id="notifCount">4</span>
+                        <?php if (isset($unread_count) && $unread_count > 0): ?>
+                        <span class="notif-dot" id="notifCount"><?= $unread_count ?></span>
+                        <?php else: ?>
+                        <span class="notif-dot" id="notifCount" style="display:none;">0</span>
+                        <?php endif; ?>
                     </button>
                     <div class="notif-dropdown" id="notifDropdown">
                         <div class="notif-dropdown-header">
-                            <span>Notifikasi</span>
-                            <a href="#" id="markAllRead">Tandai semua dibaca</a>
+                            <span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
+                            <a href="<?= base_url('petani/dashboard/history'); ?>"
+                                style="font-size:0.75rem; color: var(--amber-cream); font-weight:500; text-decoration:none;">Lihat
+                                Semua</a>
                         </div>
                         <div class="notif-dropdown-list" id="notifList">
-                            <div class="notif-item unread">
-                                <div class="notif-icon warning"><i class="bi bi-clock"></i></div>
-                                <div class="notif-text">
-                                    Stok Liberika Grade A menipis (tersisa 15 kg)
-                                    <span class="notif-time">5 menit lalu</span>
+                            <?php if (!empty($notifikasi)): ?>
+                            <?php foreach ($notifikasi as $n): ?>
+                            <a class="notif-item <?= (isset($n->status_baca) && $n->status_baca == 0) ? 'unread' : ''; ?>"
+                                href="<?= base_url('petani/dashboard/read/' . $n->id_notifikasi); ?>">
+                                <?php
+										$icon_type = $n->icon ?? 'info';
+										$icon_map = [
+											'success' => 'bi-check-circle-fill',
+											'warning' => 'bi-exclamation-triangle-fill',
+											'danger' => 'bi-x-circle-fill',
+											'info' => 'bi-info-circle-fill'
+										];
+										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+										?>
+                                <div class="notif-icon <?= $icon_type; ?>">
+                                    <i class="bi <?= $icon_class; ?>"></i>
                                 </div>
-                            </div>
-                            <div class="notif-item unread">
-                                <div class="notif-icon success"><i class="bi bi-cart-check"></i></div>
                                 <div class="notif-text">
-                                    Pesanan baru dari Cafe Merdeka
-                                    <span class="notif-time">15 menit lalu</span>
+                                    <?= htmlspecialchars($n->isi_notifikasi); ?>
+                                    <span
+                                        class="notif-time"><?= date('d M Y, H:i', strtotime($n->tanggal_buat)); ?></span>
                                 </div>
+                                <?php if (isset($n->status_baca) && $n->status_baca == 0): ?>
+                                <span class="notif-badge-new">Baru</span>
+                                <?php endif; ?>
+                            </a>
+                            <?php endforeach; ?>
+                            <?php else: ?>
+                            <div class="text-center text-muted py-5 px-3">
+                                <i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
+                                <p class="small mb-0">Tidak ada notifikasi</p>
                             </div>
-                            <div class="notif-item">
-                                <div class="notif-icon info"><i class="bi bi-truck"></i></div>
-                                <div class="notif-text">
-                                    Kurir telah mengambil pesanan #INV-2026-002
-                                    <span class="notif-time">1 jam lalu</span>
-                                </div>
-                            </div>
-                            <div class="notif-item unread">
-                                <div class="notif-icon danger"><i class="bi bi-exclamation-triangle"></i></div>
-                                <div class="notif-text">
-                                    Jadwal panen untuk Lahan Sukamakmur hari ini
-                                    <span class="notif-time">2 jam lalu</span>
-                                </div>
-                            </div>
-                            <div class="notif-item">
-                                <div class="notif-icon success"><i class="bi bi-check-circle"></i></div>
-                                <div class="notif-text">
-                                    Pembayaran #INV-2026-001 telah dikonfirmasi
-                                    <span class="notif-time">3 jam lalu</span>
-                                </div>
-                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="p-2 text-center border-top"
+                            style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+                            <a href="<?= base_url('petani/dashboard/settings'); ?>"
+                                class="small text-secondary font-weight-bold text-decoration-none">
+                                <i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
+                            </a>
                         </div>
                     </div>
                 </div>
+
                 <!-- USER AVATAR -->
                 <div class="d-flex align-items-center gap-2"
                     style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
                     <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-                    <span style="font-weight:500; font-size:0.85rem;">Petani</span>
+                    <span
+                        style="font-weight:500; font-size:0.85rem;"><?= $this->session->userdata('nama') ?? 'Petani' ?></span>
                 </div>
             </div>
         </div>
 
-        <!-- QUICK ACTION BUTTONS (M11-F04) -->
+        <!-- QUICK ACTION BUTTONS -->
         <h5 class="font-weight-bold mb-3"
             style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
-            <i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat Operasional
+            <i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
         </h5>
         <div class="row mb-4">
             <div class="col-lg-3 col-md-4 col-6 mb-2">
@@ -949,7 +970,7 @@
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-2">
-                <a href="<?= base_url('petani/panen/input'); ?>" class="quick-action-btn">
+                <a href="<?= base_url('petani/panen/tambah'); ?>" class="quick-action-btn">
                     <i class="bi bi-calendar-plus-fill"></i> Input Panen
                 </a>
             </div>
@@ -959,20 +980,20 @@
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-2">
-                <a href="<?= base_url('petani/transaksi/proses'); ?>" class="quick-action-btn">
+                <a href="#" class="quick-action-btn">
                     <i class="bi bi-box-seam-fill"></i> Proses Pesanan
                 </a>
             </div>
         </div>
 
-        <!-- KPI CARDS (M11-F01) -->
+        <!-- KPI CARDS - DATA DUMMY -->
         <div class="row mb-4">
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Total Hasil Panen</div>
-                    <h3 class="stat-num"><?= number_format($kpi_total_panen ?? 2845, 0, ',', '.'); ?> Kg</h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 15.3% dari bulan lalu</div>
+                    <h3 class="stat-num">12.350 Kg</h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge" style="background: var(--amber-cream); color: white;"><i
                             class="bi bi-archive-fill"></i></div>
                 </div>
@@ -981,8 +1002,8 @@
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Omset Penjualan</div>
-                    <h3 class="stat-num">Rp <?= number_format($kpi_omset_penjualan ?? 43750000, 0, ',', '.'); ?></h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 8.7% dari bulan lalu</div>
+                    <h3 class="stat-num">Rp 85.750.000</h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge" style="background: #059669; color: white;"><i class="bi bi-cash-stack"></i>
                     </div>
                 </div>
@@ -991,8 +1012,8 @@
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Lahan Aktif</div>
-                    <h3 class="stat-num"><?= $kpi_lahan_aktif ?? 4; ?> Kebun</h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 1 lahan baru</div>
+                    <h3 class="stat-num">3 Kebun</h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge"><i class="bi bi-globe-asia-australia"></i></div>
                 </div>
             </div>
@@ -1000,8 +1021,8 @@
                 <div class="stat-box">
                     <div class="stat-decoration"></div>
                     <div class="stat-title">Pesanan Masuk</div>
-                    <h3 class="stat-num"><?= $kpi_pesanan_masuk ?? 12; ?> Pesanan</h3>
-                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> 3 pesanan baru</div>
+                    <h3 class="stat-num">4 Pesanan</h3>
+                    <div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
                     <div class="stat-badge" style="background: var(--dark-coffee); color: white;"><i
                             class="bi bi-cart-fill"></i></div>
                 </div>
@@ -1010,7 +1031,7 @@
 
         <!-- GRAFIK & PRODUK -->
         <div class="row">
-            <!-- GRAFIK PANEN (M11-F01) -->
+            <!-- GRAFIK PANEN - DATA DUMMY -->
             <div class="col-lg-8 mb-4">
                 <div class="custom-card">
                     <div class="card-header-custom">
@@ -1032,7 +1053,7 @@
                 </div>
             </div>
 
-            <!-- TOP PRODUK TERJUAL (M11-F01) -->
+            <!-- TOP PRODUK TERJUAL - DATA DUMMY -->
             <div class="col-lg-4 mb-4">
                 <div class="custom-card">
                     <div class="card-header-custom">
@@ -1040,30 +1061,66 @@
                         <span class="badge" style="background: #D1FAE5; color: #065F46; font-weight:500;">Top 5</span>
                     </div>
                     <div class="card-body-custom" style="padding: 16px 20px;">
-                        <?php $top_products = [
-                            ['nama' => 'Liberika Grade A', 'terjual' => '185 kg', 'pendapatan' => 'Rp 27.750.000'],
-                            ['nama' => 'Arabika Grade A', 'terjual' => '120 kg', 'pendapatan' => 'Rp 19.200.000'],
-                            ['nama' => 'Robusta Grade A', 'terjual' => '95 kg', 'pendapatan' => 'Rp 12.350.000'],
-                            ['nama' => 'Liberika Grade B', 'terjual' => '65 kg', 'pendapatan' => 'Rp 8.125.000'],
-                            ['nama' => 'Arabika Specialty', 'terjual' => '42 kg', 'pendapatan' => 'Rp 7.560.000']
-                        ]; ?>
-                        <?php foreach ($top_products as $index => $product): ?>
-                        <div class="d-flex align-items-center justify-content-between py-2 <?= $index < 4 ? 'border-bottom' : ''; ?>"
+                        <div class="d-flex align-items-center justify-content-between py-2 border-bottom"
                             style="border-color: rgba(74,44,17,0.05);">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge"
-                                    style="background: <?= $index === 0 ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= $index === 0 ? 'white' : 'var(--text-secondary)'; ?>; width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">
-                                    <?= $index + 1; ?>
-                                </span>
-                                <span style="font-weight:600; font-size:0.85rem;"><?= $product['nama']; ?></span>
+                                    style="background: var(--amber-cream); color: white; width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">1</span>
+                                <span style="font-weight:600; font-size:0.85rem;">Liberika Grade A</span>
                             </div>
                             <div class="text-right">
-                                <span style="font-weight:600; font-size:0.85rem;"><?= $product['terjual']; ?></span>
-                                <small class="d-block text-muted"
-                                    style="font-size:0.7rem;"><?= $product['pendapatan']; ?></small>
+                                <span style="font-weight:600; font-size:0.85rem;">1.250 kg</span>
+                                <small class="d-block text-muted" style="font-size:0.7rem;">Rp 25.000.000</small>
                             </div>
                         </div>
-                        <?php endforeach; ?>
+                        <div class="d-flex align-items-center justify-content-between py-2 border-bottom"
+                            style="border-color: rgba(74,44,17,0.05);">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge"
+                                    style="background: var(--bg-cream); color: var(--text-secondary); width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">2</span>
+                                <span style="font-weight:600; font-size:0.85rem;">Arabica Grade AA</span>
+                            </div>
+                            <div class="text-right">
+                                <span style="font-weight:600; font-size:0.85rem;">980 kg</span>
+                                <small class="d-block text-muted" style="font-size:0.7rem;">Rp 19.600.000</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between py-2 border-bottom"
+                            style="border-color: rgba(74,44,17,0.05);">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge"
+                                    style="background: var(--bg-cream); color: var(--text-secondary); width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">3</span>
+                                <span style="font-weight:600; font-size:0.85rem;">Robusta Grade A</span>
+                            </div>
+                            <div class="text-right">
+                                <span style="font-weight:600; font-size:0.85rem;">750 kg</span>
+                                <small class="d-block text-muted" style="font-size:0.7rem;">Rp 11.250.000</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between py-2 border-bottom"
+                            style="border-color: rgba(74,44,17,0.05);">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge"
+                                    style="background: var(--bg-cream); color: var(--text-secondary); width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">4</span>
+                                <span style="font-weight:600; font-size:0.85rem;">Liberika Grade B</span>
+                            </div>
+                            <div class="text-right">
+                                <span style="font-weight:600; font-size:0.85rem;">620 kg</span>
+                                <small class="d-block text-muted" style="font-size:0.7rem;">Rp 9.300.000</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between py-2"
+                            style="border-color: rgba(74,44,17,0.05);">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge"
+                                    style="background: var(--bg-cream); color: var(--text-secondary); width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">5</span>
+                                <span style="font-weight:600; font-size:0.85rem;">Arabica Grade B</span>
+                            </div>
+                            <div class="text-right">
+                                <span style="font-weight:600; font-size:0.85rem;">450 kg</span>
+                                <small class="d-block text-muted" style="font-size:0.7rem;">Rp 6.750.000</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1071,13 +1128,13 @@
 
         <!-- PESANAN MASUK & STOK -->
         <div class="row">
-            <!-- PESANAN MASUK TERBARU (M11-F01) -->
+            <!-- PESANAN MASUK TERBARU - DATA DUMMY -->
             <div class="col-lg-6 mb-4">
                 <div class="custom-card">
                     <div class="card-header-custom">
                         <h6><i class="bi bi-cart-fill text-success mr-2"></i> Pesanan Masuk Terbaru</h6>
-                        <a href="<?= base_url('petani/transaksi'); ?>" class="text-muted"
-                            style="font-size:0.75rem;">Lihat semua <i class="bi bi-chevron-right"></i></a>
+                        <a href="#" class="text-muted" style="font-size:0.75rem;">Lihat semua <i
+                                class="bi bi-chevron-right"></i></a>
                     </div>
                     <div class="card-body-custom" style="padding:0;">
                         <div class="table-responsive">
@@ -1091,27 +1148,38 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php $recent_orders = [
-                                        ['invoice' => 'INV-2026-008', 'produk' => 'Liberika Grade A', 'qty' => '25 kg', 'status' => 'processing'],
-                                        ['invoice' => 'INV-2026-007', 'produk' => 'Arabika Grade A', 'qty' => '18 kg', 'status' => 'delivery'],
-                                        ['invoice' => 'INV-2026-006', 'produk' => 'Robusta Grade A', 'qty' => '30 kg', 'status' => 'pending'],
-                                        ['invoice' => 'INV-2026-005', 'produk' => 'Liberika Grade B', 'qty' => '40 kg', 'status' => 'complete'],
-                                        ['invoice' => 'INV-2026-004', 'produk' => 'Arabika Specialty', 'qty' => '12 kg', 'status' => 'processing']
-                                    ]; ?>
-                                    <?php foreach ($recent_orders as $order): ?>
                                     <tr>
-                                        <td><b>#<?= $order['invoice']; ?></b></td>
-                                        <td><?= $order['produk']; ?></td>
+                                        <td><b>#INV-2026-001</b></td>
+                                        <td>Liberika Grade A</td>
                                         <td><span class="badge"
-                                                style="background: var(--bg-cream); color: var(--dark-coffee);"><?= $order['qty']; ?></span>
-                                        </td>
-                                        <td>
-                                            <span class="status-badge <?= $order['status']; ?>">
-                                                <?= ucfirst($order['status']); ?>
-                                            </span>
-                                        </td>
+                                                style="background: var(--bg-cream); color: var(--dark-coffee);">50
+                                                kg</span></td>
+                                        <td><span class="status-badge processing">Diproses</span></td>
                                     </tr>
-                                    <?php endforeach; ?>
+                                    <tr>
+                                        <td><b>#INV-2026-002</b></td>
+                                        <td>Arabica Grade AA</td>
+                                        <td><span class="badge"
+                                                style="background: var(--bg-cream); color: var(--dark-coffee);">25
+                                                kg</span></td>
+                                        <td><span class="status-badge pending">Pending</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>#INV-2026-003</b></td>
+                                        <td>Robusta Grade A</td>
+                                        <td><span class="badge"
+                                                style="background: var(--bg-cream); color: var(--dark-coffee);">40
+                                                kg</span></td>
+                                        <td><span class="status-badge delivery">Dikirim</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>#INV-2026-004</b></td>
+                                        <td>Liberika Grade B</td>
+                                        <td><span class="badge"
+                                                style="background: var(--bg-cream); color: var(--dark-coffee);">15
+                                                kg</span></td>
+                                        <td><span class="status-badge complete">Selesai</span></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1119,7 +1187,7 @@
                 </div>
             </div>
 
-            <!-- PERINGATAN STOK (M11-F01) -->
+            <!-- PERINGATAN STOK - DATA DUMMY -->
             <div class="col-lg-6 mb-4">
                 <div class="custom-card">
                     <div class="card-header-custom">
@@ -1138,24 +1206,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php $stock_warnings = [
-                                        ['produk' => 'Liberika Grade A', 'stok' => '15 kg', 'status' => 'stok_tipis'],
-                                        ['produk' => 'Arabika Grade A', 'stok' => '8 kg', 'status' => 'stok_tipis'],
-                                        ['produk' => 'Robusta Grade A', 'stok' => '0 kg', 'status' => 'stok_habis'],
-                                        ['produk' => 'Liberika Grade B', 'stok' => '42 kg', 'status' => 'stok_aman'],
-                                        ['produk' => 'Arabika Specialty', 'stok' => '25 kg', 'status' => 'stok_aman']
-                                    ]; ?>
-                                    <?php foreach ($stock_warnings as $stock): ?>
                                     <tr>
-                                        <td><b><?= $stock['produk']; ?></b></td>
-                                        <td><span style="font-weight:600;"><?= $stock['stok']; ?></span></td>
-                                        <td>
-                                            <span class="status-badge <?= $stock['status']; ?>">
-                                                <?= $stock['status'] === 'stok_aman' ? 'Aman' : ($stock['status'] === 'stok_tipis' ? 'Menipis' : 'Habis'); ?>
-                                            </span>
-                                        </td>
+                                        <td><b>Liberika Grade A</b></td>
+                                        <td><span style="font-weight:600;">8 kg</span></td>
+                                        <td><span class="status-badge stok_tipis">Menipis</span></td>
                                     </tr>
-                                    <?php endforeach; ?>
+                                    <tr>
+                                        <td><b>Arabica Grade AA</b></td>
+                                        <td><span style="font-weight:600;">5 kg</span></td>
+                                        <td><span class="status-badge stok_tipis">Menipis</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Robusta Grade A</b></td>
+                                        <td><span style="font-weight:600;">0 kg</span></td>
+                                        <td><span class="status-badge stok_habis">Habis</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Arabica Grade B</b></td>
+                                        <td><span style="font-weight:600;">35 kg</span></td>
+                                        <td><span class="status-badge stok_aman">Aman</span></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1166,44 +1236,62 @@
 
         <!-- JADWAL PANEN & SETTING NOTIFIKASI -->
         <div class="row">
-            <!-- JADWAL PANEN (M11-F01) -->
+            <!-- JADWAL PANEN - DATA DUMMY -->
             <div class="col-lg-6 mb-4">
                 <div class="custom-card">
                     <div class="card-header-custom">
                         <h6><i class="bi bi-calendar-event-fill text-primary mr-2"></i> Jadwal Panen Mendatang</h6>
-                        <span class="badge" style="background: #DBEAFE; color: #1E40AF; font-weight:500;">Minggu
-                            ini</span>
+                        <span class="badge"
+                            style="background: #DBEAFE; color: #1E40AF; font-weight:500;">Terdekat</span>
                     </div>
                     <div class="card-body-custom">
-                        <?php $harvest_schedule = [
-                            ['date' => '15', 'month' => 'Jan', 'lahan' => 'Sukamakmur', 'estimasi' => '200 kg', 'varietas' => 'Liberika'],
-                            ['date' => '17', 'month' => 'Jan', 'lahan' => 'Cisarua', 'estimasi' => '150 kg', 'varietas' => 'Arabika'],
-                            ['date' => '20', 'month' => 'Jan', 'lahan' => 'Puncak', 'estimasi' => '180 kg', 'varietas' => 'Robusta'],
-                            ['date' => '22', 'month' => 'Jan', 'lahan' => 'Sukamakmur', 'estimasi' => '120 kg', 'varietas' => 'Liberika']
-                        ]; ?>
-                        <?php foreach ($harvest_schedule as $schedule): ?>
                         <div class="harvest-schedule-item">
                             <div class="schedule-date">
-                                <div class="day"><?= $schedule['date']; ?></div>
-                                <div class="month"><?= $schedule['month']; ?></div>
+                                <div class="day">28</div>
+                                <div class="month">Jun</div>
                             </div>
                             <div class="schedule-info">
-                                <div class="title"><?= $schedule['lahan']; ?></div>
-                                <div class="detail">
-                                    <?= $schedule['varietas']; ?> Â· Estimasi <?= $schedule['estimasi']; ?>
-                                </div>
+                                <div class="title">Lahan Sukamakmur</div>
+                                <div class="detail">Premium · Estimasi 450 kg</div>
                             </div>
                             <span class="badge"
                                 style="background: var(--amber-cream); color: white; padding: 4px 12px; border-radius:20px; font-weight:500;">
                                 Siap Panen
                             </span>
                         </div>
-                        <?php endforeach; ?>
+                        <div class="harvest-schedule-item">
+                            <div class="schedule-date">
+                                <div class="day">02</div>
+                                <div class="month">Jul</div>
+                            </div>
+                            <div class="schedule-info">
+                                <div class="title">Lahan Cikole</div>
+                                <div class="detail">Standard · Estimasi 320 kg</div>
+                            </div>
+                            <span class="badge"
+                                style="background: #DBEAFE; color: #1E40AF; padding: 4px 12px; border-radius:20px; font-weight:500;">
+                                Menunggu
+                            </span>
+                        </div>
+                        <div class="harvest-schedule-item">
+                            <div class="schedule-date">
+                                <div class="day">15</div>
+                                <div class="month">Jul</div>
+                            </div>
+                            <div class="schedule-info">
+                                <div class="title">Lahan Ciwidey</div>
+                                <div class="detail">Premium · Estimasi 550 kg</div>
+                            </div>
+                            <span class="badge"
+                                style="background: #DBEAFE; color: #1E40AF; padding: 4px 12px; border-radius:20px; font-weight:500;">
+                                Menunggu
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SETTING NOTIFIKASI (M11-F03) -->
+            <!-- SETTING NOTIFIKASI -->
             <div class="col-lg-6 mb-4">
                 <div class="custom-card">
                     <div class="card-header-custom">
@@ -1212,59 +1300,76 @@
                             style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;">Pengaturan</span>
                     </div>
                     <div class="card-body-custom">
-                        <div class="row">
-                            <div class="col-md-6 col-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="notifPesanan" checked>
-                                    <label class="custom-control-label" for="notifPesanan"
-                                        style="font-size:0.85rem;">Pesanan Baru</label>
+                        <form method="POST" action="#">
+                            <div class="row">
+                                <div class="col-md-6 col-6 mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="notif_transaksi"
+                                            name="notif_transaksi" checked>
+                                        <label class="custom-control-label" for="notif_transaksi"
+                                            style="font-size:0.85rem;">Pesanan Baru</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-6 mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="notif_pembayaran"
+                                            name="notif_pembayaran" checked>
+                                        <label class="custom-control-label" for="notif_pembayaran"
+                                            style="font-size:0.85rem;">Konfirmasi Bayar</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-6 mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="notif_stok"
+                                            name="notif_stok" checked>
+                                        <label class="custom-control-label" for="notif_stok"
+                                            style="font-size:0.85rem;">Peringatan Stok</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-6 mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="notif_kurir"
+                                            name="notif_kurir" checked>
+                                        <label class="custom-control-label" for="notif_kurir"
+                                            style="font-size:0.85rem;">Status Kiriman</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-6 mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="notif_panen"
+                                            name="notif_panen" checked>
+                                        <label class="custom-control-label" for="notif_panen"
+                                            style="font-size:0.85rem;">Jadwal Panen</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-6 mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="notif_laporan"
+                                            name="notif_laporan">
+                                        <label class="custom-control-label" for="notif_laporan"
+                                            style="font-size:0.85rem;">Laporan Bulanan</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-6 mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="notif_sistem"
+                                            name="notif_sistem" checked>
+                                        <label class="custom-control-label" for="notif_sistem"
+                                            style="font-size:0.85rem;">Update Sistem</label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="notifPembayaran" checked>
-                                    <label class="custom-control-label" for="notifPembayaran"
-                                        style="font-size:0.85rem;">Konfirmasi Bayar</label>
-                                </div>
+                            <div class="mt-3 pt-2 border-top" style="border-color: rgba(74,44,17,0.06);">
+                                <button type="submit" class="btn"
+                                    style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
+                                    <i class="bi bi-save mr-1"></i> Simpan Pengaturan
+                                </button>
+                                <button type="button" class="btn btn-link text-muted" style="font-size:0.85rem;"
+                                    onclick="markAllRead()">
+                                    <i class="bi bi-check2-all mr-1"></i> Tandai Semua Dibaca
+                                </button>
                             </div>
-                            <div class="col-md-6 col-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="notifStok" checked>
-                                    <label class="custom-control-label" for="notifStok"
-                                        style="font-size:0.85rem;">Peringatan Stok</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="notifPanen" checked>
-                                    <label class="custom-control-label" for="notifPanen"
-                                        style="font-size:0.85rem;">Jadwal Panen</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="notifKurir" checked>
-                                    <label class="custom-control-label" for="notifKurir"
-                                        style="font-size:0.85rem;">Status Kiriman</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="notifPromo">
-                                    <label class="custom-control-label" for="notifPromo"
-                                        style="font-size:0.85rem;">Promo & Diskon</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-3 pt-2 border-top" style="border-color: rgba(74,44,17,0.06);">
-                            <button class="btn"
-                                style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
-                                <i class="bi bi-save mr-1"></i> Simpan Pengaturan
-                            </button>
-                            <button class="btn btn-link text-muted" style="font-size:0.85rem;" onclick="markAllRead()">
-                                <i class="bi bi-check2-all mr-1"></i> Tandai Semua Dibaca
-                            </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -1304,7 +1409,7 @@
     });
 
     // ============================================
-    // 2. NOTIFICATION DROPDOWN (M11-F01)
+    // 2. NOTIFICATION DROPDOWN
     // ============================================
     const notifToggle = document.getElementById('notifToggle');
     const notifDropdown = document.getElementById('notifDropdown');
@@ -1323,14 +1428,18 @@
     });
 
     // ============================================
-    // 3. MARK ALL READ (M11-F03)
+    // 3. MARK ALL READ
     // ============================================
     function markAllRead() {
-        document.querySelectorAll('.notif-item.unread').forEach(item => {
-            item.classList.remove('unread');
-        });
-        document.getElementById('notifCount').textContent = '0';
-        document.getElementById('notifCount').style.display = 'none';
+        if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+            document.querySelectorAll('.notif-item.unread').forEach(function(item) {
+                item.classList.remove('unread');
+                item.querySelector('.notif-badge-new')?.remove();
+            });
+            document.getElementById('notifCount').textContent = '0';
+            document.getElementById('notifCount').style.display = 'none';
+            alert('Semua notifikasi telah ditandai dibaca.');
+        }
     }
 
     document.getElementById('markAllRead')?.addEventListener('click', function(e) {
@@ -1339,7 +1448,7 @@
     });
 
     // ============================================
-    // 4. CHART.JS - GRAFIK PANEN (M11-F01)
+    // 4. CHART.JS - GRAFIK PANEN (DATA DUMMY)
     // ============================================
     let harvestChart;
 
@@ -1347,13 +1456,16 @@
         const ctx = document.getElementById('harvestChart')?.getContext('2d');
         if (!ctx) return;
 
+        const chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+        const chartData = [180, 210, 240, 190, 260, 290, 270, 310, 330, 290, 350, 320];
+
         harvestChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'],
+                labels: chartLabels,
                 datasets: [{
                     label: 'Hasil Panen (Kg)',
-                    data: [180, 210, 240, 190, 260, 290, 270, 310, 330, 290, 350, 320],
+                    data: chartData,
                     backgroundColor: 'rgba(230, 161, 92, 0.8)',
                     borderColor: '#E6A15C',
                     borderWidth: 2,
@@ -1419,11 +1531,8 @@
 
     function refreshChart() {
         if (harvestChart) {
-            // Update dengan data baru dari AJAX
-            // $.get('<?= base_url('api/petani/chart_data'); ?>', function(data) {
-            //     harvestChart.data.datasets[0].data = data.values;
-            //     harvestChart.update();
-            // });
+            const newData = [190, 220, 250, 200, 270, 300, 280, 320, 340, 300, 360, 330];
+            harvestChart.data.datasets[0].data = newData;
             harvestChart.update();
         }
     }
@@ -1454,35 +1563,28 @@
     setInterval(updateDateTime, 60000);
 
     // ============================================
-    // 6. SWITCH HANDLING (M11-F03)
+    // 6. SWITCH HANDLING
     // ============================================
-    document.querySelectorAll('.custom-control-input').forEach(switchEl => {
+    document.querySelectorAll('.custom-control-input').forEach(function(switchEl) {
         switchEl.addEventListener('change', function() {
             const label = this.closest('.custom-control').querySelector('.custom-control-label');
             const setting = label ? label.textContent.trim() : 'Unknown';
             const status = this.checked ? 'diaktifkan' : 'dinonaktifkan';
-
-            // Save to database via AJAX
-            // $.post('<?= base_url('api/petani/notifikasi/setting'); ?>', {
-            //     key: this.id,
-            //     value: this.checked ? 1 : 0
-            // });
-
-            console.log(`Notifikasi ${setting} ${status}`);
+            console.log('Notifikasi ' + setting + ' ' + status);
         });
     });
 
-    console.log('âœ… Dashboard Petani siap digunakan!');
-    console.log('ðŸ“‹ Fitur yang tersedia:');
-    console.log('   - KPI Cards (M11-F01)');
-    console.log('   - Grafik Panen (M11-F01)');
-    console.log('   - Produk Terjual (M11-F01)');
-    console.log('   - Pesanan Masuk (M11-F01)');
-    console.log('   - Peringatan Stok (M11-F01)');
-    console.log('   - Jadwal Panen (M11-F01)');
-    console.log('   - Quick Action (M11-F04)');
-    console.log('   - Notifikasi Real-time (M11-F01)');
-    console.log('   - Setting Notifikasi (M11-F03)');
+    console.log('✅ Dashboard Petani siap digunakan!');
+    console.log('📋 Fitur yang tersedia:');
+    console.log('   - KPI Cards - Data Dummy');
+    console.log('   - Grafik Panen - Data Dummy');
+    console.log('   - Produk Terjual - Data Dummy');
+    console.log('   - Pesanan Masuk - Data Dummy');
+    console.log('   - Peringatan Stok - Data Dummy');
+    console.log('   - Jadwal Panen - Data Dummy');
+    console.log('   - Quick Action');
+    console.log('   - Notifikasi Real-time');
+    console.log('   - Setting Notifikasi');
     </script>
 </body>
 

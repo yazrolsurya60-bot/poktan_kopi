@@ -256,6 +256,48 @@
                                    placeholder="contoh: Cafe, Restoran, Distributor">
                         </div>
 
+                        <div class="row" style="margin:0 -10px;">
+                            <div class="col-md-6" style="padding:0 10px;">
+                                <div class="field-group">
+                                    <label class="field-label" for="email"><i class="bi bi-envelope-fill"></i> Email</label>
+                                    <input type="email" id="email" name="email" class="field-input"
+                                           placeholder="contoh: info@mitra.id"
+                                           value="<?= htmlspecialchars($mitra['email'] ?? ''); ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-6" style="padding:0 10px;">
+                                <div class="field-group">
+                                    <label class="field-label" for="no_telepon"><i class="bi bi-telephone-fill"></i> No Telepon</label>
+                                    <input type="text" id="no_telepon" name="no_telepon" class="field-input"
+                                           placeholder="contoh: 0812-3456-7890"
+                                           value="<?= htmlspecialchars($mitra['no_telepon'] ?? ''); ?>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="website"><i class="bi bi-globe2"></i> Website</label>
+                            <input type="text" id="website" name="website" class="field-input"
+                                   placeholder="contoh: https://www.mitra.id (opsional)"
+                                   value="<?= htmlspecialchars($mitra['website'] ?? ''); ?>">
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="alamat"><i class="bi bi-geo-alt-fill"></i> Alamat</label>
+                            <textarea id="alamat" name="alamat" class="field-input" rows="2"
+                                      placeholder="Masukkan alamat lengkap mitra"
+                                      style="resize:vertical;"><?= htmlspecialchars($mitra['alamat'] ?? ''); ?></textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="deskripsi"><i class="bi bi-card-text"></i> Deskripsi</label>
+                            <textarea id="deskripsi" name="deskripsi" class="field-input" rows="3"
+                                      placeholder="Ceritakan singkat tentang mitra ini"
+                                      style="resize:vertical;"><?= htmlspecialchars($mitra['deskripsi'] ?? ''); ?></textarea>
+                        </div>
+
+                        <div class="form-divider"></div>
+
                         <div class="field-group">
                             <label class="field-label" for="urutan_tampil"><i class="bi bi-sort-numeric-down"></i> Urutan Tampil <span class="req">*</span></label>
                             <input type="number" id="urutan_tampil" name="urutan_tampil" class="field-input"

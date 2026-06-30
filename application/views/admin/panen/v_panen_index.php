@@ -280,15 +280,7 @@
                 <h2 class="mb-0">Rekap Hasil Panen</h2>
                 <p class="subtitle mb-0 mt-1">Laporan rekapitulasi data panen dari seluruh petani (M04-F02).</p>
             </div>
-            <div class="d-flex gap-2">
-                <a href="<?= base_url('admin/panen/export_excel?' . $_SERVER['QUERY_STRING']); ?>"
-                    class="btn btn-custom" style="background:#10b981; color:white;">
-                    <i class="bi bi-file-earmark-excel"></i> Export Excel
-                </a>
-                <button onclick="window.print()" class="btn btn-custom btn-secondary-custom">
-                    <i class="bi bi-printer"></i> Cetak/PDF
-                </button>
-            </div>
+
         </div>
 
         <!-- M04-F06: Filter Panen -->
@@ -317,6 +309,16 @@
                     </div>
                 </form>
             </div>
+        </div>
+
+        <div class="d-flex justify-content-end mb-3 gap-2">
+            <a href="<?= base_url('admin/panen/export_excel?' . $_SERVER['QUERY_STRING']); ?>"
+                class="btn btn-custom" style="background:#10b981; color:white;">
+                <i class="bi bi-file-earmark-excel"></i> Export Excel
+            </a>
+            <button onclick="window.print()" class="btn btn-custom btn-secondary-custom">
+                <i class="bi bi-printer"></i> Cetak/PDF
+            </button>
         </div>
 
         <div class="custom-card">
