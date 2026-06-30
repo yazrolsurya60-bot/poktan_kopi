@@ -26,6 +26,10 @@ $route['admin/laporan/get_chart_data'] = 'admin/laporan/get_chart_data';
 $route['notifikasi/history'] = 'Notifikasi/history';
 $route['notifikasi/setting'] = 'Notifikasi/setting';
 $route['notifikasi/read/(:num)'] = 'Notifikasi/read/$1';
+$route['pembeli/dashboard/update_settings_ajax'] = 'pembeli/dashboard/update_settings_ajax';
+$route['pembeli/dashboard/get_notifications_ajax'] = 'pembeli/dashboard/get_notifications_ajax';
+$route['pembeli/dashboard/get_chart_data'] = 'pembeli/dashboard/get_chart_data';
+$route['pembeli/dashboard/mark_all_read'] = 'pembeli/dashboard/mark_all_read';
 
 // API Notifikasi
 $route['api/notifikasi/get'] = 'api/Notifikasi/get';

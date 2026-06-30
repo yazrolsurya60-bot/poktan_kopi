@@ -18,10 +18,40 @@
         }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-cream); color: var(--dark-coffee); }
         .box-container { background: var(--card-white); border: 1px solid #EFEAE2; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.01); padding: 30px; margin-top: 40px; }
-        .notif-item { border: 1px solid #EFEAE2; border-radius: 10px; transition: all 0.2s ease; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-        .notif-item:hover { border-color: var(--amber-cream); background-color: #FDF5ED; }
-        .notif-item.unread { background-color: #FDF5ED; border-color: rgba(230, 161, 92, 0.35); border-left: 4px solid var(--amber-cream); }
-        .notif-item.read { background-color: var(--card-white); border-color: #EFEAE2; }
+        
+        /* NOTIF ITEM SEBAGAI LINK */
+        .notif-item {
+            border: 1px solid #EFEAE2;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+        .notif-item:hover { 
+            border-color: var(--amber-cream); 
+            background-color: #FDF5ED; 
+            text-decoration: none;
+            color: inherit;
+        }
+        .notif-item.unread { 
+            background-color: #FDF5ED; 
+            border-color: rgba(230, 161, 92, 0.35); 
+            border-left: 4px solid var(--amber-cream); 
+        }
+        .notif-item.read { 
+            background-color: var(--card-white); 
+            border-color: #EFEAE2; 
+        }
+        .notif-item.read:hover {
+            background-color: #FAFAFA;
+        }
+        
         .back-btn { background-color: var(--roasted-brown); color: white; font-weight: 600; border-radius: 8px; padding: 8px 16px; transition: opacity 0.2s; text-decoration: none; }
         .back-btn:hover { color: white; opacity: 0.9; text-decoration: none; }
         .mark-all-btn { background: transparent; border: 1px solid var(--amber-cream); color: var(--roasted-brown); border-radius: 8px; padding: 8px 16px; font-weight: 600; font-size: 0.85rem; transition: all 0.2s; cursor: pointer; }
@@ -116,7 +146,6 @@
             $total = count($history);
             $unread = 0;
             foreach($history as $h) {
-                // Support object dan array
                 if (is_object($h)) {
                     $status = $h->status_baca ?? 0;
                 } else {
@@ -156,6 +185,7 @@
                         $tanggal = isset($h->tanggal_buat) ? date('d M Y, H:i', strtotime($h->tanggal_buat)) : 
                                    (isset($h->created_at) ? date('d M Y, H:i', strtotime($h->created_at)) : '');
                         $link = $h->link ?? '#';
+                        $id_notif = $h->id_notifikasi ?? 0;
                     } else {
                         $is_read = $h['status_baca'] ?? 0;
                         $icon_type = $h['icon'] ?? 'default';
@@ -164,6 +194,7 @@
                         $tanggal = isset($h['tanggal_buat']) ? date('d M Y, H:i', strtotime($h['tanggal_buat'])) : 
                                    (isset($h['created_at']) ? date('d M Y, H:i', strtotime($h['created_at'])) : '');
                         $link = $h['link'] ?? '#';
+                        $id_notif = $h['id_notifikasi'] ?? 0;
                     }
 
                     // Map icon
@@ -176,8 +207,13 @@
                         'default' => 'bi-envelope-fill'
                     ];
                     $icon_class = $icon_map[$icon_type] ?? 'bi-envelope-fill';
+                    
+                    // Tentukan URL untuk mark as read + redirect
+                    $role = $this->session->userdata('role');
+                    $read_url = base_url($role . '/dashboard/read/' . $id_notif . '?redirect=' . urlencode($link));
                 ?>
-                    <div class="notif-item <?= $is_read == 0 ? 'unread' : 'read'; ?>">
+                    <a class="notif-item <?= $is_read == 0 ? 'unread' : 'read'; ?>" 
+                       href="<?= $read_url; ?>">
                         <div class="d-flex align-items-center flex-wrap" style="flex: 1; min-width: 0;">
                             <div class="icon-circle notif-icon-<?= $icon_type; ?> mr-3">
                                 <i class="bi <?= $icon_class; ?>"></i>
@@ -200,7 +236,7 @@
                             <i class="bi bi-calendar3 mr-1"></i>
                             <?= $tanggal; ?>
                         </div>
-                    </div>
+                    </a>
                 <?php endforeach; ?>
             <?php else: ?>
                 <div class="notif-empty">
