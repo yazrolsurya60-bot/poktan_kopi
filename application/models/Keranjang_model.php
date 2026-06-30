@@ -31,6 +31,16 @@ class Keranjang_model extends CI_Model {
      * Tambah item ke keranjang (atau update jumlah jika sudah ada)
      */
     public function tambah($data) {
+        // 🔥 CEK: Pastikan harga_satuan diisi dari produk
+        if (!isset($data['harga_satuan']) || $data['harga_satuan'] <= 0) {
+            // Ambil harga dari database jika tidak ada
+            $this->db->where('id_produk', $data['id_produk']);
+            $produk = $this->db->get('tb_produk')->row_array();
+            if ($produk) {
+                $data['harga_satuan'] = $produk['harga'];
+            }
+        }
+
         // Cek apakah produk sudah ada di keranjang
         $this->db->where('id_produk', $data['id_produk']);
 
@@ -84,7 +94,8 @@ class Keranjang_model extends CI_Model {
     }
 
     /**
-     * Hitung total harga semua item di keranjang
+     * 🔥 FIX: Hitung total harga semua item di keranjang
+     * PAKAI harga_satuan dari keranjang (bukan dari produk)
      */
     public function total_harga($id_user = null, $session_id = null) {
         $this->db->select_sum('(jumlah * harga_satuan)', 'total');
@@ -143,11 +154,17 @@ class Keranjang_model extends CI_Model {
                 $this->db->where('id_keranjang', $item['id_keranjang']);
                 $this->db->delete('tb_keranjang');
             } else {
+                // 🔥 FIX: Pastikan harga_satuan diambil dari produk
+                $this->db->where('id_produk', $item['id_produk']);
+                $produk = $this->db->get('tb_produk')->row_array();
+                $harga_satuan = $produk ? $produk['harga'] : $item['harga_satuan'];
+                
                 // Assign ke user
                 $this->db->where('id_keranjang', $item['id_keranjang']);
                 $this->db->update('tb_keranjang', [
-                    'id_user'    => $id_user,
-                    'session_id' => null
+                    'id_user'      => $id_user,
+                    'session_id'   => null,
+                    'harga_satuan' => $harga_satuan
                 ]);
             }
         }
