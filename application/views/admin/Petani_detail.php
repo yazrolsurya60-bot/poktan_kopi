@@ -1210,6 +1210,27 @@ function get_doc_badge($status) {
                             <td class="fw-bold text-dark">: <?= nl2br(htmlspecialchars($petani['alamat'])); ?></td>
                         </tr>
                         <tr>
+                            <td class="text-muted align-top">Wilayah</td>
+                            <td class="fw-bold text-dark">:
+                                <?php if (!empty($petani['wilayah'])): ?>
+                                    <?php foreach ($petani['wilayah'] as $w): ?>
+                                        <div class="mb-2">
+                                            <span class="badge rounded-pill px-3 py-2" style="background-color: #F5E6D3; color: #8D6E63; font-weight: 600;">
+                                                <?= htmlspecialchars($w['nama_wilayah']); ?>
+                                            </span>
+                                            <?php if (!empty($w['alamat_wilayah'])): ?>
+                                                <div class="text-muted" style="font-size: 0.78rem; font-weight: 400; margin-top: 2px;">
+                                                    <?= htmlspecialchars($w['alamat_wilayah']); ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <span class="text-muted">-</span>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <tr>
                             <td colspan="2"><hr class="my-3 text-muted"></td>
                         </tr>
                         <tr>

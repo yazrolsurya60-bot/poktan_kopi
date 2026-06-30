@@ -94,6 +94,10 @@
 
         /* FOOTER */
         .footer { background: var(--dark-coffee); color: rgba(255,255,255,0.7); padding: 28px 0; text-align: center; font-size: 0.85rem; }
+
+        /* TAMBAHAN UNTUK EMAIL GUEST */
+        .email-info { font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px; }
+        .email-info i { color: var(--roasted-brown); }
     </style>
 </head>
 <body>
@@ -163,15 +167,47 @@
                         <i class="bi bi-person-circle" style="color: var(--roasted-brown);"></i>
                         Data Penerima
                     </div>
-                    <div class="form-group">
-                        <label>Nama Penerima <span class="text-danger">*</span></label>
-                        <input type="text" name="nama_penerima" class="form-control"
-                               value="<?= $user->nama ?? ''; ?>" placeholder="Nama lengkap penerima" required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Nama Penerima <span class="text-danger">*</span></label>
+                                <input type="text" name="nama_penerima" class="form-control"
+                                       value="<?= $user->nama ?? ''; ?>" placeholder="Nama lengkap penerima" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Nomor HP <span class="text-danger">*</span></label>
+                                <input type="text" name="no_hp" class="form-control"
+                                       value="<?= $user->no_hp ?? ''; ?>" placeholder="08xxxxxxxxxx" required>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- EMAIL PEMBELI (WAJIB UNTUK GUEST) -->
                     <div class="form-group">
-                        <label>Nomor HP <span class="text-danger">*</span></label>
-                        <input type="text" name="no_hp" class="form-control"
-                               value="<?= $user->no_hp ?? ''; ?>" placeholder="08xxxxxxxxxx" required>
+                        <label>
+                            Email Pembeli
+                            <?php if (!$this->session->userdata('id_user')): ?>
+                                <span class="text-danger">*</span>
+                            <?php endif; ?>
+                        </label>
+                        <input type="email" name="email_pembeli" class="form-control"
+                               value="<?= $user->email ?? ''; ?>"
+                               <?= $this->session->userdata('id_user') ? 'readonly' : 'required'; ?>
+                               placeholder="email@example.com">
+                        <?php if (!$this->session->userdata('id_user')): ?>
+                            <div class="email-info">
+                                <i class="bi bi-info-circle"></i>
+                                Email digunakan untuk <strong>tracking pesanan</strong> dan <strong>invoice</strong>.
+                                Pastikan email aktif!
+                            </div>
+                        <?php else: ?>
+                            <div class="email-info">
+                                <i class="bi bi-check-circle" style="color: var(--forest-green);"></i>
+                                Email terdaftar sebagai member
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -184,13 +220,15 @@
                     <div class="form-group">
                         <label>Alamat Lengkap <span class="text-danger">*</span></label>
                         <textarea name="alamat_kirim" class="form-control" rows="3"
-                                  placeholder="Jl. Nama Jalan, No. Rumah, RT/RW, Kelurahan, Kecamatan" required></textarea>
+                                  placeholder="Jl. Nama Jalan, No. Rumah, RT/RW, Kelurahan, Kecamatan"
+                                  required><?= $user->alamat ?? ''; ?></textarea>
                     </div>
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label>Kota Tujuan <span class="text-danger">*</span></label>
-                                <select name="kota_kirim" id="kota_kirim" class="form-control" required>
+                                <!-- 🔥 INI YANG DIUBAH: ditambah style biar ga kepotong -->
+                                <select name="kota_kirim" id="kota_kirim" class="form-control" style="height:45px; font-size:15px; padding:6px 12px;" required>
                                     <option value="">-- Pilih Kota --</option>
                                     <?php foreach ($kota as $k): ?>
                                         <option value="<?= $k; ?>"><?= $k; ?></option>
@@ -206,7 +244,7 @@
                         </div>
                     </div>
 
-                    <!-- Hasil ongkir -->
+                    <!-- Hasil ongkir - Kota asal PONTIANAK -->
                     <div class="ongkir-result" id="ongkir-result">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -222,21 +260,22 @@
                     </div>
                 </div>
 
-                <!-- Metode Pembayaran -->
+                <!-- 🔥 Metode Pembayaran - Virtual Account -->
                 <div class="form-card">
                     <div class="card-section-title">
                         <i class="bi bi-credit-card" style="color: var(--roasted-brown);"></i>
                         Metode Pembayaran
                     </div>
 
-                    <div class="payment-option" onclick="selectPayment('Transfer Bank', this)">
-                        <input type="radio" name="metode_bayar" value="Transfer Bank" required>
+                    <!-- 🔥 Virtual Account (pengganti Transfer Bank) -->
+                    <div class="payment-option" onclick="selectPayment('Virtual Account', this)">
+                        <input type="radio" name="metode_bayar" value="Virtual Account" required>
                         <div class="payment-icon" style="background: #EEF2FF; color: #4F46E5;">
-                            <i class="bi bi-bank"></i>
+                            <i class="bi bi-qr-code"></i>
                         </div>
                         <div>
-                            <p class="payment-label">Transfer Bank</p>
-                            <p class="payment-desc">BCA, Mandiri, BNI, BRI</p>
+                            <p class="payment-label">Virtual Account</p>
+                            <p class="payment-desc">BCA, Mandiri, BNI, BRI (Otomatis terverifikasi)</p>
                         </div>
                     </div>
 
@@ -273,7 +312,7 @@
                     <!-- Item list -->
                     <div id="order-items">
                         <?php foreach ($cart_items as $item): ?>
-                        <?php $subtotal = $item['harga_satuan'] * $item['jumlah']; ?>
+                        <?php $subtotal_item = $item['harga_satuan'] * $item['jumlah']; ?>
                         <div class="order-item">
                             <img src="<?= base_url('uploads/produk/' . ($item['foto_produk'] ?: 'default.jpg')); ?>"
                                  class="order-img" alt="<?= $item['nama_produk']; ?>">
@@ -281,7 +320,7 @@
                                 <div class="order-item-name"><?= $item['nama_produk']; ?></div>
                                 <div class="order-item-qty">x<?= $item['jumlah']; ?> kg</div>
                             </div>
-                            <div class="order-item-price">Rp <?= number_format($subtotal, 0, ',', '.'); ?></div>
+                            <div class="order-item-price">Rp <?= number_format($subtotal_item, 0, ',', '.'); ?></div>
                         </div>
                         <?php endforeach; ?>
                     </div>
@@ -307,6 +346,17 @@
                             Rp <?= number_format($subtotal, 0, ',', '.'); ?>
                         </span>
                     </div>
+
+                    <!-- INFO UNTUK GUEST -->
+                    <?php if (!$this->session->userdata('id_user')): ?>
+                        <div style="background: #FEF3C7; border-radius: 10px; padding: 10px 14px; margin-top: 14px; font-size: 0.78rem; color: #92400E;">
+                            <i class="bi bi-info-circle mr-1"></i>
+                            Kamu checkout sebagai <strong>Guest</strong>. Simpan <strong>invoice</strong> untuk tracking pesanan di
+                            <a href="<?= base_url('guest/tracking'); ?>" target="_blank" style="color: #92400E; font-weight: 700; text-decoration: underline;">
+                                Cek Pesanan
+                            </a>
+                        </div>
+                    <?php endif; ?>
 
                     <button type="submit" class="btn-checkout" id="btn-submit">
                         <i class="bi bi-bag-check mr-1"></i> Buat Pesanan
@@ -341,7 +391,7 @@
         $(el).find('input[type="radio"]').prop('checked', true);
     }
 
-    // Hitung ongkir otomatis saat pilih kota
+    // Hitung ongkir - Kota asal PONTIANAK
     $('#kota_kirim').on('change', function () {
         var kota = $(this).val();
         if (!kota) return;
@@ -377,8 +427,30 @@
         var metode = $('input[name="metode_bayar"]:checked').val();
         if (!metode) {
             e.preventDefault();
-            alert('Pilih metode pembayaran dulu ya!');
+            alert('⚠️ Pilih metode pembayaran dulu ya!');
+            return false;
         }
+
+        // Validasi email untuk guest
+        var id_user = <?= $this->session->userdata('id_user') ? 'true' : 'false'; ?>;
+        if (!id_user) {
+            var email = $('input[name="email_pembeli"]').val().trim();
+            if (!email) {
+                e.preventDefault();
+                alert('⚠️ Email wajib diisi untuk tracking pesanan!');
+                $('input[name="email_pembeli"]').focus();
+                return false;
+            }
+            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                e.preventDefault();
+                alert('⚠️ Format email tidak valid!');
+                $('input[name="email_pembeli"]').focus();
+                return false;
+            }
+        }
+
+        // Disable tombol biar ga double
+        $('#btn-submit').prop('disabled', true).html('<i class="bi bi-hourglass-split mr-1"></i> Memproses...');
     });
 </script>
 

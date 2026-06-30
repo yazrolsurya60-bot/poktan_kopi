@@ -477,11 +477,11 @@
             <?php endif; ?>
 
             <!-- ============================================ -->
-            <!-- KATEGORI: PROMO & LAPORAN -->
+            <!-- KATEGORI: LAPORAN -->
             <!-- ============================================ -->
             <?php if ($is_admin || $is_petani || $is_pembeli): ?>
                 <div class="category-header">
-                    <i class="bi bi-megaphone"></i> PROMO & LAPORAN
+                    <i class="bi bi-megaphone"></i> LAPORAN
                 </div>
 
                 <!-- Promo & Diskon (Hanya Pembeli) -->

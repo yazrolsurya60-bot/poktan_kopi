@@ -43,7 +43,7 @@
         .main-content { margin-left: var(--sidebar-width); padding: 30px 40px 50px; min-height: 100vh; transition: var(--transition-smooth); }
 
         /* ===== PAGE HEADER ===== */
-        .page-header { border-bottom: 1px solid rgba(74,44,17,0.08); padding-bottom: 20px; margin-bottom: 28px; }
+        .page-header { border-bottom: 1px solid rgba(74,44,17,0.08); padding-bottom: 20px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
         .page-header h2 { font-weight: 700; color: var(--dark-coffee); letter-spacing: -0.02em; }
         .page-header .subtitle { color: var(--text-secondary); font-size: 0.875rem; margin-top: 2px; }
 
@@ -110,6 +110,11 @@
         .logo-placeholder { width: 46px; height: 46px; border-radius: 10px; border: 1px dashed rgba(74,44,17,0.2); background: var(--bg-cream); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 1.1rem; }
         .mitra-name { font-weight: 700; color: var(--dark-coffee); margin: 0; font-size: 0.875rem; }
         .mitra-meta { font-size: 0.7rem; color: var(--text-secondary); margin: 0; }
+        .kontak-line { font-size: 0.78rem; color: var(--dark-coffee); margin: 0 0 3px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+        .kontak-line:last-child { margin-bottom: 0; }
+        .kontak-line i { color: var(--amber-cream); font-size: 0.75rem; width: 13px; }
+        .kontak-line.muted { color: var(--text-secondary); font-weight: 400; }
+        .kontak-empty { color: var(--text-secondary); font-size: 0.8rem; }
         .kategori-pill { display: inline-block; padding: 3px 10px; border-radius: 20px; background: rgba(74,44,17,0.07); color: var(--roasted-brown); font-size: 0.7rem; font-weight: 600; }
 
         .urutan-input { width: 64px; text-align: center; font-weight: 700; font-size: 0.875rem; color: var(--dark-coffee); background: rgba(250,246,240,0.7); border: 1px solid rgba(230,161,92,0.25); border-radius: 8px; padding: 5px 6px; height: auto; transition: var(--transition-smooth); }
@@ -149,29 +154,231 @@
         /* table footer */
         .table-footer { padding: 12px 20px; border-top: 1px solid rgba(74,44,17,0.05); color: var(--text-secondary); font-size: 0.77rem; font-weight: 500; }
 
-        /* scrollbar */
-        .notif-dropdown-list::-webkit-scrollbar { width: 4px; }
-        .notif-dropdown-list::-webkit-scrollbar-track { background: transparent; }
-        .notif-dropdown-list::-webkit-scrollbar-thumb { background: rgba(74,44,17,0.15); border-radius: 4px; }
+        /* ===== SCROLLBAR - SAMA DENGAN DASHBOARD ===== */
+        .sidebar-menu-wrapper::-webkit-scrollbar,
+        .notif-dropdown-list::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-menu-wrapper::-webkit-scrollbar-track,
+        .notif-dropdown-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .sidebar-menu-wrapper::-webkit-scrollbar-thumb,
+        .notif-dropdown-list::-webkit-scrollbar-thumb {
+            background: rgba(230, 161, 92, 0.3);
+            border-radius: 10px;
+        }
+        
+        /* ===== RESPONSIF - SAMA DENGAN DASHBOARD ===== */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 99;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
 
-        /* modal hapus */
-        .modal-hapus .modal-content { border-radius: 16px; border: none; box-shadow: var(--shadow-hover); }
-        .modal-hapus .modal-header { border-bottom: 1px solid rgba(74,44,17,0.06); padding: 20px 24px 16px; }
-        .modal-hapus .modal-body { padding: 20px 24px; }
-        .modal-hapus .modal-footer { border-top: 1px solid rgba(74,44,17,0.06); padding: 14px 24px; }
-        .btn-konfirm-hapus { background: #dc2626; color: #fff; border: none; border-radius: 10px; padding: 9px 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: var(--transition-smooth); font-family: inherit; display: inline-flex; align-items: center; gap: 7px; }
-        .btn-konfirm-hapus:hover { background: #b91c1c; box-shadow: 0 4px 14px rgba(220,38,38,0.35); }
-        .btn-batal-hapus { background: transparent; color: var(--text-secondary); border: 1px solid rgba(74,44,17,0.15); border-radius: 10px; padding: 9px 18px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: var(--transition-smooth); font-family: inherit; }
-        .btn-batal-hapus:hover { background: var(--bg-cream); color: var(--dark-coffee); }
-        .hapus-icon-wrap { width: 60px; height: 60px; background: rgba(239,68,68,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 1.6rem; color: #dc2626; }
+        @media (max-width: 991.98px) {
+            .sidebar {
+                left: calc(-1 * var(--sidebar-width));
+                box-shadow: none;
+            }
+            .sidebar.open {
+                left: 0;
+                box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+            }
+            .sidebar-overlay.active {
+                display: block;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px 16px 30px;
+            }
+            .page-header h2 {
+                font-size: 1.3rem;
+            }
+            .notif-dropdown {
+                width: calc(100vw - 32px);
+                right: -60px;
+            }
+            .table-card-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .table-card-header .d-flex {
+                flex-wrap: wrap;
+                width: 100%;
+            }
+            .filter-form {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            .filter-form input,
+            .filter-form select {
+                flex: 1;
+                min-width: 120px;
+            }
+            .btn-add {
+                width: 100%;
+                justify-content: center;
+                margin-top: 8px;
+            }
+            .stat-card {
+                padding: 16px 18px;
+            }
+            .stat-value {
+                font-size: 1.3rem;
+            }
+            .stat-icon {
+                width: 42px;
+                height: 42px;
+                font-size: 1.1rem;
+            }
+            .mitra-table thead th {
+                font-size: 0.6rem;
+                padding: 8px 10px;
+            }
+            .mitra-table tbody td {
+                padding: 10px 10px;
+                font-size: 0.78rem;
+            }
+            .btn-action-group {
+                gap: 4px;
+            }
+            .btn-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+            .urutan-input {
+                width: 50px;
+                font-size: 0.75rem;
+                padding: 4px 4px;
+            }
+            .logo-thumb,
+            .logo-placeholder {
+                width: 36px;
+                height: 36px;
+            }
+        }
 
-        @media (max-width: 991px) {
-            .main-content { margin-left: 0; padding: 20px 16px 40px; }
-            .notif-dropdown { width: 300px; right: -60px; }
+        @media (max-width: 575.98px) {
+            .main-content {
+                padding: 16px 12px 20px;
+            }
+            .stat-card {
+                padding: 14px 14px;
+                gap: 10px;
+            }
+            .stat-value {
+                font-size: 1.1rem;
+            }
+            .stat-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+            .stat-label {
+                font-size: 0.6rem;
+            }
+            .filter-form input,
+            .filter-form select {
+                min-width: 100%;
+                flex: 1 1 100%;
+            }
+            .btn-filter,
+            .btn-reset {
+                flex: 1;
+                justify-content: center;
+            }
+            .mitra-table thead th {
+                font-size: 0.55rem;
+                padding: 6px 6px;
+                white-space: normal;
+            }
+            .mitra-table tbody td {
+                padding: 8px 6px;
+                font-size: 0.7rem;
+            }
+            .notif-dropdown {
+                width: calc(100vw - 24px);
+                right: -70px;
+            }
+            .table-title {
+                font-size: 0.8rem;
+            }
+            .btn-add {
+                font-size: 0.75rem;
+                padding: 8px 14px;
+            }
+            .kontak-line {
+                font-size: 0.7rem;
+            }
+            .mitra-name {
+                font-size: 0.75rem;
+            }
+            .status-badge {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
+            .btn-icon {
+                width: 26px;
+                height: 26px;
+                font-size: 0.7rem;
+            }
+            .urutan-input {
+                width: 40px;
+                font-size: 0.7rem;
+                padding: 3px 3px;
+            }
+            .logo-thumb,
+            .logo-placeholder {
+                width: 30px;
+                height: 30px;
+            }
+            .page-header .subtitle {
+                font-size: 0.75rem;
+            }
+            .user-badge {
+                padding: 4px 10px;
+                font-size: 0.75rem;
+            }
+            .user-badge i {
+                font-size: 1.1rem !important;
+            }
+        }
+
+        /* ===== SIDEBAR TOGGLE BUTTON ===== */
+        .sidebar-toggle-btn {
+            display: none;
+            background: var(--card-white);
+            border: 1px solid rgba(74,44,17,0.08);
+            border-radius: 10px;
+            padding: 6px 12px;
+            color: var(--dark-coffee);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+        .sidebar-toggle-btn:hover {
+            background: var(--bg-cream);
+        }
+
+        @media (max-width: 991.98px) {
+            .sidebar-toggle-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
         }
     </style>
 </head>
 <body>
+
+<!-- ========== SIDEBAR OVERLAY ========== -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <!-- ========== SIDEBAR ========== -->
 <div class="sidebar" id="sidebarMenu">
@@ -204,10 +411,13 @@
 <div class="main-content">
 
     <!-- PAGE HEADER -->
-    <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
+    <div class="page-header">
         <div>
-            <h2 class="mb-0">Manajemen Mitra</h2>
-            <p class="subtitle mb-0 mt-1">Kelola mitra, reseller, cafe, dan partner bisnis LiberChain </p>
+            <button class="sidebar-toggle-btn" id="sidebarToggle">
+                <i class="bi bi-list"></i>
+            </button>
+            <h2 class="d-inline-block align-middle mb-0">Manajemen Mitra</h2>
+            <p class="subtitle mb-0 mt-1">Kelola mitra, reseller, cafe, dan partner bisnis LiberChain</p>
         </div>
         <div class="d-flex align-items-center" style="gap:10px;">
             <!-- NOTIF BELL -->
@@ -266,7 +476,8 @@
             <div class="user-badge">
                 <i class="bi bi-person-circle" style="font-size:1.4rem;color:var(--amber-cream);"></i>
                 <div>
-                    <div style="font-size:0.82rem;font-weight:600;line-height:1.2;">Admin</div>
+                    <div style="font-size:0.82rem;font-weight:600;line-height:1.2;"><?= $this->session->userdata('nama') ?? 'Admin'; ?></div>
+                    <div style="font-size:0.6rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;"><?= $this->session->userdata('role') ?? 'Admin'; ?></div>
                 </div>
             </div>
         </div>
@@ -352,17 +563,18 @@
                 <thead>
                     <tr>
                         <th style="width:4%">#</th>
-                        <th style="width:7%">Logo</th>
-                        <th style="width:26%">Nama Mitra</th>
-                        <th style="width:16%">Kategori</th>
-                        <th style="width:11%">Urutan</th>
-                        <th style="width:13%">Status</th>
-                        <th style="width:23%;text-align:right;">Aksi</th>
+                        <th style="width:6%">Logo</th>
+                        <th style="width:19%">Nama Mitra</th>
+                        <th style="width:12%">Kategori</th>
+                        <th style="width:17%">Kontak</th>
+                        <th style="width:8%">Urutan</th>
+                        <th style="width:11%">Status</th>
+                        <th style="width:19%;text-align:right;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($mitra)): ?>
-                    <tr><td colspan="7">
+                    <tr><td colspan="8">
                         <div class="empty-state">
                             <div class="empty-icon"><i class="bi bi-shop"></i></div>
                             <h6>Belum Ada Data Mitra</h6>
@@ -386,6 +598,17 @@
                         </td>
                         <td><span class="kategori-pill"><?= htmlspecialchars($m['kategori_mitra']); ?></span></td>
                         <td>
+                            <?php if (!empty($m['no_telepon'])): ?>
+                                <p class="kontak-line"><i class="bi bi-telephone-fill"></i> <?= htmlspecialchars($m['no_telepon']); ?></p>
+                            <?php endif; ?>
+                            <?php if (!empty($m['email'])): ?>
+                                <p class="kontak-line muted"><i class="bi bi-envelope-fill"></i> <?= htmlspecialchars($m['email']); ?></p>
+                            <?php endif; ?>
+                            <?php if (empty($m['no_telepon']) && empty($m['email'])): ?>
+                                <span class="kontak-empty">&mdash;</span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
                             <input type="number" class="form-control urutan-input" data-id="<?= $m['id_mitra']; ?>" value="<?= (int)$m['urutan_tampil']; ?>" min="1" title="Edit urutan">
                         </td>
                         <td>
@@ -402,7 +625,6 @@
                         <td>
                             <div class="btn-action-group">
                                 <a href="<?= base_url('admin/mitra/edit/'.$m['id_mitra']); ?>" class="btn-icon btn-edit" title="Edit Mitra"><i class="bi bi-pencil-square"></i></a>
-                                <!-- Hapus via Modal -->
                                 <button type="button" class="btn-icon btn-delete btn-hapus-trigger"
                                         data-id="<?= $m['id_mitra']; ?>"
                                         data-nama="<?= htmlspecialchars($m['nama_mitra']); ?>"
@@ -463,6 +685,38 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 $(document).ready(function () {
+
+    /* --- Sidebar Toggle --- */
+    const sidebar = document.getElementById('sidebarMenu');
+    const overlay = document.getElementById('sidebarOverlay');
+    const toggleBtn = document.getElementById('sidebarToggle');
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+
+    document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 991.98) {
+            if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+    });
 
     /* --- Jam real-time --- */
     function updateTime() {

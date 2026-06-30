@@ -25,12 +25,22 @@
 			--transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		}
 
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
 		body {
 			font-family: 'Plus Jakarta Sans', sans-serif;
 			background-color: var(--bg-cream);
 			color: var(--dark-coffee);
 			overflow-x: hidden;
 		}
+
+		/* ============================================ */
+		/* SIDEBAR */
+		/* ============================================ */
 
 		.sidebar {
 			width: var(--sidebar-width);
@@ -165,6 +175,22 @@
 			border-color: rgba(230, 161, 92, 0.2);
 		}
 
+		.sidebar-overlay {
+			display: none;
+			position: fixed;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.4);
+			z-index: 99;
+		}
+
+		.sidebar-overlay.active {
+			display: block;
+		}
+
+		/* ============================================ */
+		/* MAIN CONTENT */
+		/* ============================================ */
+
 		.main-content {
 			margin-left: var(--sidebar-width);
 			padding: 30px 40px 40px;
@@ -172,10 +198,18 @@
 			transition: var(--transition-smooth);
 		}
 
+		/* ============================================ */
+		/* PAGE HEADER */
+		/* ============================================ */
+
 		.page-header {
 			border-bottom: 1px solid rgba(74, 44, 17, 0.08);
 			padding-bottom: 20px;
 			margin-bottom: 30px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			flex-wrap: wrap;
 		}
 
 		.page-header h2 {
@@ -189,6 +223,58 @@
 			font-size: 0.9rem;
 			margin-top: 2px;
 		}
+
+		/* ============================================ */
+		/* HEADER RIGHT - NOTIF + USER BADGE */
+		/* ============================================ */
+
+		.header-right {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			flex-shrink: 0;
+		}
+
+		/* ============================================ */
+		/* USER BADGE - SEDERHANA (SAMA DENGAN MITRA) */
+		/* ============================================ */
+
+		.user-badge {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			padding: 6px 12px;
+			border-radius: 10px;
+			background: var(--card-white);
+			border: 1px solid rgba(74, 44, 17, 0.06);
+			font-weight: 500;
+			font-size: 0.85rem;
+			cursor: default;
+			min-width: 90px;
+		}
+
+		.user-badge i {
+			font-size: 1.4rem;
+			color: var(--amber-cream);
+		}
+
+		.user-badge .user-name {
+			font-weight: 600;
+			font-size: 0.82rem;
+			color: var(--dark-coffee);
+			line-height: 1.2;
+		}
+
+		.user-badge .user-role {
+			font-size: 0.6rem;
+			color: var(--text-secondary);
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		/* ============================================ */
+		/* NOTIFICATION BELL & DROPDOWN */
+		/* ============================================ */
 
 		.notif-btn {
 			position: relative;
@@ -357,6 +443,289 @@
 			align-self: center;
 		}
 
+		/* ============================================ */
+		/* STAT BOX - DIPERBAIKI */
+		/* ============================================ */
+
+		.stat-box {
+			background: var(--card-white);
+			border: 1px solid rgba(74, 44, 17, 0.06);
+			border-radius: var(--radius-card);
+			padding: 22px 24px;
+			position: relative;
+			box-shadow: var(--shadow-soft);
+			transition: var(--transition-smooth);
+			overflow: hidden;
+			min-height: 130px;
+		}
+
+		.stat-box .stat-num {
+			font-size: 1.5rem;
+			font-weight: 700;
+			margin-top: 6px;
+			margin-bottom: 0;
+			color: var(--dark-coffee);
+			padding-right: 55px;
+			word-break: keep-all;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.stat-box .stat-num.rupiah {
+			font-size: 1.3rem;
+			letter-spacing: -0.5px;
+		}
+
+		.stat-change {
+			font-size: 0.75rem;
+			font-weight: 600;
+			margin-top: 4px;
+		}
+
+		.stat-change.up {
+			color: #10b981;
+		}
+
+		.stat-change.down {
+			color: #EF4444;
+		}
+
+		.stat-badge {
+			position: absolute;
+			right: 16px;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 44px;
+			height: 44px;
+			border-radius: 12px;
+			background: var(--bg-cream);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.2rem;
+			color: var(--roasted-brown);
+			transition: var(--transition-smooth);
+		}
+
+		.stat-box:hover .stat-badge {
+			transform: translateY(-50%) scale(1.05) rotate(-3deg);
+		}
+
+		/* ============================================ */
+		/* RESPONSIVE UNTUK KPI */
+		/* ============================================ */
+
+		@media (max-width: 1199.98px) {
+			.stat-box .stat-num {
+				font-size: 1.3rem;
+				padding-right: 50px;
+			}
+
+			.stat-box .stat-num.rupiah {
+				font-size: 1.1rem;
+			}
+		}
+
+		@media (max-width: 991.98px) {
+			.stat-box .stat-num {
+				font-size: 1.2rem;
+				padding-right: 45px;
+			}
+
+			.stat-box .stat-num.rupiah {
+				font-size: 1rem;
+			}
+
+			.stat-badge {
+				width: 38px;
+				height: 38px;
+				font-size: 1rem;
+				right: 12px;
+			}
+		}
+
+		@media (max-width: 575.98px) {
+			.stat-box {
+				padding: 16px 18px;
+				min-height: 110px;
+			}
+
+			.stat-box .stat-num {
+				font-size: 1rem;
+				padding-right: 40px;
+				white-space: normal;
+			}
+
+			.stat-box .stat-num.rupiah {
+				font-size: 0.9rem;
+			}
+
+			.stat-badge {
+				width: 34px;
+				height: 34px;
+				font-size: 0.85rem;
+				right: 10px;
+			}
+
+			.stat-title {
+				font-size: 0.6rem;
+			}
+		}
+
+		/* ============================================ */
+		/* CUSTOM CARD */
+		/* ============================================ */
+
+		.custom-card {
+			background: var(--card-white);
+			border: 1px solid rgba(74, 44, 17, 0.06);
+			border-radius: var(--radius-card);
+			box-shadow: var(--shadow-soft);
+			transition: var(--transition-smooth);
+			overflow: hidden;
+		}
+
+		.custom-card:hover {
+			box-shadow: var(--shadow-hover);
+		}
+
+		.custom-card .card-header-custom {
+			padding: 18px 24px;
+			border-bottom: 1px solid rgba(74, 44, 17, 0.06);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.custom-card .card-header-custom h6 {
+			font-weight: 700;
+			color: var(--dark-coffee);
+			margin: 0;
+			font-size: 0.85rem;
+		}
+
+		.custom-card .card-body-custom {
+			padding: 24px;
+		}
+
+		/* ============================================ */
+		/* CHART */
+		/* ============================================ */
+
+		.chart-container {
+			position: relative;
+			height: 250px;
+			width: 100%;
+		}
+
+		/* ============================================ */
+		/* TABLE */
+		/* ============================================ */
+
+		.table-custom {
+			font-size: 0.85rem;
+		}
+
+		.table-custom thead th {
+			border-bottom: 2px solid rgba(74, 44, 17, 0.06);
+			color: var(--text-secondary);
+			font-weight: 600;
+			font-size: 0.7rem;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			padding: 10px 8px;
+		}
+
+		.table-custom tbody td {
+			padding: 10px 8px;
+			border-bottom: 1px solid rgba(74, 44, 17, 0.04);
+			vertical-align: middle;
+		}
+
+		.table-custom tbody tr:hover {
+			background: rgba(250, 246, 240, 0.3);
+		}
+
+		/* ============================================ */
+		/* STATUS BADGE */
+		/* ============================================ */
+
+		.status-badge {
+			padding: 4px 12px;
+			border-radius: 20px;
+			font-size: 0.7rem;
+			font-weight: 600;
+		}
+
+		.status-badge.pending {
+			background: #FEF3C7;
+			color: #92400E;
+		}
+
+		.status-badge.processing {
+			background: #DBEAFE;
+			color: #1E40AF;
+		}
+
+		.status-badge.delivery {
+			background: #EDE9FE;
+			color: #5B21B6;
+		}
+
+		.status-badge.complete {
+			background: #D1FAE5;
+			color: #065F46;
+		}
+
+		.status-badge.cancelled {
+			background: #FEE2E2;
+			color: #991B1B;
+		}
+
+		.status-badge.verified {
+			background: #D1FAE5;
+			color: #065F46;
+		}
+
+		/* ============================================ */
+		/* QUICK ACTION BUTTONS */
+		/* ============================================ */
+
+		.quick-action-btn {
+			padding: 10px 16px;
+			border: 1px solid rgba(74, 44, 17, 0.06);
+			border-radius: 10px;
+			background: var(--card-white);
+			color: var(--dark-coffee);
+			transition: var(--transition-smooth);
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			font-weight: 500;
+			font-size: 0.85rem;
+			cursor: pointer;
+			width: 100%;
+			text-decoration: none;
+		}
+
+		.quick-action-btn:hover {
+			background: var(--bg-cream);
+			border-color: var(--amber-cream);
+			transform: translateX(4px);
+			text-decoration: none;
+			color: var(--dark-coffee);
+		}
+
+		.quick-action-btn i {
+			font-size: 1.1rem;
+			color: var(--amber-cream);
+		}
+
+		/* ============================================ */
+		/* ACTION CARD */
+		/* ============================================ */
+
 		.action-card {
 			background: var(--card-white);
 			border: 1px solid rgba(74, 44, 17, 0.06);
@@ -431,211 +800,9 @@
 			transform: translateX(4px);
 		}
 
-		.stat-box {
-			background: var(--card-white);
-			border: 1px solid rgba(74, 44, 17, 0.06);
-			border-radius: var(--radius-card);
-			padding: 22px 24px;
-			position: relative;
-			box-shadow: var(--shadow-soft);
-			transition: var(--transition-smooth);
-			overflow: hidden;
-		}
-
-		.stat-box:hover {
-			transform: translateY(-3px);
-			box-shadow: var(--shadow-hover);
-		}
-
-		.stat-box .stat-decoration {
-			position: absolute;
-			right: -20px;
-			top: -20px;
-			width: 80px;
-			height: 80px;
-			border-radius: 50%;
-			background: rgba(230, 161, 92, 0.05);
-			pointer-events: none;
-		}
-
-		.stat-title {
-			font-size: 0.7rem;
-			font-weight: 700;
-			text-transform: uppercase;
-			color: var(--text-secondary);
-			letter-spacing: 0.7px;
-		}
-
-		.stat-num {
-			font-size: 1.7rem;
-			font-weight: 700;
-			margin-top: 6px;
-			margin-bottom: 0;
-			color: var(--dark-coffee);
-		}
-
-		.stat-change {
-			font-size: 0.75rem;
-			font-weight: 600;
-			margin-top: 4px;
-		}
-
-		.stat-change.up {
-			color: #10b981;
-		}
-
-		.stat-change.down {
-			color: #EF4444;
-		}
-
-		.stat-badge {
-			position: absolute;
-			right: 20px;
-			top: 20px;
-			width: 44px;
-			height: 44px;
-			border-radius: 12px;
-			background: var(--bg-cream);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 1.2rem;
-			color: var(--roasted-brown);
-			transition: var(--transition-smooth);
-		}
-
-		.stat-box:hover .stat-badge {
-			transform: scale(1.05) rotate(-3deg);
-		}
-
-		.custom-card {
-			background: var(--card-white);
-			border: 1px solid rgba(74, 44, 17, 0.06);
-			border-radius: var(--radius-card);
-			box-shadow: var(--shadow-soft);
-			transition: var(--transition-smooth);
-			overflow: hidden;
-		}
-
-		.custom-card:hover {
-			box-shadow: var(--shadow-hover);
-		}
-
-		.custom-card .card-header-custom {
-			padding: 18px 24px;
-			border-bottom: 1px solid rgba(74, 44, 17, 0.06);
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-		}
-
-		.custom-card .card-header-custom h6 {
-			font-weight: 700;
-			color: var(--dark-coffee);
-			margin: 0;
-			font-size: 0.85rem;
-		}
-
-		.custom-card .card-body-custom {
-			padding: 24px;
-		}
-
-		.chart-container {
-			position: relative;
-			height: 250px;
-			width: 100%;
-		}
-
-		.table-custom {
-			font-size: 0.85rem;
-		}
-
-		.table-custom thead th {
-			border-bottom: 2px solid rgba(74, 44, 17, 0.06);
-			color: var(--text-secondary);
-			font-weight: 600;
-			font-size: 0.7rem;
-			text-transform: uppercase;
-			letter-spacing: 0.5px;
-			padding: 10px 8px;
-		}
-
-		.table-custom tbody td {
-			padding: 10px 8px;
-			border-bottom: 1px solid rgba(74, 44, 17, 0.04);
-			vertical-align: middle;
-		}
-
-		.table-custom tbody tr:hover {
-			background: rgba(250, 246, 240, 0.3);
-		}
-
-		.status-badge {
-			padding: 4px 12px;
-			border-radius: 20px;
-			font-size: 0.7rem;
-			font-weight: 600;
-		}
-
-		.status-badge.pending {
-			background: #FEF3C7;
-			color: #92400E;
-		}
-
-		.status-badge.processing {
-			background: #DBEAFE;
-			color: #1E40AF;
-		}
-
-		.status-badge.delivery {
-			background: #EDE9FE;
-			color: #5B21B6;
-		}
-
-		.status-badge.complete {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.status-badge.cancelled {
-			background: #FEE2E2;
-			color: #991B1B;
-		}
-
-		.status-badge.verified {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.quick-action-btn {
-			padding: 10px 16px;
-			border: 1px solid rgba(74, 44, 17, 0.06);
-			border-radius: 10px;
-			background: var(--card-white);
-			color: var(--dark-coffee);
-			transition: var(--transition-smooth);
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			font-weight: 500;
-			font-size: 0.85rem;
-			cursor: pointer;
-			width: 100%;
-			text-decoration: none;
-		}
-
-		.quick-action-btn:hover {
-			background: var(--bg-cream);
-			border-color: var(--amber-cream);
-			transform: translateX(4px);
-			text-decoration: none;
-			color: var(--dark-coffee);
-		}
-
-		.quick-action-btn i {
-			font-size: 1.1rem;
-			color: var(--amber-cream);
-		}
+		/* ============================================ */
+		/* CUSTOM SWITCH */
+		/* ============================================ */
 
 		.custom-switch .custom-control-label::before {
 			background-color: #EFEAE2;
@@ -664,17 +831,29 @@
 			padding-left: 10px;
 		}
 
-		.sidebar-overlay {
-			display: none;
-			position: fixed;
-			inset: 0;
-			background: rgba(0, 0, 0, 0.4);
-			z-index: 99;
+		/* ============================================ */
+		/* SCROLLBAR */
+		/* ============================================ */
+
+		.sidebar-menu-wrapper::-webkit-scrollbar,
+		.notif-dropdown-list::-webkit-scrollbar {
+			width: 3px;
 		}
 
-		.sidebar-overlay.active {
-			display: block;
+		.sidebar-menu-wrapper::-webkit-scrollbar-track,
+		.notif-dropdown-list::-webkit-scrollbar-track {
+			background: transparent;
 		}
+
+		.sidebar-menu-wrapper::-webkit-scrollbar-thumb,
+		.notif-dropdown-list::-webkit-scrollbar-thumb {
+			background: rgba(230, 161, 92, 0.3);
+			border-radius: 10px;
+		}
+
+		/* ============================================ */
+		/* RESPONSIVE */
+		/* ============================================ */
 
 		@media (max-width: 991.98px) {
 			.sidebar {
@@ -685,6 +864,10 @@
 			.sidebar.open {
 				left: 0;
 				box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+			}
+
+			.sidebar-overlay.active {
+				display: block;
 			}
 
 			.main-content {
@@ -698,6 +881,14 @@
 
 			.stat-num {
 				font-size: 1.3rem;
+				padding-right: 45px;
+			}
+
+			.stat-badge {
+				width: 38px;
+				height: 38px;
+				font-size: 1rem;
+				right: 12px;
 			}
 
 			.action-card {
@@ -721,8 +912,25 @@
 				right: -60px;
 			}
 
-			.sidebar-overlay.active {
-				display: block;
+			.user-badge {
+				padding: 4px 10px;
+				min-width: 70px;
+			}
+
+			.user-badge i {
+				font-size: 1.1rem;
+			}
+
+			.user-badge .user-name {
+				font-size: 0.7rem;
+			}
+
+			.user-badge .user-role {
+				font-size: 0.5rem;
+			}
+
+			.header-right {
+				gap: 8px;
 			}
 		}
 
@@ -733,18 +941,23 @@
 
 			.stat-box {
 				padding: 16px 18px;
+				min-height: 110px;
 			}
 
 			.stat-num {
 				font-size: 1.1rem;
+				padding-right: 40px;
 			}
 
 			.stat-badge {
-				width: 36px;
-				height: 36px;
-				font-size: 1rem;
-				right: 14px;
-				top: 14px;
+				width: 34px;
+				height: 34px;
+				font-size: 0.85rem;
+				right: 10px;
+			}
+
+			.stat-title {
+				font-size: 0.6rem;
 			}
 
 			.custom-card .card-body-custom {
@@ -755,105 +968,87 @@
 				width: calc(100vw - 24px);
 				right: -70px;
 			}
+
+			.user-badge {
+				padding: 4px 8px;
+				min-width: 60px;
+				gap: 5px;
+			}
+
+			.user-badge i {
+				font-size: 0.9rem;
+			}
+
+			.user-badge .user-name {
+				font-size: 0.6rem;
+			}
+
+			.user-badge .user-role {
+				display: none;
+			}
+
+			.header-right {
+				gap: 6px;
+			}
+
+			.page-header .subtitle {
+				font-size: 0.75rem;
+			}
+
+			.quick-action-btn {
+				font-size: 0.75rem;
+				padding: 8px 12px;
+			}
+
+			.quick-action-btn i {
+				font-size: 0.9rem;
+			}
 		}
 
-		.sidebar-menu-wrapper::-webkit-scrollbar,
-		.notif-dropdown-list::-webkit-scrollbar {
-			width: 3px;
+		/* ============================================ */
+		/* UTILITY */
+		/* ============================================ */
+
+		.text-truncate {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 
-		.sidebar-menu-wrapper::-webkit-scrollbar-track,
-		.notif-dropdown-list::-webkit-scrollbar-track {
-			background: transparent;
+		.gap-1 {
+			gap: 4px;
 		}
 
-		.sidebar-menu-wrapper::-webkit-scrollbar-thumb,
-		.notif-dropdown-list::-webkit-scrollbar-thumb {
-			background: rgba(230, 161, 92, 0.3);
-			border-radius: 10px;
+		.gap-2 {
+			gap: 8px;
+		}
+
+		.gap-3 {
+			gap: 12px;
+		}
+
+		.gap-4 {
+			gap: 16px;
+		}
+
+		.gap-5 {
+			gap: 24px;
+		}
+
+		.d-flex-center {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 	</style>
 </head>
 
 <body>
-	<!-- SIDEBAR OVERLAY -->
-	<div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-	<!-- SIDEBAR -->
-	<div class="sidebar" id="sidebarMenu">
-		<div class="sidebar-brand">
-			<div class="brand-icon">
-				<i class="bi bi-patch-check-fill"></i>
-			</div>
-			<span>POKTAN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
-		</div>
-		<div class="sidebar-menu-wrapper">
-			<ul class="sidebar-menu">
-				<li class="menu-item active">
-					<a href="<?= base_url('admin/dashboard'); ?>">
-						<i class="bi bi-grid-1x2-fill"></i>Dashboard
-					</a>
-				</li>
-				<li class="menu-item">
-					<a href="<?= base_url('admin/user'); ?>">
-						<i class="bi bi-people-fill"></i>Manajemen User
-						<span class="menu-badge">12</span>
-					</a>
-				</li>
-				<li class="menu-item">
-					<a href="<?= base_url('admin/petani'); ?>">
-						<i class="bi bi-person-badge-fill"></i>Data Petani
-					</a>
-				</li>
-				<li class="menu-item">
-					<a href="<?= base_url('admin/lahan'); ?>">
-						<i class="bi bi-map-fill"></i>Manajemen Lahan
-					</a>
-				</li>
-				<li class="menu-item">
-					<a href="<?= base_url('admin/panen'); ?>">
-						<i class="bi bi-tree-fill"></i>Manajemen Panen
-					</a>
-				</li>
-				<li class="menu-item">
-					<a href="<?= base_url('admin/produk'); ?>">
-						<i class="bi bi-box-seam-fill"></i>Manajemen Produk
-					</a>
-				</li>
-				<li class="menu-item">
-					<a href="<?= base_url('admin/transaksi'); ?>">
-						<i class="bi bi-wallet2"></i>Transaksi
-						<span class="menu-badge">8</span>
-					</a>
-				</li>
-				<li class="menu-item">
-					<a href="<?= base_url('admin/kurir'); ?>">
-						<i class="bi bi-truck"></i>Manajemen Kurir
-					</a>
-				</li>
-				<li class="menu-item">
-					<a href="<?= base_url('admin/mitra'); ?>">
-						<i class="bi bi-shop"></i>Manajemen Mitra
-					</a>
-				</li>
-				<li class="menu-item">
-					<a href="<?= base_url('admin/laporan'); ?>">
-						<i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
-					</a>
-				</li>
-			</ul>
-		</div>
-		<div class="sidebar-footer">
-			<button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
-				<i class="bi bi-box-arrow-right"></i> Keluar
-			</button>
-		</div>
-	</div>
 
 	<!-- MAIN CONTENT -->
 	<div class="main-content">
 		<!-- PAGE HEADER -->
-		<div class="page-header d-flex justify-content-between align-items-center flex-wrap">
+		<div class="page-header">
 			<div>
 				<button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
 					style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
@@ -865,7 +1060,7 @@
 					<span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span>
 				</p>
 			</div>
-			<div class="d-flex align-items-center gap-3" style="gap: 12px;">
+			<div class="header-right">
 				<!-- NOTIFICATION BELL -->
 				<div style="position: relative;">
 					<button class="notif-btn" id="notifToggle">
@@ -936,12 +1131,118 @@
 						</div>
 					</div>
 				</div>
-				<!-- USER AVATAR -->
-				<div class="d-flex align-items-center gap-2"
-					style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
-					<i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-					<span style="font-weight:500; font-size:0.85rem;">Admin</span>
+
+				<!-- USER BADGE - SEDERHANA (SAMA DENGAN MITRA) -->
+				<?php 
+					$nama = $this->session->userdata('nama') ?? 'Admin';
+					$role = $this->session->userdata('role') ?? 'Admin';
+				?>
+				<div class="user-badge">
+					<i class="bi bi-person-circle"></i>
+					<div>
+						<div class="user-name"><?= $nama; ?></div>
+						<div class="user-role"><?= $role; ?></div>
+					</div>
 				</div>
+			</div>
+		</div>
+
+		<!-- SIDEBAR -->
+		<div class="sidebar" id="sidebarMenu">
+			<div class="sidebar-brand">
+				<div class="brand-icon">
+					<i class="bi bi-patch-check-fill"></i>
+				</div>
+				<span>POKTAN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
+			</div>
+			<div class="sidebar-menu-wrapper">
+				<ul class="sidebar-menu">
+					<li class="menu-item active">
+						<a href="<?= base_url('admin/dashboard'); ?>">
+							<i class="bi bi-grid-1x2-fill"></i>Dashboard
+						</a>
+					</li>
+
+					<!-- MANAJEMEN USER - Badge User Baru -->
+					<li class="menu-item">
+						<a href="<?= base_url('admin/user'); ?>">
+							<i class="bi bi-people-fill"></i>Manajemen User
+							<?php if (isset($user_baru) && $user_baru > 0): ?>
+								<span class="menu-badge" style="background: #EF4444; color: white;"><?= $user_baru; ?></span>
+							<?php endif; ?>
+						</a>
+					</li>
+
+					<!-- DATA PETANI - Badge Petani Belum Diverifikasi -->
+					<li class="menu-item">
+						<a href="<?= base_url('admin/petani'); ?>">
+							<i class="bi bi-person-badge-fill"></i>Data Petani
+							<?php if (isset($petani_baru_count) && $petani_baru_count > 0): ?>
+								<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $petani_baru_count; ?></span>
+							<?php endif; ?>
+						</a>
+					</li>
+
+					<!-- MANAJEMEN LAHAN -->
+					<li class="menu-item">
+						<a href="<?= base_url('admin/lahan'); ?>">
+							<i class="bi bi-map-fill"></i>Manajemen Lahan
+						</a>
+					</li>
+
+					<!-- MANAJEMEN PANEN -->
+					<li class="menu-item">
+						<a href="<?= base_url('admin/panen'); ?>">
+							<i class="bi bi-tree-fill"></i>Manajemen Panen
+						</a>
+					</li>
+
+					<!-- MANAJEMEN PRODUK -->
+					<li class="menu-item">
+						<a href="<?= base_url('admin/produk'); ?>">
+							<i class="bi bi-box-seam-fill"></i>Manajemen Produk
+						</a>
+					</li>
+
+					<!-- TRANSAKSI - Badge Pending -->
+					<li class="menu-item">
+						<a href="<?= base_url('admin/transaksi'); ?>">
+							<i class="bi bi-wallet2"></i>Transaksi
+							<?php if (isset($transaksi_pending) && $transaksi_pending > 0): ?>
+								<span class="menu-badge" style="background: #EF4444; color: white;"><?= $transaksi_pending; ?></span>
+							<?php endif; ?>
+						</a>
+					</li>
+
+					<!-- MANAJEMEN KURIR -->
+					<li class="menu-item">
+						<a href="<?= base_url('admin/kurir'); ?>">
+							<i class="bi bi-truck"></i>Manajemen Kurir
+						</a>
+					</li>
+
+					<!-- MANAJEMEN MITRA - Badge Mitra Baru -->
+					<li class="menu-item">
+						<a href="<?= base_url('admin/mitra'); ?>">
+							<i class="bi bi-shop"></i>Manajemen Mitra
+							<?php if (isset($mitra_baru) && $mitra_baru > 0): ?>
+								<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $mitra_baru; ?></span>
+							<?php endif; ?>
+						</a>
+					</li>
+
+					<!-- LAPORAN -->
+					<li class="menu-item">
+						<a href="<?= base_url('admin/laporan'); ?>">
+							<i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="sidebar-footer">
+				<button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
+					<i class="bi bi-box-arrow-right"></i> Keluar
+				</button>
 			</div>
 		</div>
 
@@ -955,8 +1256,6 @@
 				<a href="<?= base_url('admin/petani'); ?>" class="quick-action-btn">
 					<i class="bi bi-person-check-fill"></i> Verifikasi Petani
 				</a>
-
-
 			</div>
 			<div class="col-lg-2 col-md-4 col-6 mb-2">
 				<a href="<?= base_url('admin/transaksi/konfirmasi'); ?>" class="quick-action-btn">
@@ -985,90 +1284,22 @@
 			</div>
 		</div>
 
-		<!-- SIDEBAR -->
-		<div class="sidebar" id="sidebarMenu">
-			<div class="sidebar-brand">
-				<div class="brand-icon">
-					<i class="bi bi-patch-check-fill"></i>
-				</div>
-				<span>POKTAN <br><small
-						style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
-			</div>
-			<div class="sidebar-menu-wrapper">
-				<ul class="sidebar-menu">
-					<li class="menu-item active">
-						<a href="<?= base_url('admin/dashboard'); ?>">
-							<i class="bi bi-grid-1x2-fill"></i>Dashboard
-						</a>
-					</li>
-					<li class="menu-item">
-						<a href="<?= base_url('admin/user'); ?>">
-							<i class="bi bi-people-fill"></i>Manajemen User
-							<span class="menu-badge">12</span>
-						</a>
-					</li>
-					<li class="menu-item">
-						<a href="<?= base_url('admin/petani'); ?>">
-							<i class="bi bi-person-badge-fill"></i>Data Petani
-						</a>
-					</li>
-					<li class="menu-item">
-						<a href="<?= base_url('admin/lahan'); ?>">
-							<i class="bi bi-map-fill"></i>Manajemen Lahan
-						</a>
-					</li>
-					<li class="menu-item">
-						<a href="<?= base_url('admin/panen'); ?>">
-							<i class="bi bi-tree-fill"></i>Manajemen Panen
-						</a>
-					</li>
-					<li class="menu-item">
-						<a href="<?= base_url('admin/produk'); ?>">
-							<i class="bi bi-box-seam-fill"></i>Manajemen Produk
-						</a>
-					</li>
-					<li class="menu-item">
-						<a href="<?= base_url('admin/transaksi'); ?>">
-							<i class="bi bi-wallet2"></i>Transaksi
-							<span class="menu-badge">8</span>
-						</a>
-					</li>
-					<li class="menu-item">
-						<a href="<?= base_url('admin/kurir'); ?>">
-							<i class="bi bi-truck"></i>Manajemen Kurir
-						</a>
-					</li>
-					<li class="menu-item">
-						<a href="<?= base_url('admin/mitra'); ?>">
-							<i class="bi bi-shop"></i>Manajemen Mitra
-						</a>
-					</li>
-					<li class="menu-item">
-						<a href="<?= base_url('admin/laporan'); ?>">
-							<i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
-						</a>
-					</li>
-				</ul>
-			</div>
-			<div class="sidebar-footer">
-				<button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
-					<i class="bi bi-box-arrow-right"></i> Keluar
-				</button>
-			</div>
-		</div>
 		<!-- KPI CARDS -->
-		<!-- KPI CARDS - DATA REAL -->
 		<div class="row mb-4">
+			<!-- Total Pendapatan -->
 			<div class="col-xl-3 col-md-6 mb-4">
 				<div class="stat-box">
 					<div class="stat-decoration"></div>
 					<div class="stat-title">Total Pendapatan</div>
 					<h3 class="stat-num">Rp <?= number_format($kpi_total_revenue ?? 0, 0, ',', '.'); ?></h3>
 					<div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
-					<div class="stat-badge" style="background: var(--amber-cream); color: white;"><i
-							class="bi bi-currency-dollar"></i></div>
+					<div class="stat-badge" style="background: var(--amber-cream); color: white;">
+						<i class="bi bi-currency-dollar"></i>
+					</div>
 				</div>
 			</div>
+
+			<!-- Total Transaksi -->
 			<div class="col-xl-3 col-md-6 mb-4">
 				<div class="stat-box">
 					<div class="stat-decoration"></div>
@@ -1078,6 +1309,8 @@
 					<div class="stat-badge"><i class="bi bi-receipt"></i></div>
 				</div>
 			</div>
+
+			<!-- Petani Aktif -->
 			<div class="col-xl-3 col-md-6 mb-4">
 				<div class="stat-box">
 					<div class="stat-decoration"></div>
@@ -1087,14 +1320,17 @@
 					<div class="stat-badge"><i class="bi bi-people-fill"></i></div>
 				</div>
 			</div>
+
+			<!-- Mitra Aktif -->
 			<div class="col-xl-3 col-md-6 mb-4">
 				<div class="stat-box">
 					<div class="stat-decoration"></div>
 					<div class="stat-title">Mitra Aktif</div>
 					<h3 class="stat-num"><?= $kpi_mitra_cafe ?? 0; ?></h3>
 					<div class="stat-change up"><i class="bi bi-arrow-up"></i> Data real-time</div>
-					<div class="stat-badge" style="background: var(--dark-coffee); color: white;"><i
-							class="bi bi-shop"></i></div>
+					<div class="stat-badge" style="background: var(--dark-coffee); color: white;">
+						<i class="bi bi-shop"></i>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -1457,7 +1693,7 @@
 							padding: 10,
 							callbacks: {
 								label: function(context) {
-									return context.parsed.y + ' kg';
+									return context.parsed.y.toLocaleString('id-ID') + ' kg';
 								}
 							}
 						}
@@ -1477,7 +1713,7 @@
 								color: '#70655E',
 								stepSize: 50,
 								callback: function(value) {
-									return value + ' kg';
+									return value.toLocaleString('id-ID') + ' kg';
 								}
 							}
 						},

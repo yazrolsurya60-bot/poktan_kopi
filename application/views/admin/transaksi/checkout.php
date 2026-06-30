@@ -45,6 +45,32 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- EMAIL PEMBELI (WAJIB UNTUK GUEST) -->
+                        <div class="form-group">
+                            <label>
+                                Email Pembeli
+                                <?php if (!$this->session->userdata('id_user')): ?>
+                                    <span class="text-danger">*</span>
+                                <?php endif; ?>
+                            </label>
+                            <input type="email" name="email_pembeli" class="form-control"
+                                   value="<?php echo $user ? $user['email'] : ''; ?>"
+                                   <?php echo $this->session->userdata('id_user') ? 'readonly' : 'required'; ?>
+                                   placeholder="email@example.com">
+                            <?php if (!$this->session->userdata('id_user')): ?>
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i> 
+                                    Email digunakan untuk <strong>tracking pesanan</strong> dan <strong>invoice</strong>.
+                                </small>
+                            <?php else: ?>
+                                <small class="text-muted">
+                                    <i class="fas fa-check-circle" style="color: green;"></i> 
+                                    Email terdaftar sebagai member
+                                </small>
+                            <?php endif; ?>
+                        </div>
+                        
                         <div class="form-group">
                             <label>Alamat Kirim <span class="text-danger">*</span></label>
                             <textarea name="alamat_kirim" class="form-control" rows="3" required><?php echo $user ? $user['alamat'] : ''; ?></textarea>
@@ -76,7 +102,7 @@
                             <label>Pilih Metode <span class="text-danger">*</span></label>
                             <select name="metode_bayar" class="form-control" required>
                                 <option value="">Pilih Metode</option>
-                                <option value="Transfer Bank">🏦 Transfer Bank</option>
+                                <option value="Virtual Account">🏦 Virtual Account (BCA, Mandiri, BNI, BRI)</option>
                                 <option value="E-Wallet">📱 E-Wallet (OVO, Gopay, DANA)</option>
                                 <option value="COD">🚚 COD (Bayar di Tempat)</option>
                             </select>
@@ -136,35 +162,55 @@
                             </div>
                         </div>
                         
+                        <!-- ========================================== -->
+                        <!-- BAGIAN ONGKIR -->
+                        <!-- ========================================== -->
                         <div class="row mb-2">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <strong>Ongkir</strong>
-                                <br>
-                                <small class="text-muted">
-                                    <select name="kota_asal" id="kota_asal" class="form-control form-control-sm" style="border-radius:6px; border:1px solid #ddd;">
-                                        <option value="">Kota Asal</option>
-                                        <?php foreach ($kota as $k): ?>
-                                        <option value="<?php echo $k; ?>"><?php echo $k; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <select name="kota_tujuan" id="kota_tujuan" class="form-control form-control-sm mt-1" style="border-radius:6px; border:1px solid #ddd;">
-                                        <option value="">Kota Tujuan</option>
-                                        <?php foreach ($kota as $k): ?>
-                                        <option value="<?php echo $k; ?>"><?php echo $k; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <button type="button" id="hitung_ongkir" class="btn btn-sm btn-warning mt-1" style="font-weight:600; border-radius:6px;">
-                                        <i class="fas fa-calculator"></i> Hitung
-                                    </button>
-                                </small>
                             </div>
-                            <div class="col-6 text-right" id="ongkir_display">
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-5">
+                                <small class="text-muted">Kota Asal</small>
+                                <select name="kota_asal" id="kota_asal" class="form-control form-control-sm" style="border-radius:4px; border:1px solid #ccc; height:32px; font-size:13px; padding:2px 8px; width:100%;">
+                                    <option value="">Kota Asal</option>
+                                    <?php foreach ($kota as $k): ?>
+                                    <option value="<?php echo $k; ?>"><?php echo $k; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-7">
+                                <small class="text-muted">Kota Tujuan</small>
+                                <select name="kota_tujuan" id="kota_tujuan" class="form-control" style="border-radius:4px; border:1px solid #ccc; font-size:15px; padding:8px 12px; height:45px; background:white; width:100%;">
+                                    <option value="">-- Pilih Kota --</option>
+                                    <?php foreach ($kota as $k): ?>
+                                    <option value="<?php echo $k; ?>"><?php echo $k; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <button type="button" id="hitung_ongkir" class="btn btn-warning btn-sm" style="font-weight:600; border-radius:4px; padding:5px 12px; width:100%; font-size:0.82rem;">
+                                    <i class="fas fa-calculator"></i> Hitung Ongkir
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-2" id="ongkir_display">
+                            <div class="col-12 text-right">
                                 <span id="ongkir_biaya" style="font-size:1.2rem; font-weight:700; color:#E6A15C;">Rp 0</span>
                                 <br>
                                 <small id="ongkir_estimasi" class="text-muted"></small>
                                 <input type="hidden" name="ongkir" id="ongkir" value="0">
                             </div>
                         </div>
+                        <!-- ========================================== -->
+                        <!-- END BAGIAN ONGKIR -->
+                        <!-- ========================================== -->
                         
                         <hr>
                         
@@ -178,6 +224,17 @@
                         </div>
                         
                         <hr>
+                        
+                        <!-- INFO GUEST -->
+                        <?php if (!$this->session->userdata('id_user')): ?>
+                            <div class="alert alert-warning" style="border-radius:8px; padding:8px 12px; font-size:0.78rem;">
+                                <i class="fas fa-info-circle"></i> 
+                                Kamu checkout sebagai <strong>Guest</strong>. Simpan <strong>invoice</strong> untuk tracking pesanan di 
+                                <a href="<?php echo base_url('guest/tracking'); ?>" target="_blank" style="font-weight:700; text-decoration:underline;">
+                                    Cek Pesanan
+                                </a>
+                            </div>
+                        <?php endif; ?>
                         
                         <button type="submit" class="btn btn-success btn-block btn-lg" id="btnSubmit">
                             <i class="fas fa-check"></i> Buat Pesanan
@@ -205,7 +262,6 @@ $(document).ready(function() {
             return;
         }
         
-        // Disable tombol sambil loading
         $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Menghitung...');
         
         $.ajax({
@@ -225,7 +281,6 @@ $(document).ready(function() {
                     var total = subtotal + tarif;
                     $('#grand_total').text('Rp ' + total.toLocaleString('id-ID'));
                     
-                    // Efek sukses
                     $('#ongkir_biaya').css('color', '#28a745');
                     setTimeout(function() {
                         $('#ongkir_biaya').css('color', '#E6A15C');
@@ -240,12 +295,11 @@ $(document).ready(function() {
                 console.error('AJAX Error:', status, error);
             },
             complete: function() {
-                $('#hitung_ongkir').prop('disabled', false).html('<i class="fas fa-calculator"></i> Hitung');
+                $('#hitung_ongkir').prop('disabled', false).html('<i class="fas fa-calculator"></i> Hitung Ongkir');
             }
         });
     });
     
-    // Validasi sebelum submit
     $('#formCheckout').submit(function(e) {
         var ongkir = parseInt($('#ongkir').val());
         if (ongkir <= 0) {
@@ -260,6 +314,7 @@ $(document).ready(function() {
         var nohp = $('input[name="no_hp"]').val().trim();
         var kota = $('input[name="kota_kirim"]').val().trim();
         var metode = $('select[name="metode_bayar"]').val();
+        var email = $('input[name="email_pembeli"]').val().trim();
         
         if (!nama || !alamat || !nohp || !kota || !metode) {
             e.preventDefault();
@@ -267,7 +322,14 @@ $(document).ready(function() {
             return false;
         }
         
-        // Disable tombol submit biar ga double
+        var id_user = <?php echo $this->session->userdata('id_user') ? 'true' : 'false'; ?>;
+        if (!id_user && !email) {
+            e.preventDefault();
+            alert('⚠️ Email wajib diisi untuk tracking pesanan!');
+            $('input[name="email_pembeli"]').focus();
+            return false;
+        }
+        
         $('#btnSubmit').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Memproses...');
     });
 });

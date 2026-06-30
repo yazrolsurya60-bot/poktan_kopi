@@ -30,18 +30,17 @@ class Auth extends CI_Controller
         $this->check_already_logged_in();
 
         if ($this->input->post()) {
-            $username_or_email = $this->input->post('username_or_email', TRUE);
+            $username_or_no_telepon = $this->input->post('username_or_no_telepon', TRUE);
             $password = $this->input->post('password');
 
-            $this->form_validation->set_rules('username_or_email', 'Username atau Email', 'required');
+            $this->form_validation->set_rules('username_or_no_telepon', 'Username atau No. Telepon', 'required');
             $this->form_validation->set_rules('password', 'Password', 'required');
 
             if ($this->form_validation->run() == TRUE) {
-                $user = $this->User_model->login($username_or_email, $password);
+                $user = $this->User_model->login($username_or_no_telepon, $password);
 
                 if ($user) {
                     if ($user['status'] === 'Active') {
-                        // Cek apakah petani sudah diverifikasi oleh admin
                         if ($user['role'] === 'Petani' && $user['is_verified'] === '0') {
                             $this->session->set_flashdata('error', 'Akun Anda sebagai Petani masih menunggu verifikasi dari Administrator. Silakan tunggu.');
                             redirect('auth/login');
@@ -51,7 +50,6 @@ class Auth extends CI_Controller
                             'id_user' => $user['id_user'],
                             'username' => $user['username'],
                             'nama' => $user['nama'],
-                            'email' => $user['email'],
                             'no_telepon' => $user['no_telepon'],
                             'role' => $user['role'],
                             'foto' => $user['foto'],
@@ -74,7 +72,7 @@ class Auth extends CI_Controller
                         $this->session->set_flashdata('error', 'Akun Anda dinonaktifkan. Silakan hubungi Administrator.');
                     }
                 } else {
-                    $this->session->set_flashdata('error', 'Username/Email atau Password salah.');
+                    $this->session->set_flashdata('error', 'Username/No. Telepon atau Password salah.');
                 }
             }
         }
@@ -89,7 +87,6 @@ class Auth extends CI_Controller
         if ($this->input->post()) {
             $action = $this->input->post('action');
 
-            // Step 1: Form registrasi awal
             if ($action === 'register_form') {
                 $this->form_validation->set_rules('nama', 'Nama Lengkap', 'required|trim|max_length[100]');
                 $this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[4]|max_length[50]|is_unique[tb_user.username]');
@@ -98,34 +95,27 @@ class Auth extends CI_Controller
                 $this->form_validation->set_rules('role', 'Role', 'required|in_list[Petani,Pembeli]');
 
                 if ($this->form_validation->run() == TRUE) {
-                    // Validasi nomor telepon
                     $no_telepon = $this->input->post('no_telepon', TRUE);
                     if (!validate_phone_number($no_telepon)) {
                         $this->session->set_flashdata('error', 'Nomor telepon tidak valid.');
                         redirect('auth/register');
                     }
 
-                    // Format nomor telepon ke format Fonnte (62xxx)
                     $no_telepon_formatted = format_phone_number($no_telepon);
 
-                    // Cek apakah nomor telepon sudah terdaftar
                     $existing_user = $this->User_model->get_by_phone($no_telepon_formatted);
                     if ($existing_user) {
                         $this->session->set_flashdata('error', 'Nomor telepon sudah terdaftar.');
                         redirect('auth/register');
                     }
 
-                    // Generate OTP
                     $otp = generate_otp();
 
-                    // Simpan OTP ke database (gunakan nomor telepon sebagai tujuan)
                     $this->User_model->insert_otp($no_telepon_formatted, $otp, 'whatsapp');
 
-                    // Kirim OTP via WhatsApp menggunakan Fonnte
                     $send_result = send_otp_fonnte($no_telepon_formatted, $otp);
 
                     if ($send_result['status'] === 'success') {
-                        // Simpan data registrasi sementara di session
                         $this->session->set_userdata([
                             'register_nama' => $this->input->post('nama', TRUE),
                             'register_username' => strtolower($this->input->post('username', TRUE)),
@@ -142,42 +132,32 @@ class Auth extends CI_Controller
                         redirect('auth/register');
                     }
                 }
-            }
-
-            // Step 2: Verifikasi OTP
-            else if ($action === 'verify_otp') {
+            } else if ($action === 'verify_otp') {
                 $register_step = $this->session->userdata('register_step');
-                
+
                 if ($register_step !== 'otp_verification') {
                     $this->session->set_flashdata('error', 'Silakan mulai registrasi dari awal.');
                     redirect('auth/register');
                 }
 
                 $kode_otp = $this->input->post('kode_otp', TRUE);
-                
-                // Debug: Log what we received
+
                 log_message('debug', 'OTP Verification - Received kode_otp: ' . $kode_otp);
-                
+
                 $this->form_validation->set_rules('kode_otp', 'Kode OTP', 'required|numeric|exact_length[6]');
 
                 if ($this->form_validation->run() == FALSE) {
-                    // Validation failed - form_error() will display errors in view
                     log_message('debug', 'OTP Verification - Validation failed');
-                    // Don't redirect, just fall through to load the view with errors
-                    // The view will show form_error('kode_otp') if there's an error
                 } else if (empty($kode_otp)) {
-                    // OTP field is empty even though validation passed (shouldn't happen, but just in case)
                     $this->session->set_flashdata('error', 'Mohon masukkan kode OTP.');
                     redirect('auth/register');
                 } else {
-                    // Validation passed, verify OTP
                     log_message('debug', 'OTP Verification - Validation passed, verifying OTP');
                     $no_telepon = $this->session->userdata('register_no_telepon');
 
-                    // Verifikasi OTP
                     if ($this->User_model->verify_otp($no_telepon, $kode_otp, 'whatsapp')) {
                         log_message('debug', 'OTP Verification - OTP verified successfully');
-                        // Buat akun user
+                        
                         $userData = [
                             'nama' => $this->session->userdata('register_nama'),
                             'username' => $this->session->userdata('register_username'),
@@ -192,6 +172,46 @@ class Auth extends CI_Controller
 
                         if ($userId) {
                             log_message('debug', 'OTP Verification - User created with ID: ' . $userId);
+                            
+                            // ============================================
+                            // 🔴 TAMBAHAN KODE NOTIFIKASI
+                            // ============================================
+                            $this->load->helper('notifikasi');
+                            
+                            // Dapatkan semua admin
+                            $admins = $this->User_model->get_users_by_role('Admin');
+                            
+                            $role_text = ($userData['role'] === 'Petani') ? 'Petani (Menunggu verifikasi)' : 'Pembeli';
+                            $nama = $userData['nama'];
+                            $username = $userData['username'];
+                            
+                            // Kirim notifikasi ke semua admin
+                            foreach ($admins as $admin) {
+                                send_notifikasi(
+                                    $admin['id_user'],
+                                    'admin',
+                                    'Registrasi User Baru',
+                                    "User baru mendaftar: {$nama} ({$username}) sebagai {$role_text}. Menunggu verifikasi.",
+                                    'primary',
+                                    base_url('admin/user')
+                                );
+                            }
+                            
+                            // Jika user adalah Petani, kirim notifikasi ke petani
+                            if ($userData['role'] === 'Petani') {
+                                send_notifikasi(
+                                    $userId,
+                                    'petani',
+                                    'Pendaftaran Berhasil',
+                                    "Selamat, akun Anda sebagai Petani berhasil dibuat. Tunggu verifikasi dari Admin untuk bisa login.",
+                                    'success',
+                                    base_url('auth/login')
+                                );
+                            }
+                            // ============================================
+                            // 🔴 AKHIR TAMBAHAN KODE NOTIFIKASI
+                            // ============================================
+                            
                             // Clear session registrasi
                             $this->session->unset_userdata([
                                 'register_nama',
@@ -202,8 +222,8 @@ class Auth extends CI_Controller
                                 'register_step'
                             ]);
 
-                            $role_text = ($userData['role'] === 'Petani') ? 'Petani (Menunggu verifikasi admin)' : 'Pembeli';
-                            $this->session->set_flashdata('success', 'Akun Anda berhasil dibuat sebagai ' . $role_text . '. Silakan login.');
+                            $role_text_display = ($userData['role'] === 'Petani') ? 'Petani (Menunggu verifikasi admin)' : 'Pembeli';
+                            $this->session->set_flashdata('success', 'Akun Anda berhasil dibuat sebagai ' . $role_text_display . '. Silakan login.');
                             redirect('auth/login');
                         } else {
                             log_message('error', 'OTP Verification - Failed to create user');
@@ -216,12 +236,9 @@ class Auth extends CI_Controller
                         redirect('auth/register');
                     }
                 }
-            }
-
-            // Action resend OTP
-            else if ($action === 'resend_otp') {
+            } else if ($action === 'resend_otp') {
                 $register_step = $this->session->userdata('register_step');
-                
+
                 if ($register_step !== 'otp_verification') {
                     $this->session->set_flashdata('error', 'Silakan mulai registrasi dari awal.');
                     redirect('auth/register');
@@ -229,16 +246,12 @@ class Auth extends CI_Controller
 
                 $no_telepon = $this->session->userdata('register_no_telepon');
 
-                // Hapus OTP lama
                 $this->User_model->delete_otp($no_telepon, 'whatsapp');
 
-                // Generate OTP baru
                 $otp = generate_otp();
 
-                // Simpan OTP baru ke database
                 $this->User_model->insert_otp($no_telepon, $otp, 'whatsapp');
 
-                // Kirim OTP via WhatsApp
                 $send_result = send_otp_fonnte($no_telepon, $otp);
 
                 if ($send_result['status'] === 'success') {
@@ -256,7 +269,6 @@ class Auth extends CI_Controller
 
     public function verify($token = null)
     {
-        // Untuk backward compatibility, jika ada token parameter gunakan token-based verification
         if (!empty($token)) {
             $user = $this->User_model->verify_token($token, 'verification');
 
@@ -285,39 +297,31 @@ class Auth extends CI_Controller
         if ($this->input->post()) {
             $action = $this->input->post('action');
 
-            // Step 1: Input nomor telepon untuk reset password
             if ($action === 'request_otp') {
                 $no_telepon = $this->input->post('no_telepon', TRUE);
                 $this->form_validation->set_rules('no_telepon', 'Nomor Telepon', 'required|trim');
 
                 if ($this->form_validation->run() == TRUE) {
-                    // Validasi nomor telepon
                     if (!validate_phone_number($no_telepon)) {
                         $this->session->set_flashdata('error', 'Nomor telepon tidak valid.');
                         redirect('auth/forgot_password');
                     }
 
-                    // Format nomor telepon
                     $no_telepon_formatted = format_phone_number($no_telepon);
 
-                    // Cek apakah nomor telepon terdaftar
                     $user = $this->User_model->get_by_phone($no_telepon_formatted);
                     if (!$user) {
                         $this->session->set_flashdata('error', 'Nomor telepon tidak ditemukan dalam sistem.');
                         redirect('auth/forgot_password');
                     }
 
-                    // Generate OTP
                     $otp = generate_otp();
 
-                    // Simpan OTP ke database dengan metode whatsapp dan id_user
                     $this->User_model->insert_otp($no_telepon_formatted, $otp, 'whatsapp', $user['id_user']);
 
-                    // Kirim OTP via WhatsApp
                     $send_result = send_otp_fonnte($no_telepon_formatted, $otp);
 
                     if ($send_result['status'] === 'success') {
-                        // Simpan data sementara di session
                         $this->session->set_userdata([
                             'reset_no_telepon' => $no_telepon_formatted,
                             'reset_id_user' => $user['id_user'],
@@ -331,12 +335,9 @@ class Auth extends CI_Controller
                         redirect('auth/forgot_password');
                     }
                 }
-            }
-
-            // Step 2: Verifikasi OTP
-            else if ($action === 'verify_otp_reset') {
+            } else if ($action === 'verify_otp_reset') {
                 $reset_step = $this->session->userdata('reset_step');
-                
+
                 if ($reset_step !== 'otp_verification') {
                     $this->session->set_flashdata('error', 'Silakan mulai proses reset password dari awal.');
                     redirect('auth/forgot_password');
@@ -348,7 +349,6 @@ class Auth extends CI_Controller
                 if ($this->form_validation->run() == TRUE) {
                     $no_telepon = $this->session->userdata('reset_no_telepon');
 
-                    // Verifikasi OTP
                     if ($this->User_model->verify_otp($no_telepon, $otp, 'whatsapp')) {
                         $this->session->set_userdata('reset_step', 'password_change');
                         $this->session->set_flashdata('success', 'OTP terverifikasi. Silakan masukkan password baru.');
@@ -358,12 +358,9 @@ class Auth extends CI_Controller
                         redirect('auth/forgot_password');
                     }
                 }
-            }
-
-            // Step 3: Ubah password
-            else if ($action === 'change_password') {
+            } else if ($action === 'change_password') {
                 $reset_step = $this->session->userdata('reset_step');
-                
+
                 if ($reset_step !== 'password_change') {
                     $this->session->set_flashdata('error', 'Silakan verifikasi OTP terlebih dahulu.');
                     redirect('auth/forgot_password');
@@ -375,10 +372,7 @@ class Auth extends CI_Controller
                 if ($this->form_validation->run() == TRUE) {
                     $id_user = $this->session->userdata('reset_id_user');
 
-                    if ($this->User_model->update_user($id_user, [
-                        'password' => $this->input->post('password')
-                    ])) {
-                        // Clear session reset
+                    if ($this->User_model->update_user($id_user, ['password' => $this->input->post('password')])) {
                         $this->session->unset_userdata([
                             'reset_no_telepon',
                             'reset_id_user',
@@ -392,12 +386,9 @@ class Auth extends CI_Controller
                         redirect('auth/forgot_password');
                     }
                 }
-            }
-
-            // Action resend OTP
-            else if ($action === 'resend_otp_reset') {
+            } else if ($action === 'resend_otp_reset') {
                 $reset_step = $this->session->userdata('reset_step');
-                
+
                 if ($reset_step !== 'otp_verification' && $reset_step !== 'password_change') {
                     $this->session->set_flashdata('error', 'Silakan mulai proses reset password dari awal.');
                     redirect('auth/forgot_password');
@@ -406,16 +397,12 @@ class Auth extends CI_Controller
                 $no_telepon = $this->session->userdata('reset_no_telepon');
                 $id_user = $this->session->userdata('reset_id_user');
 
-                // Hapus OTP lama
                 $this->User_model->delete_otp($no_telepon, 'whatsapp');
 
-                // Generate OTP baru
                 $otp = generate_otp();
 
-                // Simpan OTP baru
                 $this->User_model->insert_otp($no_telepon, $otp, 'whatsapp', $id_user);
 
-                // Kirim OTP
                 $send_result = send_otp_fonnte($no_telepon, $otp);
 
                 if ($send_result['status'] === 'success') {
@@ -446,20 +433,19 @@ class Auth extends CI_Controller
             $this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[4]|max_length[50]');
             $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email');
 
-            // Validate uniqueness manually since we need to ignore current user ID
             $username = strtolower($this->input->post('username', TRUE));
             $email = $this->input->post('email', TRUE);
 
             $existing_user = $this->User_model->get_by_username($username);
             if ($existing_user && $existing_user['id_user'] != $id_user) {
                 $this->form_validation->set_message('username', 'Username sudah digunakan.');
-                $this->form_validation->set_rules('username', 'Username', 'is_unique[tb_user.username]'); // trigger validation error
+                $this->form_validation->set_rules('username', 'Username', 'is_unique[tb_user.username]');
             }
 
             $existing_email = $this->User_model->get_by_email($email);
             if ($existing_email && $existing_email['id_user'] != $id_user) {
                 $this->form_validation->set_message('email', 'Email sudah digunakan.');
-                $this->form_validation->set_rules('email', 'Email', 'is_unique[tb_user.email]'); // trigger validation error
+                $this->form_validation->set_rules('email', 'Email', 'is_unique[tb_user.email]');
             }
 
             if ($this->form_validation->run() == TRUE) {
@@ -469,9 +455,7 @@ class Auth extends CI_Controller
                     'email' => $email
                 ];
 
-                // Profile photo upload handling
                 if (!empty($_FILES['foto']['name'])) {
-                    // Create directory if not exists
                     if (!is_dir('./uploads/profile/')) {
                         mkdir('./uploads/profile/', 0777, TRUE);
                     }
@@ -484,7 +468,6 @@ class Auth extends CI_Controller
                     $this->load->library('upload', $config);
 
                     if ($this->upload->do_upload('foto')) {
-                        // Delete old profile picture if exists
                         if (!empty($user['foto']) && file_exists('./uploads/profile/' . $user['foto'])) {
                             unlink('./uploads/profile/' . $user['foto']);
                         }
@@ -492,7 +475,6 @@ class Auth extends CI_Controller
                         $uploadData = $this->upload->data();
                         $updateData['foto'] = $uploadData['file_name'];
 
-                        // Update session foto
                         $this->session->set_userdata('foto', $uploadData['file_name']);
                     } else {
                         $this->session->set_flashdata('error', 'Gagal mengupload foto: ' . $this->upload->display_errors('', ''));
@@ -501,7 +483,6 @@ class Auth extends CI_Controller
                 }
 
                 if ($this->User_model->update_user($id_user, $updateData)) {
-                    // Update session data
                     $this->session->set_userdata([
                         'nama' => $updateData['nama'],
                         'username' => $updateData['username'],
@@ -516,7 +497,6 @@ class Auth extends CI_Controller
             }
         }
 
-        // Change password action
         if ($this->input->post('action') === 'change_password') {
             $this->form_validation->set_rules('current_password', 'Password Saat Ini', 'required');
             $this->form_validation->set_rules('new_password', 'Password Baru', 'required|min_length[6]');
@@ -541,7 +521,6 @@ class Auth extends CI_Controller
 
         $data['user'] = $this->User_model->get_by_id($id_user);
 
-        // Load layout based on user role to keep the panel context consistent
         $this->load->model('Notifikasi_model');
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
@@ -549,11 +528,8 @@ class Auth extends CI_Controller
         $this->load->view('auth/v_profile', $data);
     }
 
-    // application/controllers/Auth.php
-
     public function ubah_password()
     {
-        // Cek login
         if (!$this->session->userdata('id_user')) {
             redirect('auth/login');
         }
@@ -569,14 +545,12 @@ class Auth extends CI_Controller
             $password_lama = md5($this->input->post('password_lama'));
             $password_baru = md5($this->input->post('password_baru'));
 
-            // Cek password lama di DATABASE
             $user = $this->db->get_where('tb_user', [
                 'id_user' => $id_user,
                 'password' => $password_lama
             ])->row();
 
             if ($user) {
-                // ✅ UPDATE PASSWORD DI DATABASE
                 $this->db->where('id_user', $id_user)
                     ->update('tb_user', ['password' => $password_baru]);
 
@@ -588,7 +562,6 @@ class Auth extends CI_Controller
             }
         }
     }
-
 
     public function logout()
     {

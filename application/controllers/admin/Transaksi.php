@@ -9,22 +9,25 @@ class Transaksi extends CI_Controller {
             redirect('auth/login');
         }
         $this->load->model('Transaksi_model');
+        $this->load->model('Notifikasi_model'); // 🔥 TAMBAH
         $this->load->helper('url');
         $this->load->helper('form');
     }
 
     // ============================================================
-    // INDEX - DAFTAR TRANSAKSI
+    // INDEX - DAFTAR TRANSAKSI (HANYA MEMBER)
     // ============================================================
     public function index() {
         $data['title'] = 'Manajemen Transaksi';
-        $data['transaksi'] = $this->Transaksi_model->get_all_transaksi();
+        
+        // 🔥 GANTI: panggil method yang filter member saja
+        $data['transaksi'] = $this->Transaksi_model->get_all_transaksi_member();
+        
         $data['count_pending'] = $this->Transaksi_model->count_by_status('Pending');
         $data['count_diproses'] = $this->Transaksi_model->count_by_status('Diproses');
         $data['count_dikirim'] = $this->Transaksi_model->count_by_status('Dikirim');
         $data['count_selesai'] = $this->Transaksi_model->count_by_status('Selesai');
         
-        // LANGSUNG LOAD VIEW TANPA HEADER/SIDEBAR/FOOTER
         $this->load->view('admin/transaksi/index', $data);
     }
 
@@ -42,12 +45,11 @@ class Transaksi extends CI_Controller {
         $data['details'] = $this->Transaksi_model->get_detail_transaksi($id_transaksi);
         $data['bukti'] = $this->Transaksi_model->get_bukti_by_transaksi($id_transaksi);
         
-        // LANGSUNG LOAD VIEW TANPA HEADER/SIDEBAR/FOOTER
         $this->load->view('admin/transaksi/detail', $data);
     }
 
     // ============================================================
-    // KONFIRMASI BAYAR (M06-F06)
+    // KONFIRMASI BAYAR (M06-F06) + NOTIFIKASI
     // ============================================================
     public function konfirmasi_bayar() {
         $id_transaksi = $this->input->post('id_transaksi');
@@ -56,13 +58,39 @@ class Transaksi extends CI_Controller {
         
         $this->Transaksi_model->verifikasi_bukti($id_transaksi, $status, $keterangan);
         
+        // Ambil data transaksi untuk notifikasi
+        $transaksi = $this->Transaksi_model->get_transaksi($id_transaksi);
+        
         if ($status == 'Diverifikasi') {
             $this->Transaksi_model->update_status_bayar($id_transaksi, 'Lunas');
             $this->Transaksi_model->update_status($id_transaksi, 'Diproses');
             $message = '✅ Pembayaran diverifikasi. Pesanan diproses.';
+            
+            // 🔥 NOTIFIKASI KE PEMBELI
+            if ($transaksi['id_user']) {
+                $this->Notifikasi_model->save_notifikasi([
+                    'id_user' => $transaksi['id_user'],
+                    'judul' => '✅ Pembayaran Diverifikasi',
+                    'isi_notifikasi' => 'Pembayaran untuk pesanan #' . $id_transaksi . ' telah diverifikasi. Pesanan sedang diproses.',
+                    'link' => 'pembeli/transaksi/detail/' . $id_transaksi,
+                    'icon' => 'success'
+                ]);
+            }
+            
         } else {
             $this->Transaksi_model->update_status_bayar($id_transaksi, 'Pending');
             $message = '❌ Pembayaran ditolak. Upload ulang bukti.';
+            
+            // 🔥 NOTIFIKASI KE PEMBELI
+            if ($transaksi['id_user']) {
+                $this->Notifikasi_model->save_notifikasi([
+                    'id_user' => $transaksi['id_user'],
+                    'judul' => '❌ Pembayaran Ditolak',
+                    'isi_notifikasi' => 'Pembayaran untuk pesanan #' . $id_transaksi . ' ditolak. Silakan upload ulang bukti.',
+                    'link' => 'pembeli/transaksi/detail/' . $id_transaksi,
+                    'icon' => 'danger'
+                ]);
+            }
         }
         
         $this->session->set_flashdata('success', $message);
@@ -70,7 +98,7 @@ class Transaksi extends CI_Controller {
     }
 
     // ============================================================
-    // UPDATE STATUS PESANAN (M06-F07)
+    // UPDATE STATUS PESANAN (M06-F07) + NOTIFIKASI
     // ============================================================
     public function update_status($id_transaksi) {
         $status = $this->input->post('status');
@@ -82,15 +110,30 @@ class Transaksi extends CI_Controller {
         }
         
         $this->Transaksi_model->update_status($id_transaksi, $status);
+        
+        // 🔥 NOTIFIKASI KE PEMBELI
+        $transaksi = $this->Transaksi_model->get_transaksi($id_transaksi);
+        if ($transaksi['id_user']) {
+            $icon = ($status == 'Selesai') ? 'success' : (($status == 'Dibatalkan') ? 'danger' : 'info');
+            $this->Notifikasi_model->save_notifikasi([
+                'id_user' => $transaksi['id_user'],
+                'judul' => '📦 Status Pesanan Berubah',
+                'isi_notifikasi' => 'Pesanan #' . $id_transaksi . ' sekarang: ' . $status,
+                'link' => 'pembeli/transaksi/detail/' . $id_transaksi,
+                'icon' => $icon
+            ]);
+        }
+        
         $this->session->set_flashdata('success', '✅ Status pesanan berhasil diupdate menjadi ' . $status);
         redirect('admin/transaksi/detail/' . $id_transaksi);
     }
 
     // ============================================================
-    // EXPORT EXCEL (CSV)
+    // EXPORT EXCEL (CSV) - HANYA MEMBER
     // ============================================================
     public function export_excel() {
-        $transaksi = $this->Transaksi_model->get_all_transaksi();
+        // 🔥 GANTI: ambil transaksi member saja
+        $transaksi = $this->Transaksi_model->get_all_transaksi_member();
         
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename="Laporan_Transaksi_' . date('Y-m-d') . '.csv"');
@@ -103,7 +146,7 @@ class Transaksi extends CI_Controller {
         foreach ($transaksi as $t) {
             fputcsv($output, [
                 $t['id_transaksi'],
-                $t['nama_pembeli'] ?? 'Guest',
+                $t['nama_pembeli'] ?? 'Member',
                 $t['total_harga'],
                 $t['ongkir'] ?? 0,
                 $t['grand_total'],
@@ -119,13 +162,13 @@ class Transaksi extends CI_Controller {
     }
 
     // ============================================================
-    // EXPORT PDF
+    // EXPORT PDF - HANYA MEMBER
     // ============================================================
     public function export_pdf() {
-        $data['transaksi'] = $this->Transaksi_model->get_all_transaksi();
+        // 🔥 GANTI: ambil transaksi member saja
+        $data['transaksi'] = $this->Transaksi_model->get_all_transaksi_member();
         $data['title'] = 'Laporan Transaksi';
         
-        // LANGSUNG LOAD VIEW TANPA HEADER/SIDEBAR/FOOTER
         $this->load->view('admin/transaksi/export_pdf', $data);
     }
 
@@ -153,7 +196,6 @@ class Transaksi extends CI_Controller {
         }
         $data['details'] = $this->Transaksi_model->get_detail_transaksi($id_transaksi);
         
-        // LANGSUNG LOAD VIEW TANPA HEADER/SIDEBAR/FOOTER
         $this->load->view('admin/transaksi/invoice', $data);
     }
 }

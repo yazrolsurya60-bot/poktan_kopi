@@ -126,6 +126,13 @@ $route['pembeli/transaksi/upload_bukti'] = 'pembeli/transaksi/upload_bukti';
 $route['pembeli/transaksi/invoice/(:num)'] = 'pembeli/transaksi/invoice/$1';
 
 // ============================================
+// 🔥 GUEST TRACKING (BARU)
+// ============================================
+$route['guest/tracking'] = 'Guest_tracking/index';
+$route['guest/tracking/cek'] = 'Guest_tracking/cek';
+$route['guest/tracking/detail/(:num)'] = 'Guest_tracking/detail/$1';
+
+// ============================================
 // LANDING PRODUK
 // ============================================
 $route['landing/produk'] = 'produk/index';

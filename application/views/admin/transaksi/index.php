@@ -38,7 +38,10 @@
 			overflow-x: hidden;
 		}
 
-		/* ===== SIDEBAR ===== */
+		/* ============================================ */
+		/* SIDEBAR - DISAMAKAN DENGAN HALAMAN LAIN */
+		/* ============================================ */
+
 		.sidebar {
 			width: var(--sidebar-width);
 			height: 100vh;
@@ -63,42 +66,24 @@
 			color: var(--amber-cream);
 			display: flex;
 			align-items: center;
-			gap: 12px;
+			gap: 10px;
 		}
 
 		.sidebar-brand .brand-icon {
-			width: 44px;
-			height: 44px;
+			width: 40px;
+			height: 40px;
 			background: rgba(230, 161, 92, 0.15);
-			border-radius: 12px;
+			border-radius: 10px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: 1.4rem;
-			border: 1px solid rgba(230, 161, 92, 0.1);
-		}
-
-		.sidebar-brand .brand-text small {
-			font-weight: 400;
-			font-size: 0.7rem;
-			color: var(--text-muted);
-			display: block;
-			margin-top: -2px;
+			font-size: 1.3rem;
 		}
 
 		.sidebar-menu-wrapper {
 			flex: 1;
 			overflow-y: auto;
-			padding: 12px 0;
-		}
-
-		.sidebar-menu-wrapper::-webkit-scrollbar {
-			width: 3px;
-		}
-
-		.sidebar-menu-wrapper::-webkit-scrollbar-thumb {
-			background: rgba(230, 161, 92, 0.3);
-			border-radius: 10px;
+			padding: 15px 0;
 		}
 
 		.sidebar-menu {
@@ -110,19 +95,19 @@
 		.menu-item a {
 			display: flex;
 			align-items: center;
-			padding: 12px 20px;
+			padding: 12px 24px;
 			color: #A8988A;
 			font-weight: 500;
-			font-size: 0.85rem;
+			font-size: 0.9rem;
 			transition: var(--transition-smooth);
 			text-decoration: none;
 			position: relative;
-			margin: 2px 12px;
+			margin: 2px 10px;
 			border-radius: 10px;
 		}
 
 		.menu-item a i {
-			font-size: 1.1rem;
+			font-size: 1.15rem;
 			margin-right: 14px;
 			width: 22px;
 			text-align: center;
@@ -132,7 +117,7 @@
 			margin-left: auto;
 			background: rgba(230, 161, 92, 0.2);
 			color: var(--amber-cream);
-			font-size: 0.65rem;
+			font-size: 0.7rem;
 			padding: 2px 10px;
 			border-radius: 20px;
 			font-weight: 600;
@@ -170,7 +155,7 @@
 		.sidebar-footer .btn-logout {
 			width: 100%;
 			padding: 10px 16px;
-			border: 1px solid rgba(250, 246, 240, 0.08);
+			border: 1px solid rgba(250, 246, 240, 0.1);
 			border-radius: 10px;
 			background: transparent;
 			color: #A8988A;
@@ -190,7 +175,114 @@
 			border-color: rgba(230, 161, 92, 0.2);
 		}
 
-		/* ===== MAIN CONTENT ===== */
+		/* ============================================ */
+		/* QUICK ACTION - DISAMAKAN DENGAN HALAMAN LAIN */
+		/* ============================================ */
+
+		.quick-action-btn {
+			padding: 10px 16px;
+			border: 1px solid rgba(74, 44, 17, 0.06);
+			border-radius: 10px;
+			background: var(--card-white);
+			color: var(--dark-coffee);
+			transition: var(--transition-smooth);
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			font-weight: 500;
+			font-size: 0.85rem;
+			cursor: pointer;
+			text-decoration: none;
+			box-shadow: var(--shadow-soft);
+		}
+
+		.quick-action-btn:hover {
+			background: var(--bg-cream);
+			border-color: var(--amber-cream);
+			transform: translateX(4px);
+			text-decoration: none;
+			color: var(--dark-coffee);
+			box-shadow: var(--shadow-hover);
+		}
+
+		.quick-action-btn i {
+			font-size: 1.1rem;
+			color: var(--amber-cream);
+		}
+
+		.quick-action-btn.btn-excel {
+			background: #1B7C3C;
+			color: white;
+			border-color: #1B7C3C;
+		}
+
+		.quick-action-btn.btn-excel:hover {
+			background: #14632F;
+			color: white;
+			border-color: #14632F;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(27, 124, 60, 0.3);
+		}
+
+		.quick-action-btn.btn-pdf {
+			background: #DC143C;
+			color: white;
+			border-color: #DC143C;
+		}
+
+		.quick-action-btn.btn-pdf:hover {
+			background: #B01030;
+			color: white;
+			border-color: #B01030;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);
+		}
+
+		.quick-action-btn.btn-print {
+			background: var(--dark-coffee);
+			color: white;
+			border-color: var(--dark-coffee);
+		}
+
+		.quick-action-btn.btn-print:hover {
+			background: #1a0e04;
+			color: white;
+			border-color: #1a0e04;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(44, 24, 8, 0.3);
+		}
+
+		/* ============================================ */
+		/* BTN DETAIL TRANSAKSI - DISAMAKAN */
+		/* ============================================ */
+
+		.btn-detail-transaksi {
+			background: var(--amber-cream);
+			color: white;
+			border: none;
+			padding: 6px 14px;
+			border-radius: 8px;
+			font-size: 0.75rem;
+			font-weight: 600;
+			transition: var(--transition-smooth);
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+		}
+
+		.btn-detail-transaksi:hover {
+			background: var(--roasted-brown);
+			color: white;
+			text-decoration: none;
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-hover);
+		}
+
+		/* ============================================ */
+		/* MAIN CONTENT */
+		/* ============================================ */
+
 		.main-content {
 			margin-left: var(--sidebar-width);
 			padding: 30px 40px 40px;
@@ -198,10 +290,18 @@
 			transition: var(--transition-smooth);
 		}
 
+		/* ============================================ */
+		/* PAGE HEADER */
+		/* ============================================ */
+
 		.page-header {
 			padding-bottom: 20px;
 			margin-bottom: 28px;
 			border-bottom: 1px solid rgba(74, 44, 17, 0.06);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			flex-wrap: wrap;
 		}
 
 		.page-header .page-title {
@@ -244,7 +344,58 @@
 			font-weight: 600;
 		}
 
-		/* ===== NOTIFICATION - SAMA DENGAN DASHBOARD ===== */
+		/* ============================================ */
+		/* HEADER RIGHT - NOTIF + USER BADGE */
+		/* ============================================ */
+
+		.header-right {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			flex-shrink: 0;
+		}
+
+		/* ============================================ */
+		/* USER BADGE - SAMA DENGAN DASHBOARD */
+		/* ============================================ */
+
+		.user-badge {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			padding: 6px 12px;
+			border-radius: 10px;
+			background: var(--card-white);
+			border: 1px solid rgba(74, 44, 17, 0.06);
+			font-weight: 500;
+			font-size: 0.85rem;
+			cursor: default;
+			min-width: 90px;
+		}
+
+		.user-badge i {
+			font-size: 1.4rem;
+			color: var(--amber-cream);
+		}
+
+		.user-badge .user-name {
+			font-weight: 600;
+			font-size: 0.82rem;
+			color: var(--dark-coffee);
+			line-height: 1.2;
+		}
+
+		.user-badge .user-role {
+			font-size: 0.6rem;
+			color: var(--text-secondary);
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		/* ============================================ */
+		/* NOTIFICATION BELL & DROPDOWN */
+		/* ============================================ */
+
 		.notif-btn {
 			position: relative;
 			background: var(--card-white);
@@ -434,7 +585,10 @@
 			align-self: center;
 		}
 
-		/* ===== STATISTIK CARDS ===== */
+		/* ============================================ */
+		/* STATISTIK CARDS */
+		/* ============================================ */
+
 		.stat-card {
 			background: var(--card-white);
 			border-radius: var(--radius-card);
@@ -512,7 +666,10 @@
 			color: #EF4444;
 		}
 
-		/* ===== CUSTOM CARD ===== */
+		/* ============================================ */
+		/* CUSTOM CARD */
+		/* ============================================ */
+
 		.custom-card {
 			background: var(--card-white);
 			border-radius: var(--radius-card);
@@ -551,10 +708,14 @@
 			padding: 0;
 		}
 
-		/* ===== TABLE ===== */
+		/* ============================================ */
+		/* TABLE */
+		/* ============================================ */
+
 		.table-custom {
 			font-size: 0.85rem;
 			margin-bottom: 0;
+			width: 100%;
 		}
 
 		.table-custom thead th {
@@ -566,6 +727,7 @@
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
 			padding: 14px 12px;
+			white-space: nowrap;
 		}
 
 		.table-custom tbody td {
@@ -582,6 +744,10 @@
 			background: rgba(250, 246, 240, 0.4);
 		}
 
+		.table-custom tbody tr:last-child td {
+			border-bottom: none;
+		}
+
 		.avatar-circle {
 			width: 34px;
 			height: 34px;
@@ -596,7 +762,10 @@
 			flex-shrink: 0;
 		}
 
-		/* ===== STATUS BADGE ===== */
+		/* ============================================ */
+		/* STATUS BADGE */
+		/* ============================================ */
+
 		.status-badge {
 			padding: 5px 14px;
 			border-radius: 20px;
@@ -640,7 +809,10 @@
 			color: #991B1B;
 		}
 
-		/* ===== QUICK ACTION ===== */
+		/* ============================================ */
+		/* QUICK ACTION */
+		/* ============================================ */
+
 		.quick-action-btn {
 			padding: 10px 18px;
 			border-radius: 12px;
@@ -725,30 +897,42 @@
 			box-shadow: var(--shadow-hover);
 		}
 
-		/* ===== SIDEBAR OVERLAY ===== */
-		.sidebar-overlay {
-			display: none;
-			position: fixed;
-			inset: 0;
-			background: rgba(0, 0, 0, 0.4);
-			z-index: 99;
+		/* ============================================ */
+		/* SCROLLBAR */
+		/* ============================================ */
+
+		.sidebar-menu-wrapper::-webkit-scrollbar,
+		.notif-dropdown-list::-webkit-scrollbar {
+			width: 3px;
 		}
 
-		.sidebar-overlay.active {
-			display: block;
+		.sidebar-menu-wrapper::-webkit-scrollbar-track,
+		.notif-dropdown-list::-webkit-scrollbar-track {
+			background: transparent;
 		}
 
-		/* ===== FOOTER ===== */
-		.footer-bottom {
-			color: var(--text-secondary);
-			font-size: 0.8rem;
-			border-top: 1px solid rgba(74, 44, 17, 0.06);
-			padding-top: 20px;
-			margin-top: 30px;
-			text-align: center;
+		.sidebar-menu-wrapper::-webkit-scrollbar-thumb,
+		.notif-dropdown-list::-webkit-scrollbar-thumb {
+			background: rgba(230, 161, 92, 0.3);
+			border-radius: 10px;
 		}
 
-		/* ===== RESPONSIVE ===== */
+		/* ============================================ */
+		/* RESPONSIVE - SAMA DENGAN DASHBOARD */
+		/* ============================================ */
+
+		@media (max-width: 1199.98px) {
+			.stat-card .stat-number {
+				font-size: 1.5rem;
+			}
+
+			.table-custom thead th,
+			.table-custom tbody td {
+				padding: 12px 10px;
+				font-size: 0.8rem;
+			}
+		}
+
 		@media (max-width: 991.98px) {
 			.sidebar {
 				left: calc(-1 * var(--sidebar-width));
@@ -760,6 +944,10 @@
 				box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
 			}
 
+			.sidebar-overlay.active {
+				display: block;
+			}
+
 			.main-content {
 				margin-left: 0;
 				padding: 20px 16px 30px;
@@ -769,19 +957,34 @@
 				font-size: 1.2rem;
 			}
 
+			.page-header .subtitle {
+				font-size: 0.8rem;
+			}
+
 			.notif-dropdown {
 				width: calc(100vw - 32px);
 				right: -60px;
 			}
 
-			.sidebar-overlay.active {
-				display: block;
+			.user-badge {
+				padding: 4px 10px;
+				min-width: 70px;
 			}
-		}
 
-		@media (max-width: 575.98px) {
-			.main-content {
-				padding: 16px 12px 20px;
+			.user-badge i {
+				font-size: 1.1rem;
+			}
+
+			.user-badge .user-name {
+				font-size: 0.7rem;
+			}
+
+			.user-badge .user-role {
+				font-size: 0.5rem;
+			}
+
+			.header-right {
+				gap: 8px;
 			}
 
 			.stat-card {
@@ -798,16 +1001,187 @@
 				font-size: 1.1rem;
 			}
 
+			.table-custom thead th,
+			.table-custom tbody td {
+				padding: 10px 8px;
+				font-size: 0.75rem;
+			}
+
+			.table-custom thead th {
+				font-size: 0.6rem;
+			}
+
+			.quick-action-btn {
+				font-size: 0.75rem;
+				padding: 8px 14px;
+			}
+
+			.btn-detail-transaksi {
+				font-size: 0.65rem;
+				padding: 4px 10px;
+			}
+		}
+
+		@media (max-width: 575.98px) {
+			.main-content {
+				padding: 16px 12px 20px;
+			}
+
+			.page-header .page-title {
+				font-size: 1rem;
+			}
+
+			.page-header .subtitle {
+				font-size: 0.7rem;
+			}
+
 			.notif-dropdown {
 				width: calc(100vw - 24px);
 				right: -70px;
 			}
 
+			.user-badge {
+				padding: 4px 8px;
+				min-width: 60px;
+				gap: 5px;
+			}
+
+			.user-badge i {
+				font-size: 0.9rem;
+			}
+
+			.user-badge .user-name {
+				font-size: 0.6rem;
+			}
+
+			.user-badge .user-role {
+				display: none;
+			}
+
+			.header-right {
+				gap: 6px;
+			}
+
+			.stat-card {
+				padding: 14px 14px;
+			}
+
+			.stat-card .stat-number {
+				font-size: 1.1rem;
+			}
+
+			.stat-card .stat-icon {
+				width: 36px;
+				height: 36px;
+				font-size: 0.9rem;
+			}
+
+			.stat-card .stat-title {
+				font-size: 0.6rem;
+			}
+
+			.stat-card .stat-footer {
+				font-size: 0.65rem;
+			}
+
+			.table-custom thead th {
+				font-size: 0.5rem;
+				padding: 6px 6px;
+				white-space: normal;
+			}
+
+			.table-custom tbody td {
+				padding: 8px 6px;
+				font-size: 0.65rem;
+			}
+
+			.avatar-circle {
+				width: 28px;
+				height: 28px;
+				font-size: 0.6rem;
+			}
+
 			.quick-action-btn {
+				font-size: 0.65rem;
+				padding: 6px 10px;
+				gap: 5px;
+			}
+
+			.quick-action-btn i {
+				font-size: 0.8rem;
+			}
+
+			.btn-detail-transaksi {
+				font-size: 0.6rem;
+				padding: 3px 8px;
+				gap: 3px;
+			}
+
+			.btn-detail-transaksi i {
+				font-size: 0.6rem;
+			}
+
+			.custom-card .card-header-custom {
+				padding: 12px 16px;
+			}
+
+			.custom-card .card-header-custom h6 {
 				font-size: 0.75rem;
-				padding: 8px 12px;
+			}
+
+			.row.mb-4 {
+				margin: 0 -6px;
+			}
+
+			.row.mb-4 .col-6 {
+				padding: 0 6px;
+			}
+
+			.d-flex.flex-wrap .quick-action-btn {
+				flex: 1;
+				justify-content: center;
 			}
 		}
+
+		/* ============================================ */
+		/* UTILITY */
+		/* ============================================ */
+
+		.text-truncate {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.gap-1 {
+			gap: 4px;
+		}
+
+		.gap-2 {
+			gap: 8px;
+		}
+
+		.gap-3 {
+			gap: 12px;
+		}
+
+		.gap-4 {
+			gap: 16px;
+		}
+
+		.gap-5 {
+			gap: 24px;
+		}
+
+		.d-flex-center {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		/* ============================================ */
+		/* ANIMATION */
+		/* ============================================ */
 
 		.fade-in {
 			animation: fadeInUp 0.6s ease forwards;
@@ -825,22 +1199,43 @@
 			}
 		}
 
-		::-webkit-scrollbar {
-			width: 6px;
-			height: 6px;
+		/* ============================================ */
+		/* EMPTY STATE */
+		/* ============================================ */
+
+		.empty-state {
+			padding: 60px 20px;
+			text-align: center;
 		}
 
-		::-webkit-scrollbar-track {
-			background: var(--bg-cream);
+		.empty-state i {
+			font-size: 3rem;
+			color: #D1C9C0;
+			display: block;
+			margin-bottom: 16px;
 		}
 
-		::-webkit-scrollbar-thumb {
-			background: var(--amber-cream);
-			border-radius: 10px;
+		.empty-state h6 {
+			font-weight: 700;
+			color: var(--dark-coffee);
 		}
 
-		::-webkit-scrollbar-thumb:hover {
-			background: var(--roasted-brown);
+		.empty-state p {
+			color: var(--text-secondary);
+			font-size: 0.85rem;
+		}
+
+		/* ============================================ */
+		/* FOOTER BOTTOM */
+		/* ============================================ */
+
+		.footer-bottom {
+			color: var(--text-secondary);
+			font-size: 0.8rem;
+			border-top: 1px solid rgba(74, 44, 17, 0.06);
+			padding-top: 20px;
+			margin-top: 30px;
+			text-align: center;
 		}
 	</style>
 </head>
@@ -854,7 +1249,7 @@
 	<div class="sidebar" id="sidebarMenu">
 		<div class="sidebar-brand">
 			<div class="brand-icon"><i class="bi bi-patch-check-fill"></i></div>
-			<div class="brand-text">POKTAN <small>Liberchain</small></div>
+			<span>POKTAN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
 		</div>
 		<div class="sidebar-menu-wrapper">
 			<ul class="sidebar-menu">
@@ -941,65 +1336,92 @@
 			</div>
 			<div class="d-flex align-items-center gap-3">
 
-			            <!-- NOTIFIKASI BELL -->
-            <div style="position: relative;">
-                <button class="notif-btn" id="notifToggle">
-                    <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
-                    <?php if (isset($unread_count) && $unread_count > 0): ?>
-                        <span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
-                    <?php else: ?>
-                        <span class="notif-dot" id="notifCount" style="display:none;">0</span>
-                    <?php endif; ?>
-                </button>
+				<!-- NOTIFICATION BELL -->
+				<div style="position: relative;">
+					<button class="notif-btn" id="notifToggle">
+						<i class="bi bi-bell" style="font-size: 1.2rem;"></i>
+						<?php if (isset($unread_count) && $unread_count > 0): ?>
+							<span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
+						<?php else: ?>
+							<span class="notif-dot" id="notifCount" style="display:none;">0</span>
+						<?php endif; ?>
+					</button>
 
-                <div class="notif-dropdown" id="notifDropdown">
-                    <div class="notif-dropdown-header">
-                        <span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Belum Dibaca' : 'Semua Notifikasi'; ?></span>
-                        <a href="<?= base_url('notifikasi/history'); ?>">Lihat Semua</a>
-                    </div>
-                    <div class="notif-dropdown-list">
-                        <?php if (!empty($notifikasi)): ?>
-                            <?php foreach ($notifikasi as $n): ?>
-                                <?php
-                                    $icon_type = $n['icon'] ?? 'info';
-                                    $icon_map  = ['success' => 'bi-check-circle-fill', 'warning' => 'bi-exclamation-triangle-fill', 'danger' => 'bi-x-circle-fill', 'info' => 'bi-info-circle-fill'];
-                                    $icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
-                                ?>
-                                <a class="notif-item-drop <?= ($n['status_baca'] ?? '0') == '0' ? 'unread' : ''; ?>"
-                                   href="<?= base_url('notifikasi/read/' . $n['id_notifikasi']); ?>">
-                                    <div class="notif-icon <?= $icon_type; ?>">
-                                        <i class="bi <?= $icon_class; ?>"></i>
-                                    </div>
-                                    <div style="flex:1; font-size:0.85rem;">
-                                        <?= htmlspecialchars($n['isi_notifikasi']); ?>
-                                        <span style="font-size:0.7rem; color:var(--text-secondary); display:block; margin-top:2px;"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
-                                    </div>
-                                </a>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="text-center text-muted py-4">
-                                <i class="bi bi-bell-slash d-block mb-1" style="font-size:1.8rem;"></i>
-                                <small>Tidak ada notifikasi</small>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="p-2 text-center border-top" style="background:#FAF6F0;">
-                        <a href="<?= base_url('notifikasi/setting'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
-                            <i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
-                        </a>
-                    </div>
-                </div>
-            </div>
+					<!-- NOTIFICATION DROPDOWN -->
+					<div class="notif-dropdown" id="notifDropdown">
+						<div class="notif-dropdown-header">
+							<span>
+								<?= (isset($unread_count) && $unread_count > 0) ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
+							</span>
+							<div>
+								<?php if (isset($unread_count) && $unread_count > 0): ?>
+									<a href="#" id="markAllReadBtn" class="mr-2"
+										style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
+								<?php endif; ?>
+								<a href="<?= base_url('admin/dashboard/history'); ?>"
+									style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
+							</div>
+						</div>
+						<div class="notif-dropdown-list" id="notifList">
+							<?php if (!empty($notifikasi)): ?>
+								<?php foreach ($notifikasi as $n): ?>
+									<a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
+										href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
+										<?php
+										$icon_type = $n['icon'] ?? 'info';
+										$icon_map = [
+											'success' => 'bi-check-circle-fill',
+											'warning' => 'bi-exclamation-triangle-fill',
+											'danger' => 'bi-x-circle-fill',
+											'info' => 'bi-info-circle-fill'
+										];
+										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+										?>
+										<div class="notif-icon <?= $icon_type; ?>">
+											<i class="bi <?= $icon_class; ?>"></i>
+										</div>
+										<div class="notif-text">
+											<?= htmlspecialchars($n['isi_notifikasi']); ?>
+											<span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+										</div>
+										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
+											<span class="notif-badge-new">Baru</span>
+										<?php endif; ?>
+									</a>
+								<?php endforeach; ?>
+							<?php else: ?>
+								<div class="text-center text-muted py-5 px-3">
+									<i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
+									<p class="small mb-0">Tidak ada notifikasi</p>
+								</div>
+							<?php endif; ?>
+						</div>
+						<div class="p-2 text-center border-top"
+							style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+							<a href="<?= base_url('admin/dashboard/settings'); ?>"
+								class="small text-secondary font-weight-bold text-decoration-none">
+								<i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
+							</a>
+						</div>
+					</div>
+				</div>
 
-            <!-- USER AVATAR -->
-            <div class="d-flex align-items-center" style="cursor:pointer; padding:6px 12px; border-radius:10px; background:var(--card-white); border:1px solid rgba(74,44,17,0.06);">
-                <i class="bi bi-person-circle" style="font-size:1.5rem; color:var(--amber-cream);"></i>
-                <span class="ml-2" style="font-weight:500; font-size:0.85rem;">Admin</span>
-            </div>
+				<!-- USER BADGE -->
+				<?php
+				$nama = $this->session->userdata('nama') ?? 'User';
+				$role = $this->session->userdata('role') ?? 'Member';
+				?>
+				<div class="user-badge">
+					<i class="bi bi-person-circle"></i>
+					<div>
+						<div class="user-name"><?= $nama; ?></div>
+						<div class="user-role"><?= $role; ?></div>
+					</div>
+				</div>
 			</div>
 		</div>
 
-		<!-- QUICK ACTION - RAPI & TIDAK BERDEMPET -->
+		<!-- QUICK ACTION -->
 		<div class="row mb-4 fade-in">
 			<div class="col-12">
 				<div class="d-flex flex-wrap" style="gap: 10px;">
@@ -1112,7 +1534,17 @@
 												<?= $t['status_bayar'] ?? 'Pending'; ?>
 											</span>
 										</td>
-										<td><?= $t['metode_bayar'] ?? 'Transfer'; ?></td>
+										<td>
+											<?php
+											// 🔥 FIX: Ganti Transfer Bank menjadi Virtual Account
+											$metode = $t['metode_bayar'] ?? 'Transfer';
+											if ($metode == 'Transfer Bank' || $metode == 'Transfer') {
+												echo 'Virtual Account';
+											} else {
+												echo $metode;
+											}
+											?>
+										</td>
 										<td><span style="font-size:0.8rem; color:var(--text-secondary);"><?= date('d/m/Y', strtotime($t['tanggal_transaksi'] ?? date('Y-m-d'))); ?></span></td>
 										<td class="text-center">
 											<a href="<?= base_url('admin/transaksi/detail/' . $t['id_transaksi']); ?>"

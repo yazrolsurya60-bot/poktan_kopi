@@ -16,11 +16,18 @@
 			--bg-cream: #FAF6F0;
 			--card-white: #FFFFFF;
 			--text-secondary: #70655E;
+			--text-muted: #A8988A;
 			--sidebar-width: 260px;
 			--shadow-soft: 0 8px 30px rgba(44, 24, 8, 0.08);
 			--shadow-hover: 0 12px 40px rgba(44, 24, 8, 0.15);
 			--radius-card: 14px;
 			--transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
 		}
 
 		body {
@@ -30,7 +37,10 @@
 			overflow-x: hidden;
 		}
 
-		/* --- SIDEBAR --- */
+		/* ============================================ */
+		/* SIDEBAR */
+		/* ============================================ */
+
 		.sidebar {
 			width: var(--sidebar-width);
 			height: 100vh;
@@ -112,6 +122,16 @@
 			font-weight: 600;
 		}
 
+		.menu-item a .menu-badge.danger {
+			background: #EF4444;
+			color: white;
+		}
+
+		.menu-item a .menu-badge.warning {
+			background: #F59E0B;
+			color: white;
+		}
+
 		.menu-item.active a,
 		.menu-item a:hover {
 			color: #ffffff;
@@ -121,6 +141,18 @@
 		.menu-item.active a {
 			background: rgba(230, 161, 92, 0.18);
 			border-left: 3px solid var(--amber-cream);
+		}
+
+		.menu-item.active a::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 3px;
+			height: 24px;
+			background: var(--amber-cream);
+			border-radius: 0 3px 3px 0;
 		}
 
 		.sidebar-footer {
@@ -152,7 +184,22 @@
 			border-color: rgba(230, 161, 92, 0.2);
 		}
 
-		/* --- MAIN CONTENT --- */
+		.sidebar-overlay {
+			display: none;
+			position: fixed;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.4);
+			z-index: 99;
+		}
+
+		.sidebar-overlay.active {
+			display: block;
+		}
+
+		/* ============================================ */
+		/* MAIN CONTENT */
+		/* ============================================ */
+
 		.main-content {
 			margin-left: var(--sidebar-width);
 			padding: 30px 40px 40px;
@@ -160,11 +207,18 @@
 			transition: var(--transition-smooth);
 		}
 
-		/* --- PAGE HEADER --- */
+		/* ============================================ */
+		/* PAGE HEADER */
+		/* ============================================ */
+
 		.page-header {
 			border-bottom: 1px solid rgba(74, 44, 17, 0.08);
 			padding-bottom: 20px;
 			margin-bottom: 30px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			flex-wrap: wrap;
 		}
 
 		.page-header h2 {
@@ -179,18 +233,225 @@
 			margin-top: 2px;
 		}
 
-		.breadcrumb-custom {
-			font-size: 0.78rem;
-			color: var(--text-secondary);
-			margin-bottom: 4px;
+		/* ============================================ */
+		/* HEADER RIGHT - NOTIF + USER BADGE */
+		/* ============================================ */
+
+		.header-right {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			flex-shrink: 0;
 		}
 
-		.breadcrumb-custom a {
+		/* ============================================ */
+		/* USER BADGE - SAMA DENGAN DASHBOARD */
+		/* ============================================ */
+
+		.user-badge {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			padding: 6px 12px;
+			border-radius: 10px;
+			background: var(--card-white);
+			border: 1px solid rgba(74, 44, 17, 0.06);
+			font-weight: 500;
+			font-size: 0.85rem;
+			cursor: default;
+			min-width: 90px;
+		}
+
+		.user-badge i {
+			font-size: 1.4rem;
 			color: var(--amber-cream);
+		}
+
+		.user-badge .user-name {
+			font-weight: 600;
+			font-size: 0.82rem;
+			color: var(--dark-coffee);
+			line-height: 1.2;
+		}
+
+		.user-badge .user-role {
+			font-size: 0.6rem;
+			color: var(--text-secondary);
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		/* ============================================ */
+		/* NOTIFICATION BELL & DROPDOWN */
+		/* ============================================ */
+
+		.notif-btn {
+			position: relative;
+			background: var(--card-white);
+			border: 1px solid rgba(74, 44, 17, 0.06);
+			border-radius: 12px;
+			padding: 8px 14px;
+			color: var(--dark-coffee);
+			transition: var(--transition-smooth);
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.notif-btn:hover {
+			background: var(--bg-cream);
+			box-shadow: var(--shadow-soft);
+		}
+
+		.notif-btn .notif-dot {
+			position: absolute;
+			top: -4px;
+			right: -4px;
+			width: 18px;
+			height: 18px;
+			background: #EF4444;
+			border-radius: 50%;
+			font-size: 0.6rem;
+			color: white;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: 700;
+			border: 2px solid white;
+		}
+
+		.notif-dropdown {
+			position: absolute;
+			right: 0;
+			top: calc(100% + 10px);
+			width: 380px;
+			max-height: 400px;
+			background: var(--card-white);
+			border-radius: var(--radius-card);
+			box-shadow: var(--shadow-hover);
+			border: 1px solid rgba(74, 44, 17, 0.06);
+			overflow: hidden;
+			display: none;
+			z-index: 50;
+		}
+
+		.notif-dropdown.show {
+			display: block;
+			animation: slideDown 0.25s ease;
+		}
+
+		@keyframes slideDown {
+			from {
+				opacity: 0;
+				transform: translateY(-10px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.notif-dropdown-header {
+			padding: 14px 18px;
+			border-bottom: 1px solid rgba(74, 44, 17, 0.06);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			font-weight: 600;
+		}
+
+		.notif-dropdown-header a {
+			font-size: 0.75rem;
+			color: var(--amber-cream);
+			font-weight: 500;
 			text-decoration: none;
 		}
 
-		/* --- SUMMARY / STAT BOX --- */
+		.notif-dropdown-list {
+			max-height: 300px;
+			overflow-y: auto;
+		}
+
+		.notif-item {
+			padding: 12px 18px;
+			border-bottom: 1px solid rgba(74, 44, 17, 0.04);
+			display: flex;
+			align-items: flex-start;
+			gap: 12px;
+			transition: var(--transition-smooth);
+			cursor: pointer;
+			text-decoration: none;
+			color: inherit;
+		}
+
+		.notif-item:hover {
+			background: var(--bg-cream);
+			text-decoration: none;
+			color: inherit;
+		}
+
+		.notif-item .notif-icon {
+			width: 36px;
+			height: 36px;
+			min-width: 36px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 0.9rem;
+		}
+
+		.notif-item .notif-icon.success {
+			background: #D1FAE5;
+			color: #065F46;
+		}
+		.notif-item .notif-icon.warning {
+			background: #FEF3C7;
+			color: #92400E;
+		}
+		.notif-item .notif-icon.info {
+			background: #DBEAFE;
+			color: #1E40AF;
+		}
+		.notif-item .notif-icon.danger {
+			background: #FEE2E2;
+			color: #991B1B;
+		}
+
+		.notif-item .notif-text {
+			flex: 1;
+			font-size: 0.85rem;
+		}
+
+		.notif-item .notif-text .notif-time {
+			font-size: 0.7rem;
+			color: var(--text-secondary);
+			display: block;
+			margin-top: 2px;
+		}
+
+		.notif-item.unread {
+			background: rgba(230, 161, 92, 0.05);
+		}
+
+		.notif-item.unread .notif-text {
+			font-weight: 600;
+		}
+
+		.notif-badge-new {
+			background: var(--amber-cream);
+			color: white;
+			font-size: 0.55rem;
+			padding: 2px 8px;
+			border-radius: 10px;
+			align-self: center;
+		}
+
+		/* ============================================ */
+		/* STAT BOX / SUMMARY CARDS */
+		/* ============================================ */
+
 		.stat-box {
 			background: var(--card-white);
 			border: 1px solid rgba(74, 44, 17, 0.06);
@@ -203,6 +464,7 @@
 			display: flex;
 			align-items: center;
 			gap: 16px;
+			height: 100%;
 		}
 
 		.stat-box:hover {
@@ -241,7 +503,10 @@
 			color: var(--dark-coffee);
 		}
 
-		/* --- CUSTOM CARD --- */
+		/* ============================================ */
+		/* CUSTOM CARD */
+		/* ============================================ */
+
 		.custom-card {
 			background: var(--card-white);
 			border: 1px solid rgba(74, 44, 17, 0.06);
@@ -258,6 +523,7 @@
 			justify-content: space-between;
 			flex-wrap: wrap;
 			gap: 10px;
+			background: rgba(250, 246, 240, 0.3);
 		}
 
 		.custom-card .card-header-custom h6 {
@@ -267,11 +533,18 @@
 			font-size: 0.9rem;
 		}
 
+		.custom-card .card-header-custom h6 i {
+			color: var(--amber-cream);
+		}
+
 		.custom-card .card-body-custom {
 			padding: 0;
 		}
 
-		/* --- FORM CONTROL --- */
+		/* ============================================ */
+		/* FORM CONTROL */
+		/* ============================================ */
+
 		.form-control-custom {
 			padding: 8px 14px;
 			border: 1.5px solid rgba(74, 44, 17, 0.1);
@@ -281,17 +554,24 @@
 			background: var(--bg-cream);
 			outline: none;
 			transition: var(--transition-smooth);
+			width: 100%;
+			font-family: 'Plus Jakarta Sans', sans-serif;
 		}
 
 		.form-control-custom:focus {
 			border-color: var(--amber-cream);
 			box-shadow: 0 0 0 3px rgba(230, 161, 92, 0.15);
+			background: var(--card-white);
 		}
 
-		/* --- TABEL --- */
+		/* ============================================ */
+		/* TABLE */
+		/* ============================================ */
+
 		.table-custom {
 			font-size: 0.85rem;
 			margin-bottom: 0;
+			width: 100%;
 		}
 
 		.table-custom thead th {
@@ -304,6 +584,7 @@
 			letter-spacing: 0.5px;
 			padding: 12px 16px;
 			border-top: none;
+			white-space: nowrap;
 		}
 
 		.table-custom tbody td {
@@ -312,8 +593,16 @@
 			vertical-align: middle;
 		}
 
+		.table-custom tbody tr {
+			transition: var(--transition-smooth);
+		}
+
 		.table-custom tbody tr:hover {
 			background: rgba(250, 246, 240, 0.5);
+		}
+
+		.table-custom tbody tr:last-child td {
+			border-bottom: none;
 		}
 
 		.link-name {
@@ -321,19 +610,26 @@
 			font-weight: 600;
 		}
 
-		/* --- STATUS BADGE --- */
+		/* ============================================ */
+		/* STATUS BADGE */
+		/* ============================================ */
+
 		.status-badge {
 			padding: 4px 12px;
 			border-radius: 20px;
 			font-size: 0.7rem;
 			font-weight: 600;
+			display: inline-block;
 		}
 
 		.status-badge.badge-active   { background: #D1FAE5; color: #065F46; }
 		.status-badge.badge-inactive { background: #FEF3C7; color: #92400E; }
 		.status-badge.badge-offline  { background: #FEE2E2; color: #991B1B; }
 
-		/* --- ACTION BUTTONS --- */
+		/* ============================================ */
+		/* ACTION BUTTONS */
+		/* ============================================ */
+
 		.btn-icon {
 			width: 32px;
 			height: 32px;
@@ -351,11 +647,11 @@
 		.btn-detail { background: #DBEAFE; color: #1E40AF; }
 		.btn-detail:hover { background: #1E40AF; color: #fff; }
 		.btn-toggle { background: #EDE9FE; color: #5B21B6; }
-		.btn-toggle:hover { background: #5B21B6; color: #fff; }
+		.btn-toggle:hover { background: #5B21B6; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(91, 33, 182, 0.3); }
 		.btn-edit   { background: #FEF3C7; color: #92400E; }
-		.btn-edit:hover   { background: #92400E; color: #fff; }
+		.btn-edit:hover   { background: #92400E; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3); }
 		.btn-delete { background: #FEE2E2; color: #991B1B; }
-		.btn-delete:hover { background: #991B1B; color: #fff; }
+		.btn-delete:hover { background: #991B1B; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(153, 27, 27, 0.3); }
 
 		.btn-primary-custom {
 			background: var(--roasted-brown);
@@ -370,11 +666,16 @@
 			display: inline-flex;
 			align-items: center;
 			gap: 6px;
+			cursor: pointer;
+			font-family: 'Plus Jakarta Sans', sans-serif;
 		}
 
 		.btn-primary-custom:hover {
 			background: var(--amber-cream);
 			color: #fff;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(230, 161, 92, 0.3);
+			text-decoration: none;
 		}
 
 		.btn-outline-custom {
@@ -390,28 +691,71 @@
 			display: inline-flex;
 			align-items: center;
 			gap: 6px;
+			cursor: pointer;
+			font-family: 'Plus Jakarta Sans', sans-serif;
 		}
 
 		.btn-outline-custom:hover {
 			background: var(--bg-cream);
 			border-color: var(--amber-cream);
 			color: var(--dark-coffee);
+			text-decoration: none;
 		}
 
-		/* --- SIDEBAR OVERLAY --- */
-		.sidebar-overlay {
-			display: none;
-			position: fixed;
-			inset: 0;
-			background: rgba(0, 0, 0, 0.4);
-			z-index: 99;
+		/* ============================================ */
+		/* BREADCRUMB */
+		/* ============================================ */
+
+		.breadcrumb-custom {
+			font-size: 0.78rem;
+			color: var(--text-secondary);
+			margin-bottom: 4px;
 		}
 
-		.sidebar-overlay.active {
-			display: block;
+		.breadcrumb-custom a {
+			color: var(--amber-cream);
+			text-decoration: none;
 		}
 
-		/* --- RESPONSIVE --- */
+		.breadcrumb-custom a:hover {
+			text-decoration: underline;
+		}
+
+		/* ============================================ */
+		/* SCROLLBAR */
+		/* ============================================ */
+
+		.sidebar-menu-wrapper::-webkit-scrollbar,
+		.notif-dropdown-list::-webkit-scrollbar {
+			width: 3px;
+		}
+
+		.sidebar-menu-wrapper::-webkit-scrollbar-track,
+		.notif-dropdown-list::-webkit-scrollbar-track {
+			background: transparent;
+		}
+
+		.sidebar-menu-wrapper::-webkit-scrollbar-thumb,
+		.notif-dropdown-list::-webkit-scrollbar-thumb {
+			background: rgba(230, 161, 92, 0.3);
+			border-radius: 10px;
+		}
+
+		/* ============================================ */
+		/* RESPONSIVE */
+		/* ============================================ */
+
+		@media (max-width: 1199.98px) {
+			.stat-num {
+				font-size: 1.3rem;
+			}
+			.table-custom thead th,
+			.table-custom tbody td {
+				padding: 10px 12px;
+				font-size: 0.8rem;
+			}
+		}
+
 		@media (max-width: 991.98px) {
 			.sidebar {
 				left: calc(-1 * var(--sidebar-width));
@@ -423,6 +767,10 @@
 				box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
 			}
 
+			.sidebar-overlay.active {
+				display: block;
+			}
+
 			.main-content {
 				margin-left: 0;
 				padding: 20px 16px 30px;
@@ -431,20 +779,341 @@
 			.page-header h2 {
 				font-size: 1.3rem;
 			}
+
+			.page-header .subtitle {
+				font-size: 0.8rem;
+			}
+
+			.notif-dropdown {
+				width: calc(100vw - 32px);
+				right: -60px;
+			}
+
+			.user-badge {
+				padding: 4px 10px;
+				min-width: 70px;
+			}
+
+			.user-badge i {
+				font-size: 1.1rem;
+			}
+
+			.user-badge .user-name {
+				font-size: 0.7rem;
+			}
+
+			.user-badge .user-role {
+				font-size: 0.5rem;
+			}
+
+			.header-right {
+				gap: 8px;
+			}
+
+			.stat-box {
+				padding: 16px 18px;
+			}
+
+			.stat-icon-box {
+				width: 40px;
+				height: 40px;
+				min-width: 40px;
+				font-size: 1.1rem;
+			}
+
+			.stat-num {
+				font-size: 1.2rem;
+			}
+
+			.table-custom thead th,
+			.table-custom tbody td {
+				padding: 10px 10px;
+				font-size: 0.75rem;
+			}
+
+			.table-custom thead th {
+				font-size: 0.6rem;
+			}
+
+			.custom-card .card-header-custom {
+				padding: 14px 18px;
+				flex-direction: column;
+				align-items: stretch;
+			}
+
+			.custom-card .card-header-custom .d-flex {
+				flex-wrap: wrap;
+			}
+
+			.custom-card .card-header-custom .d-flex form {
+				flex: 1;
+				min-width: 150px;
+			}
+
+			.btn-primary-custom,
+			.btn-outline-custom {
+				font-size: 0.75rem;
+				padding: 6px 14px;
+			}
+
+			.btn-icon {
+				width: 28px;
+				height: 28px;
+				font-size: 0.75rem;
+			}
 		}
 
-		/* SCROLLBAR */
-		.sidebar-menu-wrapper::-webkit-scrollbar {
-			width: 3px;
+		@media (max-width: 575.98px) {
+			.main-content {
+				padding: 16px 12px 20px;
+			}
+
+			.page-header h2 {
+				font-size: 1.1rem;
+			}
+
+			.page-header .subtitle {
+				font-size: 0.7rem;
+			}
+
+			.notif-dropdown {
+				width: calc(100vw - 24px);
+				right: -70px;
+			}
+
+			.user-badge {
+				padding: 4px 8px;
+				min-width: 60px;
+				gap: 5px;
+			}
+
+			.user-badge i {
+				font-size: 0.9rem;
+			}
+
+			.user-badge .user-name {
+				font-size: 0.6rem;
+			}
+
+			.user-badge .user-role {
+				display: none;
+			}
+
+			.header-right {
+				gap: 6px;
+			}
+
+			.stat-box {
+				padding: 14px 16px;
+				gap: 12px;
+			}
+
+			.stat-icon-box {
+				width: 36px;
+				height: 36px;
+				min-width: 36px;
+				font-size: 0.9rem;
+			}
+
+			.stat-num {
+				font-size: 1rem;
+			}
+
+			.stat-title {
+				font-size: 0.6rem;
+			}
+
+			.table-custom thead th {
+				font-size: 0.5rem;
+				padding: 6px 8px;
+				white-space: normal;
+			}
+
+			.table-custom tbody td {
+				padding: 8px 8px;
+				font-size: 0.7rem;
+			}
+
+			.link-name {
+				font-size: 0.75rem;
+			}
+
+			.btn-primary-custom,
+			.btn-outline-custom {
+				font-size: 0.65rem;
+				padding: 5px 10px;
+				gap: 4px;
+			}
+
+			.btn-primary-custom i,
+			.btn-outline-custom i {
+				font-size: 0.7rem;
+			}
+
+			.btn-icon {
+				width: 24px;
+				height: 24px;
+				font-size: 0.65rem;
+				border-radius: 6px;
+			}
+
+			.status-badge {
+				font-size: 0.6rem;
+				padding: 2px 8px;
+			}
+
+			.modal-body {
+				padding: 16px 18px !important;
+			}
+
+			.modal-footer {
+				padding: 12px 16px !important;
+				flex-wrap: wrap;
+			}
+
+			.modal-footer .btn-primary-custom,
+			.modal-footer .btn-outline-custom {
+				flex: 1;
+				justify-content: center;
+			}
+
+			.custom-card .card-header-custom {
+				padding: 12px 14px;
+			}
+
+			.custom-card .card-header-custom h6 {
+				font-size: 0.8rem;
+			}
+
+			.custom-card .card-header-custom .d-flex form input {
+				min-width: 100px;
+				font-size: 0.7rem;
+				padding: 6px 10px;
+			}
+
+			.row.mb-4 .col-md-4 {
+				padding: 0 6px;
+			}
+
+			.row.mb-4 .col-md-4 .stat-box {
+				padding: 12px 14px;
+			}
 		}
 
-		.sidebar-menu-wrapper::-webkit-scrollbar-track {
-			background: transparent;
+		/* ============================================ */
+		/* UTILITY */
+		/* ============================================ */
+
+		.text-truncate {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 
-		.sidebar-menu-wrapper::-webkit-scrollbar-thumb {
-			background: rgba(230, 161, 92, 0.3);
+		.gap-1 { gap: 4px; }
+		.gap-2 { gap: 8px; }
+		.gap-3 { gap: 12px; }
+		.gap-4 { gap: 16px; }
+		.gap-5 { gap: 24px; }
+
+		.d-flex-center {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		/* ============================================ */
+		/* ALERT / FLASH MESSAGE */
+		/* ============================================ */
+
+		.alert {
+			border-radius: 12px;
+			border: none;
+			font-size: 0.85rem;
+			padding: 14px 18px;
+			display: flex;
+			align-items: center;
+		}
+
+		.alert-success {
+			background: #D1FAE5;
+			color: #065F46;
+		}
+
+		.alert-danger {
+			background: #FEE2E2;
+			color: #991B1B;
+		}
+
+		.alert .close {
+			font-size: 1.2rem;
+			line-height: 1;
+			padding: 0 0 0 12px;
+			opacity: 0.5;
+		}
+
+		.alert .close:hover {
+			opacity: 1;
+		}
+
+		/* ============================================ */
+		/* MODAL */
+		/* ============================================ */
+
+		.modal-content {
+			border-radius: 16px;
+			border: none;
+			box-shadow: var(--shadow-hover);
+		}
+
+		.modal-header {
+			border-bottom: 1px solid rgba(74, 44, 17, 0.06);
+			padding: 18px 24px;
+		}
+
+		.modal-header .modal-title {
+			font-weight: 700;
+			font-size: 1rem;
+			color: var(--dark-coffee);
+		}
+
+		.modal-header .modal-title i {
+			color: var(--amber-cream);
+		}
+
+		.modal-body {
+			padding: 20px 24px;
+		}
+
+		.modal-footer {
+			border-top: 1px solid rgba(74, 44, 17, 0.06);
+			padding: 14px 24px;
+		}
+
+		.modal-footer .btn {
+			font-family: 'Plus Jakarta Sans', sans-serif;
 			border-radius: 10px;
+		}
+
+		/* ============================================ */
+		/* EMPTY STATE */
+		/* ============================================ */
+
+		.empty-state {
+			padding: 60px 20px;
+			text-align: center;
+		}
+
+		.empty-state i {
+			font-size: 2.5rem;
+			color: #D1C9C0;
+			display: block;
+			margin-bottom: 16px;
+		}
+
+		.empty-state p {
+			color: var(--text-secondary);
+			font-size: 0.85rem;
 		}
 	</style>
 </head>
@@ -472,11 +1141,17 @@
 				<li class="menu-item">
 					<a href="<?= base_url('admin/user'); ?>">
 						<i class="bi bi-people-fill"></i>Manajemen User
+						<?php if (isset($user_baru) && $user_baru > 0): ?>
+							<span class="menu-badge" style="background: #EF4444; color: white;"><?= $user_baru; ?></span>
+						<?php endif; ?>
 					</a>
 				</li>
 				<li class="menu-item">
 					<a href="<?= base_url('admin/petani'); ?>">
 						<i class="bi bi-person-badge-fill"></i>Data Petani
+						<?php if (isset($petani_baru_count) && $petani_baru_count > 0): ?>
+							<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $petani_baru_count; ?></span>
+						<?php endif; ?>
 					</a>
 				</li>
 				<li class="menu-item">
@@ -497,16 +1172,25 @@
 				<li class="menu-item">
 					<a href="<?= base_url('admin/transaksi'); ?>">
 						<i class="bi bi-wallet2"></i>Transaksi
+						<?php if (isset($transaksi_pending) && $transaksi_pending > 0): ?>
+							<span class="menu-badge" style="background: #EF4444; color: white;"><?= $transaksi_pending; ?></span>
+						<?php endif; ?>
 					</a>
 				</li>
 				<li class="menu-item active">
 					<a href="<?= base_url('admin/kurir'); ?>">
 						<i class="bi bi-truck"></i>Manajemen Kurir
+						<?php if (isset($kurir_active) && $kurir_active > 0): ?>
+							<span class="menu-badge" style="background: #10B981; color: white;"><?= $kurir_active; ?></span>
+						<?php endif; ?>
 					</a>
 				</li>
 				<li class="menu-item">
 					<a href="<?= base_url('admin/mitra'); ?>">
 						<i class="bi bi-shop"></i>Manajemen Mitra
+						<?php if (isset($mitra_baru) && $mitra_baru > 0): ?>
+							<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $mitra_baru; ?></span>
+						<?php endif; ?>
 					</a>
 				</li>
 				<li class="menu-item">
@@ -527,34 +1211,114 @@
 	<div class="main-content">
 
 		<!-- PAGE HEADER -->
-		<div class="page-header d-flex justify-content-between align-items-center flex-wrap">
+		<div class="page-header">
 			<div>
 				<button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle" style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
 					<i class="bi bi-list"></i>
 				</button>
-				<h2 class="d-inline-block align-middle mb-0">Manajemen Kurir</h2>
+				<h2 class="d-inline-block align-middle mb-0">
+					<i class="bi bi-truck" style="color:var(--amber-cream);"></i> Manajemen Kurir
+				</h2>
 				<p class="subtitle mb-0 mt-1">Kelola data kurir pengiriman Poktan Liberchain</p>
 			</div>
-			<div class="d-flex align-items-center" style="gap: 12px;">
-				<div class="d-flex align-items-center gap-2" style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
-					<i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-					<span style="font-weight:500; font-size:0.85rem;"><?= $this->session->userdata('nama') ?? 'Admin'; ?></span>
+			<div class="header-right">
+				<!-- NOTIFICATION BELL -->
+				<div style="position: relative;">
+					<button class="notif-btn" id="notifToggle">
+						<i class="bi bi-bell" style="font-size: 1.2rem;"></i>
+						<?php if (isset($unread_count) && $unread_count > 0): ?>
+							<span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
+						<?php else: ?>
+							<span class="notif-dot" id="notifCount" style="display:none;">0</span>
+						<?php endif; ?>
+					</button>
+
+					<!-- NOTIFICATION DROPDOWN -->
+					<div class="notif-dropdown" id="notifDropdown">
+						<div class="notif-dropdown-header">
+							<span>
+								<?= (isset($unread_count) && $unread_count > 0) ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
+							</span>
+							<div>
+								<?php if (isset($unread_count) && $unread_count > 0): ?>
+									<a href="#" id="markAllReadBtn" class="mr-2"
+										style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
+								<?php endif; ?>
+								<a href="<?= base_url('admin/dashboard/history'); ?>"
+									style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
+							</div>
+						</div>
+						<div class="notif-dropdown-list" id="notifList">
+							<?php if (!empty($notifikasi)): ?>
+								<?php foreach ($notifikasi as $n): ?>
+									<a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
+										href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
+										<?php
+										$icon_type = $n['icon'] ?? 'info';
+										$icon_map = [
+											'success' => 'bi-check-circle-fill',
+											'warning' => 'bi-exclamation-triangle-fill',
+											'danger' => 'bi-x-circle-fill',
+											'info' => 'bi-info-circle-fill'
+										];
+										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+										?>
+										<div class="notif-icon <?= $icon_type; ?>">
+											<i class="bi <?= $icon_class; ?>"></i>
+										</div>
+										<div class="notif-text">
+											<?= htmlspecialchars($n['isi_notifikasi']); ?>
+											<span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+										</div>
+										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
+											<span class="notif-badge-new">Baru</span>
+										<?php endif; ?>
+									</a>
+								<?php endforeach; ?>
+							<?php else: ?>
+								<div class="text-center text-muted py-5 px-3">
+									<i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
+									<p class="small mb-0">Tidak ada notifikasi</p>
+								</div>
+							<?php endif; ?>
+						</div>
+						<div class="p-2 text-center border-top"
+							style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+							<a href="<?= base_url('admin/dashboard/settings'); ?>"
+								class="small text-secondary font-weight-bold text-decoration-none">
+								<i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- USER BADGE -->
+				<?php
+					$nama = $this->session->userdata('nama') ?? 'Admin';
+					$role = $this->session->userdata('role') ?? 'Admin';
+				?>
+				<div class="user-badge">
+					<i class="bi bi-person-circle"></i>
+					<div>
+						<div class="user-name"><?= $nama; ?></div>
+						<div class="user-role"><?= $role; ?></div>
+					</div>
 				</div>
 			</div>
 		</div>
 
 		<!-- FLASH MESSAGE -->
 		<?php if ($this->session->flashdata('success')): ?>
-			<div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius:12px; border:none; background:#D1FAE5; color:#065F46; font-size:0.85rem;">
+			<div class="alert alert-success alert-dismissible fade show" role="alert">
 				<i class="bi bi-check-circle-fill mr-2"></i><?= $this->session->flashdata('success'); ?>
-				<button type="button" class="close" data-dismiss="alert" style="font-size:1rem;">&times;</button>
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
 			</div>
 		<?php endif; ?>
 
 		<?php if ($this->session->flashdata('error')): ?>
-			<div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius:12px; border:none; background:#FEE2E2; color:#991B1B; font-size:0.85rem;">
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
 				<i class="bi bi-exclamation-circle-fill mr-2"></i><?= $this->session->flashdata('error'); ?>
-				<button type="button" class="close" data-dismiss="alert" style="font-size:1rem;">&times;</button>
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
 			</div>
 		<?php endif; ?>
 
@@ -589,7 +1353,7 @@
 						<input type="text" name="keyword" class="form-control-custom" placeholder="Cari nama / telepon..." value="<?= htmlspecialchars($keyword ?? ''); ?>" style="min-width:180px;">
 					</form>
 					<a href="<?= base_url('admin/kurir/assign'); ?>" class="btn-outline-custom">
-						<i class="bi bi-truck"></i> Assign Kurir
+						<i class="bi bi-truck"></i> Tugaskan Kurir
 					</a>
 					<a href="<?= base_url('admin/kurir/performance'); ?>" class="btn-outline-custom">
 						<i class="bi bi-bar-chart-fill"></i> Performance
@@ -601,8 +1365,8 @@
 			</div>
 			<div class="card-body-custom">
 				<?php if (empty($list_kurir)): ?>
-					<div class="text-center text-muted py-5">
-						<i class="bi bi-inbox d-block mb-2" style="font-size:2.5rem;"></i>
+					<div class="empty-state">
+						<i class="bi bi-inbox"></i>
 						<p class="mb-0">Belum ada data kurir.</p>
 					</div>
 				<?php else: ?>
@@ -658,40 +1422,40 @@
 									<!-- MODAL EDIT (per baris) -->
 									<div class="modal fade" id="modalEdit<?= $row['id_kurir']; ?>" tabindex="-1">
 										<div class="modal-dialog modal-dialog-centered">
-											<div class="modal-content" style="border-radius:16px; border:none;">
+											<div class="modal-content">
 												<form action="<?= base_url('admin/kurir/edit/' . $row['id_kurir']); ?>" method="post">
-													<div class="modal-header" style="border-bottom:1px solid rgba(74,44,17,0.06);">
-														<h5 class="modal-title font-weight-bold" style="font-size:1rem; color:var(--dark-coffee);">
+													<div class="modal-header">
+														<h5 class="modal-title">
 															<i class="bi bi-pencil-square mr-2"></i>Edit Kurir
 														</h5>
 														<button type="button" class="close" data-dismiss="modal">&times;</button>
 													</div>
-													<div class="modal-body" style="padding:20px 24px;">
+													<div class="modal-body">
 														<div class="form-group">
-															<label class="small font-weight-bold" style="color:var(--dark-coffee);">Nama Kurir</label>
+															<label class="small font-weight-bold">Nama Kurir</label>
 															<input type="text" name="nama_kurir" class="form-control form-control-custom" value="<?= htmlspecialchars($row['nama_kurir']); ?>" required>
 														</div>
 														<div class="form-group">
-															<label class="small font-weight-bold" style="color:var(--dark-coffee);">No. Telepon</label>
+															<label class="small font-weight-bold">No. Telepon</label>
 															<input type="text" name="no_telepon" class="form-control form-control-custom" value="<?= htmlspecialchars($row['no_telepon']); ?>" required>
 														</div>
 														<div class="form-group">
-															<label class="small font-weight-bold" style="color:var(--dark-coffee);">Email</label>
+															<label class="small font-weight-bold">Email</label>
 															<input type="email" name="email" class="form-control form-control-custom" value="<?= htmlspecialchars($row['email'] ?? ''); ?>">
 														</div>
 														<div class="form-group">
-															<label class="small font-weight-bold" style="color:var(--dark-coffee);">Lokasi Terakhir</label>
+															<label class="small font-weight-bold">Lokasi Terakhir</label>
 															<input type="text" name="lokasi_terakhir" class="form-control form-control-custom" value="<?= htmlspecialchars($row['lokasi_terakhir'] ?? ''); ?>">
 														</div>
 														<div class="form-group mb-0">
-															<label class="small font-weight-bold" style="color:var(--dark-coffee);">Status</label>
+															<label class="small font-weight-bold">Status</label>
 															<select name="status" class="form-control form-control-custom">
 																<option value="Active" <?= $row['status'] == 'Active' ? 'selected' : ''; ?>>Active</option>
 																<option value="Inactive" <?= $row['status'] == 'Inactive' ? 'selected' : ''; ?>>Inactive</option>
 															</select>
 														</div>
 													</div>
-													<div class="modal-footer" style="border-top:1px solid rgba(74,44,17,0.06);">
+													<div class="modal-footer">
 														<button type="button" class="btn-outline-custom" data-dismiss="modal">Batal</button>
 														<button type="submit" class="btn-primary-custom">
 															<i class="bi bi-check-circle-fill"></i> Simpan
@@ -713,40 +1477,40 @@
 	<!-- MODAL TAMBAH KURIR -->
 	<div class="modal fade" id="modalTambah" tabindex="-1">
 		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content" style="border-radius:16px; border:none;">
+			<div class="modal-content">
 				<form action="<?= base_url('admin/kurir/tambah'); ?>" method="post">
-					<div class="modal-header" style="border-bottom:1px solid rgba(74,44,17,0.06);">
-						<h5 class="modal-title font-weight-bold" style="font-size:1rem; color:var(--dark-coffee);">
+					<div class="modal-header">
+						<h5 class="modal-title">
 							<i class="bi bi-person-plus-fill mr-2"></i>Tambah Kurir Baru
 						</h5>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
-					<div class="modal-body" style="padding:20px 24px;">
+					<div class="modal-body">
 						<div class="form-group">
-							<label class="small font-weight-bold" style="color:var(--dark-coffee);">Nama Kurir <span class="text-danger">*</span></label>
+							<label class="small font-weight-bold">Nama Kurir <span class="text-danger">*</span></label>
 							<input type="text" name="nama_kurir" class="form-control form-control-custom" placeholder="Masukkan nama lengkap kurir" required>
 						</div>
 						<div class="form-group">
-							<label class="small font-weight-bold" style="color:var(--dark-coffee);">No. Telepon <span class="text-danger">*</span></label>
+							<label class="small font-weight-bold">No. Telepon <span class="text-danger">*</span></label>
 							<input type="text" name="no_telepon" class="form-control form-control-custom" placeholder="Contoh: 081234567890" required>
 						</div>
 						<div class="form-group">
-							<label class="small font-weight-bold" style="color:var(--dark-coffee);">Email <span class="text-muted">(opsional)</span></label>
+							<label class="small font-weight-bold">Email <span class="text-muted">(opsional)</span></label>
 							<input type="email" name="email" class="form-control form-control-custom" placeholder="Contoh: kurir@poktan.com">
 						</div>
 						<div class="form-group">
-							<label class="small font-weight-bold" style="color:var(--dark-coffee);">Lokasi Terakhir <span class="text-muted">(opsional)</span></label>
+							<label class="small font-weight-bold">Lokasi Terakhir <span class="text-muted">(opsional)</span></label>
 							<input type="text" name="lokasi_terakhir" class="form-control form-control-custom" placeholder="Contoh: Terminal Buah Batu">
 						</div>
 						<div class="form-group mb-0">
-							<label class="small font-weight-bold" style="color:var(--dark-coffee);">Status <span class="text-danger">*</span></label>
+							<label class="small font-weight-bold">Status <span class="text-danger">*</span></label>
 							<select name="status" class="form-control form-control-custom">
 								<option value="Active">Active</option>
 								<option value="Inactive" selected>Inactive</option>
 							</select>
 						</div>
 					</div>
-					<div class="modal-footer" style="border-top:1px solid rgba(74,44,17,0.06);">
+					<div class="modal-footer">
 						<button type="button" class="btn-outline-custom" data-dismiss="modal">Batal</button>
 						<button type="submit" class="btn-primary-custom">
 							<i class="bi bi-check-circle-fill"></i> Simpan Kurir
@@ -760,9 +1524,9 @@
 	<!-- MODAL KONFIRMASI HAPUS -->
 	<div class="modal fade" id="modalHapus" tabindex="-1">
 		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content" style="border-radius:16px; border:none;">
+			<div class="modal-content">
 				<div class="modal-header border-0 pb-0">
-					<h5 class="modal-title font-weight-bold" style="font-size:1rem;">Hapus Kurir</h5>
+					<h5 class="modal-title">Hapus Kurir</h5>
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
 				<div class="modal-body text-center py-4">
@@ -773,7 +1537,7 @@
 				</div>
 				<div class="modal-footer border-0 pt-0 justify-content-center" style="gap:8px;">
 					<button type="button" class="btn-outline-custom" data-dismiss="modal">Batal</button>
-					<a href="#" id="btnConfirmHapus" class="btn btn-danger" style="border-radius:10px;">Ya, Hapus</a>
+					<a href="#" id="btnConfirmHapus" class="btn" style="background:#dc2626; color:white; border-radius:10px; padding:8px 18px; font-weight:600;">Ya, Hapus</a>
 				</div>
 			</div>
 		</div>
@@ -782,7 +1546,9 @@
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	<script>
-		// SIDEBAR TOGGLE
+		// ============================================
+		// 1. SIDEBAR TOGGLE
+		// ============================================
 		const sidebar = document.getElementById('sidebarMenu');
 		const overlay = document.getElementById('sidebarOverlay');
 		const toggleBtn = document.getElementById('sidebarToggle');
@@ -809,12 +1575,60 @@
 			}
 		});
 
-		// KONFIRMASI HAPUS
+		// ============================================
+		// 2. NOTIFICATION DROPDOWN
+		// ============================================
+		const notifToggle = document.getElementById('notifToggle');
+		const notifDropdown = document.getElementById('notifDropdown');
+
+		if (notifToggle) {
+			notifToggle.addEventListener('click', function(e) {
+				e.stopPropagation();
+				notifDropdown.classList.toggle('show');
+			});
+		}
+
+		document.addEventListener('click', function(e) {
+			if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
+				notifDropdown.classList.remove('show');
+			}
+		});
+
+		// ============================================
+		// 3. MARK ALL READ
+		// ============================================
+		function markAllRead() {
+			if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+				$.ajax({
+					url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
+					type: 'POST',
+					dataType: 'json',
+					success: function(response) {
+						if (response.success) location.reload();
+						else alert('Gagal menandai semua notifikasi.');
+					},
+					error: function() {
+						alert('Terjadi kesalahan. Silakan coba lagi.');
+					}
+				});
+			}
+		}
+
+		document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
+			e.preventDefault();
+			markAllRead();
+		});
+
+		// ============================================
+		// 4. KONFIRMASI HAPUS
+		// ============================================
 		function confirmDelete(id, nama) {
 			document.getElementById('namaKurirHapus').textContent = nama;
 			document.getElementById('btnConfirmHapus').href = '<?= base_url('admin/kurir/hapus/'); ?>' + id;
 			$('#modalHapus').modal('show');
 		}
+
+		console.log('✅ Halaman Manajemen Kurir siap digunakan!');
 	</script>
 </body>
 

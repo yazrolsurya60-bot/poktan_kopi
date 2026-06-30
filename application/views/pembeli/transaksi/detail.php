@@ -66,12 +66,17 @@
         .notif-item.unread { background: rgba(230, 161, 92, 0.05); }
         .notif-item.unread .notif-text { font-weight: 600; }
 
-        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; display: inline-block; }
         .status-badge.pending { background: #FEF3C7; color: #92400E; }
         .status-badge.processing { background: #DBEAFE; color: #1E40AF; }
         .status-badge.delivery { background: #EDE9FE; color: #5B21B6; }
         .status-badge.complete { background: #D1FAE5; color: #065F46; }
         .status-badge.cancelled { background: #FEE2E2; color: #991B1B; }
+        .status-badge.lunas { background: #D1FAE5; color: #065F46; }
+        .status-badge.belum-bayar { background: #FEF3C7; color: #92400E; }
+        .status-badge.ditolak { background: #FEE2E2; color: #991B1B; }
+        .status-badge.menunggu { background: #FEF3C7; color: #92400E; }
+        .status-badge.diverifikasi { background: #DBEAFE; color: #1E40AF; }
 
         .custom-card { background: var(--card-white); border: 1px solid rgba(74, 44, 17, 0.06); border-radius: var(--radius-card); box-shadow: var(--shadow-soft); transition: var(--transition-smooth); overflow: hidden; }
         .custom-card:hover { box-shadow: var(--shadow-hover); }
@@ -106,10 +111,26 @@
 
         .detail-label { font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.3px; }
         .detail-value { font-weight: 600; }
-        .btn-amber { background: var(--amber-cream); color: white; border-radius: 8px; padding: 8px 20px; font-weight: 600; border: none; }
-        .btn-amber:hover { opacity: 0.8; color: white; }
-        .btn-danger-custom { background: #EF4444; color: white; border-radius: 8px; padding: 8px 20px; font-weight: 600; border: none; }
-        .btn-danger-custom:hover { opacity: 0.8; color: white; }
+        .btn-amber { background: var(--amber-cream); color: white; border-radius: 8px; padding: 8px 20px; font-weight: 600; border: none; transition: var(--transition-smooth); }
+        .btn-amber:hover { opacity: 0.85; color: white; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(230, 161, 92, 0.3); }
+        .btn-danger-custom { background: #EF4444; color: white; border-radius: 8px; padding: 8px 20px; font-weight: 600; border: none; transition: var(--transition-smooth); }
+        .btn-danger-custom:hover { opacity: 0.85; color: white; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
+        .btn-outline-secondary-custom { background: transparent; color: var(--text-secondary); border: 1px solid rgba(74, 44, 17, 0.15); border-radius: 8px; padding: 8px 20px; font-weight: 600; transition: var(--transition-smooth); }
+        .btn-outline-secondary-custom:hover { background: var(--bg-cream); color: var(--dark-coffee); text-decoration: none; }
+        
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-secondary); }
+        .empty-state i { font-size: 3rem; color: var(--amber-cream); opacity: 0.5; display: block; margin-bottom: 16px; }
+
+        .payment-info-box { background: var(--bg-cream); border-radius: 10px; padding: 16px 20px; }
+        .payment-info-box table { font-size: 0.9rem; }
+        .payment-info-box table td { padding: 4px 8px; }
+        .payment-info-box .bank-name { font-weight: 700; color: var(--roasted-brown); }
+        
+        .instruction-alert { border-radius: 10px; border: none; }
+        .instruction-alert i { font-size: 1.1rem; }
+
+        /* Virtual Account style */
+        .va-number { font-size: 1.3rem; font-weight: 700; letter-spacing: 3px; color: var(--roasted-brown); background: var(--bg-cream); padding: 8px 16px; border-radius: 10px; display: inline-block; }
     </style>
 </head>
 <body>
@@ -162,7 +183,7 @@
             <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle" style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
                 <i class="bi bi-list"></i>
             </button>
-            <h2 class="d-inline-block align-middle mb-0">📄 Detail Transaksi #<?= $transaksi['id_transaksi']; ?></h2>
+            <h2 class="d-inline-block align-middle mb-0">📄 Detail Transaksi #<?= $transaksi['id_transaksi'] ?? 'N/A'; ?></h2>
             <p class="subtitle mb-0 mt-1">Informasi lengkap pesanan Anda</p>
         </div>
         <div class="d-flex align-items-center gap-3" style="gap: 12px;">
@@ -201,17 +222,30 @@
 
     <!-- ALERT -->
     <?php if ($this->session->flashdata('success')): ?>
-        <div class="alert alert-success alert-dismissible fade show">
+        <div class="alert alert-success alert-dismissible fade show" style="border-radius:10px; border:none;">
             <i class="bi bi-check-circle mr-1"></i> <?= $this->session->flashdata('success'); ?>
             <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
     <?php endif; ?>
     <?php if ($this->session->flashdata('error')): ?>
-        <div class="alert alert-danger alert-dismissible fade show">
+        <div class="alert alert-danger alert-dismissible fade show" style="border-radius:10px; border:none;">
             <i class="bi bi-exclamation-circle mr-1"></i> <?= $this->session->flashdata('error'); ?>
             <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
     <?php endif; ?>
+
+    <?php if (empty($transaksi)): ?>
+        <div class="custom-card">
+            <div class="card-body-custom empty-state">
+                <i class="bi bi-exclamation-circle"></i>
+                <h5>Transaksi tidak ditemukan</h5>
+                <p class="text-muted">Data transaksi yang Anda cari tidak tersedia.</p>
+                <a href="<?= base_url('pembeli/transaksi/history'); ?>" class="btn-amber">
+                    <i class="bi bi-arrow-left mr-1"></i> Kembali ke Riwayat
+                </a>
+            </div>
+        </div>
+    <?php else: ?>
 
     <div class="row">
         <!-- INFORMASI TRANSAKSI -->
@@ -219,13 +253,23 @@
             <div class="custom-card">
                 <div class="card-header-custom">
                     <h6><i class="bi bi-info-circle text-primary mr-2"></i> Informasi Pesanan</h6>
-                    <span class="status-badge <?php 
-                        echo $transaksi['status_pesanan'] == 'Selesai' ? 'complete' : 
-                             ($transaksi['status_pesanan'] == 'Pending' ? 'pending' :
-                             ($transaksi['status_pesanan'] == 'Dikirim' ? 'delivery' :
-                             ($transaksi['status_pesanan'] == 'Diproses' ? 'processing' : 'cancelled')));
-                    ?>">
-                        <?= $transaksi['status_pesanan']; ?>
+                    <?php 
+                    $status = $transaksi['status_pesanan'] ?? 'Pending';
+                    $status_map = [
+                        'Selesai' => 'complete',
+                        'Complete' => 'complete',
+                        'Dikirim' => 'delivery',
+                        'Shipped' => 'delivery',
+                        'Diproses' => 'processing',
+                        'Processing' => 'processing',
+                        'Pending' => 'pending',
+                        'Dibatalkan' => 'cancelled',
+                        'Cancelled' => 'cancelled'
+                    ];
+                    $badge_class = $status_map[$status] ?? 'pending';
+                    ?>
+                    <span class="status-badge <?= $badge_class; ?>">
+                        <?= $status; ?>
                     </span>
                 </div>
                 <div class="card-body-custom">
@@ -235,29 +279,33 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-5 detail-label">Tanggal</div>
-                        <div class="col-7"><?= date('d/m/Y H:i', strtotime($transaksi['tanggal_transaksi'])); ?></div>
+                        <div class="col-7"><?= date('d/m/Y H:i', strtotime($transaksi['tanggal_transaksi'] ?? date('Y-m-d H:i:s'))); ?></div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-5 detail-label">Metode Bayar</div>
-                        <div class="col-7"><?= $transaksi['metode_bayar']; ?></div>
+                        <div class="col-7"><?= $transaksi['metode_bayar'] ?? '-'; ?></div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-5 detail-label">Status Bayar</div>
                         <div class="col-7">
-                            <span class="status-badge <?= $transaksi['status_bayar'] == 'Lunas' ? 'complete' : 'pending'; ?>">
-                                <?= $transaksi['status_bayar']; ?>
+                            <?php 
+                            $status_bayar = $transaksi['status_bayar'] ?? 'Belum Bayar';
+                            $bayar_class = $status_bayar == 'Lunas' ? 'lunas' : ($status_bayar == 'Diverifikasi' ? 'diverifikasi' : ($status_bayar == 'Ditolak' ? 'ditolak' : 'belum-bayar'));
+                            ?>
+                            <span class="status-badge <?= $bayar_class; ?>">
+                                <?= $status_bayar; ?>
                             </span>
                         </div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-5 detail-label">Alamat Kirim</div>
-                        <div class="col-7"><?= $transaksi['alamat_kirim']; ?></div>
+                        <div class="col-7"><?= $transaksi['alamat_kirim'] ?? '-'; ?></div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-5 detail-label">Kota</div>
-                        <div class="col-7"><?= $transaksi['kota_kirim']; ?></div>
+                        <div class="col-7"><?= $transaksi['kota_kirim'] ?? '-'; ?></div>
                     </div>
-                    <?php if ($transaksi['alasan_batal']): ?>
+                    <?php if (!empty($transaksi['alasan_batal'])): ?>
                     <div class="row mb-2">
                         <div class="col-5 detail-label">Alasan Batal</div>
                         <div class="col-7" style="color: #EF4444;"><?= $transaksi['alasan_batal']; ?></div>
@@ -272,9 +320,15 @@
             <div class="custom-card">
                 <div class="card-header-custom">
                     <h6><i class="bi bi-box-seam text-success mr-2"></i> Detail Produk</h6>
-                    <span class="badge" style="background: var(--bg-cream); color: var(--text-secondary);"><?= count($details); ?> item</span>
+                    <span class="badge" style="background: var(--bg-cream); color: var(--text-secondary);"><?= count($details ?? []); ?> item</span>
                 </div>
                 <div class="card-body-custom" style="padding:0;">
+                    <?php if (empty($details)): ?>
+                        <div class="empty-state" style="padding: 20px;">
+                            <i class="bi bi-box" style="font-size: 2rem;"></i>
+                            <p>Tidak ada produk dalam transaksi ini</p>
+                        </div>
+                    <?php else: ?>
                     <div class="table-responsive">
                         <table class="table table-custom mb-0">
                             <thead>
@@ -285,97 +339,229 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($details as $d): ?>
+                                <?php 
+                                $total_terhitung = 0;
+                                foreach ($details as $d): 
+                                    $subtotal = ($d['harga_satuan'] ?? 0) * ($d['jumlah'] ?? 0);
+                                    $total_terhitung += $subtotal;
+                                ?>
                                 <tr>
-                                    <td><?= $d['nama_produk']; ?></td>
-                                    <td class="text-center"><?= $d['jumlah']; ?></td>
-                                    <td class="text-right">Rp <?= number_format($d['subtotal'], 0, ',', '.'); ?></td>
+                                    <td><?= $d['nama_produk'] ?? 'Produk tidak tersedia'; ?></td>
+                                    <td class="text-center"><?= $d['jumlah'] ?? 0; ?></td>
+                                    <td class="text-right">Rp <?= number_format($subtotal, 0, ',', '.'); ?></td>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th colspan="2" class="text-right">Subtotal</th>
-                                    <th class="text-right">Rp <?= number_format($transaksi['total_harga'], 0, ',', '.'); ?></th>
+                                    <th class="text-right">Rp <?= number_format($transaksi['total_harga'] ?? $total_terhitung, 0, ',', '.'); ?></th>
                                 </tr>
                                 <tr>
                                     <th colspan="2" class="text-right">Ongkir</th>
-                                    <th class="text-right">Rp <?= number_format($transaksi['ongkir'], 0, ',', '.'); ?></th>
+                                    <th class="text-right">Rp <?= number_format($transaksi['ongkir'] ?? 0, 0, ',', '.'); ?></th>
                                 </tr>
+                                <?php 
+                                $grand_total = ($transaksi['total_harga'] ?? 0) + ($transaksi['ongkir'] ?? 0);
+                                ?>
                                 <tr style="border-top: 2px solid var(--amber-cream);">
                                     <th colspan="2" class="text-right" style="font-size:1rem;">Grand Total</th>
                                     <th class="text-right" style="font-size:1.1rem; color: var(--amber-cream); font-weight:700;">
-                                        Rp <?= number_format($transaksi['grand_total'], 0, ',', '.'); ?>
+                                        Rp <?= number_format($grand_total, 0, ',', '.'); ?>
                                     </th>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
+                    <?php endif; ?>
                 </div>
             </div>
-
-            <?php if ($transaksi['status_pesanan'] == 'Pending' && $transaksi['status_bayar'] != 'Lunas'): ?>
-            <div class="custom-card mt-3">
-                <div class="card-header-custom" style="background: #FEF3C7;">
-                    <h6><i class="bi bi-upload text-warning mr-2"></i> Upload Bukti Pembayaran</h6>
-                </div>
-                <div class="card-body-custom">
-                    <form action="<?= base_url('pembeli/transaksi/upload_bukti'); ?>" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="id_transaksi" value="<?= $transaksi['id_transaksi']; ?>">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label style="font-size:0.8rem; font-weight:600;">Nama Bank</label>
-                                    <input type="text" name="nama_bank" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label style="font-size:0.8rem; font-weight:600;">Nama Pengirim</label>
-                                    <input type="text" name="nama_pengirim" class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label style="font-size:0.8rem; font-weight:600;">Tanggal Transfer</label>
-                                    <input type="date" name="tanggal_transfer" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label style="font-size:0.8rem; font-weight:600;">Jumlah Transfer</label>
-                                    <input type="number" name="jumlah_transfer" class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size:0.8rem; font-weight:600;">File Bukti</label>
-                            <input type="file" name="file_bukti" class="form-control" accept="image/*,application/pdf" required>
-                        </div>
-                        <button type="submit" class="btn-amber"><i class="bi bi-upload mr-1"></i> Upload Bukti</button>
-                    </form>
-                </div>
-            </div>
-            <?php endif; ?>
         </div>
     </div>
 
-    <!-- TOMBOL AKSI -->
-    <div class="mt-4">
-        <a href="<?= base_url('pembeli/transaksi/history'); ?>" class="btn btn-outline-secondary" style="border-radius:8px; padding:8px 20px;">
-            <i class="bi bi-arrow-left"></i> Kembali
-        </a>
-        <a href="<?= base_url('transaksi/invoice/' . $transaksi['id_transaksi']); ?>" target="_blank" class="btn-amber">
-            <i class="bi bi-file-pdf"></i> Download Invoice
-        </a>
-        <?php if (in_array($transaksi['status_pesanan'], ['Pending', 'Diproses'])): ?>
-            <button class="btn-danger-custom" data-toggle="modal" data-target="#modalBatal">
-                <i class="bi bi-x-circle"></i> Batalkan Pesanan
-            </button>
-        <?php endif; ?>
+    <!-- ============================================================ -->
+    <!-- 🔥 INFORMASI PEMBAYARAN - VIRTUAL ACCOUNT                    -->
+    <!-- ============================================================ -->
+    <div class="row">
+        <div class="col-12">
+            <div class="custom-card">
+                <div class="card-header-custom" style="background: <?= $status_bayar == 'Lunas' ? '#D1FAE5' : ($status_bayar == 'Ditolak' ? '#FEE2E2' : '#FEF3C7'); ?>;">
+                    <h6>
+                        <i class="bi bi-credit-card mr-2"></i> 
+                        Informasi Pembayaran
+                        <span class="status-badge <?= $bayar_class; ?> ml-2">
+                            <?= $status_bayar; ?>
+                        </span>
+                    </h6>
+                </div>
+                <div class="card-body-custom">
+
+                    <?php if ($status_bayar == 'Belum Bayar' || $status_bayar == 'Pending' || $status_bayar == 'Menunggu Pembayaran'): ?>
+                        <!-- 🔥 STATUS: BELUM BAYAR / PENDING - VIRTUAL ACCOUNT -->
+                        <div class="alert alert-warning instruction-alert">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-info-circle mr-3 mt-1" style="font-size:1.3rem;"></i>
+                                <div>
+                                    <h6 class="mb-2" style="font-weight:700;">⏳ Menunggu Pembayaran</h6>
+                                    <p class="mb-2">Silakan lakukan pembayaran melalui Virtual Account berikut:</p>
+                                    
+                                    <div class="payment-info-box">
+                                        <table class="table table-sm table-borderless mb-0">
+                                            <tr>
+                                                <td width="160"><strong>Virtual Account</strong></td>
+                                                <td>: <span class="va-number">8888-1234-5678-<?= str_pad($transaksi['id_transaksi'], 4, '0', STR_PAD_LEFT); ?></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Bank</strong></td>
+                                                <td>: <span class="bank-name">BCA</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Atas Nama</strong></td>
+                                                <td>: <span class="bank-name">POKTAN Liberchain</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Total Pembayaran</strong></td>
+                                                <td>: <strong style="color: var(--roasted-brown); font-size:1.1rem;">Rp <?= number_format($grand_total, 0, ',', '.'); ?></strong></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    
+                                    <small class="text-muted mt-2 d-block">
+                                        <i class="bi bi-clock mr-1"></i> 
+                                        Pembayaran akan terverifikasi otomatis setelah Anda transfer ke Virtual Account di atas.
+                                        <br>
+                                        <i class="bi bi-info-circle mr-1"></i>
+                                        Pastikan nominal transfer sesuai dengan total pembayaran.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php elseif ($status_bayar == 'Diverifikasi'): ?>
+                        <!-- 🔥 STATUS: DIVERIFIKASI -->
+                        <div class="alert alert-info instruction-alert">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-hourglass-split mr-3 mt-1" style="font-size:1.3rem;"></i>
+                                <div>
+                                    <h6 class="mb-2" style="font-weight:700;">🔄 Pembayaran Sedang Diverifikasi</h6>
+                                    <p class="mb-0">Admin sedang memverifikasi pembayaran Anda. Mohon tunggu sebentar.</p>
+                                    <small class="text-muted mt-2 d-block">
+                                        <i class="bi bi-clock mr-1"></i> Proses verifikasi maksimal 1x24 jam.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php elseif ($status_bayar == 'Lunas'): ?>
+                        <!-- 🔥 STATUS: LUNAS -->
+                        <div class="alert alert-success instruction-alert">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-check-circle-fill mr-3 mt-1" style="font-size:1.3rem;"></i>
+                                <div>
+                                    <h6 class="mb-2" style="font-weight:700;">✅ Pembayaran Lunas</h6>
+                                    <p class="mb-0">Pembayaran Anda telah dikonfirmasi. Pesanan akan segera diproses.</p>
+                                    <small class="text-muted mt-2 d-block">
+                                        <i class="bi bi-truck mr-1"></i> Status pesanan akan berubah menjadi "Diproses" setelah admin mengkonfirmasi.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php elseif ($status_bayar == 'Ditolak'): ?>
+                        <!-- 🔥 STATUS: DITOLAK -->
+                        <div class="alert alert-danger instruction-alert">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-x-circle-fill mr-3 mt-1" style="font-size:1.3rem;"></i>
+                                <div>
+                                    <h6 class="mb-2" style="font-weight:700;">❌ Pembayaran Ditolak</h6>
+                                    <p class="mb-0">Pembayaran Anda ditolak oleh admin dengan alasan:</p>
+                                    <div class="mt-2 p-2" style="background: rgba(239,68,68,0.1); border-radius:8px;">
+                                        <em>"<?= $bukti['keterangan'] ?? 'Data tidak valid. Silakan hubungi admin.'; ?>"</em>
+                                    </div>
+                                    <small class="text-muted mt-2 d-block">
+                                        <i class="bi bi-arrow-repeat mr-1"></i> Silakan hubungi admin untuk informasi lebih lanjut.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php else: ?>
+                        <!-- 🔥 STATUS: LAINNYA (fallback) -->
+                        <div class="alert alert-secondary instruction-alert">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-info-circle mr-3 mt-1" style="font-size:1.3rem;"></i>
+                                <div>
+                                    <h6 class="mb-2" style="font-weight:700;">ℹ️ Status Pembayaran</h6>
+                                    <p class="mb-0">Status pembayaran: <strong><?= $status_bayar; ?></strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- 🔥 TAMPILKAN BUKTI YANG SUDAH DIUPLOAD (JIKA ADA) -->
+                    <?php if (!empty($bukti) && $bukti['status_verifikasi'] != 'Ditolak'): ?>
+                    <div class="mt-3 p-3" style="background: var(--bg-cream); border-radius:10px;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <small class="text-muted">Bank</small>
+                                <div class="font-weight-bold"><?= $bukti['nama_bank'] ?? '-'; ?></div>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted">Nama Pengirim</small>
+                                <div class="font-weight-bold"><?= $bukti['nama_pengirim'] ?? '-'; ?></div>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted">Tanggal Transfer</small>
+                                <div class="font-weight-bold"><?= date('d/m/Y', strtotime($bukti['tanggal_transfer'] ?? date('Y-m-d'))); ?></div>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted">Jumlah Transfer</small>
+                                <div class="font-weight-bold">Rp <?= number_format($bukti['jumlah_transfer'] ?? 0, 0, ',', '.'); ?></div>
+                            </div>
+                            <?php if (!empty($bukti['file_bukti'])): ?>
+                            <div class="col-12 mt-2">
+                                <a href="<?= base_url('uploads/bukti/' . $bukti['file_bukti']); ?>" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> Lihat Bukti
+                                </a>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
+                    <!-- 🔥 TOMBOL AKSI -->
+                    <div class="mt-3 d-flex flex-wrap" style="gap:10px;">
+                        <a href="<?= base_url('pembeli/transaksi/history'); ?>" class="btn-outline-secondary-custom">
+                            <i class="bi bi-arrow-left"></i> Kembali
+                        </a>
+                        <a href="<?= base_url('pembeli/transaksi/invoice/' . $transaksi['id_transaksi']); ?>" target="_blank" class="btn-amber">
+                            <i class="bi bi-file-pdf"></i> Download Invoice
+                        </a>
+                        <?php 
+                        $status_cancel = $transaksi['status_pesanan'] ?? '';
+                        if (in_array($status_cancel, ['Pending', 'Diproses', 'Menunggu Pembayaran'])): 
+                        ?>
+                            <button class="btn-danger-custom" data-toggle="modal" data-target="#modalBatal">
+                                <i class="bi bi-x-circle"></i> Batalkan Pesanan
+                            </button>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- 🔥 CATATAN -->
+                    <div class="mt-3 pt-3 border-top" style="border-color: rgba(74,44,17,0.08);">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle mr-1"></i>
+                            <strong>Catatan:</strong> Pembayaran via Virtual Account akan terverifikasi otomatis. 
+                            Jika ada kendala, silakan hubungi customer service.
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
+
+    <?php endif; // end if empty transaksi ?>
 </div>
 
 <!-- MODAL BATAL -->
@@ -386,9 +572,9 @@
                 <h5 class="modal-title" style="font-weight:700;"><i class="bi bi-exclamation-triangle-fill text-danger mr-2"></i> Batalkan Pesanan</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <form action="<?= base_url('pembeli/transaksi/batalkan/' . $transaksi['id_transaksi']); ?>" method="POST">
+            <form action="<?= base_url('pembeli/transaksi/batalkan/' . ($transaksi['id_transaksi'] ?? '')); ?>" method="POST">
                 <div class="modal-body">
-                    <p>Yakin ingin membatalkan pesanan #<?= $transaksi['id_transaksi']; ?>?</p>
+                    <p>Yakin ingin membatalkan pesanan #<?= $transaksi['id_transaksi'] ?? 'N/A'; ?>?</p>
                     <div class="form-group">
                         <label style="font-weight:600; font-size:0.85rem;">Alasan Pembatalan</label>
                         <textarea name="alasan" class="form-control" rows="3" placeholder="Tulis alasan pembatalan..."></textarea>
