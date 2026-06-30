@@ -107,9 +107,6 @@ class Transaksi extends CI_Controller {
 
     // ==================== CHECKOUT ====================
 
-    // ============================================================
-    // 🔥 FIX: CHECKOUT - OTP WAJIB UNTUK SEMUA (MEMBER + GUEST)
-    // ============================================================
     public function checkout() {
         $data['title'] = 'Checkout';
         
@@ -124,11 +121,10 @@ class Transaksi extends CI_Controller {
         }
 
         // ============================================================
-        // 🔥 GATE VERIFIKASI OTP — WAJIB UNTUK SEMUA (MEMBER + GUEST)
+        // GATE VERIFIKASI OTP — WAJIB UNTUK SEMUA (MEMBER + GUEST)
         // ============================================================
         $sudah_terverifikasi = $this->session->userdata('otp_verified');
         
-        // Cek di database untuk member (kalau sudah pernah verifikasi sebelumnya)
         if (!$sudah_terverifikasi && $id_user) {
             $user_cek = $this->User_model->get_by_id($id_user);
             if ($user_cek && !empty($user_cek['kontak_terverifikasi'])) {
@@ -137,10 +133,7 @@ class Transaksi extends CI_Controller {
             }
         }
         
-        // 🔥 WAJIB OTP UNTUK SEMUA (MEMBER + GUEST) - TAPI GUEST BELUM ADA OTP
-        // Untuk guest, kita tetap redirect ke verifikasi
         if (!$sudah_terverifikasi) {
-            // Simpan data checkout sementara untuk setelah OTP
             $this->session->set_userdata('redirect_after_otp', 'transaksi/checkout');
             $this->session->set_userdata('otp_checkout_data', [
                 'id_user' => $id_user,
@@ -189,7 +182,6 @@ class Transaksi extends CI_Controller {
         $this->form_validation->set_rules('no_hp', 'No HP', 'required');
         $this->form_validation->set_rules('metode_bayar', 'Metode Bayar', 'required');
         
-        // 🔥 TAMBAH: validasi email untuk guest
         $id_user = $this->session->userdata('id_user');
         if (!$id_user) {
             $this->form_validation->set_rules('email_pembeli', 'Email', 'required|valid_email');
@@ -209,13 +201,18 @@ class Transaksi extends CI_Controller {
             redirect('transaksi/keranjang');
         }
         
+        // ============================================
+        // 🔥 FIX: HITUNG SUBTOTAL DARI SEMUA ITEM
+        // ============================================
         $subtotal = 0;
         foreach ($cart_items as $item) {
-            $subtotal += $item['harga_satuan'] * $item['jumlah'];
+            // Pastikan harga_satuan selalu ada (fallback ke harga_produk)
+            $harga = isset($item['harga_satuan']) ? $item['harga_satuan'] : ($item['harga_produk'] ?? 0);
+            $subtotal += $harga * $item['jumlah'];
         }
 
         // ============================================
-        // HITUNG ONGKIR - PAKAI KOTA ASAL PONTIANAK
+        // HITUNG ONGKIR
         // ============================================
         $kota_asal = 'Pontianak';
         $kota_tujuan = $this->input->post('kota_kirim');
@@ -227,20 +224,18 @@ class Transaksi extends CI_Controller {
         }
 
         $ongkir = $hasil_ongkir['ongkir'];
+        
+        // ============================================
+        // 🔥 FIX: GRAND TOTAL = SUBTOTAL + ONGKIR
+        // ============================================
         $grand_total = $subtotal + $ongkir;
 
-        // ============================================
-        // EMAIL PEMBELI
-        // ============================================
         $email_pembeli = $this->input->post('email_pembeli');
         if ($id_user) {
             $user = $this->User_model->get_by_id($id_user);
             $email_pembeli = $user['email'];
         }
 
-        // ============================================
-        // DATA TRANSAKSI
-        // ============================================
         $data_transaksi = array(
             'id_user'        => $id_user,
             'email_pembeli'  => $email_pembeli,
@@ -293,18 +288,19 @@ class Transaksi extends CI_Controller {
         $this->Keranjang_model->kosongkan($id_user, $session_id);
         
         // ============================================
-        // NOTIFIKASI KE ADMIN & PEMBELI
+        // 🔥 NOTIFIKASI KE ADMIN, PEMBELI, & PETANI
         // ============================================
-        // Notifikasi ke Admin
+        
+        // 1. Notifikasi ke Admin
         $this->Notifikasi_model->save_notifikasi([
-            'id_user' => 1, // Admin
+            'id_user' => 1,
             'judul' => '📦 Pesanan Baru',
             'isi_notifikasi' => 'Pesanan #' . $id_transaksi . ' dari ' . ($data_transaksi['nama_penerima'] ?? 'Guest') . ' menunggu konfirmasi.',
             'link' => 'admin/transaksi/detail/' . $id_transaksi,
             'icon' => 'info'
         ]);
         
-        // Notifikasi ke Pembeli (jika member)
+        // 2. Notifikasi ke Pembeli (jika member)
         if ($id_user) {
             $this->Notifikasi_model->save_notifikasi([
                 'id_user' => $id_user,
@@ -315,7 +311,22 @@ class Transaksi extends CI_Controller {
             ]);
         }
         
-        // Flash message untuk guest (ada link tracking)
+        // 🔥 3. Notifikasi ke Petani (pemilik produk)
+        $this->load->model('Produk_model');
+        foreach ($cart_items as $item) {
+            $produk = $this->Produk_model->getById($item['id_produk']);
+            if ($produk && $produk->id_user) {
+                $this->Notifikasi_model->save_notifikasi([
+                    'id_user' => $produk->id_user,
+                    'judul' => '📦 Pesanan Baru',
+                    'isi_notifikasi' => 'Produk ' . $produk->nama_produk . ' Anda dipesan oleh ' . ($data_transaksi['nama_penerima'] ?? 'Pembeli'),
+                    'link' => 'petani/transaksi/detail/' . $id_transaksi,
+                    'icon' => 'info'
+                ]);
+            }
+        }
+        
+        // Flash message
         if (!$id_user) {
             $this->session->set_flashdata('success', '✅ Transaksi berhasil! Gunakan invoice dan email untuk tracking di <a href="' . base_url('guest/tracking') . '">Cek Pesanan</a>');
         } else {
@@ -336,7 +347,6 @@ class Transaksi extends CI_Controller {
             show_404();
         }
         
-        // 🔥 CEK: Kalau transaksi guest (id_user NULL), redirect ke guest tracking
         if ($data['transaksi']['id_user'] === null) {
             redirect('guest/tracking/detail/' . $id_transaksi);
         }
@@ -353,13 +363,11 @@ class Transaksi extends CI_Controller {
     public function upload_bukti() {
         $id_transaksi = $this->input->post('id_transaksi');
         
-        // Ambil transaksi untuk cek
         $transaksi = $this->Transaksi_model->get_transaksi($id_transaksi);
         if (!$transaksi) {
             show_404();
         }
         
-        // Cek apakah transaksi ini milik user yang login
         $id_user = $this->session->userdata('id_user');
         if ($transaksi['id_user'] && $transaksi['id_user'] != $id_user) {
             show_404();
@@ -396,9 +404,8 @@ class Transaksi extends CI_Controller {
         $this->Transaksi_model->upload_bukti($data_bukti);
         $this->Transaksi_model->update_status_bayar($id_transaksi, 'Pending');
         
-        // 🔥 NOTIFIKASI KE ADMIN
         $this->Notifikasi_model->save_notifikasi([
-            'id_user' => 1, // Admin
+            'id_user' => 1,
             'judul' => '📷 Bukti Pembayaran Baru',
             'isi_notifikasi' => 'Pembeli ' . ($transaksi['nama_pembeli'] ?? 'Guest') . ' mengupload bukti untuk transaksi #' . $id_transaksi,
             'link' => 'admin/transaksi/detail/' . $id_transaksi,
@@ -438,9 +445,8 @@ class Transaksi extends CI_Controller {
             $this->Produk_model->tambah_stok($detail['id_produk'], $detail['jumlah']);
         }
         
-        // 🔥 NOTIFIKASI KE ADMIN
         $this->Notifikasi_model->save_notifikasi([
-            'id_user' => 1, // Admin
+            'id_user' => 1,
             'judul' => '📝 Pesanan Dibatalkan',
             'isi_notifikasi' => 'Pesanan #' . $id_transaksi . ' dibatalkan oleh pembeli. Alasan: ' . $alasan,
             'link' => 'admin/transaksi/detail/' . $id_transaksi,
@@ -475,4 +481,3 @@ class Transaksi extends CI_Controller {
         echo json_encode(['total' => $total]);
     }
 }
-?>
