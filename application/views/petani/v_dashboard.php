@@ -111,6 +111,22 @@
 			padding: 2px 10px;
 			border-radius: 20px;
 			font-weight: 600;
+			transition: var(--transition-smooth);
+		}
+
+		.menu-item a .menu-badge.danger {
+			background: #EF4444;
+			color: white;
+		}
+
+		.menu-item a .menu-badge.warning {
+			background: #F59E0B;
+			color: white;
+		}
+
+		.menu-item a .menu-badge.success {
+			background: #10B981;
+			color: white;
 		}
 
 		.menu-item.active a,
@@ -207,7 +223,7 @@
 		}
 
 		/* ============================================ */
-		/* USER BADGE - SAMA DENGAN DASHBOARD */
+		/* USER BADGE */
 		/* ============================================ */
 
 		.user-badge {
@@ -708,7 +724,7 @@
 
 		/* --- QUICK ACTION BUTTONS --- */
 		.quick-action-btn {
-			padding: 10px 16px;
+			padding: 12px 16px;
 			border: 1px solid rgba(74, 44, 17, 0.06);
 			border-radius: 10px;
 			background: var(--card-white);
@@ -716,25 +732,54 @@
 			transition: var(--transition-smooth);
 			display: flex;
 			align-items: center;
-			gap: 10px;
-			font-weight: 500;
+			gap: 12px;
+			font-weight: 600;
 			font-size: 0.85rem;
 			cursor: pointer;
 			width: 100%;
 			text-decoration: none;
+			box-shadow: var(--shadow-soft);
 		}
 
 		.quick-action-btn:hover {
 			background: var(--bg-cream);
 			border-color: var(--amber-cream);
-			transform: translateX(4px);
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-hover);
 			text-decoration: none;
 			color: var(--dark-coffee);
 		}
 
-		.quick-action-btn i {
+		.quick-action-btn .q-icon {
+			width: 38px;
+			height: 38px;
+			border-radius: 10px;
+			background: rgba(230, 161, 92, 0.1);
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			font-size: 1.1rem;
 			color: var(--amber-cream);
+			transition: var(--transition-smooth);
+		}
+
+		.quick-action-btn:hover .q-icon {
+			background: var(--amber-cream);
+			color: white;
+		}
+
+		.quick-action-btn .q-text {
+			flex: 1;
+		}
+
+		.quick-action-btn .q-arrow {
+			color: var(--text-secondary);
+			transition: var(--transition-smooth);
+		}
+
+		.quick-action-btn:hover .q-arrow {
+			color: var(--amber-cream);
+			transform: translateX(4px);
 		}
 
 		/* --- CALENDAR / JADWAL PANEN --- */
@@ -832,7 +877,7 @@
 		}
 
 		/* ============================================ */
-		/* RESPONSIVE - SAMA DENGAN DASHBOARD */
+		/* RESPONSIVE */
 		/* ============================================ */
 
 		@media (max-width: 991.98px) {
@@ -900,6 +945,21 @@
 			.header-right {
 				gap: 8px;
 			}
+
+			.quick-action-btn {
+				padding: 10px 14px;
+				font-size: 0.8rem;
+			}
+
+			.quick-action-btn .q-icon {
+				width: 32px;
+				height: 32px;
+				font-size: 0.9rem;
+			}
+
+			.sidebar-overlay.active {
+				display: block;
+			}
 		}
 
 		@media (max-width: 575.98px) {
@@ -953,6 +1013,18 @@
 			.header-right {
 				gap: 6px;
 			}
+
+			.quick-action-btn {
+				padding: 8px 12px;
+				font-size: 0.75rem;
+				gap: 8px;
+			}
+
+			.quick-action-btn .q-icon {
+				width: 28px;
+				height: 28px;
+				font-size: 0.8rem;
+			}
 		}
 
 		/* SIDEBAR OVERLAY */
@@ -966,12 +1038,6 @@
 
 		.sidebar-overlay.active {
 			display: block;
-		}
-
-		@media (max-width: 991.98px) {
-			.sidebar-overlay.active {
-				display: block;
-			}
 		}
 
 		/* SCROLLBAR */
@@ -1046,62 +1112,7 @@
 
 	<!-- SIDEBAR OVERLAY -->
 	<div class="sidebar-overlay" id="sidebarOverlay"></div>
-    <!-- SIDEBAR -->
-    <div class="sidebar" id="sidebarMenu">
-        <div class="sidebar-brand">
-            <div class="brand-icon">
-                <i class="bi bi-patch-check-fill"></i>
-            </div>
-            <span>PETANI <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
-        </div>
-        <div class="sidebar-menu-wrapper">
-            <ul class="sidebar-menu">
-                <li class="menu-item active">
-                    <a href="<?= base_url('petani/dashboard'); ?>">
-                        <i class="bi bi-grid-1x2-fill"></i>Dashboard
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('petani/lahan'); ?>">
-                        <i class="bi bi-geo-alt-fill"></i>Kelola Lahan
-                        <span class="menu-badge">3</span>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('petani/panen'); ?>">
-                        <i class="bi bi-tree-fill"></i>Manajemen Panen
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('petani/produk'); ?>">
-                        <i class="bi bi-box-seam"></i>Katalog Produk
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('petani/transaksi'); ?>">
-                        <i class="bi bi-cart-check-fill"></i>Pesanan Masuk
-                        <span class="menu-badge">4</span>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('petani/tracking'); ?>">
-                        <i class="bi bi-truck"></i>Tracking Kiriman
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <li class="menu-item">
-    <a href="<?= base_url('petani/kurir/assign'); ?>">
-        <i class="bi bi-send-check-fill"></i>Tugaskan Kurir
-    </a>
-</li>
-        <div class="sidebar-footer">
-            <button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
-                <i class="bi bi-box-arrow-right"></i> Keluar
-            </button>
-        </div>
-    </div>
-=======
+
 	<!-- SIDEBAR -->
 	<div class="sidebar" id="sidebarMenu">
 		<div class="sidebar-brand">
@@ -1120,7 +1131,7 @@
 				<li class="menu-item">
 					<a href="<?= base_url('petani/lahan'); ?>">
 						<i class="bi bi-geo-alt-fill"></i>Kelola Lahan
-						<span class="menu-badge">3</span>
+						<span class="menu-badge success"><?= $kpi_lahan_aktif ?? 0 ?></span>
 					</a>
 				</li>
 				<li class="menu-item">
@@ -1136,12 +1147,7 @@
 				<li class="menu-item">
 					<a href="<?= base_url('petani/transaksi'); ?>">
 						<i class="bi bi-cart-check-fill"></i>Pesanan Masuk
-						<span class="menu-badge">4</span>
-					</a>
-				</li>
-				<li class="menu-item">
-					<a href="<?= base_url('petani/tracking'); ?>">
-						<i class="bi bi-truck"></i>Tracking Kiriman
+						<span class="menu-badge danger"><?= $kpi_pesanan_masuk ?? 0 ?></span>
 					</a>
 				</li>
 			</ul>
@@ -1152,6 +1158,7 @@
 			</button>
 		</div>
 	</div>
+
 	<!-- MAIN CONTENT -->
 	<div class="main-content">
 		<!-- PAGE HEADER -->
@@ -1190,10 +1197,10 @@
 						<div class="notif-dropdown-list" id="notifList">
 							<?php if (!empty($notifikasi)): ?>
 								<?php foreach ($notifikasi as $n): ?>
-									<a class="notif-item <?= (isset($n->status_baca) && $n->status_baca == 0) ? 'unread' : ''; ?>"
-										href="<?= base_url('petani/dashboard/read/' . $n->id_notifikasi); ?>">
+									<a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
+										href="<?= base_url('petani/dashboard/read/' . $n['id_notifikasi']); ?>">
 										<?php
-										$icon_type = $n->icon ?? 'info';
+										$icon_type = $n['icon'] ?? 'info';
 										$icon_map = [
 											'success' => 'bi-check-circle-fill',
 											'warning' => 'bi-exclamation-triangle-fill',
@@ -1206,11 +1213,11 @@
 											<i class="bi <?= $icon_class; ?>"></i>
 										</div>
 										<div class="notif-text">
-											<?= htmlspecialchars($n->isi_notifikasi); ?>
+											<?= htmlspecialchars($n['isi_notifikasi']); ?>
 											<span
-												class="notif-time"><?= date('d M Y, H:i', strtotime($n->tanggal_buat)); ?></span>
+												class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
 										</div>
-										<?php if (isset($n->status_baca) && $n->status_baca == 0): ?>
+										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
 											<span class="notif-badge-new">Baru</span>
 										<?php endif; ?>
 									</a>
@@ -1232,7 +1239,7 @@
 					</div>
 				</div>
 
-				<!-- USER BADGE - SAMA DENGAN DASHBOARD -->
+				<!-- USER BADGE -->
 				<?php
 				$nama = $this->session->userdata('nama') ?? 'Petani';
 				$role = $this->session->userdata('role') ?? 'Petani';
@@ -1246,38 +1253,43 @@
 				</div>
 			</div>
 		</div>
-        <!-- QUICK ACTION BUTTONS -->
-        	<h5 class="font-weight-bold mb-3"
+
+		<!-- QUICK ACTION BUTTONS - TANPA TUGASKAN KURIR -->
+		<h5 class="font-weight-bold mb-3"
 			style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
 			<i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
 		</h5>
-        <div class="row mb-4">
-    <div class="col-lg-2 col-md-4 col-6 mb-2">
-        <a href="<?= base_url('petani/lahan/tambah'); ?>" class="quick-action-btn">
-            <i class="bi bi-geo-alt-fill"></i> Tambah Lahan
-        </a>
-    </div>
-    <div class="col-lg-2 col-md-4 col-6 mb-2">
-        <a href="<?= base_url('petani/panen/tambah'); ?>" class="quick-action-btn">
-            <i class="bi bi-calendar-plus-fill"></i> Input Panen
-        </a>
-    </div>
-    <div class="col-lg-2 col-md-4 col-6 mb-2">
-        <a href="<?= base_url('petani/produk/tambah'); ?>" class="quick-action-btn">
-            <i class="bi bi-plus-circle-fill"></i> Tambah Produk
-        </a>
-    </div>
-    <div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('petani/transaksi'); ?>" class="quick-action-btn">
-					<i class="bi bi-box-seam-fill"></i> Proses Pesanan
+		<div class="row mb-4">
+			<div class="col-lg-3 col-md-4 col-6 mb-3">
+				<a href="<?= base_url('petani/lahan/tambah'); ?>" class="quick-action-btn">
+					<div class="q-icon"><i class="bi bi-geo-alt-fill"></i></div>
+					<span class="q-text">Tambah Lahan</span>
+					<i class="bi bi-chevron-right q-arrow"></i>
 				</a>
 			</div>
-    <div class="col-lg-2 col-md-4 col-6 mb-2">
-        <a href="<?= base_url('petani/kurir/assign'); ?>" class="quick-action-btn">
-            <i class="bi bi-send-check-fill"></i> Tugaskan Kurir
-        </a>
-    </div>
-</div>
+			<div class="col-lg-3 col-md-4 col-6 mb-3">
+				<a href="<?= base_url('petani/panen/tambah'); ?>" class="quick-action-btn">
+					<div class="q-icon"><i class="bi bi-calendar-plus-fill"></i></div>
+					<span class="q-text">Input Panen</span>
+					<i class="bi bi-chevron-right q-arrow"></i>
+				</a>
+			</div>
+			<div class="col-lg-3 col-md-4 col-6 mb-3">
+				<a href="<?= base_url('petani/produk/tambah'); ?>" class="quick-action-btn">
+					<div class="q-icon"><i class="bi bi-plus-circle-fill"></i></div>
+					<span class="q-text">Tambah Produk</span>
+					<i class="bi bi-chevron-right q-arrow"></i>
+				</a>
+			</div>
+			<div class="col-lg-3 col-md-4 col-6 mb-3">
+				<a href="<?= base_url('petani/transaksi'); ?>" class="quick-action-btn">
+					<div class="q-icon"><i class="bi bi-box-seam-fill"></i></div>
+					<span class="q-text">Proses Pesanan</span>
+					<i class="bi bi-chevron-right q-arrow"></i>
+				</a>
+			</div>
+		</div>
+
 		<!-- KPI CARDS - DATA REAL -->
 		<div class="row mb-4">
 			<div class="col-xl-3 col-md-6 mb-4">
@@ -1476,36 +1488,63 @@
 			</div>
 		</div>
 
-		<!-- JADWAL PANEN & SETTING NOTIFIKASI -->
+		<!-- RINGKASAN PRODUK & SETTING NOTIFIKASI -->
 		<div class="row">
-			<!-- JADWAL PANEN - DATA REAL -->
+			<!-- RINGKASAN PRODUK - PENGGANTI JADWAL PANEN -->
 			<div class="col-lg-6 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
-						<h6><i class="bi bi-calendar-event-fill text-primary mr-2"></i> Jadwal Panen Mendatang</h6>
-						<span class="badge" style="background: #DBEAFE; color: #1E40AF; font-weight:500;">Terdekat</span>
+						<h6><i class="bi bi-box-seam-fill text-warning mr-2"></i> Ringkasan Produk</h6>
+						<span class="badge" style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;">Stok & Harga</span>
 					</div>
 					<div class="card-body-custom">
-						<?php if (!empty($jadwal_panen)): ?>
-							<?php foreach ($jadwal_panen as $jadwal): ?>
-								<div class="harvest-schedule-item">
-									<div class="schedule-date">
-										<div class="day"><?= date('d', strtotime($jadwal['tanggal_panen'] ?? date('Y-m-d'))); ?></div>
-										<div class="month"><?= date('M', strtotime($jadwal['tanggal_panen'] ?? date('Y-m-d'))); ?></div>
+						<?php
+						// Ambil 3 produk terbaru dari database
+						$this->db->where('id_user', $id_user);
+						$this->db->limit(3);
+						$this->db->order_by('id_produk', 'DESC');
+						$produk_terbaru = $this->db->get('tb_produk')->result_array();
+						?>
+						<?php if (!empty($produk_terbaru)): ?>
+							<?php foreach ($produk_terbaru as $p): ?>
+								<div class="d-flex align-items-center justify-content-between py-2 border-bottom" style="border-color: rgba(74,44,17,0.05);">
+									<div>
+										<span style="font-weight:600; font-size:0.85rem;"><?= $p['nama_produk'] ?? 'Produk' ?></span>
+										<div style="font-size:0.75rem; color: var(--text-secondary);">
+											<i class="bi bi-tag mr-1"></i> Rp <?= number_format($p['harga'] ?? 0, 0, ',', '.') ?>
+											<span class="mx-1">•</span>
+											<i class="bi bi-box mr-1"></i> <?= $p['stok_produk'] ?? 0 ?> kg
+										</div>
 									</div>
-									<div class="schedule-info">
-										<div class="title"><?= $jadwal['nama_lahan'] ?? 'Lahan'; ?></div>
-										<div class="detail">Estimasi <?= number_format($jadwal['estimasi'] ?? 0, 0, ',', '.'); ?> kg</div>
-									</div>
-									<span class="badge"
-										style="background: <?= ($jadwal['status'] ?? 'Menunggu') == 'Siap Panen' ? 'var(--amber-cream)' : '#DBEAFE'; ?>; color: <?= ($jadwal['status'] ?? 'Menunggu') == 'Siap Panen' ? 'white' : '#1E40AF'; ?>; padding: 4px 12px; border-radius:20px; font-weight:500;">
-										<?= $jadwal['status'] ?? 'Menunggu'; ?>
+									<?php
+									$stok = $p['stok_produk'] ?? 0;
+									if ($stok <= 0) {
+										$badge_class = 'danger';
+										$badge_text = 'Habis';
+									} elseif ($stok < 20) {
+										$badge_class = 'warning';
+										$badge_text = 'Menipis';
+									} else {
+										$badge_class = 'success';
+										$badge_text = 'Aman';
+									}
+									?>
+									<span class="badge" style="background: <?= $badge_class == 'danger' ? '#FEE2E2' : ($badge_class == 'warning' ? '#FEF3C7' : '#D1FAE5') ?>; color: <?= $badge_class == 'danger' ? '#991B1B' : ($badge_class == 'warning' ? '#92400E' : '#065F46') ?>; padding: 4px 12px; border-radius: 20px; font-weight:600; font-size:0.7rem;">
+										<?= $badge_text ?>
 									</span>
 								</div>
 							<?php endforeach; ?>
 						<?php else: ?>
-							<div class="text-center py-3 text-muted">Belum ada jadwal panen</div>
+							<div class="text-center py-3 text-muted">
+								<i class="bi bi-box-seam d-block mb-2" style="font-size:2rem;"></i>
+								<p>Belum ada produk. <a href="<?= base_url('petani/produk/tambah'); ?>" style="color: var(--amber-cream); font-weight:600;">Tambahkan produk pertama</a></p>
+							</div>
 						<?php endif; ?>
+						<div class="mt-3 text-center">
+							<a href="<?= base_url('petani/produk'); ?>" class="btn btn-sm" style="background: var(--bg-cream); color: var(--dark-coffee); border-radius:8px; font-weight:600; padding: 6px 20px;">
+								<i class="bi bi-arrow-right mr-1"></i> Kelola Semua Produk
+							</a>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1525,7 +1564,7 @@
 							'notif_pembayaran' => 1,  // Konfirmasi Bayar
 							'notif_stok' => 1,        // Peringatan Stok
 							'notif_kurir' => 1,       // Status Kiriman
-							'notif_panen' => 1,       // Jadwal Panen
+							'notif_panen' => 0,       // 🔴 JADWAL PANEN DINONAKTIFKAN
 							'notif_laporan' => 0,     // Laporan Bulanan
 							'notif_sistem' => 1       // Update Sistem
 						];
@@ -1573,22 +1612,6 @@
 										<label class="custom-control-label" for="notif_kurir" style="font-size:0.85rem;">Status Kiriman</label>
 									</div>
 								</div>
-								<!-- Jadwal Panen -->
-								<div class="col-md-6 col-6 mb-2">
-									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notif_panen" name="notif_panen"
-											<?= isset($default_settings['notif_panen']) && $default_settings['notif_panen'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notif_panen" style="font-size:0.85rem;">Jadwal Panen</label>
-									</div>
-								</div>
-								<!-- Laporan Bulanan -->
-								<div class="col-md-6 col-6 mb-2">
-									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notif_laporan" name="notif_laporan"
-											<?= $default_settings['notif_laporan'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notif_laporan" style="font-size:0.85rem;">Laporan Bulanan</label>
-									</div>
-								</div>
 								<!-- Update Sistem -->
 								<div class="col-md-6 col-6 mb-2">
 									<div class="custom-control custom-switch">
@@ -1602,385 +1625,372 @@
 								<button type="submit" class="btn" style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
 									<i class="bi bi-save mr-1"></i> Simpan Pengaturan
 								</button>
-
 							</div>
 						</form>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<!-- TOAST CONTAINER -->
-	<div class="toast-container" id="toastContainer"></div>
+		<!-- TOAST CONTAINER -->
+		<div class="toast-container" id="toastContainer"></div>
 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-	<script>
-		// ============================================
-		// 1. SIDEBAR TOGGLE
-		// ============================================
-		const sidebar = document.getElementById('sidebarMenu');
-		const overlay = document.getElementById('sidebarOverlay');
-		const toggleBtn = document.getElementById('sidebarToggle');
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+		<script>
+			// ============================================
+			// 1. SIDEBAR TOGGLE
+			// ============================================
+			const sidebar = document.getElementById('sidebarMenu');
+			const overlay = document.getElementById('sidebarOverlay');
+			const toggleBtn = document.getElementById('sidebarToggle');
 
-		function toggleSidebar() {
-			sidebar.classList.toggle('open');
-			overlay.classList.toggle('active');
-			document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
-		}
-
-		if (toggleBtn) {
-			toggleBtn.addEventListener('click', toggleSidebar);
-		}
-		if (overlay) {
-			overlay.addEventListener('click', toggleSidebar);
-		}
-
-		document.addEventListener('click', function(e) {
-			if (window.innerWidth > 991.98) return;
-			if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
-				if (sidebar.classList.contains('open')) {
-					toggleSidebar();
-				}
+			function toggleSidebar() {
+				sidebar.classList.toggle('open');
+				overlay.classList.toggle('active');
+				document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
 			}
-		});
 
-		// ============================================
-		// 2. NOTIFICATION DROPDOWN
-		// ============================================
-		const notifToggle = document.getElementById('notifToggle');
-		const notifDropdown = document.getElementById('notifDropdown');
-
-		if (notifToggle) {
-			notifToggle.addEventListener('click', function(e) {
-				e.stopPropagation();
-				notifDropdown.classList.toggle('show');
-			});
-		}
-
-		document.addEventListener('click', function(e) {
-			if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
-				notifDropdown.classList.remove('show');
+			if (toggleBtn) {
+				toggleBtn.addEventListener('click', toggleSidebar);
 			}
-		});
+			if (overlay) {
+				overlay.addEventListener('click', toggleSidebar);
+			}
 
-		// ============================================
-		// 3. TOAST NOTIFICATION
-		// ============================================
-		function showToast(message, type = 'success') {
-			const container = document.getElementById('toastContainer');
-			if (!container) return;
-
-			const toast = document.createElement('div');
-			toast.className = `toast-item ${type}`;
-			toast.textContent = message;
-			container.appendChild(toast);
-
-			// Trigger animation
-			setTimeout(() => {
-				toast.classList.add('show');
-			}, 100);
-
-			// Remove after 3 seconds
-			setTimeout(() => {
-				toast.classList.remove('show');
-				setTimeout(() => {
-					toast.remove();
-				}, 400);
-			}, 3000);
-		}
-
-		// ============================================
-		// 4. MARK ALL READ
-		// ============================================
-		function markAllRead() {
-			if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
-				$.ajax({
-					url: '<?= base_url('petani/dashboard/mark_all_read'); ?>',
-					type: 'POST',
-					dataType: 'json',
-					success: function(response) {
-						if (response.success) {
-							location.reload();
-						} else {
-							showToast('Gagal menandai semua notifikasi.', 'error');
-						}
-					},
-					error: function() {
-						showToast('Terjadi kesalahan. Silakan coba lagi.', 'error');
+			document.addEventListener('click', function(e) {
+				if (window.innerWidth > 991.98) return;
+				if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
+					if (sidebar.classList.contains('open')) {
+						toggleSidebar();
 					}
+				}
+			});
+
+			// ============================================
+			// 2. NOTIFICATION DROPDOWN
+			// ============================================
+			const notifToggle = document.getElementById('notifToggle');
+			const notifDropdown = document.getElementById('notifDropdown');
+
+			if (notifToggle) {
+				notifToggle.addEventListener('click', function(e) {
+					e.stopPropagation();
+					notifDropdown.classList.toggle('show');
 				});
 			}
-		}
 
-		// ============================================
-		// 5. CHART.JS - GRAFIK PANEN (DATA REAL)
-		// ============================================
-		let harvestChart;
+			document.addEventListener('click', function(e) {
+				if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
+					notifDropdown.classList.remove('show');
+				}
+			});
 
-		function initChart() {
-			const ctx = document.getElementById('harvestChart')?.getContext('2d');
-			if (!ctx) return;
+			// ============================================
+			// 3. TOAST NOTIFICATION
+			// ============================================
+			function showToast(message, type = 'success') {
+				const container = document.getElementById('toastContainer');
+				if (!container) return;
 
-			const chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
-			const chartData = <?= isset($grafik_panen['values']) ? json_encode($grafik_panen['values']) : json_encode(array_fill(0, 12, 0)); ?>;
+				const toast = document.createElement('div');
+				toast.className = `toast-item ${type}`;
+				toast.textContent = message;
+				container.appendChild(toast);
 
-			harvestChart = new Chart(ctx, {
-				type: 'bar',
-				data: {
-					labels: chartLabels,
-					datasets: [{
-						label: 'Hasil Panen (Kg)',
-						data: chartData,
-						backgroundColor: 'rgba(230, 161, 92, 0.8)',
-						borderColor: '#E6A15C',
-						borderWidth: 2,
-						borderRadius: 6,
-						barPercentage: 0.6
-					}]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					plugins: {
-						legend: {
-							display: false
-						},
-						tooltip: {
-							backgroundColor: '#2C1808',
-							titleColor: '#E6A15C',
-							bodyColor: '#FAF6F0',
-							cornerRadius: 8,
-							padding: 10,
-							callbacks: {
-								label: function(context) {
-									return context.parsed.y.toLocaleString('id-ID') + ' kg';
-								}
+				setTimeout(() => {
+					toast.classList.add('show');
+				}, 100);
+
+				setTimeout(() => {
+					toast.classList.remove('show');
+					setTimeout(() => {
+						toast.remove();
+					}, 400);
+				}, 3000);
+			}
+
+			// ============================================
+			// 4. MARK ALL READ
+			// ============================================
+			function markAllRead() {
+				if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+					$.ajax({
+						url: '<?= base_url('petani/dashboard/mark_all_read_ajax'); ?>',
+						type: 'POST',
+						dataType: 'json',
+						success: function(response) {
+							if (response.success) {
+								location.reload();
+							} else {
+								showToast('Gagal menandai semua notifikasi.', 'error');
 							}
+						},
+						error: function() {
+							showToast('Terjadi kesalahan. Silakan coba lagi.', 'error');
 						}
+					});
+				}
+			}
+
+			// ============================================
+			// 5. CHART.JS - GRAFIK PANEN (DATA REAL)
+			// ============================================
+			let harvestChart;
+
+			function initChart() {
+				const ctx = document.getElementById('harvestChart')?.getContext('2d');
+				if (!ctx) return;
+
+				const chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+				const chartData = <?= isset($grafik_panen['values']) ? json_encode($grafik_panen['values']) : json_encode(array_fill(0, 12, 0)); ?>;
+
+				harvestChart = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: chartLabels,
+						datasets: [{
+							label: 'Hasil Panen (Kg)',
+							data: chartData,
+							backgroundColor: 'rgba(230, 161, 92, 0.8)',
+							borderColor: '#E6A15C',
+							borderWidth: 2,
+							borderRadius: 6,
+							barPercentage: 0.6
+						}]
 					},
-					scales: {
-						y: {
-							beginAtZero: true,
-							grid: {
-								color: 'rgba(74, 44, 17, 0.06)',
-								drawBorder: false,
-							},
-							ticks: {
-								font: {
-									size: 10,
-									family: 'Plus Jakarta Sans'
-								},
-								color: '#70655E',
-								stepSize: 50,
-								callback: function(value) {
-									return value.toLocaleString('id-ID') + ' kg';
-								}
-							}
-						},
-						x: {
-							grid: {
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
 								display: false
 							},
-							ticks: {
-								font: {
-									size: 10,
-									family: 'Plus Jakarta Sans'
+							tooltip: {
+								backgroundColor: '#2C1808',
+								titleColor: '#E6A15C',
+								bodyColor: '#FAF6F0',
+								cornerRadius: 8,
+								padding: 10,
+								callbacks: {
+									label: function(context) {
+										return context.parsed.y.toLocaleString('id-ID') + ' kg';
+									}
+								}
+							}
+						},
+						scales: {
+							y: {
+								beginAtZero: true,
+								grid: {
+									color: 'rgba(74, 44, 17, 0.06)',
+									drawBorder: false,
 								},
-								color: '#70655E',
+								ticks: {
+									font: {
+										size: 10,
+										family: 'Plus Jakarta Sans'
+									},
+									color: '#70655E',
+									stepSize: 50,
+									callback: function(value) {
+										return value.toLocaleString('id-ID') + ' kg';
+									}
+								}
+							},
+							x: {
+								grid: {
+									display: false
+								},
+								ticks: {
+									font: {
+										size: 10,
+										family: 'Plus Jakarta Sans'
+									},
+									color: '#70655E',
+								}
 							}
 						}
 					}
+				});
+			}
+
+			function refreshChart() {
+				if (harvestChart) {
+					$.get('<?= base_url('petani/dashboard/get_chart_data'); ?>', function(data) {
+						if (data.success) {
+							harvestChart.data.datasets[0].data = data.values;
+							harvestChart.update();
+							showToast('Grafik berhasil diperbarui!', 'success');
+						}
+					}).fail(function() {
+						showToast('Gagal memperbarui grafik.', 'error');
+					});
 				}
+			}
+
+			document.addEventListener('DOMContentLoaded', function() {
+				initChart();
 			});
-		}
 
-		function refreshChart() {
-			if (harvestChart) {
-				$.get('<?= base_url('petani/dashboard/get_chart_data'); ?>', function(data) {
-					if (data.success) {
-						harvestChart.data.datasets[0].data = data.values;
-						harvestChart.update();
-						showToast('Grafik berhasil diperbarui!', 'success');
-					}
-				}).fail(function() {
-					showToast('Gagal memperbarui grafik.', 'error');
-				});
+			// ============================================
+			// 6. CURRENT DATE TIME
+			// ============================================
+			function updateDateTime() {
+				const now = new Date();
+				const options = {
+					weekday: 'long',
+					year: 'numeric',
+					month: 'long',
+					day: 'numeric',
+					hour: '2-digit',
+					minute: '2-digit'
+				};
+				const el = document.getElementById('currentDateTime');
+				if (el) {
+					el.textContent = '• ' + now.toLocaleDateString('id-ID', options);
+				}
 			}
-		}
+			updateDateTime();
+			setInterval(updateDateTime, 60000);
 
-		document.addEventListener('DOMContentLoaded', function() {
-			initChart();
-		});
-
-		// ============================================
-		// 6. CURRENT DATE TIME
-		// ============================================
-		function updateDateTime() {
-			const now = new Date();
-			const options = {
-				weekday: 'long',
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric',
-				hour: '2-digit',
-				minute: '2-digit'
-			};
-			const el = document.getElementById('currentDateTime');
-			if (el) {
-				el.textContent = '• ' + now.toLocaleDateString('id-ID', options);
-			}
-		}
-		updateDateTime();
-		setInterval(updateDateTime, 60000);
-
-		// ============================================
-		// 7. SWITCH HANDLING - UPDATE VIA AJAX (REAL-TIME)
-		// ============================================
-		document.querySelectorAll('.custom-control-input').forEach(function(switchEl) {
-			// Hapus event listener lama jika ada
-			switchEl.removeEventListener('change', handleSwitchChange);
-			switchEl.addEventListener('change', handleSwitchChange);
-		});
-
-		function handleSwitchChange() {
-			const field = this.getAttribute('id');
-			const value = this.checked ? 1 : 0;
-
-			// Validasi field yang diizinkan
-			const allowedFields = ['notif_transaksi', 'notif_pembayaran', 'notif_stok', 'notif_kurir', 'notif_panen', 'notif_laporan', 'notif_sistem'];
-			if (!allowedFields.includes(field)) {
-				return;
-			}
-
-			// Tampilkan loading state
-			const label = this.closest('.custom-control').querySelector('.custom-control-label');
-			if (label) {
-				label.style.opacity = '0.5';
-			}
-
-			// Kirim AJAX ke server
-			$.ajax({
-				url: '<?= base_url('petani/dashboard/update_settings_ajax'); ?>',
-				type: 'POST',
-				data: {
-					field: field,
-					value: value
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (label) {
-						label.style.opacity = '1';
-					}
-
-					if (response.success) {
-						const labelText = label ? label.textContent.trim() : field;
-						showToast('✅ ' + labelText + ' ' + (value === 1 ? 'diaktifkan' : 'dinonaktifkan'), 'success');
-						console.log('✅ Setting ' + field + ' updated to ' + value);
-					} else {
-						// Kembalikan ke posisi semula jika gagal
-						this.checked = !this.checked;
-						showToast('❌ Gagal memperbarui pengaturan', 'error');
-					}
-				}.bind(this),
-				error: function() {
-					if (label) {
-						label.style.opacity = '1';
-					}
-					// Kembalikan ke posisi semula
-					this.checked = !this.checked;
-					showToast('❌ Terjadi kesalahan. Silakan coba lagi.', 'error');
-				}.bind(this)
+			// ============================================
+			// 7. SWITCH HANDLING - UPDATE VIA AJAX (REAL-TIME)
+			// ============================================
+			document.querySelectorAll('.custom-control-input').forEach(function(switchEl) {
+				switchEl.removeEventListener('change', handleSwitchChange);
+				switchEl.addEventListener('change', handleSwitchChange);
 			});
-		}
 
-		// ============================================
-		// 8. FORM SETTINGS - SUBMIT VIA AJAX
-		// ============================================
-		const settingsForm = document.getElementById('settingsForm');
-		if (settingsForm) {
-			settingsForm.addEventListener('submit', function(e) {
-				e.preventDefault();
+			function handleSwitchChange() {
+				const field = this.getAttribute('id');
+				const value = this.checked ? 1 : 0;
 
-				const formData = new FormData(this);
-				const data = {};
-				formData.forEach((value, key) => {
-					data[key] = value === 'on' ? 1 : 0;
-				});
+				const allowedFields = ['notif_transaksi', 'notif_pembayaran', 'notif_stok', 'notif_kurir', 'notif_panen', 'notif_laporan', 'notif_sistem'];
+				if (!allowedFields.includes(field)) {
+					return;
+				}
 
-				// Tampilkan loading
-				const btn = this.querySelector('button[type="submit"]');
-				const originalText = btn.innerHTML;
-				btn.innerHTML = '<i class="bi bi-hourglass-split mr-1"></i> Menyimpan...';
-				btn.disabled = true;
+				const label = this.closest('.custom-control').querySelector('.custom-control-label');
+				if (label) {
+					label.style.opacity = '0.5';
+				}
 
 				$.ajax({
-					url: this.action,
+					url: '<?= base_url('petani/dashboard/update_settings_ajax'); ?>',
 					type: 'POST',
-					data: data,
+					data: {
+						field: field,
+						value: value
+					},
 					dataType: 'json',
 					success: function(response) {
-						btn.innerHTML = originalText;
-						btn.disabled = false;
+						if (label) {
+							label.style.opacity = '1';
+						}
 
 						if (response.success) {
-							showToast('✅ Pengaturan notifikasi berhasil diperbarui!', 'success');
-							// Update semua switch sesuai data
-							Object.keys(data).forEach(key => {
-								const el = document.getElementById(key);
-								if (el) {
-									el.checked = data[key] === 1;
-								}
-							});
+							const labelText = label ? label.textContent.trim() : field;
+							showToast('✅ ' + labelText + ' ' + (value === 1 ? 'diaktifkan' : 'dinonaktifkan'), 'success');
+							console.log('✅ Setting ' + field + ' updated to ' + value);
 						} else {
+							this.checked = !this.checked;
 							showToast('❌ Gagal memperbarui pengaturan', 'error');
 						}
-					},
+					}.bind(this),
 					error: function() {
-						btn.innerHTML = originalText;
-						btn.disabled = false;
+						if (label) {
+							label.style.opacity = '1';
+						}
+						this.checked = !this.checked;
 						showToast('❌ Terjadi kesalahan. Silakan coba lagi.', 'error');
-					}
+					}.bind(this)
 				});
-			});
-		}
+			}
 
-		// ============================================
-		// 9. AUTO-REFRESH NOTIFICATION COUNT
-		// ============================================
-		function refreshNotificationCount() {
-			$.get('<?= base_url('petani/dashboard/get_notifications_ajax'); ?>', function(response) {
-				if (response.success) {
-					const countEl = document.getElementById('notifCount');
-					if (countEl) {
-						if (response.unread > 0) {
-							countEl.textContent = response.unread;
-							countEl.style.display = 'flex';
-						} else {
-							countEl.style.display = 'none';
+			// ============================================
+			// 8. FORM SETTINGS - SUBMIT VIA AJAX
+			// ============================================
+			const settingsForm = document.getElementById('settingsForm');
+			if (settingsForm) {
+				settingsForm.addEventListener('submit', function(e) {
+					e.preventDefault();
+
+					const formData = new FormData(this);
+					const data = {};
+					formData.forEach((value, key) => {
+						data[key] = value === 'on' ? 1 : 0;
+					});
+
+					const btn = this.querySelector('button[type="submit"]');
+					const originalText = btn.innerHTML;
+					btn.innerHTML = '<i class="bi bi-hourglass-split mr-1"></i> Menyimpan...';
+					btn.disabled = true;
+
+					$.ajax({
+						url: this.action,
+						type: 'POST',
+						data: data,
+						dataType: 'json',
+						success: function(response) {
+							btn.innerHTML = originalText;
+							btn.disabled = false;
+
+							if (response.success) {
+								showToast('✅ Pengaturan notifikasi berhasil diperbarui!', 'success');
+								Object.keys(data).forEach(key => {
+									const el = document.getElementById(key);
+									if (el) {
+										el.checked = data[key] === 1;
+									}
+								});
+							} else {
+								showToast('❌ Gagal memperbarui pengaturan', 'error');
+							}
+						},
+						error: function() {
+							btn.innerHTML = originalText;
+							btn.disabled = false;
+							showToast('❌ Terjadi kesalahan. Silakan coba lagi.', 'error');
+						}
+					});
+				});
+			}
+
+			// ============================================
+			// 9. AUTO-REFRESH NOTIFICATION COUNT
+			// ============================================
+			function refreshNotificationCount() {
+				$.get('<?= base_url('petani/dashboard/get_notifications_ajax'); ?>', function(response) {
+					if (response.success) {
+						const countEl = document.getElementById('notifCount');
+						if (countEl) {
+							if (response.unread > 0) {
+								countEl.textContent = response.unread;
+								countEl.style.display = 'flex';
+							} else {
+								countEl.style.display = 'none';
+							}
 						}
 					}
-				}
-			});
-		}
+				});
+			}
 
-		// Refresh notifikasi setiap 30 detik
-		setInterval(refreshNotificationCount, 30000);
+			setInterval(refreshNotificationCount, 30000);
 
-		console.log('✅ Dashboard Petani siap digunakan!');
-		console.log('📋 Fitur yang tersedia:');
-		console.log('   - KPI Cards - Data Real');
-		console.log('   - Grafik Panen - Data Real');
-		console.log('   - Produk Terjual - Data Real');
-		console.log('   - Pesanan Masuk - Data Real');
-		console.log('   - Peringatan Stok - Data Real');
-		console.log('   - Jadwal Panen - Data Real');
-		console.log('   - Quick Action');
-		console.log('   - Notifikasi Real-time');
-		console.log('   - Setting Notifikasi (selaras dengan database)');
-		console.log('   - Switch update via AJAX (real-time)');
-		console.log('   - Form settings submit via AJAX');
-	</script>
+			console.log('✅ Dashboard Petani siap digunakan!');
+			console.log('📋 Fitur yang tersedia:');
+			console.log('   - KPI Cards - Data Real');
+			console.log('   - Grafik Panen - Data Real');
+			console.log('   - Produk Terjual - Data Real');
+			console.log('   - Pesanan Masuk - Data Real');
+			console.log('   - Peringatan Stok - Data Real');
+			console.log('   - Jadwal Panen - Data Real');
+			console.log('   - Quick Action');
+			console.log('   - Notifikasi Real-time');
+			console.log('   - Setting Notifikasi (selaras dengan database)');
+			console.log('   - Switch update via AJAX (real-time)');
+			console.log('   - Form settings submit via AJAX');
+		</script>
 
 </body>
 
