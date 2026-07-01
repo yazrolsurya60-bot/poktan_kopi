@@ -185,7 +185,6 @@ $route['verifikasi/cek'] = 'Verifikasi/cek';
 $route['pembeli/profil'] = 'pembeli/Profil/index';
 $route['pembeli/profil/update'] = 'pembeli/Profil/update';
 
-<<<<<<< HEAD
 // Admin
 $route['admin/kurir/toggle/(:num)']     = 'admin/Kurir/toggle/$1';
 $route['admin/kurir/detail/(:num)']     = 'admin/Kurir/detail/$1';
@@ -196,8 +195,3 @@ $route['admin/kurir/proses_assign']     = 'admin/Kurir/proses_assign';
 // Petani
 $route['petani/kurir/assign']           = 'petani/Kurir/assign';
 $route['petani/kurir/proses_assign']    = 'petani/Kurir/proses_assign';
-=======
-// Petani Kurir Assign
-$route['petani/kurir/assign'] = 'petani/Kurir/assign';
-$route['petani/kurir/proses_assign'] = 'petani/Kurir/proses_assign';
->>>>>>> 55018a40d4fb33544875a3ad03da6523d1bb5fdc
