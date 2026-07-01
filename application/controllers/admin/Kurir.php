@@ -13,12 +13,10 @@ class Kurir extends CI_Controller
     {
         parent::__construct();
 
-        // Cek apakah user sudah login
         if (!$this->session->userdata('id_user')) {
             redirect('auth/login');
         }
 
-        // Hanya Admin yang boleh mengakses controller ini
         $current_role = $this->session->userdata('role');
 
         if ($current_role != 'Admin') {
@@ -38,9 +36,6 @@ class Kurir extends CI_Controller
         $this->load->helper('url');
     }
 
-    // ============================================
-    // M08-F02: INDEX - LIST KURIR + MODAL TAMBAH/EDIT
-    // ============================================
     public function index()
     {
         $id_user = $this->session->userdata('id_user');
@@ -62,9 +57,6 @@ class Kurir extends CI_Controller
         $this->load->view('admin/kurir/index', $data);
     }
 
-    // ============================================
-    // M08-F01: TAMBAH KURIR (proses dari modal index)
-    // ============================================
     public function tambah()
     {
         if (!$this->input->post()) {
@@ -103,9 +95,6 @@ class Kurir extends CI_Controller
         redirect('admin/kurir');
     }
 
-    // ============================================
-    // M08-F03: DETAIL KURIR + HISTORY PENGIRIMAN
-    // ============================================
     public function detail($id_kurir = null)
     {
         $id_user = $this->session->userdata('id_user');
@@ -128,9 +117,6 @@ class Kurir extends CI_Controller
         $this->load->view('admin/kurir/detail', $data);
     }
 
-    // ============================================
-    // M08-F04: EDIT KURIR (proses dari modal index)
-    // ============================================
     public function edit($id_kurir = null)
     {
         if (!$this->input->post()) {
@@ -165,9 +151,12 @@ class Kurir extends CI_Controller
         redirect('admin/kurir');
     }
 
+<<<<<<< HEAD
     // ============================================
     // M08-F05: HAPUS KURIR (SOFT DELETE)
     // ============================================
+=======
+>>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
     public function hapus($id_kurir = null)
     {
         $kurir = $this->Kurir_model->get_by_id($id_kurir);
@@ -188,9 +177,6 @@ class Kurir extends CI_Controller
         redirect('admin/kurir');
     }
 
-    // ============================================
-    // M08-F07: STATUS KURIR (toggle Active <-> Inactive)
-    // ============================================
     public function toggle($id_kurir = null)
     {
         $kurir = $this->Kurir_model->get_by_id($id_kurir);
@@ -219,6 +205,7 @@ class Kurir extends CI_Controller
     }
 
     // ============================================
+<<<<<<< HEAD
     // M08-F06: HALAMAN ASSIGN KURIR
     // ============================================
     public function assign()
@@ -232,12 +219,39 @@ class Kurir extends CI_Controller
         
         $data['pengiriman_pending'] = $this->Kurir_model->get_pengiriman_belum_assign();
         $data['kurir_aktif']        = $this->Kurir_model->get_kurir_aktif();
+=======
+    // 🔥 M08-F06: HALAMAN ASSIGN KURIR (PAKAI QUERY MANUAL)
+    // ============================================
+    public function assign()
+    {
+        // 🔥 Ambil transaksi yang belum ada kurir
+        $data['pengiriman_pending'] = $this->db->query("
+            SELECT t.*, u.nama as nama_pembeli 
+            FROM tb_transaksi t
+            LEFT JOIN tb_user u ON u.id_user = t.id_user
+            WHERE t.status_pesanan = 'Diproses' 
+            AND t.status_bayar = 'Lunas'
+            AND (t.id_kurir IS NULL OR t.id_kurir = 0)
+            ORDER BY t.tanggal_transaksi ASC
+        ")->result_array();
+
+        // 🔥 Ambil kurir aktif
+        $data['kurir_aktif'] = $this->db->query("
+            SELECT * FROM tb_kurir 
+            WHERE status = 'Active' 
+            AND deleted_at IS NULL
+        ")->result_array();
+>>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
 
         $this->load->view('admin/kurir/assign', $data);
     }
 
     // ============================================
+<<<<<<< HEAD
     // M08-F06: PROSES ASSIGN
+=======
+    // 🔥 M08-F06: PROSES ASSIGN (PAKAI QUERY MANUAL)
+>>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
     // ============================================
     public function proses_assign()
     {
@@ -245,23 +259,43 @@ class Kurir extends CI_Controller
             redirect('admin/kurir/assign');
         }
 
-        $id_tracking = $this->input->post('id_tracking');
-        $id_kurir    = $this->input->post('id_kurir');
+        $id_transaksi = $this->input->post('id_transaksi');
+        $id_kurir     = $this->input->post('id_kurir');
 
-        if (!$id_tracking || !$id_kurir) {
-            $this->session->set_flashdata('error', 'Pengiriman dan kurir wajib dipilih.');
+        if (!$id_transaksi || !$id_kurir) {
+            $this->session->set_flashdata('error', '❌ Transaksi dan kurir wajib dipilih.');
             redirect('admin/kurir/assign');
         }
 
-        $kurir = $this->Kurir_model->get_by_id($id_kurir);
+        // 🔥 UPDATE PAKAI QUERY MANUAL
+        $sql = "UPDATE tb_transaksi SET id_kurir = ? WHERE id_transaksi = ? AND (id_kurir IS NULL OR id_kurir = 0)";
+        $this->db->query($sql, array($id_kurir, $id_transaksi));
 
-        if (!$kurir || $kurir['status'] != 'Active') {
-            $this->session->set_flashdata('error', 'Kurir tidak tersedia atau sedang tidak aktif.');
-            redirect('admin/kurir/assign');
-        }
+        if ($this->db->affected_rows() > 0) {
+            // Notifikasi ke Kurir
+            $kurir = $this->db->query("SELECT * FROM tb_kurir WHERE id_kurir = ?", array($id_kurir))->row_array();
+            
+            $this->load->model('Notifikasi_model');
+            if ($kurir && $kurir['id_user']) {
+                $this->Notifikasi_model->save_notifikasi([
+                    'id_user' => $kurir['id_user'],
+                    'judul' => '📦 Tugas Pengiriman Baru',
+                    'isi_notifikasi' => 'Anda ditugaskan untuk mengantar pesanan #' . $id_transaksi,
+                    'link' => 'kurir/tracking/detail/' . $id_transaksi,
+                    'icon' => 'info'
+                ]);
+            }
 
-        $success = $this->Kurir_model->assign_kurir($id_tracking, $id_kurir);
+            // Notifikasi ke Admin
+            $this->Notifikasi_model->save_notifikasi([
+                'id_user' => 1,
+                'judul' => '✅ Kurir Ditugaskan',
+                'isi_notifikasi' => 'Kurir ' . ($kurir['nama_kurir'] ?? '') . ' ditugaskan untuk transaksi #' . $id_transaksi,
+                'link' => 'admin/transaksi/detail/' . $id_transaksi,
+                'icon' => 'success'
+            ]);
 
+<<<<<<< HEAD
         if ($success) {
             // 🔴 KIRIM NOTIFIKASI KE ADMIN
             $this->load->helper('notifikasi');
@@ -275,16 +309,16 @@ class Kurir extends CI_Controller
             );
             
             $this->session->set_flashdata('success', 'Kurir berhasil ditugaskan untuk pengiriman ini.');
+=======
+            $this->session->set_flashdata('success', '✅ Kurir berhasil ditugaskan untuk transaksi #' . $id_transaksi);
+>>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
         } else {
-            $this->session->set_flashdata('error', 'Gagal menugaskan kurir. Silakan coba lagi.');
+            $this->session->set_flashdata('error', '❌ Gagal menugaskan kurir. Mungkin transaksi sudah memiliki kurir.');
         }
 
         redirect('admin/kurir/assign');
     }
 
-    // ============================================
-    // M08-F08: PERFORMANCE KURIR (laporan kinerja)
-    // ============================================
     public function performance()
     {
         $id_user = $this->session->userdata('id_user');
@@ -299,9 +333,6 @@ class Kurir extends CI_Controller
         $this->load->view('admin/kurir/performance', $data);
     }
 
-    // ============================================
-    // VALIDASI FORM (tambah & edit)
-    // ============================================
     private function _validate()
     {
         $this->form_validation->set_rules('nama_kurir', 'Nama Kurir', 'required|trim|min_length[3]|max_length[100]');

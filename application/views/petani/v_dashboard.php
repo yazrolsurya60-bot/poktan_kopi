@@ -1046,7 +1046,62 @@
 
 	<!-- SIDEBAR OVERLAY -->
 	<div class="sidebar-overlay" id="sidebarOverlay"></div>
-
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebarMenu">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="bi bi-patch-check-fill"></i>
+            </div>
+            <span>PETANI <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
+        </div>
+        <div class="sidebar-menu-wrapper">
+            <ul class="sidebar-menu">
+                <li class="menu-item active">
+                    <a href="<?= base_url('petani/dashboard'); ?>">
+                        <i class="bi bi-grid-1x2-fill"></i>Dashboard
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('petani/lahan'); ?>">
+                        <i class="bi bi-geo-alt-fill"></i>Kelola Lahan
+                        <span class="menu-badge">3</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('petani/panen'); ?>">
+                        <i class="bi bi-tree-fill"></i>Manajemen Panen
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('petani/produk'); ?>">
+                        <i class="bi bi-box-seam"></i>Katalog Produk
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('petani/transaksi'); ?>">
+                        <i class="bi bi-cart-check-fill"></i>Pesanan Masuk
+                        <span class="menu-badge">4</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="<?= base_url('petani/tracking'); ?>">
+                        <i class="bi bi-truck"></i>Tracking Kiriman
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <li class="menu-item">
+    <a href="<?= base_url('petani/kurir/assign'); ?>">
+        <i class="bi bi-send-check-fill"></i>Tugaskan Kurir
+    </a>
+</li>
+        <div class="sidebar-footer">
+            <button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
+                <i class="bi bi-box-arrow-right"></i> Keluar
+            </button>
+        </div>
+    </div>
+=======
 	<!-- SIDEBAR -->
 	<div class="sidebar" id="sidebarMenu">
 		<div class="sidebar-brand">
@@ -1097,7 +1152,6 @@
 			</button>
 		</div>
 	</div>
-
 	<!-- MAIN CONTENT -->
 	<div class="main-content">
 		<!-- PAGE HEADER -->
@@ -1192,35 +1246,38 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- QUICK ACTION BUTTONS -->
-		<h5 class="font-weight-bold mb-3"
+        <!-- QUICK ACTION BUTTONS -->
+        	<h5 class="font-weight-bold mb-3"
 			style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
 			<i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
 		</h5>
-		<div class="row mb-4">
-			<div class="col-lg-3 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('petani/lahan/tambah'); ?>" class="quick-action-btn">
-					<i class="bi bi-geo-alt-fill"></i> Tambah Lahan
-				</a>
-			</div>
-			<div class="col-lg-3 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('petani/panen/tambah'); ?>" class="quick-action-btn">
-					<i class="bi bi-calendar-plus-fill"></i> Input Panen
-				</a>
-			</div>
-			<div class="col-lg-3 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('petani/produk/tambah'); ?>" class="quick-action-btn">
-					<i class="bi bi-plus-circle-fill"></i> Tambah Produk
-				</a>
-			</div>
-			<div class="col-lg-3 col-md-4 col-6 mb-2">
+        <div class="row mb-4">
+    <div class="col-lg-2 col-md-4 col-6 mb-2">
+        <a href="<?= base_url('petani/lahan/tambah'); ?>" class="quick-action-btn">
+            <i class="bi bi-geo-alt-fill"></i> Tambah Lahan
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-4 col-6 mb-2">
+        <a href="<?= base_url('petani/panen/tambah'); ?>" class="quick-action-btn">
+            <i class="bi bi-calendar-plus-fill"></i> Input Panen
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-4 col-6 mb-2">
+        <a href="<?= base_url('petani/produk/tambah'); ?>" class="quick-action-btn">
+            <i class="bi bi-plus-circle-fill"></i> Tambah Produk
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-4 col-6 mb-2">
 				<a href="<?= base_url('petani/transaksi'); ?>" class="quick-action-btn">
 					<i class="bi bi-box-seam-fill"></i> Proses Pesanan
 				</a>
 			</div>
-		</div>
-
+    <div class="col-lg-2 col-md-4 col-6 mb-2">
+        <a href="<?= base_url('petani/kurir/assign'); ?>" class="quick-action-btn">
+            <i class="bi bi-send-check-fill"></i> Tugaskan Kurir
+        </a>
+    </div>
+</div>
 		<!-- KPI CARDS - DATA REAL -->
 		<div class="row mb-4">
 			<div class="col-xl-3 col-md-6 mb-4">
