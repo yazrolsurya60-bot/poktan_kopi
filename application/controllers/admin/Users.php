@@ -9,11 +9,19 @@ class Users extends CI_Controller {
             redirect('auth/login');
         }
         $this->load->model('User_model');
+        $this->load->model('Notifikasi_model'); // 🔴 TAMBAHKAN INI!
         $this->load->helper(['url', 'form']);
     }
 
     // List all users
     public function index() {
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
         $search = $this->input->get('search');
         $role = $this->input->get('role');
         $status = $this->input->get('status');
@@ -28,6 +36,13 @@ class Users extends CI_Controller {
 
     // List unverified petani (for verification)
     public function unverified_petani() {
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
         $data['petani'] = $this->User_model->get_unverified_petani();
         $this->load->view('admin/users/v_verifikasi_petani', $data);
     }
@@ -42,6 +57,17 @@ class Users extends CI_Controller {
         }
 
         if ($this->User_model->verify_petani($id)) {
+            // Kirim notifikasi ke petani
+            $this->load->helper('notifikasi');
+            send_notifikasi(
+                $id,
+                'Petani',
+                '✅ Akun Terverifikasi',
+                'Akun Petani Anda telah diverifikasi oleh Admin. Anda sekarang dapat mengelola lahan dan produk.',
+                'success',
+                base_url('petani/dashboard')
+            );
+            
             $this->session->set_flashdata('success', 'Akun Petani ' . $user['nama'] . ' berhasil diverifikasi.');
         } else {
             $this->session->set_flashdata('error', 'Gagal memverifikasi akun Petani.');
@@ -158,6 +184,13 @@ class Users extends CI_Controller {
 
     // View user details
     public function view($id) {
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
         $user = $this->User_model->get_by_id($id);
         
         if (!$user) {
@@ -170,6 +203,13 @@ class Users extends CI_Controller {
 
     // Add new user
     public function add() {
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
         if ($this->input->post()) {
             $this->form_validation->set_rules('nama', 'Nama Lengkap', 'required|trim|max_length[100]');
             $this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[4]|max_length[50]|is_unique[tb_user.username]');
@@ -214,11 +254,18 @@ class Users extends CI_Controller {
             }
         }
 
-        $this->load->view('admin/users/add');
+        $this->load->view('admin/users/add', $data);
     }
 
     // Edit user
     public function edit($id = null) {
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
         if (!$id) {
             redirect('admin/user');
         }
@@ -325,4 +372,3 @@ class Users extends CI_Controller {
         redirect('admin/user');
     }
 }
-?>

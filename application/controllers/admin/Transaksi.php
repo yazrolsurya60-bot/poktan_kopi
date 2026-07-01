@@ -5,22 +5,29 @@ class Transaksi extends CI_Controller {
     
     public function __construct() {
         parent::__construct();
+        
         if (!$this->session->userdata('id_user') || $this->session->userdata('role') != 'Admin') {
             redirect('auth/login');
         }
+        
         $this->load->model('Transaksi_model');
-        $this->load->model('Notifikasi_model'); // 🔥 TAMBAH
+        $this->load->model('Notifikasi_model');
         $this->load->helper('url');
         $this->load->helper('form');
     }
 
     // ============================================================
-    // INDEX - DAFTAR TRANSAKSI (HANYA MEMBER)
+    // INDEX - DAFTAR TRANSAKSI
     // ============================================================
     public function index() {
-        $data['title'] = 'Manajemen Transaksi';
+        $id_user = $this->session->userdata('id_user');
         
-        // 🔥 GANTI: panggil method yang filter member saja
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
+        $data['title'] = 'Manajemen Transaksi';
         $data['transaksi'] = $this->Transaksi_model->get_all_transaksi_member();
         
         $data['count_pending'] = $this->Transaksi_model->count_by_status('Pending');
@@ -35,6 +42,13 @@ class Transaksi extends CI_Controller {
     // DETAIL TRANSAKSI
     // ============================================================
     public function detail($id_transaksi) {
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
         $data['title'] = 'Detail Transaksi';
         
         $data['transaksi'] = $this->Transaksi_model->get_transaksi($id_transaksi);
@@ -49,7 +63,7 @@ class Transaksi extends CI_Controller {
     }
 
     // ============================================================
-    // KONFIRMASI BAYAR (M06-F06) + NOTIFIKASI
+    // KONFIRMASI BAYAR + NOTIFIKASI
     // ============================================================
     public function konfirmasi_bayar() {
         $id_transaksi = $this->input->post('id_transaksi');
@@ -58,7 +72,6 @@ class Transaksi extends CI_Controller {
         
         $this->Transaksi_model->verifikasi_bukti($id_transaksi, $status, $keterangan);
         
-        // Ambil data transaksi untuk notifikasi
         $transaksi = $this->Transaksi_model->get_transaksi($id_transaksi);
         
         if ($status == 'Diverifikasi') {
@@ -66,7 +79,6 @@ class Transaksi extends CI_Controller {
             $this->Transaksi_model->update_status($id_transaksi, 'Diproses');
             $message = '✅ Pembayaran diverifikasi. Pesanan diproses.';
             
-            // 🔥 NOTIFIKASI KE PEMBELI
             if ($transaksi['id_user']) {
                 $this->Notifikasi_model->save_notifikasi([
                     'id_user' => $transaksi['id_user'],
@@ -76,12 +88,10 @@ class Transaksi extends CI_Controller {
                     'icon' => 'success'
                 ]);
             }
-            
         } else {
             $this->Transaksi_model->update_status_bayar($id_transaksi, 'Pending');
             $message = '❌ Pembayaran ditolak. Upload ulang bukti.';
             
-            // 🔥 NOTIFIKASI KE PEMBELI
             if ($transaksi['id_user']) {
                 $this->Notifikasi_model->save_notifikasi([
                     'id_user' => $transaksi['id_user'],
@@ -98,7 +108,7 @@ class Transaksi extends CI_Controller {
     }
 
     // ============================================================
-    // UPDATE STATUS PESANAN (M06-F07) + NOTIFIKASI
+    // UPDATE STATUS PESANAN + NOTIFIKASI
     // ============================================================
     public function update_status($id_transaksi) {
         $status = $this->input->post('status');
@@ -111,7 +121,6 @@ class Transaksi extends CI_Controller {
         
         $this->Transaksi_model->update_status($id_transaksi, $status);
         
-        // 🔥 NOTIFIKASI KE PEMBELI
         $transaksi = $this->Transaksi_model->get_transaksi($id_transaksi);
         if ($transaksi['id_user']) {
             $icon = ($status == 'Selesai') ? 'success' : (($status == 'Dibatalkan') ? 'danger' : 'info');
@@ -129,10 +138,10 @@ class Transaksi extends CI_Controller {
     }
 
     // ============================================================
-    // EXPORT EXCEL (CSV) - HANYA MEMBER
+    // EXPORT EXCEL
     // ============================================================
     public function export_excel() {
-        // 🔥 GANTI: ambil transaksi member saja
+        // 🔴 METHOD INI DOWNLOAD, TIDAK PERLU NOTIFIKASI
         $transaksi = $this->Transaksi_model->get_all_transaksi_member();
         
         header('Content-Type: text/csv; charset=utf-8');
@@ -162,10 +171,10 @@ class Transaksi extends CI_Controller {
     }
 
     // ============================================================
-    // EXPORT PDF - HANYA MEMBER
+    // EXPORT PDF
     // ============================================================
     public function export_pdf() {
-        // 🔥 GANTI: ambil transaksi member saja
+        // 🔴 METHOD INI DOWNLOAD, TIDAK PERLU NOTIFIKASI
         $data['transaksi'] = $this->Transaksi_model->get_all_transaksi_member();
         $data['title'] = 'Laporan Transaksi';
         
@@ -176,6 +185,13 @@ class Transaksi extends CI_Controller {
     // HALAMAN KONFIRMASI BAYAR (dari quick action dashboard)
     // ============================================================
     public function konfirmasi() {
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
         $data['title'] = 'Konfirmasi Pembayaran';
         $data['transaksi_pending'] = $this->Transaksi_model->get_transaksi_butuh_konfirmasi();
         $data['count_menunggu']    = count($data['transaksi_pending']);
@@ -183,13 +199,21 @@ class Transaksi extends CI_Controller {
         $data['count_diproses']    = $this->Transaksi_model->count_by_status('Diproses');
         $data['count_dikirim']     = $this->Transaksi_model->count_by_status('Dikirim');
         $data['count_selesai']     = $this->Transaksi_model->count_by_status('Selesai');
+        
         $this->load->view('admin/transaksi/konfirmasi', $data);
     }
 
     // ============================================================
-    // INVOICE (M06-F10)
+    // INVOICE
     // ============================================================
     public function invoice($id_transaksi) {
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
         $data['transaksi'] = $this->Transaksi_model->get_transaksi($id_transaksi);
         if (!$data['transaksi']) {
             show_404();

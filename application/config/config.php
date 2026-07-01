@@ -513,6 +513,16 @@ $config['time_reference'] = 'local';
 */
 $config['rewrite_short_tags'] = FALSE;
 
+
+/*
+|--------------------------------------------------------------------------
+| Timezone Setting (WIB - Jakarta)
+|--------------------------------------------------------------------------
+|
+| Set timezone ke Asia/Jakarta agar jam sesuai dengan waktu Indonesia
+|
+*/
+date_default_timezone_set('Asia/Jakarta');
 /*
 |--------------------------------------------------------------------------
 | Reverse Proxy IPs
@@ -530,3 +540,4 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
