@@ -31,6 +31,7 @@
             overflow-x: hidden;
         }
 
+        /* --- SIDEBAR PREMIUM --- */
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -111,6 +112,16 @@
             font-weight: 600;
         }
 
+        .menu-item a .menu-badge.danger {
+            background: #EF4444;
+            color: white;
+        }
+
+        .menu-item a .menu-badge.success {
+            background: #10B981;
+            color: white;
+        }
+
         .menu-item.active a,
         .menu-item a:hover {
             color: #ffffff;
@@ -163,145 +174,78 @@
             border-color: rgba(230, 161, 92, 0.2);
         }
 
-        .main-content {
-            margin-left: var(--sidebar-width);
-            padding: 30px 40px 40px;
-            min-height: 100vh;
-            transition: var(--transition-smooth);
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 99;
         }
 
-        .page-header {
-            border-bottom: 1px solid rgba(74, 44, 17, 0.08);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+        .sidebar-overlay.active {
+            display: block;
         }
 
-        .page-header h2 {
-            font-weight: 700;
-            color: var(--dark-coffee);
-            letter-spacing: -0.02em;
-        }
+        /* ============================================ */
+        /* HEADER RIGHT - NOTIF + USER BADGE */
+        /* ============================================ */
 
-        .page-header .subtitle {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-top: 2px;
-        }
-
-        .custom-card {
-            background: var(--card-white);
-            border: 1px solid rgba(74, 44, 17, 0.06);
-            border-radius: var(--radius-card);
-            box-shadow: var(--shadow-soft);
-            transition: var(--transition-smooth);
-            overflow: hidden;
-        }
-
-        .custom-card:hover {
-            box-shadow: var(--shadow-hover);
-        }
-
-        .custom-card .card-header-custom {
-            padding: 18px 24px;
-            border-bottom: 1px solid rgba(74, 44, 17, 0.06);
+        .header-right {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 12px;
+            flex-shrink: 0;
         }
 
-        .custom-card .card-header-custom h6 {
-            font-weight: 700;
-            color: var(--dark-coffee);
-            margin: 0;
+        /* ============================================ */
+        /* USER BADGE */
+        /* ============================================ */
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            background: var(--card-white);
+            border: 1px solid rgba(74, 44, 17, 0.06);
+            font-weight: 500;
             font-size: 0.85rem;
+            cursor: default;
+            min-width: 90px;
+            transition: var(--transition-smooth);
         }
 
-        .custom-card .card-body-custom {
-            padding: 0;
+        .user-badge:hover {
+            background: var(--bg-cream);
+            border-color: var(--amber-cream);
         }
 
-        .table-custom {
-            font-size: 0.85rem;
-            margin-bottom: 0;
+        .user-badge i {
+            font-size: 1.4rem;
+            color: var(--amber-cream);
+            flex-shrink: 0;
         }
 
-        .table-custom thead th {
-            background: rgba(250, 246, 240, 0.4);
-            border-bottom: 2px solid rgba(74, 44, 17, 0.06);
-            color: var(--text-secondary);
+        .user-badge .user-name {
             font-weight: 600;
-            font-size: 0.7rem;
+            font-size: 0.82rem;
+            color: var(--dark-coffee);
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-badge .user-role {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            padding: 12px 10px;
+            white-space: nowrap;
         }
 
-        .table-custom tbody td {
-            padding: 12px 10px;
-            border-bottom: 1px solid rgba(74, 44, 17, 0.04);
-            vertical-align: middle;
-        }
-
-        .table-custom tbody tr:hover {
-            background: rgba(250, 246, 240, 0.3);
-        }
-
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .status-badge.pending {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-badge.processing {
-            background: #DBEAFE;
-            color: #1E40AF;
-        }
-
-        .status-badge.delivery {
-            background: #EDE9FE;
-            color: #5B21B6;
-        }
-
-        .status-badge.complete {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-
-        .status-badge.cancelled {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        .btn-detail {
-            background: var(--amber-cream);
-            color: white;
-            border: none;
-            padding: 5px 14px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            transition: var(--transition-smooth);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-detail:hover {
-            background: var(--roasted-brown);
-            color: white;
-            text-decoration: none;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-hover);
-        }
-
+        /* --- NOTIFICATION BELL --- */
         .notif-btn {
             position: relative;
             background: var(--card-white);
@@ -338,6 +282,7 @@
             border: 2px solid white;
         }
 
+        /* --- NOTIFICATION DROPDOWN --- */
         .notif-dropdown {
             position: absolute;
             right: 0;
@@ -423,17 +368,14 @@
             background: #D1FAE5;
             color: #065F46;
         }
-
         .notif-item .notif-icon.warning {
             background: #FEF3C7;
             color: #92400E;
         }
-
         .notif-item .notif-icon.info {
             background: #DBEAFE;
             color: #1E40AF;
         }
-
         .notif-item .notif-icon.danger {
             background: #FEE2E2;
             color: #991B1B;
@@ -468,17 +410,169 @@
             align-self: center;
         }
 
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 99;
+        .notif-empty {
+            text-align: center;
+            padding: 40px 20px;
         }
 
-        .sidebar-overlay.active {
+        .notif-empty i {
+            font-size: 2.5rem;
+            color: #D1C9C0;
             display: block;
+            margin-bottom: 10px;
         }
+
+        .notif-empty p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        /* ============================================ */
+        /* MAIN CONTENT */
+        /* ============================================ */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 30px 40px 40px;
+            min-height: 100vh;
+            transition: var(--transition-smooth);
+        }
+
+        .page-header {
+            border-bottom: 1px solid rgba(74, 44, 17, 0.08);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .page-header h2 {
+            font-weight: 700;
+            color: var(--dark-coffee);
+            letter-spacing: -0.02em;
+        }
+
+        .page-header .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 2px;
+        }
+
+        .custom-card {
+            background: var(--card-white);
+            border: 1px solid rgba(74, 44, 17, 0.06);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition-smooth);
+            overflow: hidden;
+        }
+
+        .custom-card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .custom-card .card-header-custom {
+            padding: 18px 24px;
+            border-bottom: 1px solid rgba(74, 44, 17, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .custom-card .card-header-custom h6 {
+            font-weight: 700;
+            color: var(--dark-coffee);
+            margin: 0;
+            font-size: 0.85rem;
+        }
+
+        .custom-card .card-body-custom {
+            padding: 0;
+        }
+
+        .table-custom {
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+
+        .table-custom thead th {
+            background: rgba(250, 246, 240, 0.4);
+            border-bottom: 2px solid rgba(74, 44, 17, 0.06);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 10px;
+        }
+
+        .table-custom tbody td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(74, 44, 17, 0.04);
+            vertical-align: middle;
+        }
+
+        .table-custom tbody tr:hover {
+            background: rgba(250, 246, 240, 0.3);
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-badge.pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        .status-badge.processing {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+        .status-badge.delivery {
+            background: #EDE9FE;
+            color: #5B21B6;
+        }
+        .status-badge.complete {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+        .status-badge.cancelled {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .btn-detail {
+            background: var(--amber-cream);
+            color: white;
+            border: none;
+            padding: 5px 14px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-detail:hover {
+            background: var(--roasted-brown);
+            color: white;
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* ============================================ */
+        /* RESPONSIVE */
+        /* ============================================ */
 
         @media (max-width: 991.98px) {
             .sidebar {
@@ -500,6 +594,27 @@
                 font-size: 1.3rem;
             }
 
+            .user-badge {
+                padding: 4px 10px;
+                min-width: 60px;
+            }
+
+            .user-badge i {
+                font-size: 1.1rem;
+            }
+
+            .user-badge .user-name {
+                font-size: 0.7rem;
+            }
+
+            .user-badge .user-role {
+                font-size: 0.5rem;
+            }
+
+            .header-right {
+                gap: 8px;
+            }
+
             .notif-dropdown {
                 width: calc(100vw - 32px);
                 right: -60px;
@@ -515,10 +630,82 @@
                 padding: 16px 12px 20px;
             }
 
+            .user-badge {
+                padding: 4px 8px;
+                min-width: 50px;
+                gap: 4px;
+            }
+
+            .user-badge i {
+                font-size: 0.9rem;
+            }
+
+            .user-badge .user-name {
+                font-size: 0.6rem;
+            }
+
+            .user-badge .user-role {
+                display: none;
+            }
+
+            .header-right {
+                gap: 6px;
+            }
+
             .notif-dropdown {
                 width: calc(100vw - 24px);
                 right: -70px;
             }
+
+            .table-custom thead th,
+            .table-custom tbody td {
+                padding: 8px 6px;
+                font-size: 0.7rem;
+            }
+
+            .btn-detail {
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
+        }
+
+        /* SCROLLBAR */
+        .sidebar-menu-wrapper::-webkit-scrollbar,
+        .notif-dropdown-list::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .sidebar-menu-wrapper::-webkit-scrollbar-track,
+        .notif-dropdown-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-menu-wrapper::-webkit-scrollbar-thumb,
+        .notif-dropdown-list::-webkit-scrollbar-thumb {
+            background: rgba(230, 161, 92, 0.3);
+            border-radius: 10px;
+        }
+
+        /* 🔔 NOTIFIKASI ANIMASI */
+        @keyframes notifPulse {
+            0%, 100% { transform: scale(1); }
+            30% { transform: scale(1.5); background: #EF4444; }
+            60% { transform: scale(0.9); }
+        }
+
+        @keyframes bellRing {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(10deg); }
+            50% { transform: rotate(-10deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .notif-dot.pulse {
+            animation: notifPulse 0.6s ease 3;
+        }
+
+        .notif-btn.ring {
+            animation: bellRing 0.5s ease 1;
         }
     </style>
 </head>
@@ -546,7 +733,7 @@
                 <li class="menu-item">
                     <a href="<?= base_url('petani/lahan'); ?>">
                         <i class="bi bi-geo-alt-fill"></i>Kelola Lahan
-                        <span class="menu-badge">3</span>
+                        <span class="menu-badge success">3</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -557,19 +744,16 @@
                 <li class="menu-item">
                     <a href="<?= base_url('petani/produk'); ?>">
                         <i class="bi bi-box-seam"></i>Katalog Produk
+                        <span class="menu-badge">5</span>
                     </a>
                 </li>
                 <li class="menu-item active">
                     <a href="<?= base_url('petani/transaksi'); ?>">
                         <i class="bi bi-cart-check-fill"></i>Pesanan Masuk
-                        <span class="menu-badge"><?= count($transaksi ?? []); ?></span>
+                        <span class="menu-badge danger"><?= count($transaksi ?? []); ?></span>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('petani/tracking'); ?>">
-                        <i class="bi bi-truck"></i>Tracking Kiriman
-                    </a>
-                </li>
+            
             </ul>
         </div>
         <div class="sidebar-footer">
@@ -582,7 +766,7 @@
     <!-- MAIN CONTENT -->
     <div class="main-content">
         <!-- PAGE HEADER -->
-        <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
+        <div class="page-header">
             <div>
                 <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
                     style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
@@ -591,7 +775,7 @@
                 <h2 class="d-inline-block align-middle mb-0">Transaksi Produk Saya</h2>
                 <p class="subtitle mb-0 mt-1">Daftar transaksi dari produk yang Anda jual</p>
             </div>
-            <div class="d-flex align-items-center gap-3" style="gap: 12px;">
+            <div class="header-right">
                 <!-- NOTIFICATION BELL -->
                 <div style="position: relative;">
                     <button class="notif-btn" id="notifToggle">
@@ -605,16 +789,20 @@
                     <div class="notif-dropdown" id="notifDropdown">
                         <div class="notif-dropdown-header">
                             <span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
-                            <a href="<?= base_url('petani/dashboard/history'); ?>"
-                                style="font-size:0.75rem; color: var(--amber-cream); font-weight:500; text-decoration:none;">Lihat Semua</a>
+                            <div>
+                                <?php if (isset($unread_count) && $unread_count > 0): ?>
+                                    <a href="#" id="markAllReadBtn" class="mr-2">Tandai semua</a>
+                                <?php endif; ?>
+                                <a href="<?= base_url('petani/dashboard/history'); ?>">Lihat Semua</a>
+                            </div>
                         </div>
-                        <div class="notif-dropdown-list">
+                        <div class="notif-dropdown-list" id="notifList">
                             <?php if (!empty($notifikasi)): ?>
                                 <?php foreach ($notifikasi as $n): ?>
-                                    <a class="notif-item <?= (isset($n->status_baca) && $n->status_baca == 0) ? 'unread' : ''; ?>"
-                                        href="<?= base_url('petani/dashboard/read/' . $n->id_notifikasi); ?>">
+                                    <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
+                                        href="<?= base_url('petani/dashboard/read/' . $n['id_notifikasi']); ?>">
                                         <?php
-                                        $icon_type = $n->icon ?? 'info';
+                                        $icon_type = $n['icon'] ?? 'info';
                                         $icon_map = [
                                             'success' => 'bi-check-circle-fill',
                                             'warning' => 'bi-exclamation-triangle-fill',
@@ -627,38 +815,40 @@
                                             <i class="bi <?= $icon_class; ?>"></i>
                                         </div>
                                         <div class="notif-text">
-                                            <?= htmlspecialchars($n->isi_notifikasi); ?>
-                                            <span
-                                                class="notif-time"><?= date('d M Y, H:i', strtotime($n->tanggal_buat)); ?></span>
+                                            <?= htmlspecialchars($n['isi_notifikasi']); ?>
+                                            <span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
                                         </div>
-                                        <?php if (isset($n->status_baca) && $n->status_baca == 0): ?>
+                                        <?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
                                             <span class="notif-badge-new">Baru</span>
                                         <?php endif; ?>
                                     </a>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <div class="text-center text-muted py-5 px-3">
-                                    <i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
-                                    <p class="small mb-0">Tidak ada notifikasi</p>
+                                <div class="notif-empty">
+                                    <i class="bi bi-bell-slash"></i>
+                                    <p>Tidak ada notifikasi</p>
                                 </div>
                             <?php endif; ?>
                         </div>
-                        <div class="p-2 text-center border-top"
-                            style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
-                            <a href="<?= base_url('petani/dashboard/settings'); ?>"
-                                class="small text-secondary font-weight-bold text-decoration-none">
+                        <div class="p-2 text-center border-top" style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+                            <a href="<?= base_url('petani/dashboard/settings'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
                                 <i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- USER AVATAR -->
-                <div class="d-flex align-items-center gap-2"
-                    style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
-                    <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-                    <span
-                        style="font-weight:500; font-size:0.85rem;"><?= $this->session->userdata('nama') ?? 'Petani' ?></span>
+                <!-- USER BADGE -->
+                <?php
+                $nama = $this->session->userdata('nama') ?? 'Petani';
+                $role = $this->session->userdata('role') ?? 'Petani';
+                ?>
+                <div class="user-badge">
+                    <i class="bi bi-person-circle"></i>
+                    <div>
+                        <div class="user-name"><?= $nama; ?></div>
+                        <div class="user-role"><?= $role; ?></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -725,7 +915,6 @@
                 <?php endif; ?>
             </div>
         </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
@@ -774,12 +963,41 @@
         }
 
         document.addEventListener('click', function(e) {
-            if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
+            if (notifDropdown && !notifDropdown.contains(e.target) && notifToggle && !notifToggle.contains(e.target)) {
                 notifDropdown.classList.remove('show');
             }
         });
 
+        // ============================================
+        // 3. MARK ALL READ
+        // ============================================
+        function markAllRead() {
+            if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+                $.ajax({
+                    url: '<?= base_url('petani/dashboard/mark_all_read_ajax'); ?>',
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            alert('Gagal menandai semua notifikasi.');
+                        }
+                    },
+                    error: function() {
+                        alert('Terjadi kesalahan. Silakan coba lagi.');
+                    }
+                });
+            }
+        }
+
+        document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            markAllRead();
+        });
+
         console.log('✅ Halaman Transaksi Produk Saya siap digunakan!');
+        console.log('📋 Data transaksi dari database real-time');
     </script>
 
 </body>

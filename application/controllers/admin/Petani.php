@@ -29,8 +29,11 @@ class Petani extends CI_Controller
 		$data['role'] = 'Admin';
 
 		$status = $this->input->get('status');
-		$data['daftar_petani'] = $this->Petani_model->get_daftar_petani($status);
+		$wilayah = $this->input->get('wilayah');
+		$data['daftar_petani'] = $this->Petani_model->get_daftar_petani($status, $wilayah);
 		$data['status_filter'] = $status;
+		$data['wilayah_filter'] = $wilayah;
+		$data['semua_wilayah'] = $this->Petani_model->get_all_wilayah();
 
 		// Hitung statistik untuk KPI cards
 		$semua = $this->Petani_model->get_daftar_petani();
@@ -106,12 +109,14 @@ class Petani extends CI_Controller
 		}
 
 		$data = [
-			'nama_petani'   => $this->input->post('nama_petani'),
-			'nik'           => $this->input->post('nik'),
-			'no_hp'         => $this->input->post('no_hp'),
-			'email'         => $this->input->post('email'),
-			'alamat'        => $this->input->post('alamat'),
-			'status_petani' => $this->input->post('status') ?: 'Inactive',
+			'nama_petani'    => $this->input->post('nama_petani'),
+			'nik'            => $this->input->post('nik'),
+			'no_hp'          => $this->input->post('no_hp'),
+			'email'          => $this->input->post('email'),
+			'alamat'         => $this->input->post('alamat'),
+			'domisili'       => $this->input->post('domisili'),
+			'tanggal_lahir'  => $this->input->post('tanggal_lahir'),
+			'status_petani'  => $this->input->post('status') ?: 'Inactive',
 			'tanggal_daftar' => date('Y-m-d'),
 		];
 
@@ -133,7 +138,7 @@ class Petani extends CI_Controller
 
 		$id_petani_baru = $this->Petani_model->insert_petani($data);
 
-		// Simpan relasi wilayah
+		// Simpan relasi wilayah (boleh lebih dari 1, mis. Sempadian Tekarang & Sendoyan)
 		$wilayah_dipilih = $this->input->post('wilayah') ?: [];
 		$this->Petani_model->simpan_wilayah_petani($id_petani_baru, $wilayah_dipilih);
 
@@ -183,7 +188,7 @@ class Petani extends CI_Controller
 		$config['max_size']      = 2048;
 		$this->upload->initialize($config);
 
-		$fields = ['file_ktp', 'file_npwp', 'file_sertifikat', 'foto_profil'];
+		$fields = ['file_sertifikat', 'foto_profil'];
 		foreach ($fields as $field) {
 			if (!empty($_FILES[$field]['name'])) {
 				if ($this->upload->do_upload($field)) {
@@ -194,7 +199,7 @@ class Petani extends CI_Controller
 
 		$this->Petani_model->update_petani($id, $data);
 
-		// Simpan ulang relasi wilayah
+		// Simpan ulang relasi wilayah (boleh lebih dari 1)
 		$wilayah_dipilih = $this->input->post('wilayah') ?: [];
 		$this->Petani_model->simpan_wilayah_petani($id, $wilayah_dipilih);
 
@@ -229,8 +234,6 @@ class Petani extends CI_Controller
 			];
 
 			if ($action === 'approve') {
-				$update_data['status_ktp'] = 'Terverifikasi';
-				$update_data['status_npwp'] = 'Terverifikasi';
 				$update_data['status_sertifikat'] = 'Terverifikasi';
 
 				// 🔴 BENAR! Kirim ke PETANI yang diverifikasi
@@ -244,8 +247,6 @@ class Petani extends CI_Controller
 					base_url('petani/dashboard')
 				);
 			} else {
-				$update_data['status_ktp'] = 'Ditolak';
-				$update_data['status_npwp'] = 'Ditolak';
 				$update_data['status_sertifikat'] = 'Ditolak';
 			}
 
@@ -257,11 +258,12 @@ class Petani extends CI_Controller
 		$this->load->view('admin/Petani_verifikasi', $data);
 	}
 
-	// ── 8. VERIFIKASI Dokumen Spesifik ──────────────────────────────
+	// ── 8. VERIFIKASI Dokumen Spesifik (Approve / Reject) ────────────
+	// URL: admin/petani/verifikasi_dokumen/{id}/{jenis}/{status}
 	public function verifikasi_dokumen($id, $jenis_dokumen, $status_baru = 'Terverifikasi')
 	{
 		// 🔴 METHOD INI REDIRECT, TIDAK PERLU NOTIFIKASI
-		$allowed_jenis  = ['status_ktp', 'status_npwp', 'status_sertifikat'];
+		$allowed_jenis  = ['status_sertifikat'];
 		$allowed_status = ['Terverifikasi', 'Ditolak'];
 		if (in_array($jenis_dokumen, $allowed_jenis) && in_array($status_baru, $allowed_status)) {
 			$this->Petani_model->update_petani($id, [$jenis_dokumen => $status_baru]);
@@ -283,7 +285,7 @@ class Petani extends CI_Controller
 		}
 
 		$jenis_dokumen = $this->input->post('jenis_dokumen');
-		$allowed_jenis = ['file_ktp', 'file_npwp', 'file_sertifikat'];
+		$allowed_jenis = ['file_sertifikat'];
 
 		if (!in_array($jenis_dokumen, $allowed_jenis)) {
 			$this->session->set_flashdata('error', 'Jenis dokumen tidak valid!');
@@ -304,6 +306,7 @@ class Petani extends CI_Controller
 
 		if ($this->upload->do_upload('file_dokumen')) {
 			$file_name = $this->upload->data('file_name');
+			// Juga reset status dokumen ke Menunggu agar admin perlu review ulang
 			$status_key = 'status_' . str_replace('file_', '', $jenis_dokumen);
 			$this->Petani_model->update_petani($id, [
 				$jenis_dokumen => $file_name,
@@ -376,11 +379,13 @@ class Petani extends CI_Controller
 			}
 			echo "</table>";
 		} else if ($format == 'pdf') {
+			// Render view ke string HTML dulu (bukan langsung di-echo ke browser)
 			$html = $this->load->view('admin/Petani_export_pdf', $data, true);
 
 			if (!class_exists('Dompdf\\Dompdf')) {
 				show_error(
-					'Library Dompdf belum terpasang. Jalankan <b>composer install</b> di root project.',
+					'Library Dompdf belum terpasang. Jalankan <b>composer install</b> di root project '
+						. '(sudah terdaftar di composer.json) agar fitur Export PDF dapat menghasilkan file PDF.',
 					500,
 					'Library PDF Tidak Ditemukan'
 				);
@@ -391,6 +396,8 @@ class Petani extends CI_Controller
 			$dompdf->setPaper('A4', 'portrait');
 			$dompdf->loadHtml($html);
 			$dompdf->render();
+
+			// Memaksa browser untuk mendownload file PDF asli (bukan sekadar menampilkan HTML)
 			$dompdf->stream('Data_Petani_' . date('Y-m-d') . '.pdf', ['Attachment' => true]);
 		} else {
 			redirect('admin/petani/export_page');

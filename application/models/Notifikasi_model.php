@@ -119,35 +119,29 @@ class Notifikasi_model extends CI_Model
 			'notif_kurir' => 1,
 			'notif_petani' => 0,
 			'notif_promo' => 0,
-			'notif_laporan' => 0,
 			'notif_sistem' => 1,
 			'notif_pesanan' => 1,
-			'notif_panen' => 1,
+			// 'notif_laporan' => 0, // 🔴 DIHAPUS
+			// 'notif_panen' => 0,   // 🔴 DIHAPUS
 		];
 
 		if ($role == 'Admin') {
 			$base['notif_petani'] = 1;
-			$base['notif_laporan'] = 1;
 			$base['notif_transaksi'] = 1;
 			$base['notif_stok'] = 1;
 			$base['notif_pembayaran'] = 1;
 			$base['notif_kurir'] = 1;
 			$base['notif_sistem'] = 1;
-			// Matikan yang tidak relevan untuk Admin
 			$base['notif_pesanan'] = 0;
 			$base['notif_promo'] = 0;
-			$base['notif_panen'] = 0;
 		} elseif ($role == 'Petani') {
 			$base['notif_stok'] = 1;
 			$base['notif_transaksi'] = 1;
-			$base['notif_panen'] = 1;
 			$base['notif_pembayaran'] = 1;
 			$base['notif_kurir'] = 1;
 			$base['notif_sistem'] = 1;
-			// Matikan yang tidak relevan untuk Petani
 			$base['notif_petani'] = 0;
 			$base['notif_promo'] = 0;
-			$base['notif_laporan'] = 0;
 			$base['notif_pesanan'] = 0;
 		} elseif ($role == 'Pembeli') {
 			$base['notif_promo'] = 1;
@@ -155,12 +149,9 @@ class Notifikasi_model extends CI_Model
 			$base['notif_kurir'] = 1;
 			$base['notif_pembayaran'] = 1;
 			$base['notif_sistem'] = 1;
-			// Matikan yang tidak relevan untuk Pembeli
 			$base['notif_transaksi'] = 0;
 			$base['notif_stok'] = 0;
 			$base['notif_petani'] = 0;
-			$base['notif_laporan'] = 0;
-			$base['notif_panen'] = 0;
 		}
 
 		return $base;
@@ -208,143 +199,6 @@ class Notifikasi_model extends CI_Model
 		}
 	}
 
-	// ============================================
-	// 🔴 NOTIFIKASI JADWAL PANEN
-	// ============================================
-
-	/**
-	 * Kirim notifikasi jadwal panen baru
-	 */
-	public function send_panen_notification($id_user, $data_panen)
-	{
-		$settings = $this->get_settings($id_user);
-		
-		if (isset($settings['notif_panen']) && $settings['notif_panen'] == 0) {
-			return false;
-		}
-
-		$nama_lahan = $data_panen['nama_lahan'] ?? 'Lahan';
-		$estimasi = isset($data_panen['estimasi']) ? number_format($data_panen['estimasi'], 0, ',', '.') : '0';
-		$tanggal_panen = isset($data_panen['tanggal_panen']) ? date('d M Y', strtotime($data_panen['tanggal_panen'])) : '-';
-		$id_panen = $data_panen['id_panen'] ?? 0;
-
-		$notif_data = [
-			'id_user' => $id_user,
-			'judul' => '📅 Jadwal Panen Baru',
-			'isi_notifikasi' => 'Jadwal panen untuk ' . $nama_lahan . ' telah ditambahkan. Tanggal: ' . $tanggal_panen . ', Estimasi: ' . $estimasi . ' kg',
-			'link' => base_url('petani/panen/detail/' . $id_panen),
-			'icon' => 'primary',
-			'status_baca' => 0,
-			'tanggal_buat' => date('Y-m-d H:i:s')
-		];
-		
-		return $this->insert_notification($notif_data);
-	}
-
-	/**
-	 * Kirim notifikasi pengingat panen (H-1)
-	 */
-	public function send_panen_reminder($id_user, $data_panen)
-	{
-		$settings = $this->get_settings($id_user);
-		
-		if (isset($settings['notif_panen']) && $settings['notif_panen'] == 0) {
-			return false;
-		}
-
-		$nama_lahan = $data_panen['nama_lahan'] ?? 'Lahan';
-		$tanggal_panen = isset($data_panen['tanggal_panen']) ? date('d M Y', strtotime($data_panen['tanggal_panen'])) : '-';
-		$id_panen = $data_panen['id_panen'] ?? 0;
-		
-		$notif_data = [
-			'id_user' => $id_user,
-			'judul' => '⏰ Pengingat Panen Besok',
-			'isi_notifikasi' => 'Pengingat: Besok adalah jadwal panen untuk ' . $nama_lahan . ' (' . $tanggal_panen . '). Siapkan alat dan tenaga kerja!',
-			'link' => base_url('petani/panen/detail/' . $id_panen),
-			'icon' => 'warning',
-			'status_baca' => 0,
-			'tanggal_buat' => date('Y-m-d H:i:s')
-		];
-		
-		return $this->insert_notification($notif_data);
-	}
-
-	/**
-	 * Kirim notifikasi status panen selesai
-	 */
-	public function send_panen_selesai_notification($id_user, $data_panen)
-	{
-		$settings = $this->get_settings($id_user);
-		
-		if (isset($settings['notif_panen']) && $settings['notif_panen'] == 0) {
-			return false;
-		}
-
-		$nama_lahan = $data_panen['nama_lahan'] ?? 'Lahan';
-		$jumlah_panen = isset($data_panen['jumlah_panen']) ? number_format($data_panen['jumlah_panen'], 0, ',', '.') : '0';
-		$id_panen = $data_panen['id_panen'] ?? 0;
-		
-		$notif_data = [
-			'id_user' => $id_user,
-			'judul' => '✅ Panen Selesai',
-			'isi_notifikasi' => 'Panen untuk ' . $nama_lahan . ' telah selesai. Total hasil: ' . $jumlah_panen . ' kg',
-			'link' => base_url('petani/panen/detail/' . $id_panen),
-			'icon' => 'success',
-			'status_baca' => 0,
-			'tanggal_buat' => date('Y-m-d H:i:s')
-		];
-		
-		return $this->insert_notification($notif_data);
-	}
-
-	/**
-	 * Cek jadwal panen yang akan datang dan kirim reminder otomatis
-	 */
-	public function check_upcoming_panen()
-	{
-		$tomorrow = date('Y-m-d', strtotime('+1 day'));
-		$today = date('Y-m-d');
-		
-		$total_sent = 0;
-
-		$upcoming = $this->db
-			->where('tanggal_panen', $tomorrow)
-			->where('status', 'Menunggu')
-			->get('tb_panen')
-			->result_array();
-		
-		foreach ($upcoming as $panen) {
-			$result = $this->send_panen_reminder($panen['id_user'], $panen);
-			if ($result) $total_sent++;
-		}
-		
-		$today_panen = $this->db
-			->where('tanggal_panen', $today)
-			->where('status', 'Menunggu')
-			->get('tb_panen')
-			->result_array();
-		
-		foreach ($today_panen as $panen) {
-			$settings = $this->get_settings($panen['id_user']);
-			if (isset($settings['notif_panen']) && $settings['notif_panen'] == 0) {
-				continue;
-			}
-
-			$notif_data = [
-				'id_user' => $panen['id_user'],
-				'judul' => '🌾 Hari Ini Jadwal Panen!',
-				'isi_notifikasi' => 'Hari ini adalah jadwal panen untuk ' . ($panen['nama_lahan'] ?? 'Lahan') . '. Segera lakukan panen!',
-				'link' => base_url('petani/panen/detail/' . ($panen['id_panen'] ?? 0)),
-				'icon' => 'danger',
-				'status_baca' => 0,
-				'tanggal_buat' => date('Y-m-d H:i:s')
-			];
-			$result = $this->insert_notification($notif_data);
-			if ($result) $total_sent++;
-		}
-		
-		return $total_sent;
-	}
 
 	// ============================================
 	// KPI DASHBOARD (M11-F01)
@@ -610,6 +464,7 @@ class Notifikasi_model extends CI_Model
 
 	public function get_jadwal_panen($id_user, $limit = 5)
 	{
+		// 🔴 TETAP ADA UNTUK KEPERLUAN LAIN TAPI TIDAK DIGUNAKAN UNTUK NOTIFIKASI
 		$this->db->where('id_user', $id_user);
 		$this->db->where('tanggal_panen >=', date('Y-m-d'));
 		$this->db->order_by('tanggal_panen', 'ASC');

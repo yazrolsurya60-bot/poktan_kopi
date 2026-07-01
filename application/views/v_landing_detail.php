@@ -241,7 +241,7 @@
     <!-- DETAIL SECTION -->
     <section class="detail-section">
         <div class="container">
-            <a href="<?= base_url('landing'); ?>" class="btn-back">
+            <a href="<?= base_url('landing/mitra'); ?>" class="btn-back">
                 <i class="bi bi-arrow-left"></i> Kembali ke Daftar Mitra
             </a>
 
