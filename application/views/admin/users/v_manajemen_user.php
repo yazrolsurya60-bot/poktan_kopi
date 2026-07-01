@@ -980,7 +980,6 @@
             </div>
             <div class="card-body-custom" style="padding:0;">
                 <div class="table-responsive">
-<<<<<<< HEAD
                     <table class="table table-custom mb-0">
                         <thead>
                             <tr>
@@ -988,6 +987,7 @@
                                 <th>Nama</th>
                                 <th>Username</th>
                                 <th>Email</th>
+                                <th>Nomor Telepon</th>
                                 <th>Role</th>
                                 <th>Status</th>
                                 <th class="text-center">Aksi</th>
@@ -1003,14 +1003,15 @@
                                             <span style="font-weight:600;"><?= htmlspecialchars($user['nama'] ?? '-') ?></span>
                                         </td>
                                         <td><?= htmlspecialchars($user['username']) ?></td>
-                                        <td><?= htmlspecialchars($user['email']) ?></td>
+                                        <td><?= htmlspecialchars($user['email'] ?? '-') ?></td>
+                                        <td><?= htmlspecialchars($user['no_telepon'] ?? '-') ?></td>
                                         <td>
-                                            <span class="badge" style="background: <?= $user['role'] === 'Admin' ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= $user['role'] === 'Admin' ? 'white' : 'var(--text-secondary)'; ?>; padding: 4px 12px; border-radius: 20px; font-weight:600; font-size:0.7rem;">
-                                                <?= ucfirst($user['role']) ?>
+                                            <span class="badge" style="background: <?= (strtolower($user['role'] ?? '') === 'admin') ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= (strtolower($user['role'] ?? '') === 'admin') ? 'white' : 'var(--text-secondary)'; ?>; padding: 4px 12px; border-radius: 20px; font-weight:600; font-size:0.7rem;">
+                                                <?= ucfirst($user['role'] ?? '') ?>
                                             </span>
                                         </td>
                                         <td>
-                                            <?php if ($user['status'] === 'Active'): ?>
+                                            <?php if (($user['status'] ?? '') === 'Active'): ?>
                                                 <span class="status-badge active" style="cursor: default;">
                                                     <i class="bi bi-check-circle mr-1"></i>Aktif
                                                 </span>
@@ -1021,29 +1022,29 @@
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-center">
-                                            <a href="<?= site_url('admin/user/edit/' . $user['id_user']) ?>" class="btn-custom-outline" title="Edit">
+                                            <a href="<?= site_url('admin/user/edit/' . $user['id_user']) ?>" class="btn-custom-outline me-1" title="Edit">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <?php if ($user['role'] !== 'Admin'): ?>
-                                                <?php if ($user['status'] === 'Active'): ?>
+                                            <?php if (strtolower($user['role'] ?? '') !== 'admin'): ?>
+                                                <?php if (($user['status'] ?? '') === 'Active'): ?>
                                                     <a href="<?= site_url('admin/user/deactivate/' . $user['id_user']) ?>" 
-                                                       class="btn-custom-outline" 
+                                                       class="btn-custom-outline me-1" 
                                                        title="Nonaktifkan"
                                                        onclick="return confirm('Apakah Anda yakin ingin menonaktifkan user ini?')">
                                                         <i class="bi bi-pause-circle"></i>
                                                     </a>
                                                 <?php else: ?>
                                                     <a href="<?= site_url('admin/user/activate/' . $user['id_user']) ?>" 
-                                                       class="btn-custom-outline" 
+                                                       class="btn-custom-outline me-1" 
                                                        title="Aktifkan"
                                                        onclick="return confirm('Apakah Anda yakin ingin mengaktifkan user ini?')">
                                                         <i class="bi bi-play-circle"></i>
                                                     </a>
                                                 <?php endif; ?>
                                             <?php endif; ?>
-                                            <?php if ($user['role'] === 'Petani' && $user['is_verified'] === '0'): ?>
+                                            <?php if (strtolower($user['role'] ?? '') === 'petani' && isset($user['is_verified']) && $user['is_verified'] === '0'): ?>
                                                 <a href="<?= site_url('admin/users/verify_petani/' . $user['id_user']) ?>" 
-                                                   class="btn-custom-outline" 
+                                                   class="btn-custom-outline me-1" 
                                                    title="Verifikasi Petani"
                                                    onclick="return confirm('Apakah Anda yakin ingin memverifikasi akun Petani ini?')">
                                                     <i class="bi bi-patch-check"></i>
@@ -1057,94 +1058,16 @@
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
-=======
-<table class="table table-custom mb-0">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Nama</th>
-            <th>Username</th>
-            <th>Nomor Telepon</th>  <!-- Diganti dari Email -->
-            <th>Role</th>
-            <th>Status</th>
-            <th class="text-center">Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if (!empty($users)): ?>
-            <?php $i = 1;
-            foreach ($users as $user): ?>
-                <tr>
-                    <td><?= $i++ ?></td>
-                    <td>
-                        <span style="font-weight:600;"><?= htmlspecialchars($user['nama'] ?? '-') ?></span>
-                    </td>
-                    <td><?= htmlspecialchars($user['username']) ?></td>
-                    <td><?= htmlspecialchars($user['no_telepon'] ?? '-') ?></td>  <!-- Diganti dari email -->
-                    <td>
-                        <span class="badge" style="background: <?= $user['role'] === 'admin' ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= $user['role'] === 'admin' ? 'white' : 'var(--text-secondary)'; ?>; padding: 4px 12px; border-radius: 20px; font-weight:600; font-size:0.7rem;">
-                            <?= ucfirst($user['role']) ?>
-                        </span>
-                    </td>
-                    <td>
-                        <?php if ($user['status'] === 'Active'): ?>
-                            <span class="status-badge active" style="cursor: default;">
-                                <i class="bi bi-check-circle mr-1"></i>Aktif
-                            </span>
-                        <?php else: ?>
-                            <span class="status-badge inactive" style="cursor: default;">
-                                <i class="bi bi-x-circle mr-1"></i>Nonaktif
-                            </span>
-                        <?php endif; ?>
-                    </td>
-                    <td class="text-center">
-                        <a href="<?= site_url('admin/user/edit/' . $user['id_user']) ?>" class="btn-custom-outline me-1" title="Edit">
-                            <i class="bi bi-pencil"></i>
-                        </a>
-                        <?php if ($user['role'] !== 'Admin'): ?>
-                            <?php if ($user['status'] === 'Active'): ?>
-                                <a href="<?= site_url('admin/user/deactivate/' . $user['id_user']) ?>" 
-                                   class="btn-custom-outline me-1" 
-                                   title="Nonaktifkan"
-                                   onclick="return confirm('Apakah Anda yakin ingin menonaktifkan user ini?')">
-                                    <i class="bi bi-pause-circle"></i>
-                                </a>
->>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
                             <?php else: ?>
-                                <a href="<?= site_url('admin/user/activate/' . $user['id_user']) ?>" 
-                                   class="btn-custom-outline me-1" 
-                                   title="Aktifkan"
-                                   onclick="return confirm('Apakah Anda yakin ingin mengaktifkan user ini?')">
-                                    <i class="bi bi-play-circle"></i>
-                                </a>
+                                <tr>
+                                    <td colspan="8" class="text-center py-4 text-muted">
+                                        <i class="bi bi-people d-block mb-2" style="font-size:2rem;"></i>
+                                        <p class="mb-0">Belum ada data user</p>
+                                    </td>
+                                </tr>
                             <?php endif; ?>
-                        <?php endif; ?>
-                        <?php if ($user['role'] === 'Petani' && isset($user['is_verified']) && $user['is_verified'] === '0'): ?>
-                            <a href="<?= site_url('admin/users/verify_petani/' . $user['id_user']) ?>" 
-                               class="btn-custom-outline me-1" 
-                               title="Verifikasi Petani"
-                               onclick="return confirm('Apakah Anda yakin ingin memverifikasi akun Petani ini?')">
-                                <i class="bi bi-patch-check"></i>
-                            </a>
-                        <?php endif; ?>
-                        <a href="javascript:void(0)" class="btn-custom-outline-danger" 
-                           onclick="if(confirm('Apakah Anda yakin ingin menghapus user ini?')){ window.location.href='<?= site_url('admin/user/delete/' . $user['id_user']) ?>'; }" 
-                           title="Hapus">
-                            <i class="bi bi-trash"></i>
-                        </a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="7" class="text-center py-4 text-muted">
-                    <i class="bi bi-people d-block mb-2" style="font-size:2rem;"></i>
-                    <p class="mb-0">Belum ada data user</p>
-                </td>
-            </tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
