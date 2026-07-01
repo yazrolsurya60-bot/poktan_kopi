@@ -145,8 +145,8 @@ if (!function_exists('validate_phone_number')) {
         // Hapus semua karakter non-digit
         $no_telepon = preg_replace('/\D/', '', $no_telepon);
         
-        // Telepon Indonesia minimal 10 digit, maksimal 12 digit
-        if (strlen($no_telepon) < 10 || strlen($no_telepon) > 12) {
+        // Telepon Indonesia minimal 10 digit, maksimal 14 digit
+        if (strlen($no_telepon) < 10 || strlen($no_telepon) > 14) {
             return false;
         }
         
