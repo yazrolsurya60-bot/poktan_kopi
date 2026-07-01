@@ -1197,6 +1197,10 @@
 			</div>
 		</div>
         <!-- QUICK ACTION BUTTONS -->
+        	<h5 class="font-weight-bold mb-3"
+			style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
+			<i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
+		</h5>
         <div class="row mb-4">
     <div class="col-lg-2 col-md-4 col-6 mb-2">
         <a href="<?= base_url('petani/lahan/tambah'); ?>" class="quick-action-btn">
@@ -1214,44 +1218,16 @@
         </a>
     </div>
     <div class="col-lg-2 col-md-4 col-6 mb-2">
-        <a href="#" class="quick-action-btn">
-            <i class="bi bi-box-seam-fill"></i> Proses Pesanan
-        </a>
-    </div>
+				<a href="<?= base_url('petani/transaksi'); ?>" class="quick-action-btn">
+					<i class="bi bi-box-seam-fill"></i> Proses Pesanan
+				</a>
+			</div>
     <div class="col-lg-2 col-md-4 col-6 mb-2">
         <a href="<?= base_url('petani/kurir/assign'); ?>" class="quick-action-btn">
             <i class="bi bi-send-check-fill"></i> Tugaskan Kurir
         </a>
     </div>
 </div>
-		<!-- QUICK ACTION BUTTONS -->
-		<h5 class="font-weight-bold mb-3"
-			style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
-			<i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
-		</h5>
-		<div class="row mb-4">
-			<div class="col-lg-3 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('petani/lahan/tambah'); ?>" class="quick-action-btn">
-					<i class="bi bi-geo-alt-fill"></i> Tambah Lahan
-				</a>
-			</div>
-			<div class="col-lg-3 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('petani/panen/tambah'); ?>" class="quick-action-btn">
-					<i class="bi bi-calendar-plus-fill"></i> Input Panen
-				</a>
-			</div>
-			<div class="col-lg-3 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('petani/produk/tambah'); ?>" class="quick-action-btn">
-					<i class="bi bi-plus-circle-fill"></i> Tambah Produk
-				</a>
-			</div>
-			<div class="col-lg-3 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('petani/transaksi'); ?>" class="quick-action-btn">
-					<i class="bi bi-box-seam-fill"></i> Proses Pesanan
-				</a>
-			</div>
-		</div>
-
 		<!-- KPI CARDS - DATA REAL -->
 		<div class="row mb-4">
 			<div class="col-xl-3 col-md-6 mb-4">
