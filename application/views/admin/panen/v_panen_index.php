@@ -924,7 +924,7 @@
                     <i class="bi bi-list"></i>
                 </button>
                 <h2 class="d-inline-block align-middle mb-0">Rekap Hasil Panen</h2>
-                <p class="subtitle mb-0 mt-1">Laporan rekapitulasi data panen dari seluruh petani (M04-F02).</p>
+                <p class="subtitle mb-0 mt-1">Laporan rekapitulasi data panen dari seluruh petani</p>
             </div>
             <div class="header-right">
                 <!-- NOTIFICATION BELL -->
