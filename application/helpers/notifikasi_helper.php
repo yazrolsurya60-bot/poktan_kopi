@@ -156,20 +156,6 @@ if (!function_exists('notifikasi_stok_tipis')) {
     }
 }
 
-if (!function_exists('notifikasi_poin')) {
-    function notifikasi_poin($pembeli_id, $poin, $total_poin) {
-        $judul = 'Poin Reward Ditambahkan';
-        $pesan = "Anda mendapatkan {$poin} poin! Total poin: {$total_poin}";
-        return send_notifikasi(
-            $pembeli_id,
-            'pembeli',
-            $judul,
-            $pesan,
-            'success',
-            base_url('pembeli/poin')
-        );
-    }
-}
 
 // ============================================
 // NOTIFIKASI KE SEMUA ADMIN (M11-F01)
