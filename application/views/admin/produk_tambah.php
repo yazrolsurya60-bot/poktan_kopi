@@ -943,17 +943,16 @@
                                 <label class="font-weight-bold">Altitude</label>
                                 <input type="text" name="altitude" class="form-control" placeholder="Contoh: 1200 mdpl">
                             </div>
-
                             <div class="form-group mb-3">
                                 <label class="font-weight-bold">Proses Pengolahan</label>
                                 <input type="text" name="proses" class="form-control"
-                                    placeholder="Contoh: Full Washed, Natural">
+                                    placeholder="Contoh: Dicuci Bersih, Dijemur Utuh, Setengah Dicuci">
                             </div>
 
                             <div class="form-group mb-3">
-                                <label class="font-weight-bold">Flavor Notes</label>
+                                <label class="font-weight-bold">Karakter Rasa Kopi</label>
                                 <textarea class="form-control" rows="2" name="flavor_notes"
-                                    placeholder="Contoh: Fruity, Chocolatey, Nutty..."></textarea>
+                                    placeholder="Contoh: Rasa buah, aroma cokelat, sedikit manis seperti madu, atau rasa kacang"></textarea>
                             </div>
 
                             <div class="form-group mb-3">
@@ -963,10 +962,7 @@
                             </div>
 
                             
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Galeri Tambahan (Bisa pilih banyak)</label>
-                                <input type="file" name="galeri[]" multiple class="form-control" accept="image/*">
-                            </div>
+                         
 <div class="form-group mb-3">
                                 <label class="font-weight-bold">Status Produk</label>
                                 <select name="status_produk" class="form-control">

@@ -30,7 +30,6 @@
 			overflow-x: hidden;
 		}
 
-		/* --- SIDEBAR --- */
 		.sidebar {
 			width: var(--sidebar-width);
 			height: 100vh;
@@ -142,7 +141,6 @@
 			border-color: rgba(230, 161, 92, 0.2);
 		}
 
-		/* --- MAIN CONTENT --- */
 		.main-content {
 			margin-left: var(--sidebar-width);
 			padding: 30px 40px 40px;
@@ -179,7 +177,6 @@
 			text-decoration: none;
 		}
 
-		/* --- CUSTOM CARD --- */
 		.custom-card {
 			background: var(--card-white);
 			border: 1px solid rgba(74, 44, 17, 0.06);
@@ -216,7 +213,6 @@
 			padding: 0;
 		}
 
-		/* --- TABEL --- */
 		.table-custom {
 			font-size: 0.85rem;
 			margin-bottom: 0;
@@ -257,7 +253,20 @@
 			text-transform: capitalize;
 		}
 
-		.status-badge.badge-pending { background: #FEF3C7; color: #92400E; }
+		.status-badge.badge-pending {
+			background: #FEF3C7;
+			color: #92400E;
+		}
+
+		.status-badge.badge-diproses {
+			background: #DBEAFE;
+			color: #1E40AF;
+		}
+
+		.status-badge.badge-success {
+			background: #D1FAE5;
+			color: #065F46;
+		}
 
 		.form-select-custom {
 			padding: 7px 10px;
@@ -304,6 +313,18 @@
 			align-items: center;
 		}
 
+		.btn-assigned {
+			background: #D1FAE5;
+			color: #065F46;
+			padding: 7px 14px;
+			border-radius: 8px;
+			font-size: 0.8rem;
+			font-weight: 600;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+		}
+
 		.sidebar-overlay {
 			display: none;
 			position: fixed;
@@ -337,9 +358,16 @@
 			}
 		}
 
-		.sidebar-menu-wrapper::-webkit-scrollbar { width: 3px; }
-		.sidebar-menu-wrapper::-webkit-scrollbar-track { background: transparent; }
-		.sidebar-menu-wrapper::-webkit-scrollbar-thumb { background: rgba(230, 161, 92, 0.3); border-radius: 10px; }
+		.sidebar-menu-wrapper::-webkit-scrollbar {
+			width: 3px;
+		}
+		.sidebar-menu-wrapper::-webkit-scrollbar-track {
+			background: transparent;
+		}
+		.sidebar-menu-wrapper::-webkit-scrollbar-thumb {
+			background: rgba(230, 161, 92, 0.3);
+			border-radius: 10px;
+		}
 	</style>
 </head>
 
@@ -482,7 +510,7 @@
 									<th>Invoice</th>
 									<th>Pembeli</th>
 									<th>Total Harga</th>
-									<th>Status Pengiriman</th>
+									<th>Status Pesanan</th>
 									<th>Tanggal Dibuat</th>
 									<th width="220" class="text-center">Tugaskan Kurir</th>
 								</tr>
@@ -493,24 +521,34 @@
 										<td class="text-muted"><?= $no++; ?></td>
 										<td class="link-name"><?= htmlspecialchars($row['invoice'] ?? '-'); ?></td>
 										<td><?= htmlspecialchars($row['nama_pembeli'] ?? '-'); ?></td>
-										<td>Rp <?= number_format($row['total_harga'] ?? 0, 0, ',', '.'); ?></td>
+										<td>Rp <?= number_format($row['grand_total'] ?? $row['total_harga'] ?? 0, 0, ',', '.'); ?></td>
 										<td>
-											<span class="status-badge badge-pending"><?= str_replace('_', ' ', $row['status_pengiriman']); ?></span>
+											<span class="status-badge <?= ($row['status_pesanan'] == 'Diproses') ? 'badge-diproses' : 'badge-pending'; ?>">
+												<?= $row['status_pesanan'] ?? 'Pending'; ?>
+											</span>
 										</td>
-										<td class="text-muted small"><?= date('d M Y, H:i', strtotime($row['created_at'])); ?></td>
+										<td class="text-muted small"><?= date('d M Y, H:i', strtotime($row['tanggal_transaksi'] ?? date('Y-m-d H:i:s'))); ?></td>
 										<td>
-											<form action="<?= base_url('admin/kurir/proses_assign'); ?>" method="post" class="d-flex" style="gap:6px;">
-												<input type="hidden" name="id_tracking" value="<?= $row['id_tracking']; ?>">
-												<select name="id_kurir" class="form-select-custom" required <?= empty($kurir_aktif) ? 'disabled' : ''; ?>>
-													<option value="">Pilih Kurir</option>
-													<?php foreach ($kurir_aktif as $k): ?>
-														<option value="<?= $k['id_kurir']; ?>"><?= htmlspecialchars($k['nama_kurir']); ?></option>
-													<?php endforeach; ?>
-												</select>
-												<button type="submit" class="btn-primary-custom" <?= empty($kurir_aktif) ? 'disabled' : ''; ?>>
-													<i class="bi bi-send-check-fill"></i>
-												</button>
-											</form>
+											<?php if (!empty($row['id_kurir']) && $row['id_kurir'] > 0): ?>
+												<!-- 🔥 SUDAH ADA KURIR -->
+												<span class="btn-assigned">
+													<i class="bi bi-check-circle-fill"></i> Sudah Ditugaskan
+												</span>
+											<?php else: ?>
+												<!-- 🔥 BELUM ADA KURIR -->
+												<form action="<?= base_url('admin/kurir/proses_assign'); ?>" method="post" class="d-flex" style="gap:6px;">
+													<input type="hidden" name="id_transaksi" value="<?= $row['id_transaksi']; ?>">
+													<select name="id_kurir" class="form-select-custom" required <?= empty($kurir_aktif) ? 'disabled' : ''; ?>>
+														<option value="">Pilih Kurir</option>
+														<?php foreach ($kurir_aktif as $k): ?>
+															<option value="<?= $k['id_kurir']; ?>"><?= htmlspecialchars($k['nama_kurir']); ?></option>
+														<?php endforeach; ?>
+													</select>
+													<button type="submit" class="btn-primary-custom" <?= empty($kurir_aktif) ? 'disabled' : ''; ?>>
+														<i class="bi bi-send-check-fill"></i>
+													</button>
+												</form>
+											<?php endif; ?>
 										</td>
 									</tr>
 								<?php endforeach; ?>
