@@ -4,12 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Produk - Petani Kopi</title>
+    <title>Edit Produk - Admin</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root {
             --roasted-brown: #4A2C11;
@@ -533,161 +532,150 @@
             padding: 24px;
         }
 
-        /* --- CHART --- */
-        .chart-container {
-            position: relative;
-            height: 250px;
-            width: 100%;
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 18px;
         }
 
-        /* --- TABEL --- */
-        .table-custom {
-            font-size: 0.85rem;
-        }
-
-        .table-custom thead th {
-            border-bottom: 2px solid rgba(74, 44, 17, 0.06);
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.78rem;
             color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 10px 8px;
+            margin-bottom: 5px;
+            letter-spacing: 0.2px;
         }
 
-        .table-custom tbody td {
-            padding: 10px 8px;
-            border-bottom: 1px solid rgba(74, 44, 17, 0.04);
-            vertical-align: middle;
-        }
-
-        .table-custom tbody tr:hover {
-            background: rgba(250, 246, 240, 0.3);
-        }
-
-        /* --- STATUS BADGE --- */
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-
-        .status-badge.pending {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-badge.processing {
-            background: #DBEAFE;
-            color: #1E40AF;
-        }
-
-        .status-badge.delivery {
-            background: #EDE9FE;
-            color: #5B21B6;
-        }
-
-        .status-badge.complete {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-
-        .status-badge.cancelled {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        .status-badge.stok_aman {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-
-        .status-badge.stok_tipis {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-badge.stok_habis {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        /* --- QUICK ACTION BUTTONS --- */
-        .quick-action-btn {
-            padding: 10px 16px;
-            border: 1px solid rgba(74, 44, 17, 0.06);
-            border-radius: 10px;
-            background: var(--card-white);
-            color: var(--dark-coffee);
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 500;
-            font-size: 0.85rem;
-            cursor: pointer;
-            width: 100%;
-            text-decoration: none;
-        }
-
-        .quick-action-btn:hover {
-            background: var(--bg-cream);
-            border-color: var(--amber-cream);
-            transform: translateX(4px);
-            text-decoration: none;
-            color: var(--dark-coffee);
-        }
-
-        .quick-action-btn i {
-            font-size: 1.1rem;
-            color: var(--amber-cream);
-        }
-
-        /* --- CALENDAR / JADWAL PANEN (M11-F01) --- */
-        .harvest-schedule-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(74, 44, 17, 0.05);
-        }
-
-        .harvest-schedule-item:last-child {
-            border-bottom: none;
-        }
-
-        .schedule-date {
-            min-width: 50px;
-            text-align: center;
-        }
-
-        .schedule-date .day {
-            font-size: 1.3rem;
+        .form-group label .required {
+            color: #EF4444;
             font-weight: 700;
-            color: var(--dark-coffee);
-            line-height: 1;
         }
 
-        .schedule-date .month {
-            font-size: 0.6rem;
-            text-transform: uppercase;
+        .form-control,
+        .form-select {
+            border-radius: 10px;
+            border: 1px solid rgba(74, 44, 17, 0.12);
+            padding: 10px 16px;
+            font-size: 0.88rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: var(--transition-smooth);
+            background: var(--card-white);
+            height: 44px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--amber-cream);
+            box-shadow: 0 0 0 4px rgba(230, 161, 92, 0.1);
+            outline: none;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2370655E' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+
+        /* ===== FILE UPLOAD ===== */
+        .file-upload-wrapper {
+            position: relative;
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 9px 14px;
+            border: 2px dashed rgba(74, 44, 17, 0.12);
+            border-radius: 10px;
+            background: var(--bg-cream);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-size: 0.82rem;
             color: var(--text-secondary);
-            font-weight: 600;
+            height: 44px;
         }
 
-        .schedule-info {
-            flex: 1;
+        .file-upload-wrapper input[type="file"]:hover {
+            border-color: var(--amber-cream);
+            background: rgba(230, 161, 92, 0.04);
         }
 
-        .schedule-info .title {
+        .file-upload-wrapper input[type="file"]::file-selector-button {
+            padding: 5px 16px;
+            border: none;
+            border-radius: 6px;
+            background: var(--amber-cream);
+            color: white;
             font-weight: 600;
+            font-size: 0.72rem;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: var(--transition-smooth);
+        }
+
+        .file-upload-wrapper input[type="file"]::file-selector-button:hover {
+            background: var(--roasted-brown);
+        }
+
+        .file-helper {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            display: block;
+        }
+
+        .file-helper i {
+            font-size: 0.65rem;
+        }
+
+        /* ===== BUTTON ===== */
+        .btn-custom {
+            border-radius: 10px;
             font-size: 0.85rem;
+            font-weight: 600;
+            padding: 10px 28px;
+            border: none;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
         }
 
-        .schedule-info .detail {
-            font-size: 0.75rem;
+        .btn-primary-custom {
+            background: var(--amber-cream);
+            color: white;
+        }
+
+        .btn-primary-custom:hover {
+            background: var(--roasted-brown);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            text-decoration: none;
+        }
+
+        .btn-secondary-custom {
+            background: var(--bg-cream);
             color: var(--text-secondary);
+            border: 1px solid rgba(74, 44, 17, 0.08);
+        }
+
+        .btn-secondary-custom:hover {
+            background: #e8e0d8;
+            color: var(--dark-coffee);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .form-actions {
+            padding-top: 20px;
+            border-top: 1px solid rgba(74, 44, 17, 0.06);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 8px;
         }
 
         /* --- RESPONSIVE --- */
@@ -727,13 +715,12 @@
                 font-size: 1rem;
             }
 
-            .chart-container {
-                height: 200px;
-            }
-
             .notif-dropdown {
                 width: calc(100vw - 32px);
                 right: -60px;
+            }
+            .custom-card .card-body-custom {
+                padding: 20px;
             }
         }
 
@@ -765,6 +752,13 @@
             .notif-dropdown {
                 width: calc(100vw - 24px);
                 right: -70px;
+            }
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+            .form-actions .btn-custom {
+                width: 100%;
+                justify-content: center;
             }
         }
 
@@ -830,6 +824,7 @@
                 <li class="menu-item">
                     <a href="<?= base_url('admin/user'); ?>">
                         <i class="bi bi-people-fill"></i>Manajemen User
+                        <span class="menu-badge">12</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -855,6 +850,7 @@
                 <li class="menu-item">
                     <a href="<?= base_url('admin/transaksi'); ?>">
                         <i class="bi bi-wallet2"></i>Transaksi
+                        <span class="menu-badge">8</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -883,87 +879,109 @@
 
     
 <div class="main-content">
-<div class="card-custom">
-            <div class="card-body">
-                <form action="<?= base_url('admin/produk/update/' . $produk->id_produk); ?>" method="post" enctype="multipart/form-data">
+<div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 style="font-weight: 700; font-size: 28px; color: var(--dark-coffee); margin-bottom: 5px;">Edit
+                        Produk</h2>
+                    <p style="color: var(--text-secondary); margin: 0;">Edit spesifikasi produk komoditas kopi</p>
+                </div>
+            </div>
+
+            <div class="custom-card">
+                <div class="card-header-custom">
+                    <i class="bi bi-box-seam-fill"></i>
+                    Formulir Edit Produk Kopi
+                    <span class="badge-required" style="font-size:0.65rem; font-weight:600; color:var(--text-secondary); background:rgba(74,44,17,0.06); padding:3px 12px; border-radius:20px; margin-left:auto;">
+                        <i class="bi bi-asterisk text-danger" style="font-size:0.5rem;"></i> Wajib diisi
+                    </span>
+                </div>
+                <div class="card-body-custom">
+                <form action="<?= base_url('admin/produk/update/' . $produk->id_produk); ?>"
+                    method="post"
+                    enctype="multipart/form-data">
                     <div class="row">
+
                         <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Nama Produk</label>
-                                <input type="text" name="nama_produk" class="form-control" value="<?= $produk->nama_produk; ?>" required>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Jenis Kopi</label>
-                                <select name="jenis_kopi" class="form-control" required>
-                                    <option value="Arabica" <?= $produk->jenis_kopi == 'Arabica' ? 'selected' : ''; ?>>Arabica</option>
-                                    <option value="Robusta" <?= $produk->jenis_kopi == 'Robusta' ? 'selected' : ''; ?>>Robusta</option>
-                                    <option value="Liberica" <?= $produk->jenis_kopi == 'Liberica' ? 'selected' : ''; ?>>Liberica</option>
+                            <!-- NAMA PRODUK - DROPDOWN dengan ID -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Nama Produk <span class="required">*</span></label>
+                                <select name="nama_produk" id="nama_produk" class="form-control" required>
+                                    <option value="">-- Pilih Nama Produk --</option>
+                                    <option value="Ceri" <?= $produk->nama_produk == 'Ceri' ? 'selected' : ''; ?>>Ceri</option>
+                                    <option value="Biji Kopi" <?= $produk->nama_produk == 'Biji Kopi' ? 'selected' : ''; ?>>Biji Kopi</option>
+                                    <option value="Kopi Bubuk" <?= $produk->nama_produk == 'Kopi Bubuk' ? 'selected' : ''; ?>>Kopi Bubuk</option>
                                 </select>
                             </div>
 
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Grade</label>
-                                <select name="grade" class="form-control" required>
-                                    <option value="A" <?= $produk->grade == 'A' ? 'selected' : ''; ?>>A</option>
-                                    <option value="AA" <?= $produk->grade == 'AA' ? 'selected' : ''; ?>>AA</option>
-                                    <option value="B" <?= $produk->grade == 'B' ? 'selected' : ''; ?>>B</option>
+                            <!-- JENIS KOPI - dengan ID -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Jenis Kopi <span class="required">*</span></label>
+                                <select name="jenis_kopi" id="jenis_kopi" class="form-control" required>
+                                    <option value="Liberica">Liberica</option>
                                 </select>
                             </div>
 
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Harga</label>
-                                <input type="number" name="harga" class="form-control" value="<?= $produk->harga; ?>" required>
+                            <!-- PROSES PENGOLAHAN -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Proses Pengolahan</label>
+                                <input type="text" name="proses" id="proses" class="form-control" 
+                                       placeholder="Otomatis terisi berdasarkan Nama Produk" 
+                                       value="<?= $produk->proses ?? ''; ?>" readonly>
                             </div>
 
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Stok</label>
-                                <input type="number" name="stok_produk" class="form-control" value="<?= $produk->stok_produk; ?>" required>
+                            <!-- HARGA - Auto fill -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Harga (Rp) <span class="required">*</span></label>
+                                <input type="number" name="harga" id="harga" class="form-control" 
+                                       placeholder="Otomatis terisi berdasarkan Nama Produk" 
+                                       value="<?= $produk->harga; ?>" readonly required>
                             </div>
+
+                            <!-- STOK DIHAPUS - HANYA UNTUK PETANI -->
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Altitude</label>
-                                <input type="text" name="altitude" class="form-control" value="<?= $produk->altitude; ?>">
+                            <div class="form-group">
+                                <label class="font-weight-bold">Altitude (Ketinggian Tanam)</label>
+                               <input type="text" name="altitude" class="form-control" 
+                                      placeholder="Contoh: 900 Meter" 
+                                      value="<?= $produk->altitude ?? ''; ?>">
                             </div>
-
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Proses Pengolahan</label>
-                                <input type="text" name="proses" class="form-control" value="<?= $produk->proses; ?>">
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Flavor Notes</label>
-                                <textarea class="form-control" rows="2" name="flavor_notes"><?= $produk->flavor_notes; ?></textarea>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Deskripsi</label>
-                                <textarea class="form-control" rows="3" name="deskripsi"><?= $produk->deskripsi; ?></textarea>
-                            </div>
-
-                            
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Foto Utama</label>
-                                <input type="file" name="foto_utama" class="form-control" accept="image/*">
-                            </div>
-
-                         
-<div class="form-group mb-3">
-                                <label class="font-weight-bold">Status Produk</label>
+                  
+                            <div class="form-group">
+                                <label class="font-weight-bold">Status Produk <span class="required">*</span></label>
                                 <select name="status_produk" class="form-control">
                                     <option value="Aktif" <?= $produk->status_produk == 'Aktif' ? 'selected' : ''; ?>>Aktif</option>
                                     <option value="Nonaktif" <?= $produk->status_produk == 'Nonaktif' ? 'selected' : ''; ?>>Nonaktif</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label class="font-weight-bold">Foto Produk</label>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" name="foto_utama" accept=".jpg,.jpeg,.png">
+                                    <span class="file-helper">
+                                        <i class="bi bi-info-circle"></i> Format: JPG, PNG. Maks 2MB
+                                    </span>
+                                </div>
+                                <?php if (!empty($produk->foto_utama)): ?>
+                                    <div class="mt-2">
+                                        <small class="text-muted">Foto saat ini:</small>
+                                        <img src="<?= base_url('uploads/produk/' . $produk->foto_utama); ?>" 
+                                             width="80" height="80" style="object-fit:cover; border-radius:8px; margin-top:4px; border:1px solid rgba(74,44,17,0.06);">
+                                    </div>
+                                <?php endif; ?>
+                            </div>
                         </div>
+
                     </div>
 
-                    <div class="text-right mt-4 border-top pt-3">
-                        <a href="<?= base_url('admin/produk'); ?>" class="btn btn-light px-4 mr-2" style="border-radius: 8px;">Batal</a>
-                        <button type="submit" class="btn text-white px-4" style="background: var(--amber-cream); border-radius: 8px;">
-                            <i class="bi bi-check-lg mr-1"></i> Simpan Perubahan
+                    <!-- FORM ACTIONS -->
+                    <div class="form-actions">
+                        <a href="<?= base_url('admin/produk'); ?>" class="btn btn-secondary-custom btn-custom">
+                            <i class="bi bi-arrow-left"></i> Batal
+                        </a>
+                        <button type="submit" class="btn btn-primary-custom btn-custom">
+                            <i class="bi bi-save"></i> Simpan Perubahan
                         </button>
                     </div>
                 </form>
@@ -971,9 +989,84 @@
         
 </div>
 </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // ============================================
+        // AUTO SET JENIS KOPI = LIBERICA
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const namaProduk = document.getElementById('nama_produk');
+            const jenisKopi = document.getElementById('jenis_kopi');
+
+            if (namaProduk && jenisKopi) {
+                namaProduk.addEventListener('change', function() {
+                    if (this.value !== '') {
+                        // Set jenis kopi ke Liberica
+                        jenisKopi.value = 'Liberica';
+                    } else {
+                        // Reset ke default jika tidak ada pilihan
+                        jenisKopi.value = '';
+                    }
+                });
+            }
+        });
+
+        // ============================================
+        // AUTO FILL PROSES PENGOLAHAN
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const namaProduk = document.getElementById('nama_produk');
+            const proses = document.getElementById('proses');
+
+            if (namaProduk && proses) {
+                namaProduk.addEventListener('change', function() {
+                    const value = this.value;
+                    switch(value) {
+                        case 'Ceri':
+                            proses.value = 'Tanpa Proses';
+                            break;
+                        case 'Biji Kopi':
+                            proses.value = 'Pencucian, Pengupasan, Penjemuran';
+                            break;
+                        case 'Kopi Bubuk':
+                            proses.value = 'Pencucian, Pengupasan, Penjemuran, Penggilingan, Pengemasan';
+                            break;
+                        default:
+                            proses.value = '';
+                    }
+                });
+            }
+        });
+
+        // ============================================
+        // AUTO FILL HARGA BERDASARKAN NAMA PRODUK
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const namaProduk = document.getElementById('nama_produk');
+            const harga = document.getElementById('harga');
+
+            if (namaProduk && harga) {
+                namaProduk.addEventListener('change', function() {
+                    const value = this.value;
+                    switch(value) {
+                        case 'Ceri':
+                            harga.value = 7000;
+                            break;
+                        case 'Biji Kopi':
+                            harga.value = 70000;
+                            break;
+                        case 'Kopi Bubuk':
+                            harga.value = 120000;
+                            break;
+                        default:
+                            harga.value = '';
+                    }
+                });
+            }
+        });
+
         // ============================================
         // 1. SIDEBAR TOGGLE
         // ============================================
@@ -1164,19 +1257,19 @@
             });
         });
 
-        console.log('✅ Dashboard Petani siap digunakan!');
+        console.log('✅ Edit Produk Admin siap digunakan!');
         console.log('📋 Fitur yang tersedia:');
-        console.log('   - KPI Cards (M11-F01)');
-        console.log('   - Grafik Panen (M11-F01)');
-        console.log('   - Produk Terjual (M11-F01)');
-        console.log('   - Pesanan Masuk (M11-F01)');
-        console.log('   - Peringatan Stok (M11-F01)');
-        console.log('   - Jadwal Panen (M11-F01)');
-        console.log('   - Quick Action (M11-F04)');
-        console.log('   - Notifikasi Real-time (M11-F01)');
-        console.log('   - Setting Notifikasi (M11-F03)');
+        console.log('   - Nama Produk (dropdown: Ceri, Biji Kopi, Kopi Bubuk)');
+        console.log('   - Jenis Kopi (Liberica)');
+        console.log('   - Proses Pengolahan (auto-fill)');
+        console.log('   - Harga (auto-fill)');
+        console.log('   - Altitude (opsional)');
+        console.log('   - Status (wajib)');
+        console.log('   - Foto (opsional)');
+        console.log('   - Auto set Jenis Kopi ke Liberica saat pilih Nama Produk');
+        console.log('   - Auto fill Proses Pengolahan berdasarkan Nama Produk');
+        console.log('   - Auto fill Harga berdasarkan Nama Produk');
     </script>
 </body>
 
 </html>
-
