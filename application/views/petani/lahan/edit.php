@@ -64,6 +64,13 @@
                                     Liberika</option>
                             </select>
                         </div>
+                        <!-- REVISI: Input Manual Jenis Tanah (Mengambil data lama dari DB) -->
+                        <div class="mb-3">
+                            <label class="form-label-custom">Jenis Tanah</label>
+                            <input type="text" name="jenis_tanah" class="form-control form-control-custom"
+                                value="<?= isset($lahan['jenis_tanah']) ? htmlspecialchars($lahan['jenis_tanah']) : '' ?>"
+                                placeholder="Contoh: Gambut, Aluvial, Podsolik" required>
+                        </div>
                         <div class="mb-3">
                             <label class="form-label-custom">Luas Lahan (Ha)</label>
                             <input type="number" step="0.01" name="luas" class="form-control form-control-custom"

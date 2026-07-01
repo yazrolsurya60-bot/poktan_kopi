@@ -46,6 +46,7 @@ class Lahan extends CI_Controller {
         'id_user'      => $this->session->userdata('id_user'),
         'nama_lahan'   => $this->input->post('nama_lahan'),
         'jenis_kopi'   => $this->input->post('jenis_kopi'),
+        'jenis_tanah'  => $this->input->post('jenis_tanah'),
         'luas'         => $this->input->post('luas'),
         'lokasi'       => $this->input->post('lokasi'),
         'latitude'     => $this->input->post('latitude'),
@@ -93,6 +94,7 @@ public function update() {
     $data = array(
         'nama_lahan'   => $this->input->post('nama_lahan'),
         'jenis_kopi'   => $this->input->post('jenis_kopi'),
+        'jenis_tanah'  => $this->input->post('jenis_tanah'),
         'luas'         => $this->input->post('luas'),
         'lokasi'       => $this->input->post('lokasi'),
         'latitude'     => $this->input->post('latitude'),
