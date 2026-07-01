@@ -1,0 +1,77 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="bi bi-pencil-square"></i> Update Status Pengiriman (Admin)</h4>
+                    <p class="text-muted small">Kelola status pengiriman dari semua pesanan</p>
+                </div>
+                <div class="card-body">
+                    <?php if ($this->session->flashdata('success')): ?>
+                        <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+                    <?php endif; ?>
+                    <?php if ($this->session->flashdata('error')): ?>
+                        <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+                    <?php endif; ?>
+
+                    <?php if (empty($trackings)): ?>
+                        <div class="text-center py-5">
+                            <i class="bi bi-check-circle fa-4x text-success mb-3"></i>
+                            <h5>Tidak ada pengiriman yang perlu diupdate</h5>
+                            <p class="text-muted">Semua pesanan sudah dalam status terakhir.</p>
+                        </div>
+                    <?php else: ?>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice</th>
+                                        <th>Pembeli</th>
+                                        <th>Kurir</th>
+                                        <th>Status</th>
+                                        <th>Terakhir Update</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($trackings as $track): ?>
+                                        <tr>
+                                            <td><strong>#<?= $track->invoice ?></strong></td>
+                                            <td><?= $track->pembeli ?></td>
+                                            <td><?= $track->nama_kurir ?: '-' ?></td>
+                                            <td>
+                                                <span class="status-badge <?= $track->status_class ?>">
+                                                    <i class="bi <?= $track->status_icon ?>"></i>
+                                                    <?= $track->status_label ?>
+                                                </span>
+                                            </td>
+                                            <td><?= date('d M Y H:i', strtotime($track->updated_at)) ?></td>
+                                            <td>
+                                                <a href="<?= base_url('admin/tracking/update/' . $track->id_tracking) ?>" 
+                                                   class="btn btn-primary btn-sm" 
+                                                   style="background: var(--roasted-brown, #4A2C11); border: none; border-radius:8px;">
+                                                    <i class="bi bi-pencil"></i> Update
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+:root { --roasted-brown: #4A2C11; --amber-cream: #E6A15C; --bg-cream: #FAF6F0; --dark-coffee: #2C1808; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-cream); color: var(--dark-coffee); }
+.status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+.status-badge.pending { background: #FEF3C7; color: #92400E; }
+.status-badge.processing { background: #DBEAFE; color: #1E40AF; }
+.status-badge.delivery { background: #EDE9FE; color: #5B21B6; }
+.status-badge.complete { background: #D1FAE5; color: #065F46; }
+.status-badge.cancelled { background: #FEE2E2; color: #991B1B; }
+</style>
