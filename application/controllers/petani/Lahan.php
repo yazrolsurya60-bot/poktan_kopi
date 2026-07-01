@@ -46,6 +46,7 @@ class Lahan extends CI_Controller {
         'id_user'      => $this->session->userdata('id_user'),
         'nama_lahan'   => $this->input->post('nama_lahan'),
         'jenis_kopi'   => $this->input->post('jenis_kopi'),
+        'jenis_tanah'  => $this->input->post('jenis_tanah'),
         'luas'         => $this->input->post('luas'),
         'lokasi'       => $this->input->post('lokasi'),
         'latitude'     => $this->input->post('latitude'),
@@ -93,15 +94,27 @@ public function update() {
     $data = array(
         'nama_lahan'   => $this->input->post('nama_lahan'),
         'jenis_kopi'   => $this->input->post('jenis_kopi'),
+        'jenis_tanah'  => $this->input->post('jenis_tanah'),
         'luas'         => $this->input->post('luas'),
         'lokasi'       => $this->input->post('lokasi'),
         'latitude'     => $this->input->post('latitude'),
         'longitude'    => $this->input->post('longitude'),
+        'catatan'      => $this->input->post('catatan'),
         'status_lahan' => $this->input->post('status_lahan')
+        
     );
 
-    // 3. (Opsional) Jika ada file foto, proses upload di sini
-    // ... logic upload foto ...
+    // 3. Proses upload foto jika user memilih file baru
+        if (!empty($_FILES['foto_lahan']['name'])) {
+            $config['upload_path']   = './assets/uploads/lahan/';
+            $config['allowed_types'] = 'jpg|jpeg|png|gif';
+            $config['max_size']      = 2048;
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('foto_lahan')) {
+                $data['foto_lahan'] = $this->upload->data('file_name');
+            }
+        }
 
     // 4. Lakukan update ke database
     $this->db->where('id_lahan', $id);

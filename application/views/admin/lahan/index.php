@@ -326,6 +326,7 @@
             opacity: 0;
             transform: translateY(-10px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -390,14 +391,17 @@
         background: #D1FAE5;
         color: #065F46;
     }
+
     .notif-item .notif-icon.warning {
         background: #FEF3C7;
         color: #92400E;
     }
+
     .notif-item .notif-icon.info {
         background: #DBEAFE;
         color: #1E40AF;
     }
+
     .notif-item .notif-icon.danger {
         background: #FEE2E2;
         color: #991B1B;
@@ -439,9 +443,11 @@
     .notif-dropdown-list::-webkit-scrollbar {
         width: 3px;
     }
+
     .notif-dropdown-list::-webkit-scrollbar-track {
         background: transparent;
     }
+
     .notif-dropdown-list::-webkit-scrollbar-thumb {
         background: rgba(230, 161, 92, 0.3);
         border-radius: 10px;
@@ -468,18 +474,23 @@
             padding: 4px 10px;
             min-width: 70px;
         }
+
         .user-badge i {
             font-size: 1.1rem;
         }
+
         .user-badge .user-name {
             font-size: 0.7rem;
         }
+
         .user-badge .user-role {
             font-size: 0.5rem;
         }
+
         .header-right {
             gap: 8px;
         }
+
         .notif-dropdown {
             width: calc(100vw - 32px);
             right: -60px;
@@ -490,23 +501,29 @@
         .main-content {
             padding: 16px 12px 20px;
         }
+
         .user-badge {
             padding: 4px 8px;
             min-width: 60px;
             gap: 5px;
         }
+
         .user-badge i {
             font-size: 0.9rem;
         }
+
         .user-badge .user-name {
             font-size: 0.6rem;
         }
+
         .user-badge .user-role {
             display: none;
         }
+
         .header-right {
             gap: 6px;
         }
+
         .notif-dropdown {
             width: calc(100vw - 24px);
             right: -70px;
@@ -634,9 +651,9 @@
                     <button class="notif-btn" id="notifToggle">
                         <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
                         <?php if (isset($unread_count) && $unread_count > 0): ?>
-                            <span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
+                        <span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
                         <?php else: ?>
-                            <span class="notif-dot" id="notifCount" style="display:none;">0</span>
+                        <span class="notif-dot" id="notifCount" style="display:none;">0</span>
                         <?php endif; ?>
                     </button>
 
@@ -648,8 +665,8 @@
                             </span>
                             <div>
                                 <?php if (isset($unread_count) && $unread_count > 0): ?>
-                                    <a href="#" id="markAllReadBtn" class="mr-2"
-                                        style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
+                                <a href="#" id="markAllReadBtn" class="mr-2"
+                                    style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
                                 <?php endif; ?>
                                 <a href="<?= base_url('admin/dashboard/history'); ?>"
                                     style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
@@ -657,10 +674,10 @@
                         </div>
                         <div class="notif-dropdown-list" id="notifList">
                             <?php if (!empty($notifikasi)): ?>
-                                <?php foreach ($notifikasi as $n): ?>
-                                    <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
-                                        href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
-                                        <?php
+                            <?php foreach ($notifikasi as $n): ?>
+                            <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
+                                href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
+                                <?php
                                         $icon_type = $n['icon'] ?? 'info';
                                         $icon_map = [
                                             'success' => 'bi-check-circle-fill',
@@ -670,23 +687,24 @@
                                         ];
                                         $icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
                                         ?>
-                                        <div class="notif-icon <?= $icon_type; ?>">
-                                            <i class="bi <?= $icon_class; ?>"></i>
-                                        </div>
-                                        <div class="notif-text">
-                                            <?= htmlspecialchars($n['isi_notifikasi']); ?>
-                                            <span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
-                                        </div>
-                                        <?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
-                                            <span class="notif-badge-new">Baru</span>
-                                        <?php endif; ?>
-                                    </a>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <div class="text-center text-muted py-5 px-3">
-                                    <i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
-                                    <p class="small mb-0">Tidak ada notifikasi</p>
+                                <div class="notif-icon <?= $icon_type; ?>">
+                                    <i class="bi <?= $icon_class; ?>"></i>
                                 </div>
+                                <div class="notif-text">
+                                    <?= htmlspecialchars($n['isi_notifikasi']); ?>
+                                    <span
+                                        class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+                                </div>
+                                <?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
+                                <span class="notif-badge-new">Baru</span>
+                                <?php endif; ?>
+                            </a>
+                            <?php endforeach; ?>
+                            <?php else: ?>
+                            <div class="text-center text-muted py-5 px-3">
+                                <i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
+                                <p class="small mb-0">Tidak ada notifikasi</p>
+                            </div>
                             <?php endif; ?>
                         </div>
                         <div class="p-2 text-center border-top"
@@ -782,13 +800,14 @@
                         <thead class="thead-light text-center">
                             <tr>
                                 <th width="5%" class="align-middle">No</th>
-                                <th width="12%" class="align-middle">Foto Lahan</th>
+                                <th width="10%" class="align-middle">Foto Lahan</th>
                                 <th class="align-middle">Nama Lahan</th>
                                 <th class="align-middle">Jenis Kopi</th>
+                                <th class="align-middle">Jenis Tanah</th> <!-- KOLOM BARU DITAMBAHKAN -->
                                 <th class="align-middle">Luas (Ha)</th>
                                 <th class="align-middle">Alamat / Lokasi</th>
                                 <th class="align-middle">Catatan Perawatan</th>
-                                <th width="15%" class="align-middle">Status Lahan</th>
+                                <th width="12%" class="align-middle">Status Lahan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -811,6 +830,10 @@
                                         #<?= $lh['id_user']; ?></small>
                                 </td>
                                 <td class="align-middle text-center font-weight-bold"><?= $lh['jenis_kopi']; ?></td>
+                                <td class="align-middle text-center">
+                                    <?= isset($lh['jenis_tanah']) && !empty($lh['jenis_tanah']) ? $lh['jenis_tanah'] : '<span class="text-muted font-italic">-</span>'; ?>
+                                    <!-- KOLOM BARU DITAMBAHKAN -->
+                                </td>
                                 <td class="align-middle text-center text-dark font-weight-bold">
                                     <?= number_format($lh['luas'], 2, ',', '.'); ?> Ha</td>
                                 <td class="align-middle text-muted small"><?= $lh['lokasi']; ?></td>
@@ -831,7 +854,7 @@
                             <?php endforeach; ?>
                             <?php else : ?>
                             <tr>
-                                <td colspan="8" class="text-center text-muted py-5">
+                                <td colspan="9" class="text-center text-muted py-5">
                                     <i class="fas fa-folder-open fa-3x mb-3 text-secondary"></i>
                                     <p class="mb-0 font-weight-bold text-secondary">Data lahan tidak ditemukan atau
                                         filter tidak cocok.</p>
@@ -900,27 +923,9 @@
     function markAllRead() {
         if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
             $.ajax({
-                url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
-                type: 'POST',
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) location.reload();
-                    else alert('Gagal menandai semua notifikasi.');
-                },
-                error: function() {
-                    alert('Terjadi kesalahan. Silakan coba lagi.');
-                }
-            });
-        }
-    }
-
-    document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        markAllRead();
-    });
-
-    console.log('✅ Halaman Manajemen Lahan siap digunakan!');
-    </script>
-</body>
-
-</html>
+                        url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function(response) {
+                                if (response.success) location.reload();
+                                else alert('Gagal menandai semua notifikasi.');

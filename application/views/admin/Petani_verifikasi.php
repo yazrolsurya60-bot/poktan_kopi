@@ -1097,44 +1097,21 @@ function get_doc_badge($status) {
                 <h6 class="fw-bold mb-4">Dokumen yang Diupload</h6>
                 
                 <div class="d-flex flex-column gap-3 mb-4">
-                    <!-- KTP -->
-                    <div class="border rounded-3 p-3 d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle bg-light d-flex justify-content-center align-items-center fw-bold text-muted" style="width: 35px; height: 35px;">1</div>
-                            <div>
-                                <h6 class="fw-bold mb-0">KTP</h6>
-                                <small class="text-muted"><?= !empty($petani['file_ktp']) ? $petani['file_ktp'] : 'Belum diupload'; ?></small>
-                            </div>
-                        </div>
-                        <?php if(!empty($petani['file_ktp'])): ?>
-                            <a href="<?= base_url('uploads/dokumen/'.$petani['file_ktp']); ?>" target="_blank" class="btn btn-sm btn-outline-secondary px-4 py-2 rounded-3">Lihat</a>
-                        <?php endif; ?>
-                    </div>
-                    <!-- NPWP -->
-                    <div class="border rounded-3 p-3 d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle bg-light d-flex justify-content-center align-items-center fw-bold text-muted" style="width: 35px; height: 35px;">2</div>
-                            <div>
-                                <h6 class="fw-bold mb-0">NPWP</h6>
-                                <small class="text-muted"><?= !empty($petani['file_npwp']) ? $petani['file_npwp'] : 'Belum diupload'; ?></small>
-                            </div>
-                        </div>
-                        <?php if(!empty($petani['file_npwp'])): ?>
-                            <a href="<?= base_url('uploads/dokumen/'.$petani['file_npwp']); ?>" target="_blank" class="btn btn-sm btn-outline-secondary px-4 py-2 rounded-3">Lihat</a>
-                        <?php endif; ?>
-                    </div>
                     <!-- Sertifikat -->
                     <div class="border rounded-3 p-3 d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle bg-light d-flex justify-content-center align-items-center fw-bold text-muted" style="width: 35px; height: 35px;">3</div>
+                            <div class="rounded-circle bg-light d-flex justify-content-center align-items-center fw-bold text-muted" style="width: 35px; height: 35px;">1</div>
                             <div>
                                 <h6 class="fw-bold mb-0">Sertifikat</h6>
                                 <small class="text-muted"><?= !empty($petani['file_sertifikat']) ? $petani['file_sertifikat'] : 'Belum diupload'; ?></small>
                             </div>
                         </div>
-                        <?php if(!empty($petani['file_sertifikat'])): ?>
-                            <a href="<?= base_url('uploads/dokumen/'.$petani['file_sertifikat']); ?>" target="_blank" class="btn btn-sm btn-outline-secondary px-4 py-2 rounded-3">Lihat</a>
-                        <?php endif; ?>
+                        <div class="d-flex align-items-center gap-2">
+                            <?= get_doc_badge($petani['status_sertifikat'] ?? 'Menunggu'); ?>
+                            <?php if(!empty($petani['file_sertifikat'])): ?>
+                                <a href="<?= base_url('uploads/dokumen/'.$petani['file_sertifikat']); ?>" target="_blank" class="btn btn-sm btn-outline-secondary px-4 py-2 rounded-3">Lihat</a>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
 

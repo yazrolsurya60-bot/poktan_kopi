@@ -24,6 +24,12 @@
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* flash */
+        .flash-alert { border-radius: 12px; border: none; display: flex; align-items: center; gap: 12px; padding: 13px 17px; font-weight: 500; font-size: 0.875rem; margin-bottom: 22px; }
+        .flash-success { background: rgba(45,106,79,0.1); color: #2D6A4F; border-left: 4px solid #2D6A4F; }
+        .flash-danger  { background: rgba(239,68,68,0.09); color: #dc2626; border-left: 4px solid #dc2626; }
+        .flash-alert i { font-size: 1.1rem; flex-shrink: 0; }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-cream);
@@ -1039,6 +1045,16 @@
 
         <!-- MAIN BODY CONTENT -->
         <div class="page-body" style="padding: 24px; background-color: #f8f9fa; min-height: calc(100vh - 80px);">
+            <?php if ($this->session->flashdata('pesan')): ?>
+            <div class="flash-alert flash-success">
+                <i class="bi bi-check-circle-fill"></i><span><?= $this->session->flashdata('pesan'); ?></span>
+            </div>
+            <?php endif; ?>
+            <?php if ($this->session->flashdata('error')): ?>
+            <div class="flash-alert flash-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i><span><?= $this->session->flashdata('error'); ?></span>
+            </div>
+            <?php endif; ?>
             <div class="row mb-4">
                 <div class="col-md-3">
                     <div class="card border-0 shadow-sm rounded-4">
@@ -1110,12 +1126,22 @@
                                 <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
                                 <input type="text" id="searchPetani" class="form-control border-start-0 ps-0" placeholder="Cari petani...">
                             </div>
-                            <form action="<?= base_url('admin/petani'); ?>" method="GET" class="d-flex">
+                            <form action="<?= base_url('admin/petani'); ?>" method="GET" class="d-flex gap-3">
                                 <select name="status" class="form-select text-muted" onchange="this.form.submit()" style="width: 150px;">
                                     <option value="">Semua Status</option>
                                     <option value="Active" <?= (isset($status_filter) && $status_filter == 'Active') ? 'selected' : ''; ?>>Active</option>
                                     <option value="Inactive" <?= (isset($status_filter) && $status_filter == 'Inactive') ? 'selected' : ''; ?>>Inactive</option>
                                     <option value="Suspended" <?= (isset($status_filter) && $status_filter == 'Suspended') ? 'selected' : ''; ?>>Suspended</option>
+                                </select>
+                                <select name="wilayah" class="form-select text-muted" onchange="this.form.submit()" style="width: 180px;">
+                                    <option value="">Semua Wilayah</option>
+                                    <?php if (!empty($semua_wilayah)): ?>
+                                        <?php foreach ($semua_wilayah as $w): ?>
+                                            <option value="<?= $w['id_wilayah']; ?>" <?= (isset($wilayah_filter) && $wilayah_filter == $w['id_wilayah']) ? 'selected' : ''; ?>>
+                                                <?= htmlspecialchars($w['nama_wilayah']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                 </select>
                             </form>
                         </div>

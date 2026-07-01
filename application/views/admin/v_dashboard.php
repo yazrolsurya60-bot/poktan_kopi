@@ -1257,6 +1257,13 @@
 						</a>
 					</li>
 
+					<!-- TRACKING PENGIRIMAN -->
+					<li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+						<a href="<?= base_url('admin/tracking'); ?>">
+							<i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
+						</a>
+					</li>
+
 					<!-- LAPORAN -->
 					<li class="menu-item">
 						<a href="<?= base_url('admin/laporan'); ?>">
@@ -1510,8 +1517,7 @@
 				<div class="custom-card">
 					<div class="card-header-custom">
 						<h6><i class="bi bi-gear-fill text-secondary mr-2"></i> Preferensi Notifikasi</h6>
-						<span class="badge"
-							style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;">Pengaturan</span>
+						<span class="badge" style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;">Pengaturan</span>
 					</div>
 					<div class="card-body-custom">
 						<?php
@@ -1526,10 +1532,11 @@
 							'notif_sistem' => 1
 						];
 
+						// Gabungkan dengan data dari database
 						if (!empty($settings)) {
 							foreach ($default_settings as $key => $value) {
 								if (isset($settings[$key])) {
-									$default_settings[$key] = $settings[$key];
+									$default_settings[$key] = (int)$settings[$key];
 								}
 							}
 						}
@@ -1594,13 +1601,8 @@
 								</div>
 							</div>
 							<div class="mt-3 pt-2 border-top" style="border-color: rgba(74,44,17,0.06);">
-								<button type="submit" class="btn"
-									style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
+								<button type="submit" class="btn" style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
 									<i class="bi bi-save mr-1"></i> Simpan Pengaturan
-								</button>
-								<button type="button" class="btn btn-link text-muted" style="font-size:0.85rem;"
-									onclick="markAllRead()">
-									<i class="bi bi-check2-all mr-1"></i> Tandai Semua Dibaca
 								</button>
 							</div>
 						</form>
@@ -1608,214 +1610,213 @@
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<!-- SCRIPTS -->
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-	<script>
-		// Sidebar Toggle
-		const sidebar = document.getElementById('sidebarMenu');
-		const overlay = document.getElementById('sidebarOverlay');
-		const toggleBtn = document.getElementById('sidebarToggle');
+		<!-- SCRIPTS -->
+		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+		<script>
+			// Sidebar Toggle
+			const sidebar = document.getElementById('sidebarMenu');
+			const overlay = document.getElementById('sidebarOverlay');
+			const toggleBtn = document.getElementById('sidebarToggle');
 
-		function toggleSidebar() {
-			sidebar.classList.toggle('open');
-			overlay.classList.toggle('active');
-			document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
-		}
-
-		if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
-		if (overlay) overlay.addEventListener('click', toggleSidebar);
-
-		document.addEventListener('click', function(e) {
-			if (window.innerWidth > 991.98) return;
-			if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
-				if (sidebar.classList.contains('open')) toggleSidebar();
+			function toggleSidebar() {
+				sidebar.classList.toggle('open');
+				overlay.classList.toggle('active');
+				document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
 			}
-		});
 
-		// Notification Dropdown
-		const notifToggle = document.getElementById('notifToggle');
-		const notifDropdown = document.getElementById('notifDropdown');
+			if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+			if (overlay) overlay.addEventListener('click', toggleSidebar);
 
-		if (notifToggle) {
-			notifToggle.addEventListener('click', function(e) {
-				e.stopPropagation();
-				notifDropdown.classList.toggle('show');
-			});
-		}
-
-		document.addEventListener('click', function(e) {
-			if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
-				notifDropdown.classList.remove('show');
-			}
-		});
-
-		// Mark All Read
-		function markAllRead() {
-			if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
-				$.ajax({
-					url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
-					type: 'POST',
-					dataType: 'json',
-					success: function(response) {
-						if (response.success) location.reload();
-						else alert('Gagal menandai semua notifikasi.');
-					},
-					error: function() {
-						alert('Terjadi kesalahan. Silakan coba lagi.');
-					}
-				});
-			}
-		}
-
-		document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
-			e.preventDefault();
-			markAllRead();
-		});
-
-		// Chart
-		let salesChart;
-
-		function initChart() {
-			const ctx = document.getElementById('salesChart')?.getContext('2d');
-			if (!ctx) return;
-
-			const chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
-			const chartData = <?= isset($grafik_penjualan['values']) ? json_encode($grafik_penjualan['values']) : json_encode(array_fill(0, 12, 0)); ?>;
-
-			salesChart = new Chart(ctx, {
-				type: 'line',
-				data: {
-					labels: chartLabels,
-					datasets: [{
-						label: 'Penjualan (Kg)',
-						data: chartData,
-						borderColor: '#E6A15C',
-						backgroundColor: 'rgba(230, 161, 92, 0.08)',
-						fill: true,
-						tension: 0.4,
-						pointBackgroundColor: '#E6A15C',
-						pointBorderColor: '#FFFFFF',
-						pointBorderWidth: 2,
-						pointRadius: 4,
-						pointHoverRadius: 7,
-						borderWidth: 2.5
-					}]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					plugins: {
-						legend: {
-							display: false
-						},
-						tooltip: {
-							backgroundColor: '#2C1808',
-							titleColor: '#E6A15C',
-							bodyColor: '#FAF6F0',
-							cornerRadius: 8,
-							padding: 10,
-							callbacks: {
-								label: function(context) {
-									return context.parsed.y.toLocaleString('id-ID') + ' kg';
-								}
-							}
-						}
-					},
-					scales: {
-						y: {
-							beginAtZero: true,
-							grid: {
-								color: 'rgba(74, 44, 17, 0.06)',
-								drawBorder: false
-							},
-							ticks: {
-								font: {
-									size: 10,
-									family: 'Plus Jakarta Sans'
-								},
-								color: '#70655E',
-								stepSize: 50,
-								callback: function(value) {
-									return value.toLocaleString('id-ID') + ' kg';
-								}
-							}
-						},
-						x: {
-							grid: {
-								display: false
-							},
-							ticks: {
-								font: {
-									size: 10,
-									family: 'Plus Jakarta Sans'
-								},
-								color: '#70655E'
-							}
-						}
-					},
-					interaction: {
-						intersect: false,
-						mode: 'index'
-					}
+			document.addEventListener('click', function(e) {
+				if (window.innerWidth > 991.98) return;
+				if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
+					if (sidebar.classList.contains('open')) toggleSidebar();
 				}
 			});
-		}
 
-		function refreshChart() {
-			if (salesChart) {
-				$.get('<?= base_url('admin/dashboard/get_chart_data'); ?>', function(data) {
-					if (data.success) {
-						salesChart.data.datasets[0].data = data.values;
-						salesChart.update();
+			// Notification Dropdown
+			const notifToggle = document.getElementById('notifToggle');
+			const notifDropdown = document.getElementById('notifDropdown');
+
+			if (notifToggle) {
+				notifToggle.addEventListener('click', function(e) {
+					e.stopPropagation();
+					notifDropdown.classList.toggle('show');
+				});
+			}
+
+			document.addEventListener('click', function(e) {
+				if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
+					notifDropdown.classList.remove('show');
+				}
+			});
+
+			// Mark All Read
+			function markAllRead() {
+				if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+					$.ajax({
+						url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
+						type: 'POST',
+						dataType: 'json',
+						success: function(response) {
+							if (response.success) location.reload();
+							else alert('Gagal menandai semua notifikasi.');
+						},
+						error: function() {
+							alert('Terjadi kesalahan. Silakan coba lagi.');
+						}
+					});
+				}
+			}
+
+			document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
+				e.preventDefault();
+				markAllRead();
+			});
+
+			// Chart
+			let salesChart;
+
+			function initChart() {
+				const ctx = document.getElementById('salesChart')?.getContext('2d');
+				if (!ctx) return;
+
+				const chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+				const chartData = <?= isset($grafik_penjualan['values']) ? json_encode($grafik_penjualan['values']) : json_encode(array_fill(0, 12, 0)); ?>;
+
+				salesChart = new Chart(ctx, {
+					type: 'line',
+					data: {
+						labels: chartLabels,
+						datasets: [{
+							label: 'Penjualan (Kg)',
+							data: chartData,
+							borderColor: '#E6A15C',
+							backgroundColor: 'rgba(230, 161, 92, 0.08)',
+							fill: true,
+							tension: 0.4,
+							pointBackgroundColor: '#E6A15C',
+							pointBorderColor: '#FFFFFF',
+							pointBorderWidth: 2,
+							pointRadius: 4,
+							pointHoverRadius: 7,
+							borderWidth: 2.5
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								display: false
+							},
+							tooltip: {
+								backgroundColor: '#2C1808',
+								titleColor: '#E6A15C',
+								bodyColor: '#FAF6F0',
+								cornerRadius: 8,
+								padding: 10,
+								callbacks: {
+									label: function(context) {
+										return context.parsed.y.toLocaleString('id-ID') + ' kg';
+									}
+								}
+							}
+						},
+						scales: {
+							y: {
+								beginAtZero: true,
+								grid: {
+									color: 'rgba(74, 44, 17, 0.06)',
+									drawBorder: false
+								},
+								ticks: {
+									font: {
+										size: 10,
+										family: 'Plus Jakarta Sans'
+									},
+									color: '#70655E',
+									stepSize: 50,
+									callback: function(value) {
+										return value.toLocaleString('id-ID') + ' kg';
+									}
+								}
+							},
+							x: {
+								grid: {
+									display: false
+								},
+								ticks: {
+									font: {
+										size: 10,
+										family: 'Plus Jakarta Sans'
+									},
+									color: '#70655E'
+								}
+							}
+						},
+						interaction: {
+							intersect: false,
+							mode: 'index'
+						}
 					}
 				});
 			}
-		}
 
-		document.addEventListener('DOMContentLoaded', function() {
-			initChart();
-		});
+			function refreshChart() {
+				if (salesChart) {
+					$.get('<?= base_url('admin/dashboard/get_chart_data'); ?>', function(data) {
+						if (data.success) {
+							salesChart.data.datasets[0].data = data.values;
+							salesChart.update();
+						}
+					});
+				}
+			}
 
-		// Current DateTime
-		function updateDateTime() {
-			const now = new Date();
-			const options = {
-				weekday: 'long',
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric',
-				hour: '2-digit',
-				minute: '2-digit'
-			};
-			const el = document.getElementById('currentDateTime');
-			if (el) el.textContent = now.toLocaleDateString('id-ID', options);
-		}
-		updateDateTime();
-		setInterval(updateDateTime, 60000);
-
-		// Switch handling
-		document.querySelectorAll('.custom-control-input').forEach(function(switchEl) {
-			switchEl.addEventListener('change', function() {
-				const label = this.closest('.custom-control').querySelector('.custom-control-label');
-				const setting = label ? label.textContent.trim() : 'Unknown';
-				console.log('Notifikasi ' + setting + (this.checked ? ' diaktifkan' : ' dinonaktifkan'));
+			document.addEventListener('DOMContentLoaded', function() {
+				initChart();
 			});
-		});
 
-		console.log('✅ Dashboard Admin siap digunakan!');
-		console.log('📋 Fitur yang tersedia:');
-		console.log('   - KPI Cards (M11-F01) - Data Real');
-		console.log('   - Grafik Penjualan (M10-F02) - Data Real');
-		console.log('   - Produk Terlaris (M10-F04) - Data Real');
-		console.log('   - Pesanan Terbaru (M11-F01) - Data Real');
-		console.log('   - Petani Baru (M11-F01) - Data Real');
-		console.log('   - Quick Action (M11-F04)');
-		console.log('   - Notifikasi Real-time (M11-F01)');
-		console.log('   - Setting Notifikasi (M11-F03) - Sesuai Role Admin');
-	</script>
+			// Current DateTime
+			function updateDateTime() {
+				const now = new Date();
+				const options = {
+					weekday: 'long',
+					year: 'numeric',
+					month: 'long',
+					day: 'numeric',
+					hour: '2-digit',
+					minute: '2-digit'
+				};
+				const el = document.getElementById('currentDateTime');
+				if (el) el.textContent = now.toLocaleDateString('id-ID', options);
+			}
+			updateDateTime();
+			setInterval(updateDateTime, 60000);
+
+			// Switch handling
+			document.querySelectorAll('.custom-control-input').forEach(function(switchEl) {
+				switchEl.addEventListener('change', function() {
+					const label = this.closest('.custom-control').querySelector('.custom-control-label');
+					const setting = label ? label.textContent.trim() : 'Unknown';
+					console.log('Notifikasi ' + setting + (this.checked ? ' diaktifkan' : ' dinonaktifkan'));
+				});
+			});
+
+			console.log('✅ Dashboard Admin siap digunakan!');
+			console.log('📋 Fitur yang tersedia:');
+			console.log('   - KPI Cards (M11-F01) - Data Real');
+			console.log('   - Grafik Penjualan (M10-F02) - Data Real');
+			console.log('   - Produk Terlaris (M10-F04) - Data Real');
+			console.log('   - Pesanan Terbaru (M11-F01) - Data Real');
+			console.log('   - Petani Baru (M11-F01) - Data Real');
+			console.log('   - Quick Action (M11-F04)');
+			console.log('   - Notifikasi Real-time (M11-F01)');
+			console.log('   - Setting Notifikasi (M11-F03) - Sesuai Role Admin');
+		</script>
 </body>
 
 </html>
