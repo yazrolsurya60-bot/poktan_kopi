@@ -1,114 +1,212 @@
-<li class="nav-item dropdown" style="list-style: none;">
-    <a class="nav-link text-dark position-relative p-2" href="#" id="notifDrop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="bi bi-bell-fill" style="font-size: 1.35rem; color: var(--roasted-brown);"></i>
-        <?php 
-        // Hitung notifikasi yang BELUM DIBACA
-        $unread_count = 0;
-        if(!empty($notifikasi)) {
-            foreach($notifikasi as $n) {
-                if(isset($n['is_read']) && $n['is_read'] == 0) {
-                    $unread_count++;
-                }
-            }
-        }
-        ?>
-        <?php if($unread_count > 0): ?>
-            <span class="badge badge-danger position-absolute" style="top: 2px; right: 2px; border-radius: 50%; font-size: 0.65rem; padding: 4px 6px; border: 2px solid var(--card-white);"><?= $unread_count; ?></span>
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+// 🔴 PASTIKAN $role ADA
+if (!isset($role)) {
+    $role = $this->session->userdata('role') ?? 'Admin';
+}
+?>
+
+<!-- 🔔 AUDIO NOTIFIKASI -->
+<audio id="notifSound" preload="auto">
+    <source src="<?= base_url('assets/sounds/notifikasi.mav'); ?>" type="audio/mpeg">
+</audio>
+
+<!-- NOTIFICATION BELL -->
+<div style="position: relative;">
+    <button class="notif-btn" id="notifToggle" onclick="toggleNotifDropdown()">
+        <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
+        <?php if (isset($unread_count) && $unread_count > 0): ?>
+            <span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
+        <?php else: ?>
+            <span class="notif-dot" id="notifCount" style="display:none;">0</span>
         <?php endif; ?>
-    </a>
-    <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 p-0 mt-2" style="width: 380px; border-radius: 14px; overflow: hidden;">
-        <!-- Header Dropdown -->
-        <div class="p-3 font-weight-bold text-white d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, var(--dark-coffee), #1a0e04);">
-            <span style="font-size: 0.9rem; letter-spacing: 0.5px;">
-                <i class="bi bi-envelope-paper-fill mr-2 text-warning"></i>
-                <?= $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
+    </button>
+
+    <!-- NOTIFICATION DROPDOWN -->
+    <div class="notif-dropdown" id="notifDropdown">
+        <div class="notif-dropdown-header">
+            <span>
+                <?= (isset($unread_count) && $unread_count > 0) ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
             </span>
-            <a href="<?= base_url('notifikasi/history'); ?>" class="badge badge-warning text-dark px-2 py-1 small" style="font-size: 0.75rem; font-weight: 600; text-decoration: none;">
-                Lihat Semua
-            </a>
+            <div>
+                <?php if (isset($unread_count) && $unread_count > 0): ?>
+                    <a href="#" id="markAllReadBtn" class="mr-2"
+                        style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
+                <?php endif; ?>
+                <a href="<?= base_url($role . '/dashboard/history'); ?>"
+                    style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
+            </div>
         </div>
-        
-        <!-- List Item Pesan -->
-        <div style="max-height: 300px; overflow-y: auto; background-color: var(--card-white);">
-            <?php if(!empty($notifikasi)): ?>
-                <?php foreach($notifikasi as $n): ?>
-                    <a class="dropdown-item p-3 border-bottom d-flex align-items-start <?= (isset($n['is_read']) && $n['is_read'] == 0) ? 'bg-light' : ''; ?>" 
-                       href="<?= base_url('notifikasi/read/'.$n['id_notifikasi']); ?>" 
-                       style="white-space: normal; transition: background 0.2s; <?= (isset($n['is_read']) && $n['is_read'] == 0) ? 'border-left: 3px solid var(--amber-cream);' : ''; ?>">
-                        
-                        <!-- Icon berdasarkan tipe notifikasi -->
-                        <div class="mr-3 mt-1 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; min-width: 36px; border-radius: 10px; <?= $n['icon'] ?? 'info'; ?>">
-                            <?php 
-                            $icon_map = [
-                                'success' => 'bi-check-circle-fill',
-                                'warning' => 'bi-exclamation-triangle-fill',
-                                'danger' => 'bi-x-circle-fill',
-                                'info' => 'bi-info-circle-fill',
-                                'primary' => 'bi-star-fill'
-                            ];
-                            $icon_class = isset($n['icon']) && isset($icon_map[$n['icon']]) ? $icon_map[$n['icon']] : 'bi-info-circle-fill';
-                            
-                            $bg_color = [
-                                'success' => '#D1FAE5',
-                                'warning' => '#FEF3C7',
-                                'danger' => '#FEE2E2',
-                                'info' => '#DBEAFE',
-                                'primary' => '#EDE9FE'
-                            ];
-                            $bg = isset($n['icon']) && isset($bg_color[$n['icon']]) ? $bg_color[$n['icon']] : '#FDF5ED';
-                            
-                            $text_color = [
-                                'success' => '#065F46',
-                                'warning' => '#92400E',
-                                'danger' => '#991B1B',
-                                'info' => '#1E40AF',
-                                'primary' => '#5B21B6'
-                            ];
-                            $color = isset($n['icon']) && isset($text_color[$n['icon']]) ? $text_color[$n['icon']] : 'var(--amber-cream)';
-                            ?>
-                            <div style="width: 36px; height: 36px; border-radius: 10px; background: <?= $bg; ?>; display: flex; align-items: center; justify-content: center; color: <?= $color; ?>;">
-                                <i class="bi <?= $icon_class; ?>" style="font-size: 1rem;"></i>
-                            </div>
+        <div class="notif-dropdown-list" id="notifList">
+            <?php if (!empty($notifikasi)): ?>
+                <?php foreach ($notifikasi as $n): ?>
+                    <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
+                        href="<?= base_url($role . '/dashboard/read/' . $n['id_notifikasi']); ?>">
+                        <?php
+                        $icon_type = $n['icon'] ?? 'info';
+                        $icon_map = [
+                            'success' => 'bi-check-circle-fill',
+                            'warning' => 'bi-exclamation-triangle-fill',
+                            'danger' => 'bi-x-circle-fill',
+                            'info' => 'bi-info-circle-fill'
+                        ];
+                        $icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+                        ?>
+                        <div class="notif-icon <?= $icon_type; ?>">
+                            <i class="bi <?= $icon_class; ?>"></i>
                         </div>
-                        
-                        <div style="flex: 1; min-width: 0;">
-                            <?php if(isset($n['judul']) && !empty($n['judul'])): ?>
-                                <p class="mb-1 small text-dark font-weight-bold" style="line-height: 1.3;"><?= htmlspecialchars($n['judul']); ?></p>
-                            <?php endif; ?>
-                            <p class="mb-1 small text-dark <?= (isset($n['is_read']) && $n['is_read'] == 0) ? 'font-weight-semibold' : ''; ?>" style="line-height: 1.4;">
-                                <?= htmlspecialchars($n['pesan'] ?? $n['isi_notifikasi']); ?>
-                            </p>
-                            <small class="text-muted d-block" style="font-size: 0.65rem;">
-                                <i class="bi bi-clock mr-1"></i>
-                                <?= isset($n['created_at']) ? date('d M Y, H:i', strtotime($n['created_at'])) : (isset($n['tanggal_buat']) ? date('d M Y, H:i', strtotime($n['tanggal_buat'])) : ''); ?>
-                            </small>
+                        <div class="notif-text">
+                            <?= htmlspecialchars($n['isi_notifikasi']); ?>
+                            <span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
                         </div>
-                        
-                        <?php if(isset($n['is_read']) && $n['is_read'] == 0): ?>
-                            <span class="badge badge-pill" style="background: var(--amber-cream); color: white; font-size: 0.55rem; padding: 3px 8px; align-self: center;">Baru</span>
+                        <?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
+                            <span class="notif-badge-new">Baru</span>
                         <?php endif; ?>
                     </a>
                 <?php endforeach; ?>
             <?php else: ?>
                 <div class="text-center text-muted py-5 px-3">
-                    <i class="bi bi-bell-slash d-block mb-2" style="font-size: 2.5rem; color: #C0B7B1;"></i>
+                    <i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
                     <p class="small mb-0">Tidak ada notifikasi</p>
                 </div>
             <?php endif; ?>
         </div>
-        
-        <!-- Footer Dropdown -->
-        <div class="p-2 text-center border-top" style="background-color: #FAF6F0; border-color: rgba(74,44,17,0.06);">
-            <div class="d-flex justify-content-center gap-3" style="gap: 16px;">
-                <?php if($unread_count > 0): ?>
-                    <a href="#" id="markAllReadBtn" class="small text-secondary font-weight-bold text-decoration-none" style="font-size: 0.75rem;">
-                        <i class="bi bi-check2-all mr-1"></i> Tandai semua dibaca
-                    </a>
-                    <span class="text-muted" style="font-size: 0.7rem;">|</span>
-                <?php endif; ?>
-                <a href="<?= base_url('notifikasi/setting'); ?>" class="small text-secondary font-weight-bold text-decoration-none" style="font-size: 0.75rem;">
-                    <i class="bi bi-gear-fill mr-1"></i> Pengaturan
-                </a>
-            </div>
+        <div class="p-2 text-center border-top"
+            style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+            <a href="<?= base_url($role . '/dashboard/settings'); ?>"
+                class="small text-secondary font-weight-bold text-decoration-none">
+                <i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
+            </a>
         </div>
     </div>
+</div>
+
+<!-- ============================================ -->
+<!-- 🔔 SCRIPT NOTIFIKASI DENGAN SUARA -->
+<!-- ============================================ -->
+<script>
+// ============================================
+// 1. TOGGLE DROPDOWN
+// ============================================
+function toggleNotifDropdown() {
+    var dropdown = document.getElementById('notifDropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
+}
+
+// ============================================
+// 2. PLAY NOTIFICATION SOUND
+// ============================================
+function playNotifSound() {
+    var audio = document.getElementById('notifSound');
+    if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(function(e) {
+            console.log('🔇 Sound play error:', e.message);
+        });
+    }
+}
+
+// ============================================
+// 3. AUTO-REFRESH NOTIFICATION COUNT
+// ============================================
+var lastUnreadCount = <?= isset($unread_count) ? $unread_count : 0; ?>;
+
+function refreshNotificationCount() {
+    var role = '<?= $role ?? $this->session->userdata('role') ?? 'Admin'; ?>';
+    
+    $.get('<?= base_url() ?>' + role + '/dashboard/get_notifications_ajax', function(response) {
+        if (response.success) {
+            var currentCount = response.unread;
+            var countEl = document.getElementById('notifCount');
+            var notifBtn = document.getElementById('notifToggle');
+            
+            // Update badge
+            if (countEl) {
+                if (currentCount > 0) {
+                    countEl.textContent = currentCount;
+                    countEl.style.display = 'flex';
+                    
+                    // 🔔 PLAY SOUND JIKA ADA NOTIFIKASI BARU
+                    if (currentCount > lastUnreadCount) {
+                        playNotifSound();
+                        
+                        // Efek lonceng bergetar
+                        if (notifBtn) {
+                            notifBtn.classList.add('ring');
+                            setTimeout(function() {
+                                notifBtn.classList.remove('ring');
+                            }, 600);
+                        }
+                    }
+                } else {
+                    countEl.style.display = 'none';
+                }
+            }
+            
+            lastUnreadCount = currentCount;
+        }
+    }).fail(function() {
+        console.log('⚠️ Gagal refresh notifikasi');
+    });
+}
+
+// Refresh notifikasi setiap 30 detik
+setInterval(refreshNotificationCount, 30000);
+
+// ============================================
+// 4. MARK ALL READ
+// ============================================
+document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    var role = '<?= $role ?? $this->session->userdata('role') ?? 'Admin'; ?>';
+    
+    if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+        $.ajax({
+            url: '<?= base_url() ?>' + role + '/dashboard/mark_all_read_ajax',
+            type: 'POST',
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert('Gagal menandai semua notifikasi.');
+                }
+            },
+            error: function() {
+                alert('Terjadi kesalahan. Silakan coba lagi.');
+            }
+        });
+    }
+});
+
+// ============================================
+// 5. TAMBAHKAN ANIMASI CSS
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    var style = document.createElement('style');
+    style.textContent = `
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+        }
+        
+        @keyframes bellRing {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(10deg); }
+            50% { transform: rotate(-10deg); }
+            75% { transform: rotate(5deg); }
+        }
+        
+        .notif-btn.ring {
+            animation: bellRing 0.5s ease 1;
+        }
+    `;
+    document.head.appendChild(style);
+});
+
+console.log('🔔 Notifikasi dengan suara siap digunakan!');
+console.log('📋 Notifikasi akan di-refresh setiap 30 detik');
+</script>

@@ -31,11 +31,20 @@ class Kurir extends CI_Controller
         }
 
         $this->load->model('Kurir_model');
+        $this->load->model('Notifikasi_model'); // 🔴 TAMBAHKAN INI!
         $this->load->library('form_validation');
+        $this->load->helper('url');
     }
 
     public function index()
     {
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
         $status_filter = $this->input->get('status');
         $keyword       = $this->input->get('keyword');
 
@@ -71,12 +80,30 @@ class Kurir extends CI_Controller
 
         $this->Kurir_model->insert($data);
 
+        // 🔴 KIRIM NOTIFIKASI KE ADMIN
+        $this->load->helper('notifikasi');
+        send_notifikasi(
+            $this->session->userdata('id_user'),
+            'Admin',
+            '🚚 Kurir Baru Ditambahkan',
+            'Kurir ' . $data['nama_kurir'] . ' telah ditambahkan ke sistem.',
+            'success',
+            base_url('admin/kurir')
+        );
+
         $this->session->set_flashdata('success', 'Kurir baru berhasil ditambahkan.');
         redirect('admin/kurir');
     }
 
     public function detail($id_kurir = null)
     {
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
         $detail = $this->Kurir_model->get_detail_with_history($id_kurir);
 
         if (!$detail) {
@@ -124,6 +151,12 @@ class Kurir extends CI_Controller
         redirect('admin/kurir');
     }
 
+<<<<<<< HEAD
+    // ============================================
+    // M08-F05: HAPUS KURIR (SOFT DELETE)
+    // ============================================
+=======
+>>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
     public function hapus($id_kurir = null)
     {
         $kurir = $this->Kurir_model->get_by_id($id_kurir);
@@ -156,11 +189,37 @@ class Kurir extends CI_Controller
         $status_baru = ($kurir['status'] == 'Active') ? 'Inactive' : 'Active';
         $this->Kurir_model->update($id_kurir, ['status' => $status_baru]);
 
+        // 🔴 KIRIM NOTIFIKASI KE ADMIN
+        $this->load->helper('notifikasi');
+        send_notifikasi(
+            $this->session->userdata('id_user'),
+            'Admin',
+            '🔄 Status Kurir Diubah',
+            'Status kurir ' . $kurir['nama_kurir'] . ' diubah menjadi ' . $status_baru . '.',
+            'warning',
+            base_url('admin/kurir')
+        );
+
         $this->session->set_flashdata('success', 'Status kurir diubah menjadi ' . $status_baru . '.');
         redirect('admin/kurir');
     }
 
     // ============================================
+<<<<<<< HEAD
+    // M08-F06: HALAMAN ASSIGN KURIR
+    // ============================================
+    public function assign()
+    {
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
+        $data['pengiriman_pending'] = $this->Kurir_model->get_pengiriman_belum_assign();
+        $data['kurir_aktif']        = $this->Kurir_model->get_kurir_aktif();
+=======
     // 🔥 M08-F06: HALAMAN ASSIGN KURIR (PAKAI QUERY MANUAL)
     // ============================================
     public function assign()
@@ -182,12 +241,17 @@ class Kurir extends CI_Controller
             WHERE status = 'Active' 
             AND deleted_at IS NULL
         ")->result_array();
+>>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
 
         $this->load->view('admin/kurir/assign', $data);
     }
 
     // ============================================
+<<<<<<< HEAD
+    // M08-F06: PROSES ASSIGN
+=======
     // 🔥 M08-F06: PROSES ASSIGN (PAKAI QUERY MANUAL)
+>>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
     // ============================================
     public function proses_assign()
     {
@@ -231,7 +295,23 @@ class Kurir extends CI_Controller
                 'icon' => 'success'
             ]);
 
+<<<<<<< HEAD
+        if ($success) {
+            // 🔴 KIRIM NOTIFIKASI KE ADMIN
+            $this->load->helper('notifikasi');
+            send_notifikasi(
+                $this->session->userdata('id_user'),
+                'Admin',
+                '📦 Kurir Ditugaskan',
+                'Kurir ' . $kurir['nama_kurir'] . ' telah ditugaskan untuk pengiriman #' . $id_tracking . '.',
+                'success',
+                base_url('admin/kurir')
+            );
+            
+            $this->session->set_flashdata('success', 'Kurir berhasil ditugaskan untuk pengiriman ini.');
+=======
             $this->session->set_flashdata('success', '✅ Kurir berhasil ditugaskan untuk transaksi #' . $id_transaksi);
+>>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
         } else {
             $this->session->set_flashdata('error', '❌ Gagal menugaskan kurir. Mungkin transaksi sudah memiliki kurir.');
         }
@@ -241,6 +321,13 @@ class Kurir extends CI_Controller
 
     public function performance()
     {
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Admin';
+        
         $data['performance'] = $this->Kurir_model->get_performance_kurir();
 
         $this->load->view('admin/kurir/performance', $data);
