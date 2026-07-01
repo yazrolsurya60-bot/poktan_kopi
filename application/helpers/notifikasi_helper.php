@@ -14,6 +14,22 @@ if (!function_exists('send_notifikasi')) {
             $CI->load->model('Notifikasi_model');
         }
         
+        // CEK APAKAH USER ID VALID
+        $user = $CI->db
+            ->where('id_user', $user_id)
+            ->get('tb_user')
+            ->row_array();
+        
+        // JIKA USER TIDAK DITEMUKAN, BATALKAN
+        if (!$user) {
+            return false;
+        }
+        
+        // CEK APAKAH ROLE SESUAI DENGAN USER
+        if (strtolower($user['role']) != strtolower($role)) {
+            $role = $user['role'];
+        }
+        
         // Cek setting notifikasi user
         $settings = $CI->Notifikasi_model->get_settings($user_id);
         
@@ -36,7 +52,9 @@ if (!function_exists('send_notifikasi')) {
             'Maintenance' => 'notif_sistem',
             'Verifikasi' => 'notif_petani',
             'Terverifikasi' => 'notif_petani',
-            'Test' => 'notif_sistem'
+            'Test' => 'notif_sistem',
+            'Akun Petani Terverifikasi' => 'notif_petani',
+            'Akun Terverifikasi' => 'notif_petani'
         ];
         
         $key = 'notif_sistem';
@@ -87,7 +105,7 @@ if (!function_exists('notifikasi_tracking')) {
         }
         return send_notifikasi(
             $pembeli_id,
-            'pembeli',
+            'Pembeli',
             $judul,
             $pesan,
             'info',
@@ -102,7 +120,7 @@ if (!function_exists('notifikasi_pesanan_baru')) {
         $pesan = "Pesanan #{$invoice} untuk produk {$produk} telah masuk.";
         return send_notifikasi(
             $petani_id,
-            'petani',
+            'Petani',
             $judul,
             $pesan,
             'success',
@@ -117,7 +135,7 @@ if (!function_exists('notifikasi_pesanan_pembeli')) {
         $pesan = "Pesanan #{$invoice} status: {$status}";
         return send_notifikasi(
             $pembeli_id,
-            'pembeli',
+            'Pembeli',
             $judul,
             $pesan,
             'info',
@@ -132,7 +150,7 @@ if (!function_exists('notifikasi_konfirmasi_bayar')) {
         $pesan = "Pembayaran #{$invoice} menunggu konfirmasi.";
         return send_notifikasi(
             $admin_id,
-            'admin',
+            'Admin',
             $judul,
             $pesan,
             'warning',
@@ -147,7 +165,7 @@ if (!function_exists('notifikasi_stok_tipis')) {
         $pesan = "Stok {$produk} tersisa {$sisa} kg. Segera isi ulang!";
         return send_notifikasi(
             $petani_id,
-            'petani',
+            'Petani',
             $judul,
             $pesan,
             'danger',
@@ -156,7 +174,6 @@ if (!function_exists('notifikasi_stok_tipis')) {
     }
 }
 
-
 // ============================================
 // NOTIFIKASI KE SEMUA ADMIN (M11-F01)
 // ============================================
@@ -164,17 +181,18 @@ if (!function_exists('notifikasi_stok_tipis')) {
 if (!function_exists('notifikasi_semua_admin')) {
     function notifikasi_semua_admin($judul, $pesan, $icon = 'info', $link = null) {
         $CI =& get_instance();
-        if (!isset($CI->User_model)) {
-            $CI->load->model('User_model');
-        }
         
-        $admins = $CI->User_model->get_users_by_role('Admin');
+        $admins = $CI->db
+            ->where('role', 'Admin')
+            ->get('tb_user')
+            ->result_array();
+        
         $results = [];
         
         foreach ($admins as $admin) {
             $results[] = send_notifikasi(
                 $admin['id_user'],
-                'admin',
+                'Admin',
                 $judul,
                 $pesan,
                 $icon,
@@ -183,5 +201,48 @@ if (!function_exists('notifikasi_semua_admin')) {
         }
         
         return $results;
+    }
+}
+
+// ============================================
+// FUNGSI KHUSUS NOTIFIKASI PER ROLE
+// ============================================
+
+if (!function_exists('notifikasi_pembeli')) {
+    function notifikasi_pembeli($pembeli_id, $judul, $pesan, $icon = 'info', $link = null) {
+        return send_notifikasi(
+            $pembeli_id,
+            'Pembeli',
+            $judul,
+            $pesan,
+            $icon,
+            $link
+        );
+    }
+}
+
+if (!function_exists('notifikasi_petani')) {
+    function notifikasi_petani($petani_id, $judul, $pesan, $icon = 'info', $link = null) {
+        return send_notifikasi(
+            $petani_id,
+            'Petani',
+            $judul,
+            $pesan,
+            $icon,
+            $link
+        );
+    }
+}
+
+if (!function_exists('notifikasi_admin')) {
+    function notifikasi_admin($admin_id, $judul, $pesan, $icon = 'info', $link = null) {
+        return send_notifikasi(
+            $admin_id,
+            'Admin',
+            $judul,
+            $pesan,
+            $icon,
+            $link
+        );
     }
 }
