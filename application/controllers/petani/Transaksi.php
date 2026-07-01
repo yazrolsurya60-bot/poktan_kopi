@@ -9,11 +9,17 @@ class Transaksi extends CI_Controller {
             redirect('auth/login');
         }
         $this->load->model('Transaksi_model');
+        $this->load->model('Notifikasi_model'); // 🔴 TAMBAHKAN
         $this->load->helper('url');
     }
 
     public function index() {
         $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Petani';
         
         // Ambil semua produk milik petani ini
         $this->db->where('id_user', $id_user);
@@ -40,6 +46,11 @@ class Transaksi extends CI_Controller {
 
     public function detail($id_transaksi) {
         $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Petani';
         
         // Cek apakah transaksi ini berisi produk petani
         $this->db->select('d.*');
