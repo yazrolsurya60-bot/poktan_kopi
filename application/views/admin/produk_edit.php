@@ -949,10 +949,7 @@
                                 <input type="file" name="foto_utama" class="form-control" accept="image/*">
                             </div>
 
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Galeri Tambahan (Bisa pilih banyak)</label>
-                                <input type="file" name="galeri[]" multiple class="form-control" accept="image/*">
-                            </div>
+                         
 <div class="form-group mb-3">
                                 <label class="font-weight-bold">Status Produk</label>
                                 <select name="status_produk" class="form-control">

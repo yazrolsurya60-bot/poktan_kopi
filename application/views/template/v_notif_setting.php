@@ -396,6 +396,33 @@
             </div>
 
             <!-- ============================================ -->
+            <!-- 🔴 KATEGORI: PANEN & PRODUKSI (PETANI) -->
+            <!-- ============================================ -->
+            <?php if ($is_petani): ?>
+                <div class="category-header">
+                    <i class="bi bi-tree-fill"></i> PANEN & PRODUKSI
+                </div>
+
+                <!-- Jadwal Panen (Petani) -->
+                <div class="switch-group">
+                    <div class="switch-icon" style="background: #EDE9FE; color: #5B21B6;">
+                        <i class="bi bi-calendar-event"></i>
+                    </div>
+                    <div class="switch-content">
+                        <div class="switch-label">
+                            <span>Lansiran Jadwal Panen</span>
+                            <div class="custom-switch ml-auto">
+                                <input type="checkbox" class="custom-control-input" id="notif_panen" name="notif_panen"
+                                    <?= isset($settings['notif_panen']) && $settings['notif_panen'] == 1 ? 'checked' : ''; ?>>
+                                <label class="custom-control-label" for="notif_panen"></label>
+                            </div>
+                        </div>
+                        <small class="switch-desc">Notifikasi saat jadwal panen baru ditambahkan atau pengingat H-1 panen.</small>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- ============================================ -->
             <!-- KATEGORI: STOK & PRODUK -->
             <!-- ============================================ -->
             <?php if ($is_admin || $is_petani): ?>
