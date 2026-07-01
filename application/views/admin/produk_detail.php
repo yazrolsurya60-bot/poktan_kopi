@@ -858,11 +858,13 @@
                     <div class="col-lg-8">
                         <div class="row">
                             <div class="col-md-6">
+                                <!-- Nama Produk -->
                                 <div class="detail-group">
                                     <div class="detail-label">Nama Produk</div>
                                     <div class="detail-value"><?= $produk->nama_produk; ?></div>
                                 </div>
 
+                                <!-- Jenis Kopi -->
                                 <div class="detail-group">
                                     <div class="detail-label">Jenis Kopi</div>
                                     <div class="detail-value">
@@ -870,13 +872,9 @@
                                     </div>
                                 </div>
 
-                                <div class="detail-group">
-                                    <div class="detail-label">Grade Kopi</div>
-                                    <div class="detail-value">
-                                        <span class="badge-info"><?= $produk->grade; ?></span>
-                                    </div>
-                                </div>
+                               
 
+                                <!-- Harga -->
                                 <div class="detail-group">
                                     <div class="detail-label">Harga per Kilogram</div>
                                     <div class="detail-value" style="color: var(--roasted-brown); font-weight: 700; font-size: 1.1rem;">
@@ -886,6 +884,7 @@
                             </div>
 
                             <div class="col-md-6">
+                                <!-- Stok -->
                                 <div class="detail-group">
                                     <div class="detail-label">Stok Tersedia</div>
                                     <div class="detail-value">
@@ -893,23 +892,19 @@
                                     </div>
                                 </div>
 
+                                <!-- Altitude -->
                                 <div class="detail-group">
                                     <div class="detail-label">Altitude (Ketinggian Tanam)</div>
                                     <div class="detail-value"><?= !empty($produk->altitude) ? $produk->altitude : '<span class="text-muted">-</span>'; ?></div>
                                 </div>
 
+                                <!-- Proses Pengolahan -->
                                 <div class="detail-group">
                                     <div class="detail-label">Proses Pengolahan</div>
                                     <div class="detail-value"><?= !empty($produk->proses) ? $produk->proses : '<span class="text-muted">-</span>'; ?></div>
                                 </div>
 
-                                <div class="detail-group">
-                                    <div class="detail-label">Flavor Notes (Catatan Rasa)</div>
-                                    <div class="detail-value" style="font-style: italic;">
-                                        <?= !empty($produk->flavor_notes) ? $produk->flavor_notes : '<span class="text-muted">-</span>'; ?>
-                                    </div>
-                                </div>
-
+                                <!-- Status -->
                                 <div class="detail-group">
                                     <div class="detail-label">Status Penjualan</div>
                                     <div class="detail-value">
@@ -924,19 +919,7 @@
                             </div>
                         </div>
 
-                        <!-- DESKRIPSI (FULL WIDTH) -->
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <div class="detail-group">
-                                    <div class="detail-label">Deskripsi Produk</div>
-                                    <div class="detail-description">
-                                        <?= !empty($produk->deskripsi) ? nl2br($produk->deskripsi) : '<span class="text-muted">Tidak ada deskripsi.</span>'; ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                       
 
                 <!-- TOMBOL KEMBALI -->
                 <div class="mt-4 pt-3 border-top" style="border-color: rgba(74,44,17,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">

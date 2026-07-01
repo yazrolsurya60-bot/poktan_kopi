@@ -8,13 +8,21 @@ class Petani_model extends CI_Model {
     protected $table_petani_wilayah = 'tb_petani_wilayah';
 
     // Mengambil daftar petani dengan penanganan filter yang lebih aman
-    public function get_daftar_petani($status = null) {
+    public function get_daftar_petani($status = null, $id_wilayah = null) {
+        $this->db->select($this->table . '.*');
         $this->db->from($this->table);
         $this->db->where('is_deleted', 0);
         
         // Cek jika status ada dan bukan string kosong
         if (!empty($status)) {
             $this->db->where('status_petani', $status);
+        }
+
+        // Filter berdasarkan wilayah (Sempadian / Sendoyan / dll)
+        if (!empty($id_wilayah)) {
+            $this->db->join($this->table_petani_wilayah . ' pwf', 'pwf.id_petani = ' . $this->table . '.id_petani');
+            $this->db->where('pwf.id_wilayah', $id_wilayah);
+            $this->db->group_by($this->table . '.id_petani');
         }
         
         // Urutkan terbaru di atas (opsional tapi disarankan untuk admin)

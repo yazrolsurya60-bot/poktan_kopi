@@ -514,180 +514,195 @@
             box-shadow: var(--shadow-hover);
         }
 
-        .custom-card .card-header-custom {
-            padding: 18px 24px;
+        .card-header-custom {
+            padding: 18px 28px;
             border-bottom: 1px solid rgba(74, 44, 17, 0.06);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .custom-card .card-header-custom h6 {
             font-weight: 700;
+            font-size: 1rem;
             color: var(--dark-coffee);
-            margin: 0;
-            font-size: 0.85rem;
-        }
-
-        .custom-card .card-body-custom {
-            padding: 24px;
-        }
-
-        /* --- CHART --- */
-        .chart-container {
-            position: relative;
-            height: 250px;
-            width: 100%;
-        }
-
-        /* --- TABEL --- */
-        .table-custom {
-            font-size: 0.85rem;
-        }
-
-        .table-custom thead th {
-            border-bottom: 2px solid rgba(74, 44, 17, 0.06);
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 10px 8px;
-        }
-
-        .table-custom tbody td {
-            padding: 10px 8px;
-            border-bottom: 1px solid rgba(74, 44, 17, 0.04);
-            vertical-align: middle;
-        }
-
-        .table-custom tbody tr:hover {
-            background: rgba(250, 246, 240, 0.3);
-        }
-
-        /* --- STATUS BADGE --- */
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-
-        .status-badge.pending {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-badge.processing {
-            background: #DBEAFE;
-            color: #1E40AF;
-        }
-
-        .status-badge.delivery {
-            background: #EDE9FE;
-            color: #5B21B6;
-        }
-
-        .status-badge.complete {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-
-        .status-badge.cancelled {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        .status-badge.stok_aman {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-
-        .status-badge.stok_tipis {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-badge.stok_habis {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        /* --- QUICK ACTION BUTTONS --- */
-        .quick-action-btn {
-            padding: 10px 16px;
-            border: 1px solid rgba(74, 44, 17, 0.06);
-            border-radius: 10px;
-            background: var(--card-white);
-            color: var(--dark-coffee);
-            transition: var(--transition-smooth);
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 500;
-            font-size: 0.85rem;
-            cursor: pointer;
-            width: 100%;
-            text-decoration: none;
-        }
-
-        .quick-action-btn:hover {
+            gap: 12px;
             background: var(--bg-cream);
-            border-color: var(--amber-cream);
-            transform: translateX(4px);
-            text-decoration: none;
-            color: var(--dark-coffee);
         }
 
-        .quick-action-btn i {
-            font-size: 1.1rem;
+        .card-header-custom i {
             color: var(--amber-cream);
+            font-size: 1.2rem;
         }
 
-        /* --- CALENDAR / JADWAL PANEN (M11-F01) --- */
-        .harvest-schedule-item {
+        .card-header-custom .badge-required {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: rgba(74, 44, 17, 0.06);
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin-left: auto;
+        }
+
+        .card-body-custom {
+            padding: 28px 28px 20px;
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            letter-spacing: 0.2px;
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(74, 44, 17, 0.05);
+            gap: 4px;
         }
 
-        .harvest-schedule-item:last-child {
-            border-bottom: none;
-        }
-
-        .schedule-date {
-            min-width: 50px;
-            text-align: center;
-        }
-
-        .schedule-date .day {
-            font-size: 1.3rem;
+        .form-group label .required {
+            color: #EF4444;
             font-weight: 700;
-            color: var(--dark-coffee);
-            line-height: 1;
         }
 
-        .schedule-date .month {
-            font-size: 0.6rem;
-            text-transform: uppercase;
+        .form-control,
+        .form-select {
+            border-radius: 10px;
+            border: 1px solid rgba(74, 44, 17, 0.12);
+            padding: 10px 16px;
+            font-size: 0.88rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: var(--transition-smooth);
+            background: var(--card-white);
+            height: 44px;
+        }
+
+        .form-control::placeholder {
+            color: #B8B0A8;
+            font-size: 0.82rem;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--amber-cream);
+            box-shadow: 0 0 0 4px rgba(230, 161, 92, 0.1);
+            outline: none;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 70px;
+            height: auto;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2370655E' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+
+        /* ===== FILE UPLOAD ===== */
+        .file-upload-wrapper {
+            position: relative;
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 9px 14px;
+            border: 2px dashed rgba(74, 44, 17, 0.12);
+            border-radius: 10px;
+            background: var(--bg-cream);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-size: 0.82rem;
             color: var(--text-secondary);
-            font-weight: 600;
+            height: 44px;
         }
 
-        .schedule-info {
-            flex: 1;
+        .file-upload-wrapper input[type="file"]:hover {
+            border-color: var(--amber-cream);
+            background: rgba(230, 161, 92, 0.04);
         }
 
-        .schedule-info .title {
+        .file-upload-wrapper input[type="file"]::file-selector-button {
+            padding: 5px 16px;
+            border: none;
+            border-radius: 6px;
+            background: var(--amber-cream);
+            color: white;
             font-weight: 600;
+            font-size: 0.72rem;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: var(--transition-smooth);
+        }
+
+        .file-upload-wrapper input[type="file"]::file-selector-button:hover {
+            background: var(--roasted-brown);
+        }
+
+        .file-helper {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            display: block;
+        }
+
+        .file-helper i {
+            font-size: 0.65rem;
+        }
+
+        /* ===== BUTTON ===== */
+        .btn-custom {
+            border-radius: 10px;
             font-size: 0.85rem;
+            font-weight: 600;
+            padding: 10px 28px;
+            border: none;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
         }
 
-        .schedule-info .detail {
-            font-size: 0.75rem;
+        .btn-primary-custom {
+            background: var(--amber-cream);
+            color: white;
+        }
+
+        .btn-primary-custom:hover {
+            background: var(--roasted-brown);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            text-decoration: none;
+        }
+
+        .btn-secondary-custom {
+            background: var(--bg-cream);
             color: var(--text-secondary);
+            border: 1px solid rgba(74, 44, 17, 0.08);
+        }
+
+        .btn-secondary-custom:hover {
+            background: #e8e0d8;
+            color: var(--dark-coffee);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .form-actions {
+            padding-top: 20px;
+            border-top: 1px solid rgba(74, 44, 17, 0.06);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 8px;
         }
 
         /* --- RESPONSIVE --- */
@@ -735,6 +750,9 @@
                 width: calc(100vw - 32px);
                 right: -60px;
             }
+            .card-body-custom {
+                padding: 20px 18px;
+            }
         }
 
         @media (max-width: 575.98px) {
@@ -758,13 +776,29 @@
                 top: 14px;
             }
 
-            .custom-card .card-body-custom {
+            .card-body-custom {
                 padding: 16px;
             }
 
             .notif-dropdown {
                 width: calc(100vw - 24px);
                 right: -70px;
+            }
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+            .form-actions .btn-custom {
+                width: 100%;
+                justify-content: center;
+            }
+            .card-header-custom {
+                padding: 14px 16px;
+                font-size: 0.9rem;
+                flex-wrap: wrap;
+            }
+            .card-header-custom .badge-required {
+                font-size: 0.6rem;
+                padding: 2px 10px;
             }
         }
 
@@ -830,6 +864,7 @@
                 <li class="menu-item">
                     <a href="<?= base_url('admin/user'); ?>">
                         <i class="bi bi-people-fill"></i>Manajemen User
+                        <span class="menu-badge">12</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -855,6 +890,7 @@
                 <li class="menu-item">
                     <a href="<?= base_url('admin/transaksi'); ?>">
                         <i class="bi bi-wallet2"></i>Transaksi
+                        <span class="menu-badge">8</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -892,98 +928,88 @@
                 </div>
             </div>
 
-            <div class="card-custom">
+            <div class="custom-card">
+                <div class="card-header-custom">
+                    <i class="bi bi-box-seam-fill"></i>
+                    Formulir Produk Kopi
+                    <span class="badge-required">
+                        <i class="bi bi-asterisk text-danger" style="font-size:0.5rem;"></i> Wajib diisi
+                    </span>
+                </div>
+                <div class="card-body-custom">
                <form action="<?= base_url('admin/produk/simpan'); ?>"
                     method="post"
                     enctype="multipart/form-data">
                     <div class="row">
 
                         <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Nama Produk</label>
-                                <input type="text" name="nama_produk" class="form-control"
-                                    placeholder="Masukkan nama produk" required>
+                            <!-- NAMA PRODUK - DROPDOWN dengan ID -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Nama Produk <span class="required">*</span></label>
+                                <select name="nama_produk" id="nama_produk" class="form-control" required>
+                                    <option value="">-- Pilih Nama Produk --</option>
+                                    <option value="Ceri">Ceri</option>
+                                    <option value="Biji Kopi">Biji Kopi</option>
+                                    <option value="Kopi Bubuk">Kopi Bubuk</option>
+                                </select>
                             </div>
 
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Jenis Kopi</label>
-                                <select name="jenis_kopi" class="form-control" required>
-                                    <option value="">Pilih Jenis Kopi</option>
-                                    <option value="Arabica">Arabica</option>
-                                    <option value="Robusta">Robusta</option>
+                            <!-- JENIS KOPI - dengan ID -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Jenis Kopi <span class="required">*</span></label>
+                                <select name="jenis_kopi" id="jenis_kopi" class="form-control" required>
                                     <option value="Liberica">Liberica</option>
                                 </select>
                             </div>
 
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Grade</label>
-                                <select name="grade" class="form-control" required>
-                                    <option value="">Pilih Grade</option>
-                                    <option value="A">A</option>
-                                    <option value="AA">AA</option>
-                                    <option value="B">B</option>
-                                </select>
+                            <!-- PROSES PENGOLAHAN -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Proses Pengolahan</label>
+                                <input type="text" name="proses" id="proses" class="form-control" placeholder="Otomatis terisi berdasarkan Nama Produk" readonly>
                             </div>
 
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Harga (Rp)</label>
-                                <input type="number" name="harga" class="form-control" placeholder="Contoh: 120000"
-                                    required>
+                            <!-- HARGA - Auto fill -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Harga (Rp) <span class="required">*</span></label>
+                                <input type="number" name="harga" id="harga" class="form-control" placeholder="Otomatis terisi berdasarkan Nama Produk" readonly required>
                             </div>
 
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Stok</label>
-                                <input type="number" name="stok_produk" class="form-control" placeholder="Contoh: 50"
-                                    required>
-                            </div>
+                            <!-- STOK DIHAPUS - HANYA UNTUK PETANI -->
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Altitude</label>
-                                <input type="text" name="altitude" class="form-control" placeholder="Contoh: 1200 mdpl">
+                            <div class="form-group">
+                                <label class="font-weight-bold">Altitude (Ketinggian Tanam)</label>
+                               <input type="text" name="altitude" class="form-control" placeholder="Contoh: 900 Meter">
                             </div>
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Proses Pengolahan</label>
-                                <input type="text" name="proses" class="form-control"
-                                    placeholder="Contoh: Dicuci Bersih, Dijemur Utuh, Setengah Dicuci">
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Karakter Rasa Kopi</label>
-                                <textarea class="form-control" rows="2" name="flavor_notes"
-                                    placeholder="Contoh: Rasa buah, aroma cokelat, sedikit manis seperti madu, atau rasa kacang"></textarea>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Deskripsi</label>
-                                <textarea class="form-control" rows="3" name="deskripsi"
-                                    placeholder="Tuliskan deskripsi lengkap produk..."></textarea>
-                            </div>
-
-                            
-                         
-<div class="form-group mb-3">
-                                <label class="font-weight-bold">Status Produk</label>
+                  
+                            <div class="form-group">
+                                <label class="font-weight-bold">Status Produk <span class="required">*</span></label>
                                 <select name="status_produk" class="form-control">
                                     <option value="Aktif">Aktif</option>
                                     <option value="Nonaktif">Nonaktif</option>
                                 </select>
                             </div>
-                            <div class="form-group mb-3">
+                            <div class="form-group">
                                 <label class="font-weight-bold">Foto Produk</label>
-                                <input type="file" name="foto_utama" class="form-control" accept=".jpg,.jpeg,.png">
+                                <div class="file-upload-wrapper">
+                                    <input type="file" name="foto_utama" accept=".jpg,.jpeg,.png">
+                                    <span class="file-helper">
+                                        <i class="bi bi-info-circle"></i> Format: JPG, PNG. Maks 2MB
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
                     </div>
 
-                    <div class="text-right mt-4 border-top pt-3">
-                        <a href="<?= base_url('admin/produk'); ?>" class="btn btn-light px-4 mr-2"
-                            style="border-radius: 8px;">Batal</a>
-                        <button type="submit" class="btn text-white px-4"
-                            style="background: var(--amber-cream); border-radius: 8px;">
-                            <i class="bi bi-save mr-1"></i> Simpan Produk
+                    <!-- FORM ACTIONS -->
+                    <div class="form-actions">
+                        <a href="<?= base_url('admin/produk'); ?>" class="btn btn-secondary-custom btn-custom">
+                            <i class="bi bi-arrow-left"></i> Batal
+                        </a>
+                        <button type="submit" class="btn btn-primary-custom btn-custom">
+                            <i class="bi bi-save"></i> Simpan Produk
                         </button>
                     </div>
                 </form>
@@ -991,9 +1017,84 @@
         
 </div>
 </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // ============================================
+        // AUTO SET JENIS KOPI = LIBERICA
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const namaProduk = document.getElementById('nama_produk');
+            const jenisKopi = document.getElementById('jenis_kopi');
+
+            if (namaProduk && jenisKopi) {
+                namaProduk.addEventListener('change', function() {
+                    if (this.value !== '') {
+                        // Set jenis kopi ke Liberica
+                        jenisKopi.value = 'Liberica';
+                    } else {
+                        // Reset ke default jika tidak ada pilihan
+                        jenisKopi.value = '';
+                    }
+                });
+            }
+        });
+
+        // ============================================
+        // AUTO FILL PROSES PENGOLAHAN
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const namaProduk = document.getElementById('nama_produk');
+            const proses = document.getElementById('proses');
+
+            if (namaProduk && proses) {
+                namaProduk.addEventListener('change', function() {
+                    const value = this.value;
+                    switch(value) {
+                        case 'Ceri':
+                            proses.value = 'Tanpa Proses';
+                            break;
+                        case 'Biji Kopi':
+                            proses.value = 'Pencucian, Pengupasan, Penjemuran';
+                            break;
+                        case 'Kopi Bubuk':
+                            proses.value = 'Pencucian, Pengupasan, Penjemuran, Penggilingan, Pengemasan';
+                            break;
+                        default:
+                            proses.value = '';
+                    }
+                });
+            }
+        });
+
+        // ============================================
+        // AUTO FILL HARGA BERDASARKAN NAMA PRODUK
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const namaProduk = document.getElementById('nama_produk');
+            const harga = document.getElementById('harga');
+
+            if (namaProduk && harga) {
+                namaProduk.addEventListener('change', function() {
+                    const value = this.value;
+                    switch(value) {
+                        case 'Ceri':
+                            harga.value = 7000;
+                            break;
+                        case 'Biji Kopi':
+                            harga.value = 70000;
+                            break;
+                        case 'Kopi Bubuk':
+                            harga.value = 120000;
+                            break;
+                        default:
+                            harga.value = '';
+                    }
+                });
+            }
+        });
+
         // ============================================
         // 1. SIDEBAR TOGGLE
         // ============================================
@@ -1184,19 +1285,19 @@
             });
         });
 
-        console.log('✅ Dashboard Petani siap digunakan!');
+        console.log('✅ Tambah Produk Admin siap digunakan!');
         console.log('📋 Fitur yang tersedia:');
-        console.log('   - KPI Cards (M11-F01)');
-        console.log('   - Grafik Panen (M11-F01)');
-        console.log('   - Produk Terjual (M11-F01)');
-        console.log('   - Pesanan Masuk (M11-F01)');
-        console.log('   - Peringatan Stok (M11-F01)');
-        console.log('   - Jadwal Panen (M11-F01)');
-        console.log('   - Quick Action (M11-F04)');
-        console.log('   - Notifikasi Real-time (M11-F01)');
-        console.log('   - Setting Notifikasi (M11-F03)');
+        console.log('   - Nama Produk (dropdown: Ceri, Biji Kopi, Kopi Bubuk)');
+        console.log('   - Jenis Kopi (Liberica)');
+        console.log('   - Proses Pengolahan (auto-fill)');
+        console.log('   - Harga (auto-fill)');
+        console.log('   - Altitude (opsional)');
+        console.log('   - Status (wajib)');
+        console.log('   - Foto (opsional)');
+        console.log('   - Auto set Jenis Kopi ke Liberica saat pilih Nama Produk');
+        console.log('   - Auto fill Proses Pengolahan berdasarkan Nama Produk');
+        console.log('   - Auto fill Harga berdasarkan Nama Produk');
     </script>
 </body>
 
 </html>
-
