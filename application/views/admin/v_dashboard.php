@@ -1297,7 +1297,7 @@
 			</div>
 			<div class="col-lg-2 col-md-4 col-6 mb-2">
 				<a href="<?= base_url('admin/kurir/assign'); ?>" class="quick-action-btn">
-					<i class="bi bi-truck"></i> Assign Kurir
+					<i class="bi bi-truck"></i> Tugaskan Kurir
 				</a>
 			</div>
 			<div class="col-lg-2 col-md-4 col-6 mb-2">
