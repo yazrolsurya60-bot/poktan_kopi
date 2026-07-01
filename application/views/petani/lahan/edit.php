@@ -47,6 +47,7 @@
                 <input type="hidden" name="id_lahan" value="<?= htmlspecialchars($lahan['id_lahan']) ?>">
 
                 <div class="row g-4">
+                    <!-- KOLOM KIRI -->
                     <div class="col-lg-6">
                         <div class="mb-3">
                             <label class="form-label-custom">Nama Lahan</label>
@@ -64,24 +65,27 @@
                                     Liberika</option>
                             </select>
                         </div>
-                        <!-- REVISI: Input Manual Jenis Tanah (Mengambil data lama dari DB) -->
+
                         <div class="mb-3">
                             <label class="form-label-custom">Jenis Tanah</label>
                             <input type="text" name="jenis_tanah" class="form-control form-control-custom"
                                 value="<?= isset($lahan['jenis_tanah']) ? htmlspecialchars($lahan['jenis_tanah']) : '' ?>"
                                 placeholder="Contoh: Gambut, Aluvial, Podsolik" required>
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label-custom">Luas Lahan (Ha)</label>
                             <input type="number" step="0.01" name="luas" class="form-control form-control-custom"
                                 value="<?= htmlspecialchars($lahan['luas']) ?>" required>
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label-custom">Foto Lahan (Kosongkan jika tidak ganti)</label>
                             <input type="file" name="foto_lahan" class="form-control form-control-custom">
                             <small class="text-muted">File saat ini:
-                                <?= htmlspecialchars($lahan['foto_lahan']) ?></small>
+                                <?= htmlspecialchars($lahan['foto_lahan'] ?: 'Tidak ada foto') ?></small>
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label-custom">Status</label>
                             <select name="status_lahan" class="form-select form-control-custom" required>
@@ -91,8 +95,16 @@
                                     <?= ($lahan['status_lahan'] == 'Inactive') ? 'selected' : '' ?>>Inactive</option>
                             </select>
                         </div>
+
+                        <!-- INPUT CATATAN (Diletakkan di bawah status sesuai form tambah) -->
+                        <div class="mb-3">
+                            <label class="form-label-custom">Catatan</label>
+                            <textarea name="catatan" class="form-control form-control-custom" rows="3"
+                                placeholder="Masukkan catatan tambahan"><?= isset($lahan['catatan']) ? htmlspecialchars($lahan['catatan']) : '' ?></textarea>
+                        </div>
                     </div>
 
+                    <!-- KOLOM KANAN -->
                     <div class="col-lg-6">
                         <div class="mb-3">
                             <label class="form-label-custom">Lokasi / Alamat</label>
@@ -115,9 +127,12 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="d-flex justify-content-end gap-3 mt-4">
-                    <a href="<?= base_url('petani/lahan') ?>" class="btn btn-light">Batal</a>
-                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    <a href="<?= base_url('petani/lahan') ?>" class="btn btn-light"
+                        style="border-radius: 10px; padding: 10px 20px;">Batal</a>
+                    <button type="submit" class="btn btn-primary"
+                        style="border-radius: 10px; padding: 10px 20px;">Simpan Perubahan</button>
                 </div>
             </form>
         </div>
@@ -126,7 +141,6 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Ambil koordinat dari database, gunakan koordinat default jika kosong
         var lat = <?= !empty($lahan['latitude']) ? $lahan['latitude'] : -2.5489 ?>;
         var lng = <?= !empty($lahan['longitude']) ? $lahan['longitude'] : 118.0149 ?>;
 
@@ -144,7 +158,6 @@
             document.getElementById('lng').value = e.latlng.lng;
         });
 
-        // FORCE RENDER: Memastikan peta tidak kosong saat muncul
         setTimeout(function() {
             map.invalidateSize();
         }, 300);
