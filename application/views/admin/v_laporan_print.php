@@ -6,8 +6,7 @@
     <style>
         @page { size: A4 portrait; margin: 15mm 15mm 15mm 15mm; }
         body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 10pt; color: #333; margin: 0; padding: 0; background: #fff; }
-        .kop-surat { display: flex; align-items: center; border-bottom: 3px solid #2C1808; padding-bottom: 15px; margin-bottom: 20px; }
-        .kop-icon { width: 60px; height: 60px; background: linear-gradient(135deg, #4A2C11, #8B4513); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-right: 15px; flex-shrink: 0; }
+        .kop-surat { display: flex; align-items: center; border-bottom: 3px solid #2C1808; padding-bottom: 15px; margin-bottom: 20px; flex-direction: column; text-align: center; justify-content: center; }
         .kop-text h1 { margin: 0 0 5px 0; font-size: 18pt; color: #2C1808; text-transform: uppercase; }
         .kop-text p { margin: 0; font-size: 10pt; color: #555; }
         .doc-title { text-align: center; margin-bottom: 20px; }
@@ -40,7 +39,6 @@
 
     <!-- KOP SURAT DINAMIS PER POKTAN -->
     <div class="kop-surat">
-        <div class="kop-icon">☕</div>
         <div class="kop-text">
             <h1><?= htmlspecialchars($poktan_info['nama']); ?></h1>
             <p><?= htmlspecialchars($poktan_info['alamat']); ?></p>
