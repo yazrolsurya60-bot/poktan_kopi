@@ -317,6 +317,7 @@
 				opacity: 0;
 				transform: translateY(-10px);
 			}
+
 			to {
 				opacity: 1;
 				transform: translateY(0);
@@ -989,6 +990,55 @@
 			background: rgba(230, 161, 92, 0.3);
 			border-radius: 10px;
 		}
+
+		/* ============================================ */
+		/* 🔔 NOTIFIKASI ANIMASI */
+		/* ============================================ */
+
+		@keyframes notifPulse {
+
+			0%,
+			100% {
+				transform: scale(1);
+			}
+
+			30% {
+				transform: scale(1.5);
+				background: #EF4444;
+			}
+
+			60% {
+				transform: scale(0.9);
+			}
+		}
+
+		@keyframes bellRing {
+
+			0%,
+			100% {
+				transform: rotate(0);
+			}
+
+			25% {
+				transform: rotate(10deg);
+			}
+
+			50% {
+				transform: rotate(-10deg);
+			}
+
+			75% {
+				transform: rotate(5deg);
+			}
+		}
+
+		.notif-dot.pulse {
+			animation: notifPulse 0.6s ease 3;
+		}
+
+		.notif-btn.ring {
+			animation: bellRing 0.5s ease 1;
+		}
 	</style>
 </head>
 
@@ -1552,7 +1602,7 @@
 								<button type="submit" class="btn" style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
 									<i class="bi bi-save mr-1"></i> Simpan Pengaturan
 								</button>
-								
+
 							</div>
 						</form>
 					</div>
@@ -1830,9 +1880,9 @@
 					} else {
 						// Kembalikan ke posisi semula jika gagal
 						this.checked = !this.checked;
-							showToast('❌ Gagal memperbarui pengaturan', 'error');
-						}
-					}.bind(this),
+						showToast('❌ Gagal memperbarui pengaturan', 'error');
+					}
+				}.bind(this),
 				error: function() {
 					if (label) {
 						label.style.opacity = '1';

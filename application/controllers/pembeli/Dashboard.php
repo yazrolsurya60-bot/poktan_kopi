@@ -27,22 +27,16 @@ class Dashboard extends CI_Controller
 
 		$current_role = $this->session->userdata('role');
 
-		// Jika role bukan Pembeli, redirect ke dashboard yang sesuai
 		if ($current_role != 'Pembeli') {
 			if ($current_role == 'Admin') {
 				redirect('admin/dashboard');
 			} elseif ($current_role == 'Petani') {
 				redirect('petani/dashboard');
 			} else {
-				// Jika role tidak dikenal, logout dan redirect ke login
 				$this->session->sess_destroy();
 				redirect('auth/login');
 			}
 		}
-
-		// ============================================
-		// 🔴 LOAD MODEL
-		// ============================================
 
 		$this->load->model('Notifikasi_model');
 	}
@@ -53,12 +47,14 @@ class Dashboard extends CI_Controller
 
 	public function index()
 	{
-		// Ambil id_user dari session (dari Modul 1)
 		$id_user = $this->session->userdata('id_user');
 
-		// Data Notifikasi (M11-F01)
+		// ============================================
+		// 🔴 NOTIFIKASI + ROLE UNTUK SOUND
+		// ============================================
 		$data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
 		$data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+		$data['role'] = 'Pembeli'; // 🔴 UNTUK SOUND
 
 		// Data KPI Pembeli
 		$kpi = $this->Notifikasi_model->get_pembeli_kpi($id_user);
@@ -67,7 +63,6 @@ class Dashboard extends CI_Controller
 		$data['kpi_pesanan_dikirim'] = $kpi['pesanan_dikirim'] ?? 0;
 
 		// Data Pesanan Terbaru
-		// 🔴 NOTE: Karena tb_transaksi belum punya id_user, tampilkan semua
 		$data['pesanan_terbaru'] = $this->db->order_by('id_transaksi', 'DESC')
 			->limit(5)
 			->get('tb_transaksi')
@@ -94,6 +89,7 @@ class Dashboard extends CI_Controller
 		$data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
 		$data['history'] = $this->Notifikasi_model->get_all_notif($id_user);
 		$data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+		$data['role'] = 'Pembeli';
 
 		$this->load->view('template/v_notif_history', $data);
 	}
@@ -107,7 +103,6 @@ class Dashboard extends CI_Controller
 		$id_user = $this->session->userdata('id_user');
 
 		if ($this->input->post()) {
-			// 🔴 Pastikan nama field sama dengan di form
 			$this->Notifikasi_model->update_settings($id_user, [
 				'notif_pesanan' => $this->input->post('notif_pesanan') ? 1 : 0,
 				'notif_kurir' => $this->input->post('notif_kurir') ? 1 : 0,
@@ -123,6 +118,7 @@ class Dashboard extends CI_Controller
 		$data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
 		$data['settings'] = $this->Notifikasi_model->get_settings($id_user);
 		$data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+		$data['role'] = 'Pembeli';
 
 		$this->load->view('template/v_notif_setting', $data);
 	}
@@ -135,6 +131,12 @@ class Dashboard extends CI_Controller
 	{
 		$id_user = $this->session->userdata('id_user');
 		$this->Notifikasi_model->mark_as_read($id_notif, $id_user);
+		
+		$redirect = $this->input->get('redirect');
+		if (!empty($redirect)) {
+			redirect($redirect);
+		}
+		
 		redirect('pembeli/dashboard/history');
 	}
 
@@ -146,6 +148,65 @@ class Dashboard extends CI_Controller
 	{
 		$id_user = $this->session->userdata('id_user');
 		$this->Notifikasi_model->mark_all_read($id_user);
-		redirect($this->session->userdata('role') . '/dashboard/history');
+		
+		if ($this->input->is_ajax_request()) {
+			echo json_encode(['success' => true]);
+			return;
+		}
+		
+		redirect('pembeli/dashboard/history');
+	}
+
+	// ============================================
+	// 🔴 AJAX - GET NOTIFIKASI (UNTUK SOUND)
+	// ============================================
+	public function get_notifications_ajax()
+	{
+		if (!$this->input->is_ajax_request()) {
+			show_404();
+		}
+
+		$id_user = $this->session->userdata('id_user');
+		$notifikasi = $this->Notifikasi_model->get_unread_notif($id_user, 5);
+		$unread = $this->Notifikasi_model->count_unread($id_user);
+
+		echo json_encode([
+			'success' => true,
+			'notifikasi' => $notifikasi,
+			'unread' => $unread
+		]);
+	}
+
+	// ============================================
+	// 🔴 AJAX - MARK ALL READ
+	// ============================================
+	public function mark_all_read_ajax()
+	{
+		if (!$this->input->is_ajax_request()) {
+			show_404();
+		}
+
+		$id_user = $this->session->userdata('id_user');
+		$result = $this->Notifikasi_model->mark_all_read($id_user);
+
+		echo json_encode(['success' => $result]);
+	}
+
+	// ============================================
+	// 🔴 AJAX - GET CHART DATA
+	// ============================================
+	public function get_chart_data()
+	{
+		if (!$this->input->is_ajax_request()) {
+			show_404();
+		}
+
+		$id_user = $this->session->userdata('id_user');
+		$data = $this->Notifikasi_model->get_shopping_chart($id_user);
+
+		echo json_encode([
+			'success' => true,
+			'values' => $data['values'] ?? array_fill(0, 12, 0)
+		]);
 	}
 }

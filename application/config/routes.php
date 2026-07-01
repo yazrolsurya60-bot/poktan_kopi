@@ -176,6 +176,10 @@ $route['verifikasi/cek'] = 'Verifikasi/cek';
 $route['pembeli/profil'] = 'pembeli/Profil/index';
 $route['pembeli/profil/update'] = 'pembeli/Profil/update';
 
+// Petani Kurir Assign
+$route['petani/kurir/assign'] = 'petani/Kurir/assign';
+$route['petani/kurir/proses_assign'] = 'petani/Kurir/proses_assign';
+
 // ============================================================
 // ADMIN KURIR (LENGKAP)
 // ============================================================
