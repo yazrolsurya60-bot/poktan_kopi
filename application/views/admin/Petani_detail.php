@@ -1086,74 +1086,9 @@ function get_doc_badge($status) {
         <h6 class="fw-bold mb-3">Dokumen Petani</h6>
         <div class="d-flex flex-column gap-3">
 
-            <!-- KTP -->
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="bi bi-person-vcard text-muted" style="font-size:1.4rem;"></i>
-                            <span class="fw-bold" style="font-size:0.85rem;">KTP</span>
-                        </div>
-                        <?= get_doc_badge(isset($petani['status_ktp']) ? $petani['status_ktp'] : 'Menunggu'); ?>
-                    </div>
-                    <?php if(!empty($petani['file_ktp'])): ?>
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-file-earmark-check text-success"></i>
-                            <small class="text-muted text-truncate" style="max-width:140px;"><?= $petani['file_ktp']; ?></small>
-                            <a href="<?= base_url('uploads/dokumen/'.$petani['file_ktp']); ?>" target="_blank" class="btn btn-sm rounded-2 ms-auto" style="background:#f0f0f0;color:#555;font-size:0.75rem;"><i class="bi bi-eye me-1"></i>Lihat</a>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <a href="<?= base_url('admin/petani/verifikasi_dokumen/'.$petani['id_petani'].'/status_ktp/Terverifikasi'); ?>" onclick="return confirm('Approve KTP?')" class="btn btn-sm w-50 fw-bold text-white rounded-2" style="background:#4CAF50;font-size:0.75rem;"><i class="bi bi-check-lg me-1"></i>Approve</a>
-                            <a href="<?= base_url('admin/petani/verifikasi_dokumen/'.$petani['id_petani'].'/status_ktp/Ditolak'); ?>" onclick="return confirm('Reject KTP?')" class="btn btn-sm w-50 fw-bold text-white rounded-2" style="background:#F44336;font-size:0.75rem;"><i class="bi bi-x-lg me-1"></i>Reject</a>
-                        </div>
-                    <?php else: ?>
-                        <form action="<?= base_url('admin/petani/upload_dokumen/'.$petani['id_petani']); ?>" method="POST" enctype="multipart/form-data">
-                            <input type="hidden" name="jenis_dokumen" value="file_ktp">
-                            <div class="d-flex gap-2 align-items-center">
-                                <input type="file" name="file_dokumen" class="form-control form-control-sm rounded-2" accept=".jpg,.jpeg,.png,.pdf" required style="font-size:0.75rem;">
-                                <button type="submit" class="btn btn-sm text-white rounded-2 fw-bold" style="background:#6d4c41;white-space:nowrap;font-size:0.75rem;"><i class="bi bi-upload me-1"></i>Upload</button>
-                            </div>
-                        </form>
-                    <?php endif; ?>
-                </div>
-            </div>
-
-            <!-- NPWP -->
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="bi bi-card-heading text-muted" style="font-size:1.4rem;"></i>
-                            <span class="fw-bold" style="font-size:0.85rem;">NPWP</span>
-                        </div>
-                        <?= get_doc_badge(isset($petani['status_npwp']) ? $petani['status_npwp'] : 'Menunggu'); ?>
-                    </div>
-                    <?php if(!empty($petani['file_npwp'])): ?>
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-file-earmark-check text-success"></i>
-                            <small class="text-muted text-truncate" style="max-width:140px;"><?= $petani['file_npwp']; ?></small>
-                            <a href="<?= base_url('uploads/dokumen/'.$petani['file_npwp']); ?>" target="_blank" class="btn btn-sm rounded-2 ms-auto" style="background:#f0f0f0;color:#555;font-size:0.75rem;"><i class="bi bi-eye me-1"></i>Lihat</a>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <a href="<?= base_url('admin/petani/verifikasi_dokumen/'.$petani['id_petani'].'/status_npwp/Terverifikasi'); ?>" onclick="return confirm('Approve NPWP?')" class="btn btn-sm w-50 fw-bold text-white rounded-2" style="background:#4CAF50;font-size:0.75rem;"><i class="bi bi-check-lg me-1"></i>Approve</a>
-                            <a href="<?= base_url('admin/petani/verifikasi_dokumen/'.$petani['id_petani'].'/status_npwp/Ditolak'); ?>" onclick="return confirm('Reject NPWP?')" class="btn btn-sm w-50 fw-bold text-white rounded-2" style="background:#F44336;font-size:0.75rem;"><i class="bi bi-x-lg me-1"></i>Reject</a>
-                        </div>
-                    <?php else: ?>
-                        <form action="<?= base_url('admin/petani/upload_dokumen/'.$petani['id_petani']); ?>" method="POST" enctype="multipart/form-data">
-                            <input type="hidden" name="jenis_dokumen" value="file_npwp">
-                            <div class="d-flex gap-2 align-items-center">
-                                <input type="file" name="file_dokumen" class="form-control form-control-sm rounded-2" accept=".jpg,.jpeg,.png,.pdf" required style="font-size:0.75rem;">
-                                <button type="submit" class="btn btn-sm text-white rounded-2 fw-bold" style="background:#6d4c41;white-space:nowrap;font-size:0.75rem;"><i class="bi bi-upload me-1"></i>Upload</button>
-                            </div>
-                        </form>
-                    <?php endif; ?>
-                </div>
-            </div>
-
             <!-- Sertifikat -->
             <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
+                <div class="card-body p-3">                    <div class="d-flex align-items-center justify-content-between mb-2">
                         <div class="d-flex align-items-center gap-2">
                             <i class="bi bi-patch-check text-muted" style="font-size:1.4rem;"></i>
                             <span class="fw-bold" style="font-size:0.85rem;">Sertifikat</span>
@@ -1511,4 +1446,3 @@ function get_doc_badge($status) {
 </body>
 
 </html>
-
