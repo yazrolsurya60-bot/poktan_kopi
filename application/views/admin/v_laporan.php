@@ -968,9 +968,27 @@
 				<a href="<?= base_url('admin/laporan/export_excel?tab=penjualan'); ?>" id="btnExcelHeader" class="btn-export-excel" target="_blank">
 					<i class="bi bi-file-earmark-excel-fill"></i> Export Excel
 				</a>
-				<a href="<?= base_url('admin/laporan/print_pdf?tab=penjualan'); ?>" id="btnPdfHeader" class="btn-print-pdf" target="_blank">
-					<i class="bi bi-printer-fill"></i> Cetak PDF
-				</a>
+				<!-- Dropdown Pilih Poktan untuk Cetak PDF -->
+				<div class="dropdown" id="dropdownPdfWrap">
+					<button class="btn-print-pdf dropdown-toggle" type="button" id="dropdownPdfBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="cursor:pointer;">
+						<i class="bi bi-printer-fill"></i> Cetak PDF
+					</button>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownPdfBtn" style="min-width:230px; border-radius:10px; box-shadow:0 8px 24px rgba(44,24,8,0.15); border:none; padding:8px;">
+						<div style="font-size:0.72rem; font-weight:700; color:#70655E; text-transform:uppercase; letter-spacing:0.5px; padding:4px 12px 8px;">Pilih Kelompok Tani</div>
+						<a class="dropdown-item pdf-poktan-link" href="#" data-poktan="1"
+						   style="border-radius:8px; font-size:0.83rem; padding:8px 12px;">
+							<i class="bi bi-geo-alt-fill mr-1" style="color:#8B4513;"></i>
+							<b>Kel. Tani Harum Manis</b><br>
+							<small style="color:#888; margin-left:18px;">Desa Sempadian, Tekarang</small>
+						</a>
+						<a class="dropdown-item pdf-poktan-link" href="#" data-poktan="2"
+						   style="border-radius:8px; font-size:0.83rem; padding:8px 12px; margin-top:4px;">
+							<i class="bi bi-geo-alt-fill mr-1" style="color:#8B4513;"></i>
+							<b>Kel. Tani Batu Layar Sejahtera</b><br>
+							<small style="color:#888; margin-left:18px;">Desa Sendoyan, Sejangkung</small>
+						</a>
+					</div>
+				</div>
 
 				<!-- NOTIFICATION BELL -->
 				<div style="position: relative;">
@@ -1842,9 +1860,23 @@
 			link.addEventListener('shown.bs.tab', (e) => {
 				const tabName = e.target.getAttribute('data-tab') || 'penjualan';
 				const btnExcel = document.getElementById('btnExcelHeader');
-				const btnPdf = document.getElementById('btnPdfHeader');
 				if (btnExcel) btnExcel.href = '<?= base_url('admin/laporan/export_excel'); ?>?tab=' + tabName;
-				if (btnPdf) btnPdf.href = '<?= base_url('admin/laporan/print_pdf'); ?>?tab=' + tabName;
+				// Simpan tab aktif untuk dropdown PDF
+				document.querySelectorAll('.pdf-poktan-link').forEach(function(el) {
+					el.setAttribute('data-tab', tabName);
+				});
+			});
+		});
+
+		// Handler dropdown poktan PDF
+		document.querySelectorAll('.pdf-poktan-link').forEach(function(el) {
+			el.setAttribute('data-tab', 'penjualan'); // default tab
+			el.addEventListener('click', function(e) {
+				e.preventDefault();
+				const poktan = this.getAttribute('data-poktan');
+				const tab    = this.getAttribute('data-tab') || 'penjualan';
+				const url    = '<?= base_url('admin/laporan/print_pdf'); ?>?tab=' + tab + '&poktan=' + poktan;
+				window.open(url, '_blank');
 			});
 		});
 

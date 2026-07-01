@@ -82,6 +82,8 @@ $route['admin/user'] = 'admin/Users/index';
 $route['admin/user/add'] = 'admin/Users/add';
 $route['admin/user/edit/(:num)'] = 'admin/Users/edit/$1';
 $route['admin/user/delete/(:num)'] = 'admin/Users/delete/$1';
+$route['admin/user/deactivate/(:num)'] = 'admin/Users/deactivate/$1';
+$route['admin/user/activate/(:num)'] = 'admin/Users/activate/$1';
 $route['admin/user/toggle/(:num)'] = 'admin/Users/toggle/$1';
 
 // ============================================
@@ -174,7 +176,9 @@ $route['verifikasi/cek'] = 'Verifikasi/cek';
 $route['pembeli/profil'] = 'pembeli/Profil/index';
 $route['pembeli/profil/update'] = 'pembeli/Profil/update';
 
-// Admin Kurir
+// ============================================================
+// ADMIN KURIR (LENGKAP)
+// ============================================================
 $route['admin/kurir'] = 'admin/Kurir/index';
 $route['admin/kurir/tambah'] = 'admin/Kurir/tambah';
 $route['admin/kurir/edit/(:num)'] = 'admin/Kurir/edit/$1';
@@ -185,6 +189,8 @@ $route['admin/kurir/performance'] = 'admin/Kurir/performance';
 $route['admin/kurir/assign'] = 'admin/Kurir/assign';
 $route['admin/kurir/proses_assign'] = 'admin/Kurir/proses_assign';
 
-// Petani Kurir Assign
+// ============================================================
+// PETANI KURIR ASSIGN
+// ============================================================
 $route['petani/kurir/assign'] = 'petani/Kurir/assign';
 $route['petani/kurir/proses_assign'] = 'petani/Kurir/proses_assign';

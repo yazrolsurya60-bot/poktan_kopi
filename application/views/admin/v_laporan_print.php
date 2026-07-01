@@ -6,8 +6,7 @@
     <style>
         @page { size: A4 portrait; margin: 15mm 15mm 15mm 15mm; }
         body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 10pt; color: #333; margin: 0; padding: 0; background: #fff; }
-        .kop-surat { display: flex; align-items: center; border-bottom: 3px solid #2C1808; padding-bottom: 15px; margin-bottom: 20px; }
-        .kop-logo { width: 60px; height: 60px; background: #E6A15C; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 30px; font-weight: bold; margin-right: 15px; }
+        .kop-surat { display: flex; align-items: center; border-bottom: 3px solid #2C1808; padding-bottom: 15px; margin-bottom: 20px; flex-direction: column; text-align: center; justify-content: center; }
         .kop-text h1 { margin: 0 0 5px 0; font-size: 18pt; color: #2C1808; text-transform: uppercase; }
         .kop-text p { margin: 0; font-size: 10pt; color: #555; }
         .doc-title { text-align: center; margin-bottom: 20px; }
@@ -38,12 +37,12 @@
 </head>
 <body onload="window.print()">
 
+    <!-- KOP SURAT DINAMIS PER POKTAN -->
     <div class="kop-surat">
-        <div class="kop-logo">P</div>
         <div class="kop-text">
-            <h1>Poktan Liberchain</h1>
-            <p>Sistem Manajemen Supply Chain Kopi Terpadu</p>
-            <p>Jl. Perkebunan Kopi No. 123, Kabupaten Kopi, Indonesia</p>
+            <h1><?= htmlspecialchars($poktan_info['nama']); ?></h1>
+            <p><?= htmlspecialchars($poktan_info['alamat']); ?></p>
+            <p style="font-size:8pt; color:#888;">Laporan <?= strtoupper($tab); ?> &mdash; <?= $tanggal; ?></p>
         </div>
     </div>
 
@@ -117,15 +116,17 @@
                         if ($s_raw == 'dibatalkan') $bg = 'bg-red';
                         if ($s_raw == 'diproses') $bg = 'bg-blue';
                     ?>
-                    <tr><td><?= $i+1; ?></td><td><b><?= htmlspecialchars($r['id_transaksi'] ?? ('TRX-'.($i+1))); ?></b></td><td><?= htmlspecialchars($r['nama_pembeli'] ?? '-'); ?></td><td><?= htmlspecialchars($r['nama_produk'] ?? '-'); ?></td><td class="num"><?= number_format($r['jumlah_kg'] ?? 0, 0, ',', '.'); ?> Kg</td><td class="num">Rp <?= number_format($r['total_harga'] ?? 0, 0, ',', '.'); ?></td><td><span class="status-badge <?= $bg; ?>"><?= htmlspecialchars($r['status_pesanan']); ?></span></td><td><?= htmlspecialchars($r['metode_bayar']); ?></td><td><?= isset($r['tanggal']) ? date('d/m/Y', strtotime($r['tanggal'])) : '-'; ?></td></tr>
+                    <tr><td><?= $i+1; ?></td><td><b><?= htmlspecialchars($r['id_transaksi'] ?? ('TRX-'.($i+1))); ?></b></td><td><?= htmlspecialchars($r['nama_pembeli'] ?? '-'); ?></td><td><?= htmlspecialchars($r['nama_produk'] ?? '-'); ?></td><td class="num"><?= number_format($r['jumlah_kg'] ?? 0, 0, ',', '.'); ?> Kg</td><td class="num">Rp <?= number_format($r['total_harga'] ?? 0, 0, ',', '.'); ?></td><td><span class="status-badge <?= $bg; ?>"><?= htmlspecialchars($r['status_pesanan']); ?></span></td><td><?= htmlspecialchars($r['metode_bayar'] ?? '-'); ?></td><td><?= isset($r['tanggal_transaksi']) ? date('d/m/Y', strtotime($r['tanggal_transaksi'])) : (isset($r['tanggal']) ? date('d/m/Y', strtotime($r['tanggal'])) : '-'); ?></td></tr>
                 <?php endforeach; ?>
             </tbody>
         <?php endif; ?>
     </table>
 
     <div class="ttd-section">
-        Mengetahui,<br>Admin Sistem Poktan Liberchain
-        <div class="ttd-name"><?= $admin; ?></div>
+        <?= htmlspecialchars($poktan_info['lokasi']); ?>, <?= $tanggal; ?><br>
+        <?= htmlspecialchars($poktan_info['nama']); ?>
+        <div class="ttd-name">&nbsp;</div>
+        <div style="font-size:9pt; color:#555;">Pengurus Kelompok</div>
     </div>
 
     <div style="clear:both;"></div>

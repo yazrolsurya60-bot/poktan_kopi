@@ -563,6 +563,15 @@ class Auth extends CI_Controller
         }
     }
 
+    // Go back to registration form from OTP step, preserve form data
+    public function back_to_form()
+    {
+        // Keep register data but clear the OTP step so form shows again
+        $this->session->unset_userdata('register_step');
+        $this->session->set_flashdata('info', 'Data formulir masih tersimpan. Silakan periksa kembali.');
+        redirect('auth/register');
+    }
+
     public function logout()
     {
         $this->session->sess_destroy();
