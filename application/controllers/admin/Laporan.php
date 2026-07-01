@@ -96,11 +96,33 @@ class Laporan extends CI_Controller {
     }
 
     public function print_pdf() {
-        $tab = $this->input->get('tab') ?? 'penjualan';
+        $tab    = $this->input->get('tab') ?? 'penjualan';
+        $poktan = (int)($this->input->get('poktan') ?? 0); // 1 = Harum Manis, 2 = Batu Layar
 
-        $data['tab']     = $tab;
-        $data['tanggal'] = date('d F Y H:i');
-        $data['admin']   = $this->session->userdata('nama') ?? 'Admin';
+        // Tanggal realtime format Indonesia
+        $nm_bulan = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',
+                     7=>'Juli',8=>'Agustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
+        $nm_hari  = ['Sunday'=>'Minggu','Monday'=>'Senin','Tuesday'=>'Selasa',
+                     'Wednesday'=>'Rabu','Thursday'=>'Kamis','Friday'=>'Jumat','Saturday'=>'Sabtu'];
+        $data['tanggal'] = $nm_hari[date('l')] . ', ' . date('d') . ' ' . $nm_bulan[(int)date('m')] . ' ' . date('Y');
+        $data['jam']     = date('H:i') . ' WIB';
+
+        // Info Poktan
+        $poktan_list = [
+            0 => ['nama' => 'Poktan Liberchain', 'nama_singkat' => 'POKTAN LIBERCHAIN',
+                  'alamat' => 'Sistem Manajemen Supply Chain Kopi Terpadu', 'lokasi' => 'Sambas'],
+            1 => ['nama' => 'Kelompok Tani Harum Manis', 'nama_singkat' => 'KEL. TANI HARUM MANIS',
+                  'alamat' => 'Desa Sempadian, Kecamatan Tekarang, Kabupaten Sambas, Kalimantan Barat',
+                  'lokasi' => 'Sempadian, Tekarang'],
+            2 => ['nama' => 'Kelompok Tani Batu Layar Sejahtera', 'nama_singkat' => 'KEL. TANI BATU LAYAR SEJAHTERA',
+                  'alamat' => 'Desa Sendoyan, Kecamatan Sejangkung, Kabupaten Sambas, Kalimantan Barat',
+                  'lokasi' => 'Sendoyan, Sejangkung'],
+        ];
+        $data['poktan']      = $poktan;
+        $data['poktan_info'] = $poktan_list[$poktan] ?? $poktan_list[0];
+
+        $data['tab']   = $tab;
+        $data['admin'] = $this->session->userdata('nama') ?? 'Admin';
 
         switch ($tab) {
             case 'petani':   $data['rows'] = $this->Laporan_model->get_laporan_petani();   break;

@@ -165,17 +165,6 @@ $route['api/tracking/get'] = 'api/Tracking/get';
 $route['api/tracking/history'] = 'api/Tracking/history';
 $route['api/tracking/estimasi'] = 'api/Tracking/estimasi';
 
-// Admin Kurir
-$route['admin/kurir'] = 'admin/Kurir/index';
-$route['admin/kurir/tambah'] = 'admin/Kurir/tambah';
-$route['admin/kurir/edit/(:num)'] = 'admin/Kurir/edit/$1';
-$route['admin/kurir/hapus/(:num)'] = 'admin/Kurir/hapus/$1';
-$route['admin/kurir/toggle/(:num)'] = 'admin/Kurir/toggle/$1';
-$route['admin/kurir/assign'] = 'admin/Kurir/assign';
-$route['admin/kurir/proses_assign'] = 'admin/Kurir/proses_assign';
-$route['admin/kurir/detail/(:num)'] = 'admin/Kurir/detail/$1';
-$route['admin/kurir/performance'] = 'admin/Kurir/performance';
-
 // ============================================================
 // VERIFIKASI OTP (sebelum checkout)
 // ============================================================
@@ -187,13 +176,21 @@ $route['verifikasi/cek'] = 'Verifikasi/cek';
 $route['pembeli/profil'] = 'pembeli/Profil/index';
 $route['pembeli/profil/update'] = 'pembeli/Profil/update';
 
-// Admin
-$route['admin/kurir/toggle/(:num)']     = 'admin/Kurir/toggle/$1';
-$route['admin/kurir/detail/(:num)']     = 'admin/Kurir/detail/$1';
-$route['admin/kurir/performance']       = 'admin/Kurir/performance';
-$route['admin/kurir/assign']            = 'admin/Kurir/assign';
-$route['admin/kurir/proses_assign']     = 'admin/Kurir/proses_assign';
+// ============================================================
+// ADMIN KURIR (LENGKAP)
+// ============================================================
+$route['admin/kurir'] = 'admin/Kurir/index';
+$route['admin/kurir/tambah'] = 'admin/Kurir/tambah';
+$route['admin/kurir/edit/(:num)'] = 'admin/Kurir/edit/$1';
+$route['admin/kurir/hapus/(:num)'] = 'admin/Kurir/hapus/$1';
+$route['admin/kurir/toggle/(:num)'] = 'admin/Kurir/toggle/$1';
+$route['admin/kurir/detail/(:num)'] = 'admin/Kurir/detail/$1';
+$route['admin/kurir/performance'] = 'admin/Kurir/performance';
+$route['admin/kurir/assign'] = 'admin/Kurir/assign';
+$route['admin/kurir/proses_assign'] = 'admin/Kurir/proses_assign';
 
-// Petani
-$route['petani/kurir/assign']           = 'petani/Kurir/assign';
-$route['petani/kurir/proses_assign']    = 'petani/Kurir/proses_assign';
+// ============================================================
+// PETANI KURIR ASSIGN
+// ============================================================
+$route['petani/kurir/assign'] = 'petani/Kurir/assign';
+$route['petani/kurir/proses_assign'] = 'petani/Kurir/proses_assign';
