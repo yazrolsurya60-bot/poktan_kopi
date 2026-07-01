@@ -496,17 +496,6 @@
             border: 1px solid rgba(74, 44, 17, 0.06);
         }
 
-        .detail-description {
-            padding: 16px 20px;
-            background: var(--bg-cream);
-            border-radius: 10px;
-            border: 1px solid rgba(74, 44, 17, 0.06);
-            font-size: 0.95rem;
-            line-height: 1.7;
-            color: #4a3a2a;
-            min-height: 80px;
-        }
-
         /* ===== BUTTON ===== */
         .btn-back {
             background: var(--bg-cream);
@@ -836,11 +825,13 @@
                     <div class="col-lg-8">
                         <div class="row">
                             <div class="col-md-6">
+                                <!-- Nama Produk -->
                                 <div class="detail-group">
                                     <div class="detail-label">Nama Produk</div>
                                     <div class="detail-value"><?= isset($produk) ? $produk->nama_produk : '-'; ?></div>
                                 </div>
 
+                                <!-- Jenis Kopi -->
                                 <div class="detail-group">
                                     <div class="detail-label">Jenis Kopi</div>
                                     <div class="detail-value">
@@ -848,13 +839,13 @@
                                     </div>
                                 </div>
 
+                                <!-- Proses Pengolahan -->
                                 <div class="detail-group">
-                                    <div class="detail-label">Grade Kopi</div>
-                                    <div class="detail-value">
-                                        <span class="badge-info"><?= isset($produk) ? $produk->grade : '-'; ?></span>
-                                    </div>
+                                    <div class="detail-label">Proses Pengolahan</div>
+                                    <div class="detail-value"><?= (isset($produk) && !empty($produk->proses)) ? $produk->proses : '<span class="text-muted">-</span>'; ?></div>
                                 </div>
 
+                                <!-- Harga -->
                                 <div class="detail-group">
                                     <div class="detail-label">Harga per Kilogram</div>
                                     <div class="detail-value" style="color: var(--roasted-brown); font-weight: 700; font-size: 1.1rem;">
@@ -864,6 +855,7 @@
                             </div>
 
                             <div class="col-md-6">
+                                <!-- Stok -->
                                 <div class="detail-group">
                                     <div class="detail-label">Stok Tersedia</div>
                                     <div class="detail-value">
@@ -871,23 +863,26 @@
                                     </div>
                                 </div>
 
+                                <!-- Total = Harga × Stok -->
+                                <div class="detail-group">
+                                    <div class="detail-label">Total Pendapatan</div>
+                                    <div class="detail-value" style="color: var(--roasted-brown); font-weight: 700; font-size: 1.1rem;">
+                                        <?php
+                                        $harga = isset($produk) ? $produk->harga : 0;
+                                        $stok = isset($produk) ? $produk->stok_produk : 0;
+                                        $total = $harga * $stok;
+                                        echo 'Rp ' . number_format($total, 0, ',', '.');
+                                        ?>
+                                    </div>
+                                </div>
+
+                                <!-- Altitude -->
                                 <div class="detail-group">
                                     <div class="detail-label">Altitude (Ketinggian Tanam)</div>
                                     <div class="detail-value"><?= (isset($produk) && !empty($produk->altitude)) ? $produk->altitude : '<span class="text-muted">-</span>'; ?></div>
                                 </div>
 
-                                <div class="detail-group">
-                                    <div class="detail-label">Proses Pengolahan</div>
-                                    <div class="detail-value"><?= (isset($produk) && !empty($produk->proses)) ? $produk->proses : '<span class="text-muted">-</span>'; ?></div>
-                                </div>
-
-                                <div class="detail-group">
-                                    <div class="detail-label">Flavor Notes (Catatan Rasa)</div>
-                                    <div class="detail-value" style="font-style: italic;">
-                                        <?= (isset($produk) && !empty($produk->flavor_notes)) ? $produk->flavor_notes : '<span class="text-muted">-</span>'; ?>
-                                    </div>
-                                </div>
-
+                                <!-- Status -->
                                 <div class="detail-group">
                                     <div class="detail-label">Status Penjualan</div>
                                     <div class="detail-value">
@@ -896,22 +891,6 @@
                                         $status_class = (strtolower($status_text) == 'nonaktif') ? 'nonaktif' : 'aktif';
                                         ?>
                                         <span class="badge-status <?= $status_class; ?>"><?= $status_text; ?></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- DESKRIPSI (FULL WIDTH) -->
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <div class="detail-group">
-                                    <div class="detail-label">Deskripsi Produk</div>
-                                    <div class="detail-description">
-                                        <?php if (isset($produk) && !empty($produk->deskripsi)): ?>
-                                            <?= nl2br($produk->deskripsi); ?>
-                                        <?php else: ?>
-                                            <span class="text-muted">Tidak ada deskripsi.</span>
-                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -1005,7 +984,15 @@
         });
 
         console.log('✅ Detail Produk Petani siap digunakan!');
-        console.log('📋 Informasi produk dari database real-time');
+        console.log('📋 Informasi yang ditampilkan:');
+        console.log('   - Nama Produk');
+        console.log('   - Jenis Kopi');
+        console.log('   - Proses Pengolahan');
+        console.log('   - Harga');
+        console.log('   - Stok');
+        console.log('   - Total (Harga × Stok)');
+        console.log('   - Altitude');
+        console.log('   - Status');
     </script>
 </body>
 
