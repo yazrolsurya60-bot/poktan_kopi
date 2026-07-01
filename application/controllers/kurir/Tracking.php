@@ -13,6 +13,10 @@ class Tracking extends CI_Controller
             redirect('auth/login');
         }
 
+        if ($this->session->userdata('role') !== 'Kurir') {
+            show_error('Akses ditolak. Halaman ini hanya untuk Kurir.', 403);
+        }
+
         $this->load->model('Tracking_model');
         $this->load->model('Notifikasi_model');
         $this->load->helper('notifikasi');
@@ -35,7 +39,7 @@ class Tracking extends CI_Controller
         }
 
         $this->load->view('template/header', ['title' => 'Dashboard Kurir']);
-        $this->load->view('kurir/tracking_list', $data);
+        $this->load->view('kurir/tracking_dashboard', $data);
         $this->load->view('template/footer');
     }
 
@@ -133,5 +137,60 @@ class Tracking extends CI_Controller
         } else {
             echo json_encode(['success' => false, 'message' => 'Gagal update lokasi']);
         }
+    }
+
+    public function upload_bukti($id_tracking)
+    {
+        $tracking = $this->Tracking_model->get_tracking_by_id($id_tracking);
+        if (!$tracking) {
+            show_404();
+        }
+
+        if ($this->input->post()) {
+            $upload_path = './assets/uploads/bukti_pengiriman/';
+            if (!is_dir($upload_path)) {
+                mkdir($upload_path, 0755, TRUE);
+            }
+
+            $config['upload_path']   = $upload_path;
+            $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+            $config['max_size']      = 2048; // max 2MB
+            $config['encrypt_name']  = TRUE;
+
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('bukti_file')) {
+                $upload_data = $this->upload->data();
+                $file_name = $upload_data['file_name'];
+                $id_user = $this->session->userdata('id_user');
+
+                $result = $this->Tracking_model->upload_bukti($id_tracking, $file_name, $id_user);
+
+                if ($result) {
+                    // Send notification to buyer
+                    notifikasi_tracking(
+                        $tracking->pembeli_id,
+                        $tracking->invoice,
+                        'delivered',
+                        'Bukti pengiriman telah diunggah oleh kurir.'
+                    );
+
+                    $this->session->set_flashdata('success', 'Bukti pengiriman berhasil diunggah.');
+                    redirect('kurir/tracking');
+                } else {
+                    $this->session->set_flashdata('error', 'Gagal menyimpan bukti pengiriman ke database.');
+                }
+            } else {
+                $this->session->set_flashdata('error', $this->upload->display_errors());
+            }
+        }
+
+        $data['tracking'] = $tracking;
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($this->session->userdata('id_user'));
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($this->session->userdata('id_user'), 5);
+
+        $this->load->view('template/header', ['title' => 'Upload Bukti Pengiriman']);
+        $this->load->view('kurir/upload_bukti', $data);
+        $this->load->view('template/footer');
     }
 }

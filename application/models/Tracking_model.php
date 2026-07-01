@@ -210,7 +210,7 @@ class Tracking_model extends CI_Model {
      * Get tracking by status
      */
     public function get_tracking_by_status($status = null, $limit = null) {
-        $this->db->select('t.*, tr.invoice, u.nama as pembeli, k.nama_kurir');
+        $this->db->select('t.*, tr.invoice, u.nama as pembeli, k.nama_kurir, t.bukti_pengiriman');
         $this->db->from('tb_tracking t');
         $this->db->join('tb_transaksi tr', 'tr.id_transaksi = t.id_transaksi');
         $this->db->join('tb_user u', 'u.id_user = tr.id_user');
@@ -237,5 +237,33 @@ class Tracking_model extends CI_Model {
             'dibatalkan'        => ['label' => 'Dibatalkan', 'class' => 'cancelled', 'icon' => 'bi bi-x-circle']
         ];
         return isset($labels[$status]) ? $labels[$status] : ['label' => $status, 'class' => 'pending', 'icon' => 'bi bi-info-circle'];
+    }
+
+    /**
+     * M07-F09: Upload bukti pengiriman
+     */
+    public function upload_bukti($id_tracking, $file_name, $id_user) {
+        $data = [
+            'bukti_pengiriman' => $file_name,
+            'bukti_upload_at' => date('Y-m-d H:i:s'),
+            'bukti_upload_by' => $id_user,
+            'status_pengiriman' => 'delivered',
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+        $this->db->where('id_tracking', $id_tracking);
+        $result = $this->db->update('tb_tracking', $data);
+        if ($result) {
+            $this->save_history($id_tracking, 'delivered', 'Bukti pengiriman telah diunggah oleh kurir');
+        }
+        return $result;
+    }
+
+    /**
+     * M07-F09: Get bukti pengiriman
+     */
+    public function get_bukti($id_tracking) {
+        $this->db->select('bukti_pengiriman, bukti_upload_at, bukti_upload_by');
+        $this->db->where('id_tracking', $id_tracking);
+        return $this->db->get('tb_tracking')->row();
     }
 }

@@ -73,6 +73,36 @@
                     </div>
                     <?php endif; ?>
 
+                    <?php if (!empty($tracking->bukti_pengiriman)): ?>
+                    <div class="mb-4">
+                        <h5><i class="bi bi-file-earmark-check-fill"></i> Bukti Pengiriman</h5>
+                        <div class="bukti-card p-3">
+                            <?php 
+                            $ext = strtolower(pathinfo($tracking->bukti_pengiriman, PATHINFO_EXTENSION));
+                            if ($ext === 'pdf'): ?>
+                                <div class="text-center py-3">
+                                    <i class="bi bi-file-earmark-pdf-fill text-danger" style="font-size:3rem;"></i>
+                                    <p class="mb-2 text-muted small mt-1"><?= $tracking->bukti_pengiriman ?></p>
+                                    <a href="<?= base_url('assets/uploads/bukti_pengiriman/' . $tracking->bukti_pengiriman) ?>" target="_blank" class="btn btn-sm btn-outline-danger" style="border-radius:8px;">
+                                        <i class="bi bi-eye"></i> Lihat PDF
+                                    </a>
+                                </div>
+                            <?php else: ?>
+                                <div class="text-center">
+                                    <a href="<?= base_url('assets/uploads/bukti_pengiriman/' . $tracking->bukti_pengiriman) ?>" target="_blank">
+                                        <img src="<?= base_url('assets/uploads/bukti_pengiriman/' . $tracking->bukti_pengiriman) ?>" class="img-fluid img-thumbnail shadow-sm" style="max-height:220px; border-radius:10px;" alt="Bukti Pengiriman">
+                                    </a>
+                                </div>
+                            <?php endif; ?>
+                            <?php if (!empty($tracking->bukti_upload_at)): ?>
+                            <p class="mt-2 mb-0 text-muted small text-center">
+                                <i class="bi bi-clock"></i> Diupload: <?= date('d M Y H:i', strtotime($tracking->bukti_upload_at)) ?>
+                            </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
                     <div class="mb-4">
                         <h5><i class="bi bi-clock-history"></i> Riwayat Tracking</h5>
                         <div class="timeline">
@@ -137,6 +167,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-
 .timeline-marker.cancelled { background: #FEE2E2; box-shadow: 0 0 0 2px #FEE2E2; }
 .timeline-content { background: var(--card-white); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(74,44,17,0.06); transition: all 0.3s; }
 .timeline-content:hover { border-color: var(--amber-cream); box-shadow: 0 8px 30px rgba(44,24,8,0.08); }
+.bukti-card { background: #FAF6F0; border-radius: 12px; border: 1px solid rgba(74,44,17,0.08); }
 </style>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />

@@ -523,6 +523,12 @@ $base_url = base_url();
                     <a href="<?= base_url('petani/tracking'); ?>"><i class="bi bi-truck"></i>Tracking Kiriman</a>
                 </li>
 
+            <?php elseif ($role == 'Kurir'): ?>
+                <!-- ====== MENU KURIR ====== -->
+                <li class="menu-item <?= strpos(current_url(), 'kurir/tracking') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('kurir/tracking'); ?>"><i class="bi bi-truck"></i>Dashboard Kurir</a>
+                </li>
+
             <?php else: ?>
                 <!-- ====== MENU PEMBELI ====== -->
                 <li class="menu-item <?= current_url() == base_url('pembeli/dashboard') ? 'active' : '' ?>">

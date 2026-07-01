@@ -158,6 +158,7 @@ $route['petani/tracking/update/(:num)'] = 'petani/Tracking/update/$1';
 $route['kurir/tracking'] = 'kurir/Tracking/index';
 $route['kurir/tracking/update_location/(:num)'] = 'kurir/Tracking/update_location/$1';
 $route['kurir/tracking/api_update_location'] = 'kurir/Tracking/api_update_location';
+$route['kurir/tracking/upload_bukti/(:num)'] = 'kurir/Tracking/upload_bukti/$1';
 
 // API Tracking
 $route['api/tracking/get'] = 'api/Tracking/get';
