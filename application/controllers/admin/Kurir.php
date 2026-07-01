@@ -151,12 +151,9 @@ class Kurir extends CI_Controller
         redirect('admin/kurir');
     }
 
-<<<<<<< HEAD
     // ============================================
     // M08-F05: HAPUS KURIR (SOFT DELETE)
     // ============================================
-=======
->>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
     public function hapus($id_kurir = null)
     {
         $kurir = $this->Kurir_model->get_by_id($id_kurir);
@@ -205,7 +202,6 @@ class Kurir extends CI_Controller
     }
 
     // ============================================
-<<<<<<< HEAD
     // M08-F06: HALAMAN ASSIGN KURIR
     // ============================================
     public function assign()
@@ -219,39 +215,12 @@ class Kurir extends CI_Controller
         
         $data['pengiriman_pending'] = $this->Kurir_model->get_pengiriman_belum_assign();
         $data['kurir_aktif']        = $this->Kurir_model->get_kurir_aktif();
-=======
-    // 🔥 M08-F06: HALAMAN ASSIGN KURIR (PAKAI QUERY MANUAL)
-    // ============================================
-    public function assign()
-    {
-        // 🔥 Ambil transaksi yang belum ada kurir
-        $data['pengiriman_pending'] = $this->db->query("
-            SELECT t.*, u.nama as nama_pembeli 
-            FROM tb_transaksi t
-            LEFT JOIN tb_user u ON u.id_user = t.id_user
-            WHERE t.status_pesanan = 'Diproses' 
-            AND t.status_bayar = 'Lunas'
-            AND (t.id_kurir IS NULL OR t.id_kurir = 0)
-            ORDER BY t.tanggal_transaksi ASC
-        ")->result_array();
-
-        // 🔥 Ambil kurir aktif
-        $data['kurir_aktif'] = $this->db->query("
-            SELECT * FROM tb_kurir 
-            WHERE status = 'Active' 
-            AND deleted_at IS NULL
-        ")->result_array();
->>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
 
         $this->load->view('admin/kurir/assign', $data);
     }
 
     // ============================================
-<<<<<<< HEAD
-    // M08-F06: PROSES ASSIGN
-=======
     // 🔥 M08-F06: PROSES ASSIGN (PAKAI QUERY MANUAL)
->>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
     // ============================================
     public function proses_assign()
     {
@@ -295,23 +264,7 @@ class Kurir extends CI_Controller
                 'icon' => 'success'
             ]);
 
-<<<<<<< HEAD
-        if ($success) {
-            // 🔴 KIRIM NOTIFIKASI KE ADMIN
-            $this->load->helper('notifikasi');
-            send_notifikasi(
-                $this->session->userdata('id_user'),
-                'Admin',
-                '📦 Kurir Ditugaskan',
-                'Kurir ' . $kurir['nama_kurir'] . ' telah ditugaskan untuk pengiriman #' . $id_tracking . '.',
-                'success',
-                base_url('admin/kurir')
-            );
-            
-            $this->session->set_flashdata('success', 'Kurir berhasil ditugaskan untuk pengiriman ini.');
-=======
             $this->session->set_flashdata('success', '✅ Kurir berhasil ditugaskan untuk transaksi #' . $id_transaksi);
->>>>>>> 1a75ccd89b8fdaa88a4f782e68db1a702a40192c
         } else {
             $this->session->set_flashdata('error', '❌ Gagal menugaskan kurir. Mungkin transaksi sudah memiliki kurir.');
         }
