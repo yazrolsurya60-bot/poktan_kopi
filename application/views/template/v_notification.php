@@ -9,7 +9,7 @@ if (!isset($role)) {
 
 <!-- 🔔 AUDIO NOTIFIKASI -->
 <audio id="notifSound" preload="auto">
-    <source src="<?= base_url('assets/sounds/notifikasi.mav'); ?>" type="audio/mpeg">
+    <source src="<?= base_url('assets/sounds/notifikasi.wav'); ?>" type="audio/wav">
 </audio>
 
 <!-- NOTIFICATION BELL -->
