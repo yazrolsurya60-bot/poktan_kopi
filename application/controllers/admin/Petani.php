@@ -403,4 +403,67 @@ class Petani extends CI_Controller
 			redirect('admin/petani/export_page');
 		}
 	}
+
+	// ── 12. EXPORT PDF (method terpisah, format seragam dgn Laporan.php) ─
+	// Bisa diakses langsung via GET: admin/petani/export_pdf
+	public function export_pdf()
+	{
+		$data['daftar_petani'] = $this->Petani_model->get_daftar_petani();
+
+		$html = $this->load->view('admin/Petani_export_pdf', $data, true);
+
+		if (!class_exists('Dompdf\\Dompdf')) {
+			show_error(
+				'Library Dompdf belum terpasang. Jalankan <b>composer install</b> di root project '
+					. '(sudah terdaftar di composer.json) agar fitur Export PDF dapat menghasilkan file PDF.',
+				500,
+				'Library PDF Tidak Ditemukan'
+			);
+			return;
+		}
+
+		$dompdf = new \Dompdf\Dompdf();
+		$dompdf->setPaper('A4', 'portrait');
+		$dompdf->loadHtml($html);
+		$dompdf->render();
+
+		// Memaksa browser untuk mendownload file PDF asli (bukan sekadar menampilkan HTML)
+		$dompdf->stream('Data_Petani_' . date('Y-m-d') . '.pdf', ['Attachment' => true]);
+	}
+
+	// ── 13. EXPORT EXCEL (method terpisah, format seragam dgn Laporan.php) ─
+	// Bisa diakses langsung via GET: admin/petani/export_excel
+	public function export_excel()
+	{
+		$data['daftar_petani'] = $this->Petani_model->get_daftar_petani();
+
+		header("Content-type: application/vnd-ms-excel");
+		header("Content-Disposition: attachment; filename=Data_Petani_" . date('Y-m-d') . ".xls");
+		echo "<table border='1'>";
+		echo "<tr>
+                <th>No</th>
+                <th>Nama Petani</th>
+                <th>NIK</th>
+                <th>No HP</th>
+                <th>Email</th>
+                <th>Alamat</th>
+                <th>Status Petani</th>
+                <th>Tanggal Daftar</th>
+              </tr>";
+		$no = 1;
+		foreach ($data['daftar_petani'] as $p) {
+			echo "<tr>
+                    <td>{$no}</td>
+                    <td>{$p['nama_petani']}</td>
+                    <td>{$p['nik']}</td>
+                    <td>{$p['no_hp']}</td>
+                    <td>{$p['email']}</td>
+                    <td>{$p['alamat']}</td>
+                    <td>{$p['status_petani']}</td>
+                    <td>{$p['tanggal_daftar']}</td>
+                  </tr>";
+			$no++;
+		}
+		echo "</table>";
+	}
 }
