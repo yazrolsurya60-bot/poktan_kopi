@@ -41,9 +41,12 @@ class Petani extends CI_Controller
 		$inactive_count = 0;
 		$suspended_count = 0;
 		foreach ($semua as $p) {
-			if ($p['status_petani'] == 'Active') $active_count++;
-			else if ($p['status_petani'] == 'Inactive') $inactive_count++;
-			else if ($p['status_petani'] == 'Suspended') $suspended_count++;
+			if ($p['status_petani'] == 'Active')
+				$active_count++;
+			else if ($p['status_petani'] == 'Inactive')
+				$inactive_count++;
+			else if ($p['status_petani'] == 'Suspended')
+				$suspended_count++;
 		}
 		$data['total_petani'] = count($semua);
 		$data['active_count'] = $active_count;
@@ -90,10 +93,10 @@ class Petani extends CI_Controller
 	{
 		// 🔴 METHOD INI REDIRECT, TIDAK PERLU NOTIFIKASI
 		$this->form_validation->set_rules('nama_petani', 'Nama Petani', 'required|trim');
-		$this->form_validation->set_rules('nik',         'NIK',         'required|trim|numeric|exact_length[16]');
-		$this->form_validation->set_rules('no_hp',       'No HP',       'required|trim|numeric|min_length[9]|max_length[15]');
-		$this->form_validation->set_rules('alamat',      'Alamat',      'required|trim');
-		$this->form_validation->set_rules('wilayah[]',   'Wilayah',     'required');
+		$this->form_validation->set_rules('nik', 'NIK', 'required|trim|numeric|exact_length[16]');
+		$this->form_validation->set_rules('no_hp', 'No HP', 'required|trim|numeric|min_length[9]|max_length[15]');
+		$this->form_validation->set_rules('alamat', 'Alamat', 'required|trim');
+		$this->form_validation->set_rules('wilayah[]', 'Wilayah', 'required');
 
 		if ($this->form_validation->run() === FALSE) {
 			$id_user = $this->session->userdata('id_user');
@@ -109,14 +112,14 @@ class Petani extends CI_Controller
 		}
 
 		$data = [
-			'nama_petani'    => $this->input->post('nama_petani'),
-			'nik'            => $this->input->post('nik'),
-			'no_hp'          => $this->input->post('no_hp'),
-			'email'          => $this->input->post('email'),
-			'alamat'         => $this->input->post('alamat'),
-			'domisili'       => $this->input->post('domisili'),
-			'tanggal_lahir'  => $this->input->post('tanggal_lahir'),
-			'status_petani'  => $this->input->post('status') ?: 'Inactive',
+			'nama_petani' => $this->input->post('nama_petani'),
+			'nik' => $this->input->post('nik'),
+			'no_hp' => $this->input->post('no_hp'),
+			'email' => $this->input->post('email'),
+			'alamat' => $this->input->post('alamat'),
+			'domisili' => $this->input->post('domisili'),
+			'tanggal_lahir' => $this->input->post('tanggal_lahir'),
+			'status_petani' => $this->input->post('status') ?: 'Inactive',
 			'tanggal_daftar' => date('Y-m-d'),
 		];
 
@@ -125,9 +128,9 @@ class Petani extends CI_Controller
 		if (!is_dir($upload_path)) {
 			mkdir($upload_path, 0755, true);
 		}
-		$config['upload_path']   = $upload_path;
+		$config['upload_path'] = $upload_path;
 		$config['allowed_types'] = 'jpg|jpeg|png';
-		$config['max_size']      = 2048;
+		$config['max_size'] = 2048;
 		$this->upload->initialize($config);
 
 		if (!empty($_FILES['foto_profil']['name'])) {
@@ -170,11 +173,11 @@ class Petani extends CI_Controller
 	{
 		// 🔴 METHOD INI REDIRECT, TIDAK PERLU NOTIFIKASI
 		$data = [
-			'nama_petani'   => $this->input->post('nama_petani'),
-			'nik'           => $this->input->post('nik'),
-			'no_hp'         => $this->input->post('no_hp'),
-			'email'         => $this->input->post('email'),
-			'alamat'        => $this->input->post('alamat'),
+			'nama_petani' => $this->input->post('nama_petani'),
+			'nik' => $this->input->post('nik'),
+			'no_hp' => $this->input->post('no_hp'),
+			'email' => $this->input->post('email'),
+			'alamat' => $this->input->post('alamat'),
 			'status_petani' => $this->input->post('status'),
 		];
 
@@ -183,9 +186,9 @@ class Petani extends CI_Controller
 			mkdir($upload_path, 0755, true);
 		}
 
-		$config['upload_path']   = $upload_path;
+		$config['upload_path'] = $upload_path;
 		$config['allowed_types'] = 'jpg|jpeg|png|pdf';
-		$config['max_size']      = 2048;
+		$config['max_size'] = 2048;
 		$this->upload->initialize($config);
 
 		$fields = ['file_sertifikat', 'foto_profil'];
@@ -263,7 +266,7 @@ class Petani extends CI_Controller
 	public function verifikasi_dokumen($id, $jenis_dokumen, $status_baru = 'Terverifikasi')
 	{
 		// 🔴 METHOD INI REDIRECT, TIDAK PERLU NOTIFIKASI
-		$allowed_jenis  = ['status_sertifikat'];
+		$allowed_jenis = ['status_sertifikat'];
 		$allowed_status = ['Terverifikasi', 'Ditolak'];
 		if (in_array($jenis_dokumen, $allowed_jenis) && in_array($status_baru, $allowed_status)) {
 			$this->Petani_model->update_petani($id, [$jenis_dokumen => $status_baru]);
@@ -298,10 +301,10 @@ class Petani extends CI_Controller
 			mkdir($upload_path, 0755, true);
 		}
 
-		$config['upload_path']   = $upload_path;
+		$config['upload_path'] = $upload_path;
 		$config['allowed_types'] = 'jpg|jpeg|png|pdf';
-		$config['max_size']      = 5120;
-		$config['file_name']     = $jenis_dokumen . '_petani_' . $id . '_' . time();
+		$config['max_size'] = 5120;
+		$config['file_name'] = $jenis_dokumen . '_petani_' . $id . '_' . time();
 		$this->upload->initialize($config);
 
 		if ($this->upload->do_upload('file_dokumen')) {
@@ -310,7 +313,7 @@ class Petani extends CI_Controller
 			$status_key = 'status_' . str_replace('file_', '', $jenis_dokumen);
 			$this->Petani_model->update_petani($id, [
 				$jenis_dokumen => $file_name,
-				$status_key    => 'Menunggu'
+				$status_key => 'Menunggu'
 			]);
 			$this->session->set_flashdata('pesan', 'Dokumen berhasil diupload!');
 		} else {
@@ -379,26 +382,8 @@ class Petani extends CI_Controller
 			}
 			echo "</table>";
 		} else if ($format == 'pdf') {
-			// Render view ke string HTML dulu (bukan langsung di-echo ke browser)
-			$html = $this->load->view('admin/Petani_export_pdf', $data, true);
-
-			if (!class_exists('Dompdf\\Dompdf')) {
-				show_error(
-					'Library Dompdf belum terpasang. Jalankan <b>composer install</b> di root project '
-						. '(sudah terdaftar di composer.json) agar fitur Export PDF dapat menghasilkan file PDF.',
-					500,
-					'Library PDF Tidak Ditemukan'
-				);
-				return;
-			}
-
-			$dompdf = new \Dompdf\Dompdf();
-			$dompdf->setPaper('A4', 'portrait');
-			$dompdf->loadHtml($html);
-			$dompdf->render();
-
-			// Memaksa browser untuk mendownload file PDF asli (bukan sekadar menampilkan HTML)
-			$dompdf->stream('Data_Petani_' . date('Y-m-d') . '.pdf', ['Attachment' => true]);
+			// Tampilkan view dan gunakan fitur print dari browser
+			$this->load->view('admin/Petani_export_pdf', $data);
 		} else {
 			redirect('admin/petani/export_page');
 		}
@@ -410,25 +395,8 @@ class Petani extends CI_Controller
 	{
 		$data['daftar_petani'] = $this->Petani_model->get_daftar_petani();
 
-		$html = $this->load->view('admin/Petani_export_pdf', $data, true);
-
-		if (!class_exists('Dompdf\\Dompdf')) {
-			show_error(
-				'Library Dompdf belum terpasang. Jalankan <b>composer install</b> di root project '
-					. '(sudah terdaftar di composer.json) agar fitur Export PDF dapat menghasilkan file PDF.',
-				500,
-				'Library PDF Tidak Ditemukan'
-			);
-			return;
-		}
-
-		$dompdf = new \Dompdf\Dompdf();
-		$dompdf->setPaper('A4', 'portrait');
-		$dompdf->loadHtml($html);
-		$dompdf->render();
-
-		// Memaksa browser untuk mendownload file PDF asli (bukan sekadar menampilkan HTML)
-		$dompdf->stream('Data_Petani_' . date('Y-m-d') . '.pdf', ['Attachment' => true]);
+		// Tampilkan view dan gunakan fitur print dari browser
+		$this->load->view('admin/Petani_export_pdf', $data);
 	}
 
 	// ── 13. EXPORT EXCEL (method terpisah, format seragam dgn Laporan.php) ─
