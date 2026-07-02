@@ -209,10 +209,10 @@ class Notifikasi_model extends CI_Model
 		$this->db->where('id_user', $id_user);
 		$total_transaksi = $this->db->count_all_results('tb_transaksi');
 
-		$this->db->select_sum('total_harga');
+		$this->db->select_sum('grand_total');
 		$this->db->where('id_user', $id_user);
 		$query = $this->db->get('tb_transaksi');
-		$total_belanja = $query->row()->total_harga ?? 0;
+		$total_belanja = $query->row()->grand_total ?? 0;
 
 		$this->db->where('id_user', $id_user);
 		$this->db->where_in('status_pesanan', ['Diproses', 'Dikirim']);

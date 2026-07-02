@@ -164,7 +164,7 @@
             </li>
             <li class="menu-item">
                 <a href="<?= base_url('pembeli/tracking'); ?>">
-                    <i class="bi bi-geo-alt-fill"></i>Lacak Pengiriman
+                    <i class="bi bi-geo-alt-fill"></i>Status Pengiriman
                     <span class="menu-badge">2</span>
                 </a>
             </li>

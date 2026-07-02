@@ -19,6 +19,8 @@ class Dashboard extends CI_Controller
                 redirect('petani/dashboard');
             } elseif ($current_role == 'Pembeli') {
                 redirect('pembeli/dashboard');
+            } elseif ($current_role == 'Kurir') {
+                redirect('kurir/tracking');
             } else {
                 $this->session->sess_destroy();
                 redirect('auth/login');

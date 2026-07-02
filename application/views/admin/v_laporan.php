@@ -7,7 +7,8 @@
 	<title>Laporan & Analisis - Sistem Supply Chain Kopi</title>
 	<meta name="description" content="Dashboard laporan dan analisis sistem supply chain kopi Poktan Liberchain">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+		rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 	<style>
@@ -284,7 +285,7 @@
 			overflow-y: auto;
 		}
 
-		.notif-item-drop {
+		.notif-item {
 			padding: 12px 18px;
 			border-bottom: 1px solid rgba(74, 44, 17, 0.04);
 			display: flex;
@@ -296,13 +297,13 @@
 			color: inherit;
 		}
 
-		.notif-item-drop:hover {
+		.notif-item:hover {
 			background: var(--bg-cream);
 			text-decoration: none;
 			color: inherit;
 		}
 
-		.notif-item-drop .notif-icon {
+		.notif-item .notif-icon {
 			width: 36px;
 			height: 36px;
 			min-width: 36px;
@@ -313,24 +314,44 @@
 			font-size: 0.9rem;
 		}
 
-		.notif-icon.success {
+		.notif-item .notif-icon.success {
 			background: #D1FAE5;
 			color: #065F46;
 		}
 
-		.notif-icon.warning {
+		.notif-item .notif-icon.warning {
 			background: #FEF3C7;
 			color: #92400E;
 		}
 
-		.notif-icon.info {
+		.notif-item .notif-icon.info {
 			background: #DBEAFE;
 			color: #1E40AF;
 		}
 
-		.notif-icon.danger {
+		.notif-item .notif-icon.danger {
 			background: #FEE2E2;
 			color: #991B1B;
+		}
+
+		.notif-item .notif-text {
+			flex: 1;
+			font-size: 0.85rem;
+		}
+
+		.notif-item .notif-text .notif-time {
+			font-size: 0.7rem;
+			color: var(--text-secondary);
+			display: block;
+			margin-top: 2px;
+		}
+
+		.notif-item.unread {
+			background: rgba(230, 161, 92, 0.05);
+		}
+
+		.notif-item.unread .notif-text {
+			font-weight: 600;
 		}
 
 		/* --- KPI STAT BOX --- */
@@ -881,7 +902,79 @@
 </head>
 
 <body>
-	<?php $this->load->view('admin/layout/sidebar'); ?>
+	<!-- SIDEBAR OVERLAY -->
+	<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+	<!-- SIDEBAR -->
+	<div class="sidebar" id="sidebarMenu">
+		<div class="sidebar-brand">
+			<div class="brand-icon"><i class="bi bi-patch-check-fill"></i></div>
+			<span>POKTAN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
+		</div>
+		<div class="sidebar-menu-wrapper">
+			<ul class="sidebar-menu">
+				<li class="menu-item">
+					<a href="<?= base_url('admin/dashboard'); ?>">
+						<i class="bi bi-grid-1x2-fill"></i>Dashboard
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/user'); ?>">
+						<i class="bi bi-people-fill"></i>Manajemen User
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/petani'); ?>">
+						<i class="bi bi-person-badge-fill"></i>Data Petani
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/lahan'); ?>">
+						<i class="bi bi-map-fill"></i>Manajemen Lahan
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/panen'); ?>">
+						<i class="bi bi-tree-fill"></i>Manajemen Panen
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/produk'); ?>">
+						<i class="bi bi-box-seam-fill"></i>Manajemen Produk
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/transaksi'); ?>">
+						<i class="bi bi-wallet2"></i>Transaksi
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/kurir'); ?>">
+						<i class="bi bi-truck"></i>Manajemen Kurir
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/mitra'); ?>">
+						<i class="bi bi-shop"></i>Manajemen Mitra
+					</a>
+				<li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+					<a href="<?= base_url('admin/tracking'); ?>">
+						<i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
+					</a>
+				</li>
+				<li class="menu-item active">
+					<a href="<?= base_url('admin/laporan'); ?>">
+						<i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="sidebar-footer">
+			<button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
+				<i class="bi bi-box-arrow-right"></i> Keluar
+			</button>
+		</div>
+	</div>
 
 	<!-- MAIN CONTENT -->
 	<div class="main-content">
@@ -889,7 +982,8 @@
 		<!-- PAGE HEADER -->
 		<div class="page-header d-flex justify-content-between align-items-center flex-wrap">
 			<div>
-				<button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle" style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
+				<button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
+					style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
 					<i class="bi bi-list"></i>
 				</button>
 				<h2 class="d-inline-block align-middle mb-0">Analisis & Laporan</h2>
@@ -897,24 +991,29 @@
 			</div>
 			<div class="d-flex align-items-center flex-wrap mt-2 mt-md-0" style="gap: 10px;">
 				<!-- Tombol Export -->
-				<a href="<?= base_url('admin/laporan/export_excel?tab=penjualan'); ?>" id="btnExcelHeader" class="btn-export-excel" target="_blank">
+				<a href="<?= base_url('admin/laporan/export_excel?tab=penjualan'); ?>" id="btnExcelHeader"
+					class="btn-export-excel" target="_blank">
 					<i class="bi bi-file-earmark-excel-fill"></i> Export Excel
 				</a>
 				<!-- Dropdown Pilih Poktan untuk Cetak PDF -->
 				<div class="dropdown" id="dropdownPdfWrap">
-					<button class="btn-print-pdf dropdown-toggle" type="button" id="dropdownPdfBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="cursor:pointer;">
+					<button class="btn-print-pdf dropdown-toggle" type="button" id="dropdownPdfBtn"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="cursor:pointer;">
 						<i class="bi bi-printer-fill"></i> Cetak PDF
 					</button>
-					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownPdfBtn" style="min-width:230px; border-radius:10px; box-shadow:0 8px 24px rgba(44,24,8,0.15); border:none; padding:8px;">
-						<div style="font-size:0.72rem; font-weight:700; color:#70655E; text-transform:uppercase; letter-spacing:0.5px; padding:4px 12px 8px;">Pilih Kelompok Tani</div>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownPdfBtn"
+						style="min-width:230px; border-radius:10px; box-shadow:0 8px 24px rgba(44,24,8,0.15); border:none; padding:8px;">
+						<div
+							style="font-size:0.72rem; font-weight:700; color:#70655E; text-transform:uppercase; letter-spacing:0.5px; padding:4px 12px 8px;">
+							Pilih Kelompok Tani</div>
 						<a class="dropdown-item pdf-poktan-link" href="#" data-poktan="1"
-						   style="border-radius:8px; font-size:0.83rem; padding:8px 12px;">
+							style="border-radius:8px; font-size:0.83rem; padding:8px 12px;">
 							<i class="bi bi-geo-alt-fill mr-1" style="color:#8B4513;"></i>
 							<b>Kel. Tani Harum Manis</b><br>
 							<small style="color:#888; margin-left:18px;">Desa Sempadian, Tekarang</small>
 						</a>
 						<a class="dropdown-item pdf-poktan-link" href="#" data-poktan="2"
-						   style="border-radius:8px; font-size:0.83rem; padding:8px 12px; margin-top:4px;">
+							style="border-radius:8px; font-size:0.83rem; padding:8px 12px; margin-top:4px;">
 							<i class="bi bi-geo-alt-fill mr-1" style="color:#8B4513;"></i>
 							<b>Kel. Tani Batu Layar Sejahtera</b><br>
 							<small style="color:#888; margin-left:18px;">Desa Sendoyan, Sejangkung</small>
@@ -968,7 +1067,8 @@
 										</div>
 										<div class="notif-text">
 											<?= htmlspecialchars($n['isi_notifikasi']); ?>
-											<span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+											<span
+												class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
 										</div>
 										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
 											<span class="notif-badge-new">Baru</span>
@@ -1016,7 +1116,8 @@
 					<div class="stat-title">Total Pendapatan</div>
 					<h3 class="stat-num">Rp <?= number_format($kpi['total_pendapatan'] ?? 0, 0, ',', '.'); ?></h3>
 					<div class="stat-change up"><i class="bi bi-arrow-up"></i> Akumulasi seluruh penjualan</div>
-					<div class="stat-badge" style="background:var(--amber-cream); color:white;"><i class="bi bi-cash-coin"></i></div>
+					<div class="stat-badge" style="background:var(--amber-cream); color:white;"><i
+							class="bi bi-cash-coin"></i></div>
 				</div>
 			</div>
 			<div class="col-xl-3 col-md-6 mb-4">
@@ -1034,7 +1135,8 @@
 					<div class="stat-title">Laba Bersih (Est.)</div>
 					<h3 class="stat-num">Rp <?= number_format($kpi['laba_bersih'] ?? 0, 0, ',', '.'); ?></h3>
 					<div class="stat-change up"><i class="bi bi-arrow-up"></i> Estimasi 30% dari pendapatan</div>
-					<div class="stat-badge" style="background:#D1FAE5; color:#065F46;"><i class="bi bi-graph-up-arrow"></i></div>
+					<div class="stat-badge" style="background:#D1FAE5; color:#065F46;"><i
+							class="bi bi-graph-up-arrow"></i></div>
 				</div>
 			</div>
 			<div class="col-xl-3 col-md-6 mb-4">
@@ -1052,17 +1154,20 @@
 		<div class="laporan-tabs">
 			<ul class="nav nav-tabs" id="laporanTab" role="tablist">
 				<li class="nav-item">
-					<a class="nav-link active" id="tab-ringkasan" data-toggle="tab" href="#ringkasan" role="tab" data-tab="ringkasan">
+					<a class="nav-link active" id="tab-ringkasan" data-toggle="tab" href="#ringkasan" role="tab"
+						data-tab="ringkasan">
 						<i class="bi bi-bar-chart-line-fill mr-1"></i> Ringkasan
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" id="tab-penjualan" data-toggle="tab" href="#penjualan" role="tab" data-tab="penjualan">
+					<a class="nav-link" id="tab-penjualan" data-toggle="tab" href="#penjualan" role="tab"
+						data-tab="penjualan">
 						<i class="bi bi-cart-fill mr-1"></i> Penjualan
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" id="tab-petani" data-toggle="tab" href="#petani-tab" role="tab" data-tab="petani">
+					<a class="nav-link" id="tab-petani" data-toggle="tab" href="#petani-tab" role="tab"
+						data-tab="petani">
 						<i class="bi bi-person-badge-fill mr-1"></i> Petani
 					</a>
 				</li>
@@ -1072,7 +1177,8 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" id="tab-keuangan" data-toggle="tab" href="#keuangan" role="tab" data-tab="keuangan">
+					<a class="nav-link" id="tab-keuangan" data-toggle="tab" href="#keuangan" role="tab"
+						data-tab="keuangan">
 						<i class="bi bi-wallet2 mr-1"></i> Keuangan
 					</a>
 				</li>
@@ -1082,7 +1188,8 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" id="tab-tracking" data-toggle="tab" href="#tracking" role="tab" data-tab="tracking">
+					<a class="nav-link" id="tab-tracking" data-toggle="tab" href="#tracking" role="tab"
+						data-tab="tracking">
 						<i class="bi bi-truck mr-1"></i> Tracking
 					</a>
 				</li>
@@ -1102,9 +1209,11 @@
 						<div class="col-lg-8 mb-4">
 							<div class="custom-card">
 								<div class="card-header-custom">
-									<h6><i class="bi bi-graph-up-arrow text-warning mr-2"></i> Grafik Penjualan Bulanan</h6>
+									<h6><i class="bi bi-graph-up-arrow text-warning mr-2"></i> Grafik Penjualan Bulanan
+									</h6>
 									<div>
-										<select id="chartTypeToggle" class="form-control form-control-sm d-inline-block" style="width:auto; font-size:0.8rem; border-color:rgba(74,44,17,0.1);">
+										<select id="chartTypeToggle" class="form-control form-control-sm d-inline-block"
+											style="width:auto; font-size:0.8rem; border-color:rgba(74,44,17,0.1);">
 											<option value="pendapatan">Pendapatan (Rp)</option>
 											<option value="volume">Volume (Kg)</option>
 										</select>
@@ -1137,19 +1246,25 @@
 						<div class="col-md-3 col-6 mb-3">
 							<div class="p-3 rounded" style="background:#FFF7ED; border:1px solid rgba(230,161,92,0.2);">
 								<div class="stat-title">Petani Aktif</div>
-								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);"><?= $kpi['total_petani'] ?? 0; ?></h4>
+								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);">
+									<?= $kpi['total_petani'] ?? 0; ?></h4>
+								<small class="text-muted">dari tb_petani</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-6 mb-3">
 							<div class="p-3 rounded" style="background:#F0FDF4; border:1px solid rgba(16,185,129,0.2);">
 								<div class="stat-title">Mitra Aktif</div>
-								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);"><?= $kpi['total_mitra'] ?? 0; ?></h4>
+								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);">
+									<?= $kpi['total_mitra'] ?? 0; ?></h4>
+								<small class="text-muted">dari tb_mitra</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-6 mb-3">
 							<div class="p-3 rounded" style="background:#EFF6FF; border:1px solid rgba(59,130,246,0.2);">
 								<div class="stat-title">Rata-rata Transaksi</div>
-								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);">Rp <?= number_format($kpi['rata_transaksi'] ?? 0, 0, ',', '.'); ?></h4>
+								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);">Rp
+									<?= number_format($kpi['rata_transaksi'] ?? 0, 0, ',', '.'); ?></h4>
+								<small class="text-muted">per pesanan</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-6 mb-3">
@@ -1157,7 +1272,10 @@
 								<div class="stat-title">Status Transaksi</div>
 								<?php $tr = $tracking ?? [];
 								$stat = $tr['statistik'] ?? []; ?>
-								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);"><?= $tr['total'] ?? 0; ?></h4>
+								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);">
+									<?= $tr['total'] ?? 0; ?></h4>
+								<small class="text-muted"><?= ($stat['Selesai'] ?? 0); ?> selesai,
+									<?= ($stat['Pending'] ?? 0); ?> pending</small>
 							</div>
 						</div>
 					</div>
@@ -1165,19 +1283,28 @@
 
 				<!-- TAB PENJUALAN -->
 				<div class="tab-pane fade" id="penjualan" role="tabpanel">
-					<form method="POST" action="<?= base_url('admin/laporan/filter'); ?>" class="mb-3 d-flex align-items-center flex-wrap" style="gap:10px;">
+					<form method="POST" action="<?= base_url('admin/laporan/filter'); ?>"
+						class="mb-3 d-flex align-items-center flex-wrap" style="gap:10px;">
 						<div class="d-flex align-items-center" style="gap:8px;">
-							<label class="mb-0 font-weight-600" style="font-size:0.85rem; font-weight:600;">Filter Status:</label>
-							<select name="status" class="form-control form-control-sm" style="width:auto; border-color:rgba(74,44,17,0.1); font-size:0.85rem;" onchange="this.form.submit()">
+							<label class="mb-0 font-weight-600" style="font-size:0.85rem; font-weight:600;">Filter
+								Status:</label>
+							<select name="status" class="form-control form-control-sm"
+								style="width:auto; border-color:rgba(74,44,17,0.1); font-size:0.85rem;"
+								onchange="this.form.submit()">
 								<option value="semua" <?= ($filter_status ?? '') == 'semua' || ($filter_status ?? '') == '' ? 'selected' : ''; ?>>Semua Status</option>
-								<option value="Pending" <?= ($filter_status ?? '') == 'Pending'    ? 'selected' : ''; ?>>Pending</option>
-								<option value="Diproses" <?= ($filter_status ?? '') == 'Diproses'   ? 'selected' : ''; ?>>Diproses</option>
-								<option value="Dikirim" <?= ($filter_status ?? '') == 'Dikirim'    ? 'selected' : ''; ?>>Dikirim</option>
-								<option value="Selesai" <?= ($filter_status ?? '') == 'Selesai'    ? 'selected' : ''; ?>>Selesai</option>
+								<option value="Pending" <?= ($filter_status ?? '') == 'Pending' ? 'selected' : ''; ?>>
+									Pending</option>
+								<option value="Diproses" <?= ($filter_status ?? '') == 'Diproses' ? 'selected' : ''; ?>>
+									Diproses</option>
+								<option value="Dikirim" <?= ($filter_status ?? '') == 'Dikirim' ? 'selected' : ''; ?>>
+									Dikirim</option>
+								<option value="Selesai" <?= ($filter_status ?? '') == 'Selesai' ? 'selected' : ''; ?>>
+									Selesai</option>
 								<option value="Dibatalkan" <?= ($filter_status ?? '') == 'Dibatalkan' ? 'selected' : ''; ?>>Dibatalkan</option>
 							</select>
 						</div>
-						<a href="<?= base_url('admin/laporan'); ?>" class="btn btn-sm" style="background:var(--bg-cream); border:1px solid rgba(74,44,17,0.1); color:var(--text-secondary); border-radius:8px; font-size:0.82rem;">
+						<a href="<?= base_url('admin/laporan'); ?>" class="btn btn-sm"
+							style="background:var(--bg-cream); border:1px solid rgba(74,44,17,0.1); color:var(--text-secondary); border-radius:8px; font-size:0.82rem;">
 							<i class="bi bi-arrow-counterclockwise mr-1"></i> Reset
 						</a>
 					</form>
@@ -1206,14 +1333,20 @@
 										?>
 										<tr>
 											<td><?= $i + 1; ?></td>
-											<td><span class="font-weight-bold" style="color:var(--roasted-brown);"><?= htmlspecialchars($p['id_transaksi'] ?? 'TRX-' . str_pad($p['id_transaksi'] ?? ($i + 1), 3, '0', STR_PAD_LEFT)); ?></span></td>
+											<td><span class="font-weight-bold"
+													style="color:var(--roasted-brown);"><?= htmlspecialchars($p['id_transaksi'] ?? 'TRX-' . str_pad($p['id_transaksi'] ?? ($i + 1), 3, '0', STR_PAD_LEFT)); ?></span>
+											</td>
 											<td><?= htmlspecialchars($p['nama_pembeli'] ?? '-'); ?></td>
 											<td><?= htmlspecialchars($p['nama_produk'] ?? '-'); ?></td>
 											<td><?= number_format($p['jumlah_kg'] ?? 0, 0, ',', '.'); ?> kg</td>
-											<td class="font-weight-bold">Rp <?= number_format($p['total_harga'] ?? 0, 0, ',', '.'); ?></td>
+											<td class="font-weight-bold">Rp
+												<?= number_format($p['total_harga'] ?? 0, 0, ',', '.'); ?></td>
 											<td><?= htmlspecialchars($p['metode_bayar'] ?? '-'); ?></td>
-											<td><span class="status-badge <?= $status_class; ?>"><?= htmlspecialchars($p['status_pesanan'] ?? 'Pending'); ?></span></td>
-											<td><?= isset($p['tanggal']) ? date('d/m/Y', strtotime($p['tanggal'])) : '-'; ?></td>
+											<td><span
+													class="status-badge <?= $status_class; ?>"><?= htmlspecialchars($p['status_pesanan'] ?? 'Pending'); ?></span>
+											</td>
+											<td><?= isset($p['tanggal']) ? date('d/m/Y', strtotime($p['tanggal'])) : '-'; ?>
+											</td>
 										</tr>
 									<?php endforeach; ?>
 								<?php else: ?>
@@ -1248,18 +1381,25 @@
 										<tr>
 											<td>
 												<div class="rank-badge <?= $rankClass; ?>">
-													<?php if ($i == 0): ?><i class="bi bi-trophy-fill" style="font-size:0.7rem;"></i>
-													<?php elseif ($i == 1): ?><i class="bi bi-award-fill" style="font-size:0.7rem;"></i>
-													<?php elseif ($i == 2): ?><i class="bi bi-award" style="font-size:0.7rem;"></i>
-														<?php else: ?><?= $i + 1; ?><?php endif; ?>
+													<?php if ($i == 0): ?><i class="bi bi-trophy-fill"
+															style="font-size:0.7rem;"></i>
+													<?php elseif ($i == 1): ?><i class="bi bi-award-fill"
+															style="font-size:0.7rem;"></i>
+													<?php elseif ($i == 2): ?><i class="bi bi-award"
+															style="font-size:0.7rem;"></i>
+													<?php else: ?>			<?= $i + 1; ?>		<?php endif; ?>
 												</div>
 											</td>
 											<td class="font-weight-bold"><?= htmlspecialchars($p['nama_petani']); ?></td>
-											<td><span class="status-badge <?= strtolower($p['status_petani'] ?? 'pending'); ?>"><?= $p['status_petani'] ?? '-'; ?></span></td>
+											<td><span
+													class="status-badge <?= strtolower($p['status_petani'] ?? 'pending'); ?>"><?= $p['status_petani'] ?? '-'; ?></span>
+											</td>
 											<td><?= $p['lahan_aktif'] ?? 0; ?> lahan</td>
-											<td class="font-weight-bold"><?= number_format($p['total_panen'] ?? 0, 0, ',', '.'); ?> kg</td>
+											<td class="font-weight-bold">
+												<?= number_format($p['total_panen'] ?? 0, 0, ',', '.'); ?> kg</td>
 											<td>Rp <?= number_format($p['omset'] ?? 0, 0, ',', '.'); ?></td>
-											<td><?= isset($p['tanggal_daftar']) ? date('d/m/Y', strtotime($p['tanggal_daftar'])) : '-'; ?></td>
+											<td><?= isset($p['tanggal_daftar']) ? date('d/m/Y', strtotime($p['tanggal_daftar'])) : '-'; ?>
+											</td>
 										</tr>
 									<?php endforeach; ?>
 								<?php else: ?>
@@ -1300,13 +1440,15 @@
 										?>
 										<tr>
 											<td><?= $i + 1; ?></td>
-											<td class="font-weight-bold"><?= htmlspecialchars($pr['nama_produk'] ?? '-'); ?></td>
+											<td class="font-weight-bold"><?= htmlspecialchars($pr['nama_produk'] ?? '-'); ?>
+											</td>
 											<td><?= htmlspecialchars($pr['jenis'] ?? '-'); ?></td>
 											<td>Rp <?= number_format($pr['harga'] ?? 0, 0, ',', '.'); ?></td>
 											<td>
 												<span class="font-weight-bold"><?= $stok; ?> kg</span>
 												<div class="stok-bar">
-													<div class="stok-bar-fill" style="width:<?= $stokPct; ?>%; background:<?= $stokColor; ?>;"></div>
+													<div class="stok-bar-fill"
+														style="width:<?= $stokPct; ?>%; background:<?= $stokColor; ?>;"></div>
 												</div>
 											</td>
 											<td><?= number_format($pr['total_terjual'] ?? 0, 0, ',', '.'); ?> kg</td>
@@ -1331,19 +1473,22 @@
 						<div class="col-md-4 mb-3">
 							<div class="keu-summary-card pendapatan">
 								<div class="stat-title" style="color:#065F46;">Pendapatan Kotor</div>
-								<h3 class="font-weight-bold mb-0 mt-1" style="color:#065F46;">Rp <?= number_format($keu['pendapatan_kotor'] ?? 0, 0, ',', '.'); ?></h3>
+								<h3 class="font-weight-bold mb-0 mt-1" style="color:#065F46;">Rp
+									<?= number_format($keu['pendapatan_kotor'] ?? 0, 0, ',', '.'); ?></h3>
 							</div>
 						</div>
 						<div class="col-md-4 mb-3">
 							<div class="keu-summary-card pengeluaran">
 								<div class="stat-title" style="color:#991B1B;">Estimasi Biaya</div>
-								<h3 class="font-weight-bold mb-0 mt-1" style="color:#991B1B;">Rp <?= number_format($keu['estimasi_biaya'] ?? 0, 0, ',', '.'); ?></h3>
+								<h3 class="font-weight-bold mb-0 mt-1" style="color:#991B1B;">Rp
+									<?= number_format($keu['estimasi_biaya'] ?? 0, 0, ',', '.'); ?></h3>
 							</div>
 						</div>
 						<div class="col-md-4 mb-3">
 							<div class="keu-summary-card laba">
 								<div class="stat-title" style="color:var(--roasted-brown);">Laba Bersih (Est.)</div>
-								<h3 class="font-weight-bold mb-0 mt-1" style="color:var(--roasted-brown);">Rp <?= number_format($keu['laba_bersih'] ?? 0, 0, ',', '.'); ?></h3>
+								<h3 class="font-weight-bold mb-0 mt-1" style="color:var(--roasted-brown);">Rp
+									<?= number_format($keu['laba_bersih'] ?? 0, 0, ',', '.'); ?></h3>
 							</div>
 						</div>
 					</div>
@@ -1376,8 +1521,11 @@
 											<td class="font-weight-bold"><?= $k['bulan']; ?></td>
 											<td>Rp <?= number_format($k['pendapatan'], 0, ',', '.'); ?></td>
 											<td>Rp <?= number_format($k['pengeluaran'], 0, ',', '.'); ?></td>
-											<td class="font-weight-bold" style="color:#10b981;">Rp <?= number_format($k['laba'], 0, ',', '.'); ?></td>
-											<td><span class="badge" style="background:#D1FAE5; color:#065F46; font-weight:600;"><?= $margin; ?>%</span></td>
+											<td class="font-weight-bold" style="color:#10b981;">Rp
+												<?= number_format($k['laba'], 0, ',', '.'); ?></td>
+											<td><span class="badge"
+													style="background:#D1FAE5; color:#065F46; font-weight:600;"><?= $margin; ?>%</span>
+											</td>
 										</tr>
 									<?php endforeach; ?>
 								<?php endif; ?>
@@ -1406,15 +1554,19 @@
 									<?php foreach ($panen as $i => $pn): ?>
 										<tr>
 											<td><?= $i + 1; ?></td>
-											<td class="font-weight-bold"><?= htmlspecialchars($pn['nama_petani'] ?? '-'); ?></td>
+											<td class="font-weight-bold"><?= htmlspecialchars($pn['nama_petani'] ?? '-'); ?>
+											</td>
 											<td><?= htmlspecialchars($pn['lahan'] ?? '-'); ?></td>
 											<td><?= htmlspecialchars($pn['jenis_kopi'] ?? '-'); ?></td>
-											<td class="font-weight-bold"><?= number_format($pn['jumlah_panen'] ?? 0, 0, ',', '.'); ?> kg</td>
+											<td class="font-weight-bold">
+												<?= number_format($pn['jumlah_panen'] ?? 0, 0, ',', '.'); ?> kg</td>
 											<td>
 												<?php $kualitas = $pn['kualitas'] ?? 'Grade A'; ?>
-												<span class="status-badge <?= $kualitas == 'Grade A' ? 'selesai' : 'diproses'; ?>"><?= $kualitas; ?></span>
+												<span
+													class="status-badge <?= $kualitas == 'Grade A' ? 'selesai' : 'diproses'; ?>"><?= $kualitas; ?></span>
 											</td>
-											<td><?= isset($pn['tanggal_panen']) ? date('d/m/Y', strtotime($pn['tanggal_panen'])) : '-'; ?></td>
+											<td><?= isset($pn['tanggal_panen']) ? date('d/m/Y', strtotime($pn['tanggal_panen'])) : '-'; ?>
+											</td>
 										</tr>
 									<?php endforeach; ?>
 								<?php endif; ?>
@@ -1430,13 +1582,17 @@
 					<div class="row mb-4">
 						<?php
 						$statColors = ['Pending' => '#FEF3C7', 'Diproses' => '#DBEAFE', 'Dikirim' => '#EDE9FE', 'Selesai' => '#D1FAE5', 'Dibatalkan' => '#FEE2E2'];
-						$textColors  = ['Pending' => '#92400E', 'Diproses' => '#1E40AF', 'Dikirim' => '#5B21B6', 'Selesai' => '#065F46', 'Dibatalkan' => '#991B1B'];
+						$textColors = ['Pending' => '#92400E', 'Diproses' => '#1E40AF', 'Dikirim' => '#5B21B6', 'Selesai' => '#065F46', 'Dibatalkan' => '#991B1B'];
 						foreach ($trk_stat as $stat_key => $stat_val):
-						?>
+							?>
 							<div class="col mb-3">
-								<div class="text-center p-3 rounded" style="background:<?= $statColors[$stat_key] ?? '#F3F4F6'; ?>;">
-									<div class="font-weight-bold" style="font-size:1.5rem; color:<?= $textColors[$stat_key] ?? '#374151'; ?>;"><?= $stat_val; ?></div>
-									<small style="color:<?= $textColors[$stat_key] ?? '#374151'; ?>; font-weight:600;"><?= $stat_key; ?></small>
+								<div class="text-center p-3 rounded"
+									style="background:<?= $statColors[$stat_key] ?? '#F3F4F6'; ?>;">
+									<div class="font-weight-bold"
+										style="font-size:1.5rem; color:<?= $textColors[$stat_key] ?? '#374151'; ?>;">
+										<?= $stat_val; ?></div>
+									<small
+										style="color:<?= $textColors[$stat_key] ?? '#374151'; ?>; font-weight:600;"><?= $stat_key; ?></small>
 								</div>
 							</div>
 						<?php endforeach; ?>
@@ -1459,11 +1615,14 @@
 										<?php $s_class = strtolower(str_replace(' ', '', $lg['status_pesanan'] ?? 'pending')); ?>
 										<tr>
 											<td><?= $i + 1; ?></td>
-											<td class="font-weight-bold" style="color:var(--roasted-brown);"><?= htmlspecialchars($lg['id_transaksi'] ?? '-'); ?></td>
+											<td class="font-weight-bold" style="color:var(--roasted-brown);">
+												<?= htmlspecialchars($lg['id_transaksi'] ?? '-'); ?></td>
 											<td><?= htmlspecialchars($lg['kurir'] ?? '-'); ?></td>
 											<td><?= htmlspecialchars($lg['resi'] ?? '-'); ?></td>
 											<td><?= htmlspecialchars($lg['estimasi'] ?? '-'); ?></td>
-											<td><span class="status-badge <?= in_array($s_class, ['pending', 'diproses', 'dikirim', 'selesai', 'dibatalkan']) ? $s_class : 'diproses'; ?>"><?= htmlspecialchars($lg['status_pesanan'] ?? '-'); ?></span></td>
+											<td><span
+													class="status-badge <?= in_array($s_class, ['pending', 'diproses', 'dikirim', 'selesai', 'dibatalkan']) ? $s_class : 'diproses'; ?>"><?= htmlspecialchars($lg['status_pesanan'] ?? '-'); ?></span>
+											</td>
 										</tr>
 									<?php endforeach; ?>
 								<?php endif; ?>
@@ -1493,14 +1652,17 @@
 										<tr>
 											<td><?= $i + 1; ?></td>
 											<td class="font-weight-bold"><?= htmlspecialchars($m['nama_mitra'] ?? '-'); ?></td>
-											<td><span class="status-badge <?= strtolower($m['status_mitra'] ?? 'active'); ?>"><?= $m['status_mitra'] ?? '-'; ?></span></td>
+											<td><span
+													class="status-badge <?= strtolower($m['status_mitra'] ?? 'active'); ?>"><?= $m['status_mitra'] ?? '-'; ?></span>
+											</td>
 											<td><?= number_format($m['total_order'] ?? 0, 0, ',', '.'); ?> order</td>
 											<td>Rp <?= number_format($m['total_pembelian'] ?? 0, 0, ',', '.'); ?></td>
 											<td><?= htmlspecialchars($m['produk_favorit'] ?? '-'); ?></td>
 											<td>
-												<?php $rating = (int)($m['rating'] ?? 0);
+												<?php $rating = (int) ($m['rating'] ?? 0);
 												for ($s = 0; $s < 5; $s++): ?>
-													<i class="bi bi-star<?= $s < $rating ? '-fill' : ''; ?>" style="font-size:0.8rem; color:<?= $s < $rating ? 'var(--amber-cream)' : '#D1D5DB'; ?>;"></i>
+													<i class="bi bi-star<?= $s < $rating ? '-fill' : ''; ?>"
+														style="font-size:0.8rem; color:<?= $s < $rating ? 'var(--amber-cream)' : '#D1D5DB'; ?>;"></i>
 												<?php endfor; ?>
 											</td>
 										</tr>
@@ -1520,19 +1682,19 @@
 	<script>
 		// DATA CHART DARI PHP
 		const chartPenjualanData = {
-			labels: <?= json_encode($chart_penjualan['labels']     ?? []); ?>,
+			labels: <?= json_encode($chart_penjualan['labels'] ?? []); ?>,
 			pendapatan: <?= json_encode($chart_penjualan['pendapatan'] ?? []); ?>,
-			volume: <?= json_encode($chart_penjualan['volume']     ?? []); ?>
+			volume: <?= json_encode($chart_penjualan['volume'] ?? []); ?>
 		};
 		const chartProdukData = {
 			labels: <?= json_encode($chart_produk['labels'] ?? []); ?>,
-			data: <?= json_encode($chart_produk['data']   ?? []); ?>
+			data: <?= json_encode($chart_produk['data'] ?? []); ?>
 		};
 		const chartKeuanganData = {
-			labels: <?= json_encode(array_column($keuangan['detail'] ?? [], 'bulan'));      ?>,
+			labels: <?= json_encode(array_column($keuangan['detail'] ?? [], 'bulan')); ?>,
 			pendapatan: <?= json_encode(array_column($keuangan['detail'] ?? [], 'pendapatan')); ?>,
 			pengeluaran: <?= json_encode(array_column($keuangan['detail'] ?? [], 'pengeluaran')); ?>,
-			laba: <?= json_encode(array_column($keuangan['detail'] ?? [], 'laba'));       ?>
+			laba: <?= json_encode(array_column($keuangan['detail'] ?? [], 'laba')); ?>
 		};
 
 		// 1. GRAFIK PENJUALAN BULANAN
@@ -1578,7 +1740,7 @@
 							cornerRadius: 8,
 							padding: 10,
 							callbacks: {
-								label: function(ctx) {
+								label: function (ctx) {
 									return mode === 'volume' ? ctx.parsed.y + ' kg' : 'Rp ' + ctx.parsed.y.toLocaleString('id-ID');
 								}
 							}
@@ -1595,7 +1757,7 @@
 									size: 10
 								},
 								color: '#70655E',
-								callback: function(val) {
+								callback: function (val) {
 									return mode === 'volume' ? val + ' kg' : 'Rp ' + (val / 1000000).toFixed(0) + 'jt';
 								}
 							}
@@ -1657,7 +1819,7 @@
 							bodyColor: '#FAF6F0',
 							cornerRadius: 8,
 							callbacks: {
-								label: function(ctx) {
+								label: function (ctx) {
 									if (ctx.label === 'Belum Ada Penjualan') {
 										return ctx.label;
 									}
@@ -1679,33 +1841,33 @@
 				data: {
 					labels: chartKeuanganData.labels,
 					datasets: [{
-							label: 'Pendapatan',
-							data: chartKeuanganData.pendapatan,
-							backgroundColor: 'rgba(16, 185, 129, 0.7)',
-							borderColor: '#10b981',
-							borderWidth: 1,
-							borderRadius: 6
-						},
-						{
-							label: 'Biaya',
-							data: chartKeuanganData.pengeluaran,
-							backgroundColor: 'rgba(239, 68, 68, 0.7)',
-							borderColor: '#EF4444',
-							borderWidth: 1,
-							borderRadius: 6
-						},
-						{
-							label: 'Laba',
-							data: chartKeuanganData.laba,
-							backgroundColor: 'rgba(230, 161, 92, 0.85)',
-							borderColor: '#E6A15C',
-							borderWidth: 1,
-							borderRadius: 6,
-							type: 'line',
-							tension: 0.4,
-							fill: false,
-							pointRadius: 4
-						}
+						label: 'Pendapatan',
+						data: chartKeuanganData.pendapatan,
+						backgroundColor: 'rgba(16, 185, 129, 0.7)',
+						borderColor: '#10b981',
+						borderWidth: 1,
+						borderRadius: 6
+					},
+					{
+						label: 'Biaya',
+						data: chartKeuanganData.pengeluaran,
+						backgroundColor: 'rgba(239, 68, 68, 0.7)',
+						borderColor: '#EF4444',
+						borderWidth: 1,
+						borderRadius: 6
+					},
+					{
+						label: 'Laba',
+						data: chartKeuanganData.laba,
+						backgroundColor: 'rgba(230, 161, 92, 0.85)',
+						borderColor: '#E6A15C',
+						borderWidth: 1,
+						borderRadius: 6,
+						type: 'line',
+						tension: 0.4,
+						fill: false,
+						pointRadius: 4
+					}
 					]
 				},
 				options: {
@@ -1726,7 +1888,7 @@
 							bodyColor: '#FAF6F0',
 							cornerRadius: 8,
 							callbacks: {
-								label: function(ctx) {
+								label: function (ctx) {
 									return ctx.dataset.label + ': Rp ' + ctx.parsed.y.toLocaleString('id-ID');
 								}
 							}
@@ -1743,7 +1905,7 @@
 									size: 10
 								},
 								color: '#70655E',
-								callback: function(val) {
+								callback: function (val) {
 									return 'Rp ' + (val / 1000000).toFixed(0) + 'jt';
 								}
 							}
@@ -1793,29 +1955,29 @@
 				const btnExcel = document.getElementById('btnExcelHeader');
 				if (btnExcel) btnExcel.href = '<?= base_url('admin/laporan/export_excel'); ?>?tab=' + tabName;
 				// Simpan tab aktif untuk dropdown PDF
-				document.querySelectorAll('.pdf-poktan-link').forEach(function(el) {
+				document.querySelectorAll('.pdf-poktan-link').forEach(function (el) {
 					el.setAttribute('data-tab', tabName);
 				});
 			});
 		});
 
 		// Handler dropdown poktan PDF
-		document.querySelectorAll('.pdf-poktan-link').forEach(function(el) {
+		document.querySelectorAll('.pdf-poktan-link').forEach(function (el) {
 			el.setAttribute('data-tab', 'penjualan'); // default tab
-			el.addEventListener('click', function(e) {
+			el.addEventListener('click', function (e) {
 				e.preventDefault();
 				const poktan = this.getAttribute('data-poktan');
-				const tab    = this.getAttribute('data-tab') || 'penjualan';
-				const url    = '<?= base_url('admin/laporan/print_pdf'); ?>?tab=' + tab + '&poktan=' + poktan;
+				const tab = this.getAttribute('data-tab') || 'penjualan';
+				const url = '<?= base_url('admin/laporan/print_pdf'); ?>?tab=' + tab + '&poktan=' + poktan;
 				window.open(url, '_blank');
 			});
 		});
 
 		const chartTypeSelect = document.getElementById('chartTypeToggle');
-		if (chartTypeSelect) chartTypeSelect.addEventListener('change', function() {
+		if (chartTypeSelect) chartTypeSelect.addEventListener('change', function () {
 			initChartPenjualan(this.value);
 		});
-		$('#tab-keuangan').on('shown.bs.tab', function() {
+		$('#tab-keuangan').on('shown.bs.tab', function () {
 			initChartKeuangan();
 		});
 
@@ -1833,7 +1995,7 @@
 		updateDateTime();
 		setInterval(updateDateTime, 60000);
 
-		document.addEventListener('DOMContentLoaded', function() {
+		document.addEventListener('DOMContentLoaded', function () {
 			initChartPenjualan('pendapatan');
 			initChartProduk();
 		});

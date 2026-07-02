@@ -42,6 +42,8 @@ class Tracking_model extends CI_Model {
             tr.id_user as pembeli_id,
             tr.invoice,
             tr.total_harga,
+            tr.grand_total,
+            tr.metode_bayar,
             k.nama_kurir,
             k.no_telepon as kurir_telp,
             k.lat_terakhir as kurir_lat,
@@ -78,6 +80,52 @@ class Tracking_model extends CI_Model {
         $result = $this->db->update('tb_tracking', $data);
         if ($result) $this->save_history($id_tracking, $status, $keterangan);
         return $result;
+    }
+
+    // ============================================================
+    // 🔥 METHOD BARU UNTUK ADMIN UPDATE STATUS (M07-F02)
+    // ============================================================
+    
+    /**
+     * M07-F02: Update tracking status by Admin (dengan pencatat admin)
+     */
+    public function update_status_admin($id_tracking, $status, $keterangan = null, $admin_id = null) {
+        $data = [
+            'status_pengiriman' => $status,
+            'status_updated_by' => $admin_id,
+            'status_updated_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        if ($status == 'dikirim') {
+            $data['tanggal_kirim'] = date('Y-m-d H:i:s');
+        }
+
+        if ($status == 'diterima') {
+            $data['tanggal_terima'] = date('Y-m-d H:i:s');
+        }
+
+        $this->db->where('id_tracking', $id_tracking);
+        $result = $this->db->update('tb_tracking', $data);
+
+        if ($result) {
+            // Tambahkan keterangan siapa yang update
+            $admin_name = $this->get_admin_name($admin_id);
+            $history_keterangan = $keterangan ?: "Status diperbarui oleh Admin: {$admin_name}";
+            $this->save_history($id_tracking, $status, $history_keterangan);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get admin name by ID
+     */
+    private function get_admin_name($admin_id) {
+        $this->db->select('nama');
+        $this->db->where('id_user', $admin_id);
+        $query = $this->db->get('tb_user');
+        return $query->row()->nama ?? 'Admin';
     }
     
     /**
@@ -210,7 +258,7 @@ class Tracking_model extends CI_Model {
      * Get tracking by status
      */
     public function get_tracking_by_status($status = null, $limit = null) {
-        $this->db->select('t.*, tr.invoice, u.nama as pembeli, k.nama_kurir');
+        $this->db->select('t.*, tr.invoice, u.nama as pembeli, k.nama_kurir, t.bukti_pengiriman');
         $this->db->from('tb_tracking t');
         $this->db->join('tb_transaksi tr', 'tr.id_transaksi = t.id_transaksi');
         $this->db->join('tb_user u', 'u.id_user = tr.id_user');
@@ -237,5 +285,91 @@ class Tracking_model extends CI_Model {
             'dibatalkan'        => ['label' => 'Dibatalkan', 'class' => 'cancelled', 'icon' => 'bi bi-x-circle']
         ];
         return isset($labels[$status]) ? $labels[$status] : ['label' => $status, 'class' => 'pending', 'icon' => 'bi bi-info-circle'];
+    }
+
+    /**
+     * M07-F09: Upload bukti pengiriman
+     */
+    public function upload_bukti($id_tracking, $file_name, $id_user) {
+        $data = [
+            'bukti_pengiriman' => $file_name,
+            'bukti_upload_at' => date('Y-m-d H:i:s'),
+            'bukti_upload_by' => $id_user,
+            'status_pengiriman' => 'delivered',
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+        $this->db->where('id_tracking', $id_tracking);
+        $result = $this->db->update('tb_tracking', $data);
+        if ($result) {
+            $this->save_history($id_tracking, 'delivered', 'Bukti pengiriman telah diunggah oleh kurir');
+        }
+        return $result;
+    }
+
+    /**
+     * M07-F09: Get bukti pengiriman
+     */
+    public function get_bukti($id_tracking) {
+        $this->db->select('bukti_pengiriman, bukti_upload_at, bukti_upload_by');
+        $this->db->where('id_tracking', $id_tracking);
+        return $this->db->get('tb_tracking')->row();
+    }
+
+    /**
+     * Buat tracking untuk transaksi yang sudah ada (tanpa data dummy)
+     */
+    public function create_tracking_for_existing_transactions() {
+        // Ambil semua transaksi yang belum punya tracking
+        $this->db->select('id_transaksi, invoice, id_user');
+        $this->db->where('id_tracking IS NULL', NULL, FALSE);
+        $transactions = $this->db->get('tb_transaksi')->result();
+        
+        $created = 0;
+        foreach ($transactions as $trx) {
+            // Cek apakah sudah ada di tb_tracking (mencegah unique key violation)
+            $exists = $this->db->get_where('tb_tracking', ['id_transaksi' => $trx->id_transaksi])->row();
+            if ($exists) {
+                $this->db->where('id_transaksi', $trx->id_transaksi);
+                $this->db->update('tb_transaksi', ['id_tracking' => $exists->id_tracking]);
+                continue;
+            }
+
+            // Buat tracking
+            $data = [
+                'id_transaksi' => $trx->id_transaksi,
+                'status_pengiriman' => 'pending',
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+            $this->db->insert('tb_tracking', $data);
+            $id_tracking = $this->db->insert_id();
+            
+            // Update transaksi
+            $this->db->where('id_transaksi', $trx->id_transaksi);
+            $this->db->update('tb_transaksi', ['id_tracking' => $id_tracking]);
+            $created++;
+        }
+        
+        return $created;
+    }
+
+    /**
+     * Get tracking list assigned to a specific courier user
+     */
+    public function get_kurir_tracking($id_user, $limit = null) {
+        $user = $this->db->get_where('tb_user', ['id_user' => $id_user])->row();
+        if (!$user || empty($user->email)) return [];
+
+        $kurir = $this->db->get_where('tb_kurir', ['email' => $user->email])->row();
+        if (!$kurir) return [];
+
+        $this->db->select('t.*, tr.invoice, tr.metode_bayar, u.nama as pembeli, k.nama_kurir, t.bukti_pengiriman');
+        $this->db->from('tb_tracking t');
+        $this->db->join('tb_transaksi tr', 'tr.id_transaksi = t.id_transaksi');
+        $this->db->join('tb_user u', 'u.id_user = tr.id_user');
+        $this->db->join('tb_kurir k', 'k.id_kurir = t.id_kurir');
+        $this->db->where('t.id_kurir', $kurir->id_kurir);
+        $this->db->order_by('t.created_at', 'DESC');
+        if ($limit) $this->db->limit($limit);
+        return $this->db->get()->result();
     }
 }

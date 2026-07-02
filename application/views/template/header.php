@@ -442,6 +442,26 @@
 $role = $this->session->userdata('role');
 $nama_user = $this->session->userdata('nama') ?? 'User';
 $base_url = base_url();
+
+// Fallback untuk meload notifikasi secara dinamis jika tidak dikirim dari controller
+$CI =& get_instance();
+if (!isset($unread_count) || !isset($notifikasi)) {
+    if (!isset($CI->Notifikasi_model)) {
+        $CI->load->model('Notifikasi_model');
+    }
+    $id_user = $CI->session->userdata('id_user');
+    if ($id_user) {
+        if (!isset($unread_count)) {
+            $unread_count = $CI->Notifikasi_model->count_unread($id_user);
+        }
+        if (!isset($notifikasi)) {
+            $notifikasi = $CI->Notifikasi_model->get_unread_notif($id_user, 5);
+        }
+    } else {
+        if (!isset($unread_count)) $unread_count = 0;
+        if (!isset($notifikasi)) $notifikasi = [];
+    }
+}
 ?>
 
 <div class="sidebar" id="sidebarMenu">
@@ -451,15 +471,19 @@ $base_url = base_url();
                 <i class="bi bi-patch-check-fill"></i>
             <?php elseif ($role == 'Petani'): ?>
                 <i class="bi bi-patch-check-fill"></i>
+            <?php elseif ($role == 'Kurir'): ?>
+                <i class="bi bi-truck"></i>
             <?php else: ?>
                 <i class="bi bi-cup-hot-fill"></i>
             <?php endif; ?>
         </div>
         <span>
             <?php if ($role == 'Admin'): ?>
-                ADMIN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
+                POKTAN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
             <?php elseif ($role == 'Petani'): ?>
                 PETANI <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
+            <?php elseif ($role == 'Kurir'): ?>
+                KURIR <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
             <?php else: ?>
                 MEMBER <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
             <?php endif; ?>
@@ -475,7 +499,7 @@ $base_url = base_url();
                     <a href="<?= base_url('admin/dashboard'); ?>"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/user') !== false ? 'active' : '' ?>">
-                    <a href="<?= base_url('admin/user'); ?>"><i class="bi bi-people-fill"></i>Manajemen User <span class="menu-badge">12</span></a>
+                    <a href="<?= base_url('admin/user'); ?>"><i class="bi bi-people-fill"></i>Manajemen User</a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/petani') !== false ? 'active' : '' ?>">
                     <a href="<?= base_url('admin/petani'); ?>"><i class="bi bi-person-badge-fill"></i>Data Petani</a>
@@ -490,10 +514,13 @@ $base_url = base_url();
                     <a href="<?= base_url('admin/produk'); ?>"><i class="bi bi-box-seam-fill"></i>Manajemen Produk</a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/transaksi') !== false ? 'active' : '' ?>">
-                    <a href="<?= base_url('admin/transaksi'); ?>"><i class="bi bi-wallet2"></i>Transaksi <span class="menu-badge">8</span></a>
+                    <a href="<?= base_url('admin/transaksi'); ?>"><i class="bi bi-wallet2"></i>Transaksi</a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/kurir') !== false ? 'active' : '' ?>">
                     <a href="<?= base_url('admin/kurir'); ?>"><i class="bi bi-truck"></i>Manajemen Kurir</a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/tracking'); ?>"><i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman</a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/mitra') !== false ? 'active' : '' ?>">
                     <a href="<?= base_url('admin/mitra'); ?>"><i class="bi bi-shop"></i>Manajemen Mitra</a>
@@ -523,6 +550,12 @@ $base_url = base_url();
                     <a href="<?= base_url('petani/tracking'); ?>"><i class="bi bi-truck"></i>Tracking Kiriman</a>
                 </li>
 
+            <?php elseif ($role == 'Kurir'): ?>
+                <!-- ====== MENU KURIR ====== -->
+                <li class="menu-item <?= strpos(current_url(), 'kurir/tracking') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('kurir/tracking'); ?>"><i class="bi bi-truck"></i>Dashboard Kurir</a>
+                </li>
+
             <?php else: ?>
                 <!-- ====== MENU PEMBELI ====== -->
                 <li class="menu-item <?= current_url() == base_url('pembeli/dashboard') ? 'active' : '' ?>">
@@ -535,7 +568,7 @@ $base_url = base_url();
                     <a href="<?= base_url('pembeli/transaksi'); ?>"><i class="bi bi-receipt"></i>Riwayat Transaksi <span class="menu-badge">8</span></a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'pembeli/tracking') !== false ? 'active' : '' ?>">
-                    <a href="<?= base_url('pembeli/tracking'); ?>"><i class="bi bi-geo-alt-fill"></i>Lacak Pengiriman <span class="menu-badge">2</span></a>
+                    <a href="<?= base_url('pembeli/tracking'); ?>"><i class="bi bi-geo-alt-fill"></i>Status Pengiriman <span class="menu-badge">2</span></a>
                 </li>
     
                 <li class="menu-item <?= strpos(current_url(), 'pembeli/profil') !== false ? 'active' : '' ?>">
@@ -595,6 +628,7 @@ $base_url = base_url();
                     <div class="notif-dropdown-list" id="notifList">
                         <?php if (!empty($notifikasi)): ?>
                             <?php foreach ($notifikasi as $n): ?>
+                                <?php $n = (object) $n; ?>
                                 <?php if (is_object($n)): ?>
                                     <a class="notif-item <?= (isset($n->status_baca) && $n->status_baca == 0) ? 'unread' : ''; ?>" 
                                        href="<?= base_url('notifikasi/read/'.$n->id_notifikasi); ?>">
@@ -639,10 +673,12 @@ $base_url = base_url();
             </div>
 
             <!-- USER AVATAR -->
+            <?php if ($role !== 'Kurir'): ?>
             <div style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
                 <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
                 <span style="font-weight:500; font-size:0.85rem;"><?= $nama_user ?></span>
             </div>
+            <?php endif; ?>
         </div>
     </div>
     <!-- END PAGE HEADER -->
