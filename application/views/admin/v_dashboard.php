@@ -1257,6 +1257,13 @@
 						</a>
 					</li>
 
+					<!-- TRACKING PENGIRIMAN -->
+					<li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+						<a href="<?= base_url('admin/tracking'); ?>">
+							<i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
+						</a>
+					</li>
+
 					<!-- LAPORAN -->
 					<li class="menu-item">
 						<a href="<?= base_url('admin/laporan'); ?>">
@@ -1290,7 +1297,7 @@
 			</div>
 			<div class="col-lg-2 col-md-4 col-6 mb-2">
 				<a href="<?= base_url('admin/kurir/assign'); ?>" class="quick-action-btn">
-					<i class="bi bi-truck"></i> Assign Kurir
+					<i class="bi bi-truck"></i> Tugaskan Kurir
 				</a>
 			</div>
 			<div class="col-lg-2 col-md-4 col-6 mb-2">

@@ -294,7 +294,7 @@ class Transaksi extends CI_Controller {
         // 1. Notifikasi ke Admin
         $this->Notifikasi_model->save_notifikasi([
             'id_user' => 1,
-            'judul' => '📦 Pesanan Baru',
+            'judul' => 'Pesanan Baru',
             'isi_notifikasi' => 'Pesanan #' . $id_transaksi . ' dari ' . ($data_transaksi['nama_penerima'] ?? 'Guest') . ' menunggu konfirmasi.',
             'link' => 'admin/transaksi/detail/' . $id_transaksi,
             'icon' => 'info'
@@ -304,7 +304,7 @@ class Transaksi extends CI_Controller {
         if ($id_user) {
             $this->Notifikasi_model->save_notifikasi([
                 'id_user' => $id_user,
-                'judul' => '🛒 Pesanan Berhasil',
+                'judul' => 'Pesanan Berhasil',
                 'isi_notifikasi' => 'Pesanan #' . $id_transaksi . ' berhasil dibuat. Silakan upload bukti pembayaran.',
                 'link' => 'pembeli/transaksi/detail/' . $id_transaksi,
                 'icon' => 'success'
@@ -318,7 +318,7 @@ class Transaksi extends CI_Controller {
             if ($produk && $produk->id_user) {
                 $this->Notifikasi_model->save_notifikasi([
                     'id_user' => $produk->id_user,
-                    'judul' => '📦 Pesanan Baru',
+                    'judul' => 'Pesanan Baru',
                     'isi_notifikasi' => 'Produk ' . $produk->nama_produk . ' Anda dipesan oleh ' . ($data_transaksi['nama_penerima'] ?? 'Pembeli'),
                     'link' => 'petani/transaksi/detail/' . $id_transaksi,
                     'icon' => 'info'
@@ -406,7 +406,7 @@ class Transaksi extends CI_Controller {
         
         $this->Notifikasi_model->save_notifikasi([
             'id_user' => 1,
-            'judul' => '📷 Bukti Pembayaran Baru',
+            'judul' => 'Bukti Pembayaran Baru',
             'isi_notifikasi' => 'Pembeli ' . ($transaksi['nama_pembeli'] ?? 'Guest') . ' mengupload bukti untuk transaksi #' . $id_transaksi,
             'link' => 'admin/transaksi/detail/' . $id_transaksi,
             'icon' => 'success'
@@ -447,7 +447,7 @@ class Transaksi extends CI_Controller {
         
         $this->Notifikasi_model->save_notifikasi([
             'id_user' => 1,
-            'judul' => '📝 Pesanan Dibatalkan',
+            'judul' => 'Pesanan Dibatalkan',
             'isi_notifikasi' => 'Pesanan #' . $id_transaksi . ' dibatalkan oleh pembeli. Alasan: ' . $alasan,
             'link' => 'admin/transaksi/detail/' . $id_transaksi,
             'icon' => 'warning'

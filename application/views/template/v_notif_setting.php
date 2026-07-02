@@ -396,33 +396,6 @@
             </div>
 
             <!-- ============================================ -->
-            <!-- 🔴 KATEGORI: PANEN & PRODUKSI (PETANI) -->
-            <!-- ============================================ -->
-            <?php if ($is_petani): ?>
-                <div class="category-header">
-                    <i class="bi bi-tree-fill"></i> PANEN & PRODUKSI
-                </div>
-
-                <!-- Jadwal Panen (Petani) -->
-                <div class="switch-group">
-                    <div class="switch-icon" style="background: #EDE9FE; color: #5B21B6;">
-                        <i class="bi bi-calendar-event"></i>
-                    </div>
-                    <div class="switch-content">
-                        <div class="switch-label">
-                            <span>Lansiran Jadwal Panen</span>
-                            <div class="custom-switch ml-auto">
-                                <input type="checkbox" class="custom-control-input" id="notif_panen" name="notif_panen"
-                                    <?= isset($settings['notif_panen']) && $settings['notif_panen'] == 1 ? 'checked' : ''; ?>>
-                                <label class="custom-control-label" for="notif_panen"></label>
-                            </div>
-                        </div>
-                        <small class="switch-desc">Notifikasi saat jadwal panen baru ditambahkan atau pengingat H-1 panen.</small>
-                    </div>
-                </div>
-            <?php endif; ?>
-
-            <!-- ============================================ -->
             <!-- KATEGORI: STOK & PRODUK -->
             <!-- ============================================ -->
             <?php if ($is_admin || $is_petani): ?>
@@ -501,55 +474,6 @@
                         <small class="switch-desc">Notifikasi saat ada petani baru yang mendaftar di platform.</small>
                     </div>
                 </div>
-            <?php endif; ?>
-
-            <!-- ============================================ -->
-            <!-- KATEGORI: LAPORAN -->
-            <!-- ============================================ -->
-            <?php if ($is_admin || $is_petani || $is_pembeli): ?>
-                <div class="category-header">
-                    <i class="bi bi-megaphone"></i> LAPORAN
-                </div>
-
-                <!-- Promo & Diskon (Hanya Pembeli) -->
-                <?php if ($is_pembeli): ?>
-                    <div class="switch-group">
-                        <div class="switch-icon" style="background: #FCE4EC; color: #C62828;">
-                            <i class="bi bi-gift"></i>
-                        </div>
-                        <div class="switch-content">
-                            <div class="switch-label">
-                                <span>Lansiran Promo & Diskon</span>
-                                <div class="custom-switch ml-auto">
-                                    <input type="checkbox" class="custom-control-input" id="notif_promo" name="notif_promo"
-                                        <?= isset($settings['notif_promo']) && $settings['notif_promo'] == 1 ? 'checked' : ''; ?>>
-                                    <label class="custom-control-label" for="notif_promo"></label>
-                                </div>
-                            </div>
-                            <small class="switch-desc">Informasi promo dan diskon spesial untuk pelanggan setia.</small>
-                        </div>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Laporan Bulanan (Admin & Petani) -->
-                <?php if ($is_admin || $is_petani): ?>
-                    <div class="switch-group">
-                        <div class="switch-icon" style="background: #E8EAF6; color: #283593;">
-                            <i class="bi bi-file-earmark-text"></i>
-                        </div>
-                        <div class="switch-content">
-                            <div class="switch-label">
-                                <span>Lansiran Laporan Bulanan</span>
-                                <div class="custom-switch ml-auto">
-                                    <input type="checkbox" class="custom-control-input" id="notif_laporan" name="notif_laporan"
-                                        <?= isset($settings['notif_laporan']) && $settings['notif_laporan'] == 1 ? 'checked' : ''; ?>>
-                                    <label class="custom-control-label" for="notif_laporan"></label>
-                                </div>
-                            </div>
-                            <small class="switch-desc">Notifikasi saat laporan bulanan siap untuk diunduh.</small>
-                        </div>
-                    </div>
-                <?php endif; ?>
             <?php endif; ?>
 
             <!-- ============================================ -->

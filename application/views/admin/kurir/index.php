@@ -1193,9 +1193,16 @@
 						<?php endif; ?>
 					</a>
 				</li>
+					<!-- TRACKING PENGIRIMAN -->
+					<li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+						<a href="<?= base_url('admin/tracking'); ?>">
+							<i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
+						</a>
+					</li>
+				
 				<li class="menu-item">
 					<a href="<?= base_url('admin/laporan'); ?>">
-						<i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan & Analytics
+						<i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
 					</a>
 				</li>
 			</ul>

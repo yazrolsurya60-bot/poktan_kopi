@@ -11,35 +11,48 @@ class Laporan_model extends CI_Model {
     // ============================================
     // KPI UTAMA LAPORAN
     // ============================================
-    public function get_kpi_laporan() {
-        $total_pendapatan_row = $this->db->select_sum('total_harga')
-            ->where('status_pesanan', 'Selesai')
-            ->get('tb_transaksi')->row();
-        $total_pendapatan = $total_pendapatan_row->total_harga ?? 0;
-
-        $total_transaksi = $this->db->count_all_results('tb_transaksi');
-
-        $total_petani = $this->db->where('status_petani', 'Active')
-            ->count_all_results('tb_petani');
-
-        $total_mitra = $this->db->where('status_mitra', 'Active')
-            ->count_all_results('tb_mitra');
-
-        if ($total_pendapatan == 0 && $total_transaksi > 0) {
-            $sum_row = $this->db->select_sum('total_harga')->get('tb_transaksi')->row();
-            $total_pendapatan = $sum_row->total_harga ?? 0;
+    public function get_kpi_laporan($poktan = 0) {
+        // Base Query Transaksi
+        $this->db->select_sum('t.total_harga')
+                 ->from('tb_transaksi t')
+                 ->where('t.status_pesanan', 'Selesai');
+        if ($poktan > 0) {
+            $this->db->join('tb_petani_wilayah pw', 'pw.id_petani = t.id_petani', 'inner')
+                     ->where('pw.id_wilayah', $poktan);
         }
+        $total_pendapatan = $this->db->get()->row()->total_harga ?? 0;
 
-        $volume_penjualan = $total_transaksi > 0 ? ($total_transaksi * 150) : 0;
+        // Base Query Total Transaksi
+        $this->db->from('tb_transaksi t');
+        if ($poktan > 0) {
+            $this->db->join('tb_petani_wilayah pw', 'pw.id_petani = t.id_petani', 'inner')
+                     ->where('pw.id_wilayah', $poktan);
+        }
+        $total_transaksi = $this->db->count_all_results();
+
+        // Volume Penjualan (Riil dari tb_detail_transaksi)
+        $this->db->select_sum('dt.jumlah')
+                 ->from('tb_detail_transaksi dt')
+                 ->join('tb_transaksi t', 't.id_transaksi = dt.id_transaksi', 'inner')
+                 ->where('t.status_pesanan', 'Selesai');
+        if ($poktan > 0) {
+            $this->db->join('tb_petani_wilayah pw', 'pw.id_petani = t.id_petani', 'inner')
+                     ->where('pw.id_wilayah', $poktan);
+        }
+        $volume_penjualan = $this->db->get()->row()->jumlah ?? 0;
+
+        // Total Petani
+        $this->db->from('tb_petani p')->where('p.status_petani', 'Active');
+        if ($poktan > 0) {
+            $this->db->join('tb_petani_wilayah pw', 'pw.id_petani = p.id_petani', 'inner')
+                     ->where('pw.id_wilayah', $poktan);
+        }
+        $total_petani = $this->db->count_all_results();
+
+        $total_mitra = $this->db->where('status_mitra', 'Active')->count_all_results('tb_mitra');
+
         $laba_bersih      = $total_pendapatan > 0 ? (int)($total_pendapatan * 0.30) : 0;
         $rata_transaksi   = $total_transaksi > 0 ? (int)($total_pendapatan / $total_transaksi) : 0;
-
-        if ($total_pendapatan == 0) {
-            $total_pendapatan = 40000000;
-            $volume_penjualan = 450;
-            $laba_bersih      = 12000000;
-            $rata_transaksi   = 13333333;
-        }
 
         return [
             'total_pendapatan' => $total_pendapatan,
@@ -55,12 +68,18 @@ class Laporan_model extends CI_Model {
     // ============================================
     // LAPORAN PENJUALAN
     // ============================================
-    public function get_laporan_penjualan($filter = []) {
+    public function get_laporan_penjualan($filter = [], $poktan = 0) {
         // Ambil data transaksi riil + nama pembeli dari tb_user
         $this->db->select('t.*, COALESCE(u.nama, t.nama_penerima, t.email_pembeli, "Umum") as nama_pembeli')
             ->from('tb_transaksi t')
-            ->join('tb_user u', 'u.id_user = t.id_user', 'left')
-            ->order_by('t.id_transaksi', 'DESC');
+            ->join('tb_user u', 'u.id_user = t.id_user', 'left');
+            
+        if ($poktan > 0) {
+            $this->db->join('tb_petani_wilayah pw', 'pw.id_petani = t.id_petani', 'inner')
+                     ->where('pw.id_wilayah', $poktan);
+        }
+        
+        $this->db->order_by('t.id_transaksi', 'DESC');
 
         if (!empty($filter['status']) && $filter['status'] != 'semua') {
             $this->db->where('t.status_pesanan', $filter['status']);
@@ -89,9 +108,16 @@ class Laporan_model extends CI_Model {
     // ============================================
     // LAPORAN PETANI
     // ============================================
-    public function get_laporan_petani() {
+    public function get_laporan_petani($poktan = 0) {
         // Ambil petani yang tidak di-delete
-        $petani = $this->db->where('is_deleted', 0)->get('tb_petani')->result_array();
+        $this->db->select('p.*')->from('tb_petani p')->where('p.is_deleted', 0);
+        
+        if ($poktan > 0) {
+            $this->db->join('tb_petani_wilayah pw', 'pw.id_petani = p.id_petani', 'inner')
+                     ->where('pw.id_wilayah', $poktan);
+        }
+        
+        $petani = $this->db->get()->result_array();
         if (empty($petani)) return [];
 
         foreach ($petani as &$p) {
@@ -120,10 +146,16 @@ class Laporan_model extends CI_Model {
     // ============================================
     // LAPORAN PRODUK
     // ============================================
-    public function get_laporan_produk() {
-        $produk = $this->db
-            ->where('status_produk', 'Aktif')
-            ->get('tb_produk')->result_array();
+    public function get_laporan_produk($poktan = 0) {
+        $this->db->select('pr.*')->from('tb_produk pr')->where('pr.status_produk', 'Aktif');
+        
+        if ($poktan > 0) {
+            $this->db->join('tb_petani p', 'p.id_petani = pr.id_user', 'inner')
+                     ->join('tb_petani_wilayah pw', 'pw.id_petani = p.id_petani', 'inner')
+                     ->where('pw.id_wilayah', $poktan);
+        }
+        
+        $produk = $this->db->get()->result_array();
         if (empty($produk)) return [];
 
         foreach ($produk as &$pr) {
@@ -147,8 +179,8 @@ class Laporan_model extends CI_Model {
     // ============================================
     // LAPORAN KEUANGAN
     // ============================================
-    public function get_laporan_keuangan() {
-        $kpi = $this->get_kpi_laporan();
+    public function get_laporan_keuangan($poktan = 0) {
+        $kpi = $this->get_kpi_laporan($poktan);
         $pendapatan_kotor = $kpi['total_pendapatan'];
         $estimasi_biaya   = (int)($pendapatan_kotor * 0.70);
         $laba_bersih      = $pendapatan_kotor - $estimasi_biaya;
@@ -157,11 +189,16 @@ class Laporan_model extends CI_Model {
         $bulan_id = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',
                      7=>'Juli',8=>'Agustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
 
-        $rows = $this->db
-            ->select('MONTH(tanggal_transaksi) as bln, SUM(total_harga) as pendapatan, COUNT(*) as jml')
-            ->from('tb_transaksi')
-            ->group_by('MONTH(tanggal_transaksi)')
-            ->order_by('MONTH(tanggal_transaksi)', 'ASC')
+        $this->db->select('MONTH(t.tanggal_transaksi) as bln, SUM(t.total_harga) as pendapatan, COUNT(*) as jml')
+            ->from('tb_transaksi t');
+            
+        if ($poktan > 0) {
+            $this->db->join('tb_petani_wilayah pw', 'pw.id_petani = t.id_petani', 'inner')
+                     ->where('pw.id_wilayah', $poktan);
+        }
+            
+        $rows = $this->db->group_by('MONTH(t.tanggal_transaksi)')
+            ->order_by('MONTH(t.tanggal_transaksi)', 'ASC')
             ->get()->result_array();
 
         $detail_keuangan = [];
@@ -192,14 +229,18 @@ class Laporan_model extends CI_Model {
     // ============================================
     // LAPORAN PANEN
     // ============================================
-    public function get_laporan_panen() {
-        $panen = $this->db
-            ->select('p.*, pt.nama_petani, l.nama_lahan as lahan, l.jenis_kopi as jenis_kopi_lahan')
+    public function get_laporan_panen($poktan = 0) {
+        $this->db->select('p.*, pt.nama_petani, l.nama_lahan as lahan, l.jenis_kopi as jenis_kopi_lahan')
             ->from('tb_panen p')
             ->join('tb_petani pt', 'pt.id_petani = p.id_user', 'left')
-            ->join('tb_lahan l', 'l.id_lahan = p.id_lahan', 'left')
-            ->order_by('p.tanggal_panen', 'DESC')
-            ->get()->result_array();
+            ->join('tb_lahan l', 'l.id_lahan = p.id_lahan', 'left');
+            
+        if ($poktan > 0) {
+            $this->db->join('tb_petani_wilayah pw', 'pw.id_petani = p.id_user', 'inner')
+                     ->where('pw.id_wilayah', $poktan);
+        }
+            
+        $panen = $this->db->order_by('p.tanggal_panen', 'DESC')->get()->result_array();
 
         if (empty($panen)) return [];
 
@@ -218,34 +259,24 @@ class Laporan_model extends CI_Model {
     public function get_laporan_tracking() {
         $transaksi = $this->db->select('id_transaksi, status_pesanan, metode_bayar, total_harga')
             ->get('tb_transaksi')->result_array();
-        if (empty($transaksi)) {
-            return $this->_get_dummy_tracking();
-        }
+            
         $total = count($transaksi);
         $status_count = ['Pending' => 0, 'Diproses' => 0, 'Dikirim' => 0, 'Selesai' => 0, 'Dibatalkan' => 0];
-        foreach ($transaksi as $t) {
-            $s = $t['status_pesanan'];
-            if (isset($status_count[$s])) $status_count[$s]++;
+        
+        if (!empty($transaksi)) {
+            foreach ($transaksi as $t) {
+                $s = $t['status_pesanan'];
+                if (isset($status_count[$s])) $status_count[$s]++;
+            }
         }
         return ['statistik' => $status_count, 'total' => $total, 'log' => $transaksi];
-    }
-
-    private function _get_dummy_tracking() {
-        return [
-            'statistik' => ['Pending' => 2, 'Diproses' => 5, 'Dikirim' => 8, 'Selesai' => 30, 'Dibatalkan' => 1],
-            'total'     => 46,
-            'log'       => [
-                ['id_transaksi' => 'TRX-001', 'status_pesanan' => 'Selesai',  'kurir' => 'JNE',     'estimasi' => '2026-06-03', 'resi' => 'JNE123456'],
-                ['id_transaksi' => 'TRX-002', 'status_pesanan' => 'Dikirim',  'kurir' => 'Sicepat', 'estimasi' => '2026-06-20', 'resi' => 'SCP789012'],
-                ['id_transaksi' => 'TRX-003', 'status_pesanan' => 'Diproses', 'kurir' => '-',       'estimasi' => '-',          'resi' => '-'],
-            ],
-        ];
     }
 
     // ============================================
     // LAPORAN MITRA
     // ============================================
-    public function get_laporan_mitra() {
+    public function get_laporan_mitra($poktan = 0) {
+        // Data mitra belum direlasikan secara langsung per poktan
         $mitra = $this->db->get('tb_mitra')->result_array();
         if (empty($mitra)) return [];
 
@@ -261,29 +292,71 @@ class Laporan_model extends CI_Model {
         return $mitra;
     }
 
-    private function _get_dummy_mitra() {
-        return [
-            ['id_mitra' => 1, 'nama_mitra' => 'Cafe Merapi',         'status_mitra' => 'Active',   'total_order' => 48, 'total_pembelian' => 24000000, 'produk_favorit' => 'Liberika Grade A', 'rating' => 5],
-            ['id_mitra' => 2, 'nama_mitra' => 'Toko Kopi Nusantara', 'status_mitra' => 'Active',   'total_order' => 35, 'total_pembelian' => 18500000, 'produk_favorit' => 'Arabika Grade A',  'rating' => 4],
-            ['id_mitra' => 3, 'nama_mitra' => 'CV. Aroma Kopi',      'status_mitra' => 'Inactive', 'total_order' => 12, 'total_pembelian' => 7200000,  'produk_favorit' => 'Robusta Grade A',  'rating' => 3],
-        ];
-    }
+
 
     // ============================================
     // DATA CHART
     // ============================================
     public function get_chart_penjualan_bulanan() {
+        $bulan_id = [1=>'Jan',2=>'Feb',3=>'Mar',4=>'Apr',5=>'Mei',6=>'Jun',
+                     7=>'Jul',8=>'Ags',9=>'Sep',10=>'Okt',11=>'Nov',12=>'Des'];
+                     
+        // Ambil data 6 bulan terakhir dari tb_transaksi
+        $rows = $this->db->select('MONTH(tanggal_transaksi) as bln, SUM(total_harga) as pendapatan')
+            ->from('tb_transaksi')
+            ->where('status_pesanan', 'Selesai')
+            ->group_by('MONTH(tanggal_transaksi)')
+            ->order_by('MONTH(tanggal_transaksi)', 'ASC')
+            ->limit(12)
+            ->get()->result_array();
+            
+        $labels = [];
+        $pendapatan = [];
+        $volume = []; // Karena tb_transaksi tidak punya volume, kita bisa ambil dari detail_transaksi nantinya, namun kita isi 0 sementara
+        
+        if (empty($rows)) {
+            // Jika kosong, kembalikan chart kosong
+            return ['labels' => ['Kosong'], 'pendapatan' => [0], 'volume' => [0]];
+        }
+
+        foreach ($rows as $r) {
+            $labels[] = $bulan_id[(int)$r['bln']] ?? $r['bln'];
+            $pendapatan[] = (int)$r['pendapatan'];
+            $volume[] = 0; // Bisa disesuaikan dengan SUM(jumlah) jika join detail_transaksi
+        }
+        
         return [
-            'labels'     => ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'],
-            'pendapatan' => [12000000, 15000000, 18000000, 14000000, 20000000, 23000000, 21000000, 25000000, 27000000, 24000000, 30000000, 28000000],
-            'volume'     => [80, 100, 120, 93, 133, 153, 140, 167, 180, 160, 200, 187],
+            'labels'     => $labels,
+            'pendapatan' => $pendapatan,
+            'volume'     => $volume,
         ];
     }
 
     public function get_chart_produk_terlaris() {
+        // Top 5 produk terlaris dari tb_detail_transaksi
+        $rows = $this->db->select('p.nama_produk, SUM(dt.jumlah) as total_qty')
+            ->from('tb_detail_transaksi dt')
+            ->join('tb_produk p', 'p.id_produk = dt.id_produk')
+            ->group_by('dt.id_produk')
+            ->order_by('total_qty', 'DESC')
+            ->limit(5)
+            ->get()->result_array();
+            
+        $labels = [];
+        $data = [];
+        
+        if (empty($rows)) {
+            return ['labels' => ['Belum Ada Penjualan'], 'data' => [1]];
+        }
+        
+        foreach ($rows as $r) {
+            $labels[] = $r['nama_produk'];
+            $data[] = (int)$r['total_qty'];
+        }
+
         return [
-            'labels' => ['Liberika Grade A', 'Arabika Grade A', 'Robusta Grade A', 'Liberika Grade B', 'Arabika Specialty'],
-            'data'   => [285, 220, 180, 95, 72],
+            'labels' => $labels,
+            'data'   => $data,
         ];
     }
 

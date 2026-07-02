@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Data Lahan</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -94,18 +97,34 @@
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0; color: #1a202c;"><?= $lahan['nama_lahan'] ?></h2>
-            <span class="status-pill"><?= $lahan['status_lahan'] ?></span>
+            <h2 style="margin: 0; color: #1a202c;"><?= htmlspecialchars($lahan['nama_lahan']) ?></h2>
+            <span class="status-pill"><?= htmlspecialchars($lahan['status_lahan']) ?></span>
         </div>
 
         <div class="info-grid">
-            <div><span class="label-text">Jenis Kopi</span><span class="value-text"><?= $lahan['jenis_kopi'] ?></span>
+            <div>
+                <span class="label-text">Jenis Kopi</span>
+                <span class="value-text"><?= htmlspecialchars($lahan['jenis_kopi']) ?></span>
             </div>
-            <div><span class="label-text">Luas Lahan</span><span class="value-text"><?= $lahan['luas'] ?> Ha</span>
+            <!-- REVISI: Menampilkan data Jenis Tanah -->
+            <div>
+                <span class="label-text">Jenis Tanah</span>
+                <span
+                    class="value-text"><?= !empty($lahan['jenis_tanah']) ? htmlspecialchars($lahan['jenis_tanah']) : '-' ?></span>
             </div>
-            <div><span class="label-text">Lokasi</span><span class="value-text"><?= $lahan['lokasi'] ?></span></div>
-            <div><span class="label-text">Koordinat</span><span class="value-text"><?= $lahan['latitude'] ?>,
-                    <?= $lahan['longitude'] ?></span></div>
+            <div>
+                <span class="label-text">Luas Lahan</span>
+                <span class="value-text"><?= htmlspecialchars($lahan['luas']) ?> Ha</span>
+            </div>
+            <div>
+                <span class="label-text">Lokasi</span>
+                <span class="value-text"><?= htmlspecialchars($lahan['lokasi']) ?></span>
+            </div>
+            <div style="grid-column: span 2;">
+                <span class="label-text">Koordinat</span>
+                <span class="value-text"><?= htmlspecialchars($lahan['latitude']) ?>,
+                    <?= htmlspecialchars($lahan['longitude']) ?></span>
+            </div>
         </div>
 
         <div style="margin-top: 25px;">
@@ -116,7 +135,7 @@
         <div style="margin-top: 25px; border-top: 1px solid #edf2f7; padding-top: 20px;">
             <span class="label-text">Catatan Lahan</span>
             <p style="color: #4a5568; line-height: 1.6;">
-                <?= !empty($lahan['catatan']) ? $lahan['catatan'] : 'Tidak ada catatan tambahan.' ?>
+                <?= !empty($lahan['catatan']) ? htmlspecialchars($lahan['catatan']) : 'Tidak ada catatan tambahan.' ?>
             </p>
         </div>
 
@@ -134,16 +153,20 @@
                     <?php if(!empty($riwayat_panen)): ?>
                     <?php foreach($riwayat_panen as $p): ?>
                     <tr>
-                        <td style="padding: 12px; border: 1px solid #e2e8f0;"><?= $p->tanggal_panen; ?></td>
-                        <td style="padding: 12px; border: 1px solid #e2e8f0;"><?= $p->jumlah_panen; ?> Kg</td>
-                        <td style="padding: 12px; border: 1px solid #e2e8f0;"><?= $p->kualitas; ?></td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">
+                            <?= htmlspecialchars($p->tanggal_panen); ?></td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;"><?= htmlspecialchars($p->jumlah_panen); ?>
+                            Kg</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;"><?= htmlspecialchars($p->kualitas); ?>
+                        </td>
                     </tr>
                     <?php endforeach; ?>
                     <?php else: ?>
                     <tr>
                         <td colspan="3"
-                            style="padding: 20px; text-align: center; border: 1px solid #e2e8f0; color: #718096;">Belum
-                            ada riwayat panen.</td>
+                            style="padding: 20px; text-align: center; border: 1px solid #e2e8f0; color: #718096;">
+                            Belum ada riwayat panen.
+                        </td>
                     </tr>
                     <?php endif; ?>
                 </tbody>
@@ -158,7 +181,7 @@
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap'
     }).addTo(map);
-    L.marker([lat, lng]).addTo(map).bindPopup("<b><?= $lahan['nama_lahan'] ?></b>").openPopup();
+    L.marker([lat, lng]).addTo(map).bindPopup("<b><?= htmlspecialchars($lahan['nama_lahan']) ?></b>").openPopup();
     </script>
 
 </body>

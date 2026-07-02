@@ -451,13 +451,6 @@
             margin-top: 8px;
         }
 
-        /* ===== SECTION DIVIDER ===== */
-        .section-divider {
-            border-top: 1px solid rgba(74, 44, 17, 0.06);
-            margin: 6px 0 18px;
-            padding-top: 4px;
-        }
-
         /* ===== RESPONSIVE ===== */
         @media (max-width: 991.98px) {
             .sidebar {
@@ -636,49 +629,55 @@
             </div>
 
             <div class="card-body-custom">
-                <!-- PERBAIKAN: action diubah ke produk/simpan -->
                 <form action="<?= base_url('petani/produk/simpan'); ?>" method="post" enctype="multipart/form-data">
 
                     <div class="row">
                         <!-- KOLOM KIRI -->
                         <div class="col-lg-6">
+                            <!-- NAMA PRODUK - DROPDOWN -->
                             <div class="form-group">
                                 <label>Nama Produk <span class="required">*</span></label>
-                                <input type="text" name="nama_produk" class="form-control"
-                                    placeholder="Contoh: Biji Kopi Arabica Organik" required>
+                                <select name="nama_produk" id="nama_produk" class="form-control" required>
+                                    <option value="">-- Pilih Nama Produk --</option>
+                                    <option value="Ceri">Ceri</option>
+                                    <option value="Biji Kopi">Biji Kopi</option>
+                                    <option value="Kopi Bubuk">Kopi Bubuk</option>
+                                </select>
                             </div>
 
+                            <!-- JENIS KOPI -->
                             <div class="form-group">
                                 <label>Jenis Kopi <span class="required">*</span></label>
-                                <select name="jenis_kopi" class="form-control" required>
-                                    <option value="">-- Pilih Jenis Kopi --</option>
-                                    <option value="Arabica">Arabica</option>
-                                    <option value="Robusta">Robusta</option>
+                                <select name="jenis_kopi" id="jenis_kopi" class="form-control" required>
                                     <option value="Liberica">Liberica</option>
                                 </select>
                             </div>
 
+                            <!-- PROSES PENGOLAHAN -->
                             <div class="form-group">
-                                <label>Grade <span class="required">*</span></label>
-                                <select name="grade" class="form-control" required>
-                                    <option value="">-- Pilih Grade --</option>
-                                    <option value="A">Grade A</option>
-                                    <option value="AA">Grade AA</option>
-                                    <option value="B">Grade B</option>
-                                    <option value="C">Grade C</option>
-                                </select>
+                                <label>Proses Pengolahan</label>
+                                <input type="text" name="proses" id="proses" class="form-control" placeholder="Otomatis terisi berdasarkan Nama Produk" readonly>
                             </div>
 
+                            <!-- HARGA - Auto fill dari Admin -->
                             <div class="form-group">
-                                <label>Harga (Rp) / Kg <span class="required">*</span></label>
-                                <input type="number" name="harga" class="form-control"
-                                    placeholder="Contoh: 120000" required>
+                                <label>Harga (Rp) / Kg</label>
+                                <input type="number" name="harga" id="harga" class="form-control" placeholder="Otomatis terisi" readonly>
+                                <small class="text-muted" style="display:block; margin-top:3px; color:var(--text-secondary);">Harga ditentukan oleh Admin</small>
                             </div>
 
+                            <!-- STOK - Input Petani -->
                             <div class="form-group">
                                 <label>Stok Ketersediaan (Kg) <span class="required">*</span></label>
-                                <input type="number" name="stok_produk" class="form-control"
+                                <input type="number" name="stok_produk" id="stok" class="form-control"
                                     placeholder="Contoh: 50" required>
+                            </div>
+
+                            <!-- TOTAL - Otomatis -->
+                            <div class="form-group">
+                                <label>Total Pendapatan (Rp)</label>
+                                <input type="text" name="total" id="total" class="form-control" style="font-weight:700; color:var(--roasted-brown);" readonly>
+                                <small class="text-muted" style="display:block; margin-top:3px; color:var(--text-secondary);">Harga × Stok = Total Pendapatan</small>
                             </div>
                         </div>
 
@@ -687,35 +686,9 @@
                             <div class="form-group">
                                 <label>Altitude (Ketinggian Tanam)</label>
                                 <input type="text" name="altitude" class="form-control"
-                                    placeholder="Contoh: 1200 - 1500 mdpl">
+                                    placeholder="Contoh: 900 Meter">
                             </div>
 
-                            <div class="form-group">
-                                <label>Proses Pengolahan</label>
-                                <input type="text" name="proses" class="form-control"
-                                    placeholder="Contoh: Dicuci Bersih, Dijemur Utuh, Setengah Dicuci">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Karakter Rasa Kopi</label>
-                                <textarea class="form-control" rows="2" name="flavor_notes"
-                                    placeholder="Contoh: Rasa buah, aroma cokelat, sedikit manis seperti madu, atau rasa kacang"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Deskripsi Tambahan</label>
-                                <textarea class="form-control" rows="2" name="deskripsi"
-                                    placeholder="Tuliskan deskripsi lengkap produk kopi Anda..."></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SECTION DIVIDER -->
-                    <div class="section-divider"></div>
-
-                    <!-- BARIS BAWAH: STATUS & FOTO -->
-                    <div class="row">
-                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>Status Produk <span class="required">*</span></label>
                                 <select name="status_produk" class="form-control">
@@ -723,8 +696,7 @@
                                     <option value="Nonaktif">Nonaktif</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="col-md-6">
+
                             <div class="form-group">
                                 <label>Foto Produk</label>
                                 <div class="file-upload-wrapper">
@@ -742,9 +714,8 @@
                         <a href="<?= base_url('petani/produk'); ?>" class="btn btn-secondary-custom btn-custom">
                             <i class="bi bi-arrow-left"></i> Batal
                         </a>
-                        <button type="submit" class="btn text-white px-4"
-                            style="background: var(--amber-cream); border-radius: 8px;">
-                            <i class="bi bi-save mr-1"></i> Simpan Produk
+                        <button type="submit" class="btn btn-primary-custom btn-custom">
+                            <i class="bi bi-save"></i> Simpan Produk
                         </button>
                     </div>
 
@@ -786,17 +757,95 @@
             }
         });
 
+        // ============================================
+        // AUTO SET JENIS KOPI = LIBERICA & PROSES & HARGA & TOTAL
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const namaProduk = document.getElementById('nama_produk');
+            const jenisKopi = document.getElementById('jenis_kopi');
+            const proses = document.getElementById('proses');
+            const harga = document.getElementById('harga');
+            const stok = document.getElementById('stok');
+            const total = document.getElementById('total');
+
+            // Daftar harga dari Admin
+            const hargaProduk = {
+                'Ceri': 7000,
+                'Biji Kopi': 70000,
+                'Kopi Bubuk': 120000
+            };
+
+            // Fungsi hitung total
+            function hitungTotal() {
+                const hargaVal = parseFloat(harga.value) || 0;
+                const stokVal = parseFloat(stok.value) || 0;
+                const totalVal = hargaVal * stokVal;
+                
+                if (total && totalVal > 0) {
+                    total.value = 'Rp ' + totalVal.toLocaleString('id-ID');
+                } else {
+                    total.value = 'Rp 0';
+                }
+            }
+
+            if (namaProduk && jenisKopi) {
+                namaProduk.addEventListener('change', function() {
+                    const value = this.value;
+                    
+                    // Set Jenis Kopi ke Liberica
+                    if (value !== '') {
+                        jenisKopi.value = 'Liberica';
+                    } else {
+                        jenisKopi.value = '';
+                    }
+
+                    // Set Proses Pengolahan
+                    if (proses) {
+                        switch(value) {
+                            case 'Ceri':
+                                proses.value = 'Tanpa Proses';
+                                break;
+                            case 'Biji Kopi':
+                                proses.value = 'Pencucian, Pengupasan, Penjemuran';
+                                break;
+                            case 'Kopi Bubuk':
+                                proses.value = 'Pencucian, Pengupasan, Penjemuran, Penggilingan, Pengemasan';
+                                break;
+                            default:
+                                proses.value = '';
+                        }
+                    }
+
+                    // Set Harga
+                    if (harga) {
+                        if (value && hargaProduk[value]) {
+                            harga.value = hargaProduk[value];
+                        } else {
+                            harga.value = '';
+                        }
+                    }
+
+                    // Hitung total
+                    hitungTotal();
+                });
+            }
+
+            // Auto-calculate Total saat Stok berubah
+            if (stok) {
+                stok.addEventListener('input', function() {
+                    hitungTotal();
+                });
+            }
+        });
+
         console.log('✅ Form Tambah Produk Petani siap digunakan!');
-        console.log('📋 Field yang tersedia:');
-        console.log('   - Nama Produk (wajib)');
+        console.log('📋 Fitur yang tersedia:');
+        console.log('   - Nama Produk (dropdown: Ceri, Biji Kopi, Kopi Bubuk)');
         console.log('   - Jenis Kopi (wajib)');
-        console.log('   - Grade (wajib)');
-        console.log('   - Harga (wajib)');
+        console.log('   - Proses Pengolahan (auto-fill)');
+        console.log('   - Harga (auto-fill dari Admin)');
         console.log('   - Stok (wajib)');
-        console.log('   - Altitude (opsional)');
-        console.log('   - Proses (opsional)');
-        console.log('   - Flavor Notes (opsional)');
-        console.log('   - Deskripsi (opsional)');
+        console.log('   - Total (auto-calculate: Harga × Stok)');
         console.log('   - Status (wajib)');
         console.log('   - Foto (opsional)');
     </script>

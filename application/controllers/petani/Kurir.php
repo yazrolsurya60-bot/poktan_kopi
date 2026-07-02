@@ -5,13 +5,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Kurir Controller (PETANI)
  * ============================================
  * Modul 08: Manajemen Kurir — (Anisya)
- * ============================================
- * Sesuai PRD M-08, role Petani HANYA punya akses ke:
- * - M08-F06 : Assign Kurir — tapi dibatasi HANYA untuk transaksi/
- *             pengiriman hasil panen miliknya sendiri (id_user = id_user login)
- *
- * Petani TIDAK punya akses ke tambah/edit/hapus/detail/performance kurir,
- * itu semua tetap eksklusif milik Admin (lihat controllers/admin/Kurir.php).
  */
 class Kurir extends CI_Controller
 {
@@ -38,15 +31,20 @@ class Kurir extends CI_Controller
         }
 
         $this->load->model('Kurir_model');
+        $this->load->model('Notifikasi_model'); // 🔴 TAMBAHKAN
     }
 
     // ============================================
     // M08-F06: HALAMAN ASSIGN KURIR (sisi Petani)
-    // Hanya menampilkan pengiriman dari transaksi miliknya sendiri
     // ============================================
     public function assign()
     {
         $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Petani';
 
         $data['pengiriman_pending'] = $this->Kurir_model->get_pengiriman_belum_assign_by_user($id_user);
         $data['kurir_aktif']        = $this->Kurir_model->get_kurir_aktif();
@@ -56,8 +54,6 @@ class Kurir extends CI_Controller
 
     // ============================================
     // M08-F06: PROSES ASSIGN (sisi Petani)
-    // Validasi tambahan: transaksi yang di-assign HARUS milik petani ini,
-    // supaya petani tidak bisa assign kurir ke transaksi orang lain.
     // ============================================
     public function proses_assign()
     {
@@ -75,8 +71,6 @@ class Kurir extends CI_Controller
         }
 
         // Pastikan id_tracking yang dikirim memang milik petani ini.
-        // Dicocokkan terhadap daftar pengiriman miliknya sendiri,
-        // supaya petani tidak bisa "menebak" id_tracking milik orang lain.
         $milik_sendiri = $this->Kurir_model->get_pengiriman_belum_assign_by_user($id_user);
         $valid_ids      = array_column($milik_sendiri, 'id_tracking');
 

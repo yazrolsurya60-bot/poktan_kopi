@@ -55,10 +55,11 @@ class Dashboard extends CI_Controller
         $data['settings'] = $this->Notifikasi_model->get_settings($id_user);
 
         // ============================================
-        // 2. NOTIFIKASI
+        // 2. NOTIFIKASI + ROLE UNTUK SOUND
         // ============================================
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Petani'; // 🔴 UNTUK SOUND
 
         // ============================================
         // 3. KPI CARDS
@@ -95,16 +96,6 @@ class Dashboard extends CI_Controller
         // ============================================
         $data['produk_terjual'] = $this->Notifikasi_model->get_petani_top_products($id_user, 5);
 
-        // ============================================
-        // 8. JADWAL PANEN
-        // ============================================
-        $data['jadwal_panen'] = $this->db
-            ->where('id_user', $id_user)
-            ->where('tanggal_panen >=', date('Y-m-d'))
-            ->order_by('tanggal_panen', 'ASC')
-            ->limit(5)
-            ->get('tb_panen')
-            ->result_array();
 
         // ============================================
         // 9. LOAD VIEW
@@ -123,6 +114,7 @@ class Dashboard extends CI_Controller
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['history'] = $this->Notifikasi_model->get_all_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Petani';
 
         $this->load->view('template/v_notif_history', $data);
     }
@@ -159,6 +151,7 @@ class Dashboard extends CI_Controller
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['settings'] = $this->Notifikasi_model->get_settings($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Petani';
 
         $this->load->view('template/v_notif_setting', $data);
     }
@@ -250,7 +243,7 @@ class Dashboard extends CI_Controller
     }
 
     // ============================================
-    // AJAX - GET NOTIFIKASI
+    // AJAX - GET NOTIFIKASI (UNTUK SOUND)
     // ============================================
     public function get_notifications_ajax()
     {
@@ -267,6 +260,21 @@ class Dashboard extends CI_Controller
             'notifikasi' => $notifikasi,
             'unread' => $unread
         ]);
+    }
+
+    // ============================================
+    // AJAX - MARK ALL READ
+    // ============================================
+    public function mark_all_read_ajax()
+    {
+        if (!$this->input->is_ajax_request()) {
+            show_404();
+        }
+
+        $id_user = $this->session->userdata('id_user');
+        $result = $this->Notifikasi_model->mark_all_read($id_user);
+
+        echo json_encode(['success' => $result]);
     }
 
     // ============================================

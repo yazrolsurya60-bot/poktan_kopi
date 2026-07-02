@@ -244,7 +244,7 @@
 		}
 
 		/* ============================================ */
-		/* USER BADGE - SAMA DENGAN DASHBOARD */
+		/* USER BADGE */
 		/* ============================================ */
 
 		.user-badge {
@@ -473,15 +473,17 @@
 			font-size: 0.7rem;
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
-			padding: 14px 16px;
+			padding: 10px 12px;
+			text-align: center;
 			white-space: nowrap;
 		}
 
 		.table-custom tbody td {
-			padding: 14px 16px;
+			padding: 10px 12px;
 			border-bottom: 1px solid rgba(74, 44, 17, 0.04);
 			vertical-align: middle;
 			background: var(--card-white);
+			text-align: center;
 		}
 
 		.table-custom tbody tr:hover td {
@@ -497,7 +499,7 @@
 		/* ============================================ */
 
 		.status-badge {
-			padding: 4px 14px;
+			padding: 4px 12px;
 			border-radius: 20px;
 			font-size: 0.7rem;
 			font-weight: 600;
@@ -514,21 +516,6 @@
 			color: #991B1B;
 		}
 
-		.status-badge.stok_aman {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.status-badge.stok_tipis {
-			background: #FEF3C7;
-			color: #92400E;
-		}
-
-		.status-badge.stok_habis {
-			background: #FEE2E2;
-			color: #991B1B;
-		}
-
 		/* ============================================ */
 		/* TOMBOL */
 		/* ============================================ */
@@ -537,14 +524,14 @@
 			background: #DBEAFE;
 			color: #1E40AF;
 			border: none;
-			padding: 4px 12px;
+			padding: 3px 10px;
 			border-radius: 6px;
-			font-size: 0.75rem;
+			font-size: 0.7rem;
 			font-weight: 600;
 			transition: var(--transition-smooth);
 			display: inline-flex;
 			align-items: center;
-			gap: 4px;
+			gap: 3px;
 			text-decoration: none;
 		}
 
@@ -558,14 +545,14 @@
 			background: #FEF3C7;
 			color: #92400E;
 			border: none;
-			padding: 4px 12px;
+			padding: 3px 10px;
 			border-radius: 6px;
-			font-size: 0.75rem;
+			font-size: 0.7rem;
 			font-weight: 600;
 			transition: var(--transition-smooth);
 			display: inline-flex;
 			align-items: center;
-			gap: 4px;
+			gap: 3px;
 			text-decoration: none;
 		}
 
@@ -579,14 +566,14 @@
 			background: #FEE2E2;
 			color: #991B1B;
 			border: none;
-			padding: 4px 12px;
+			padding: 3px 10px;
 			border-radius: 6px;
-			font-size: 0.75rem;
+			font-size: 0.7rem;
 			font-weight: 600;
 			transition: var(--transition-smooth);
 			display: inline-flex;
 			align-items: center;
-			gap: 4px;
+			gap: 3px;
 			text-decoration: none;
 		}
 
@@ -702,17 +689,8 @@
 		}
 
 		/* ============================================ */
-		/* RESPONSIVE - SAMA DENGAN DASHBOARD */
+		/* RESPONSIVE */
 		/* ============================================ */
-
-		@media (max-width: 1199.98px) {
-
-			.table-custom thead th,
-			.table-custom tbody td {
-				padding: 12px 14px;
-				font-size: 0.8rem;
-			}
-		}
 
 		@media (max-width: 991.98px) {
 			.sidebar {
@@ -736,10 +714,6 @@
 
 			.page-header h2 {
 				font-size: 1.3rem;
-			}
-
-			.page-header .subtitle {
-				font-size: 0.8rem;
 			}
 
 			.notif-dropdown {
@@ -770,27 +744,12 @@
 
 			.table-custom thead th,
 			.table-custom tbody td {
-				padding: 10px 12px;
-				font-size: 0.75rem;
-			}
-
-			.table-custom thead th {
-				font-size: 0.6rem;
+				padding: 8px 10px;
+				font-size: 0.7rem;
 			}
 
 			.btn-tambah {
 				padding: 8px 18px;
-				font-size: 0.8rem;
-			}
-
-			.search-input {
-				padding: 8px 14px;
-				font-size: 0.8rem;
-			}
-
-			.btn-search,
-			.btn-reset {
-				padding: 8px 16px;
 				font-size: 0.8rem;
 			}
 		}
@@ -802,10 +761,6 @@
 
 			.page-header h2 {
 				font-size: 1.1rem;
-			}
-
-			.page-header .subtitle {
-				font-size: 0.7rem;
 			}
 
 			.notif-dropdown {
@@ -836,26 +791,25 @@
 			}
 
 			.table-custom thead th {
-				font-size: 0.55rem;
-				padding: 8px 8px;
-				white-space: normal;
+				font-size: 0.5rem;
+				padding: 6px 6px;
 			}
 
 			.table-custom tbody td {
-				padding: 8px 8px;
-				font-size: 0.7rem;
+				padding: 6px 6px;
+				font-size: 0.65rem;
 			}
 
 			.table-custom tbody td img {
-				width: 40px !important;
-				height: 40px !important;
+				width: 35px !important;
+				height: 35px !important;
 			}
 
 			.btn-detail,
 			.btn-edit,
 			.btn-hapus {
-				font-size: 0.6rem;
-				padding: 3px 8px;
+				font-size: 0.55rem;
+				padding: 2px 6px;
 			}
 
 			.btn-tambah {
@@ -894,93 +848,15 @@
 				justify-content: center;
 				margin-top: 4px;
 			}
-
-			.btn-detail i,
-			.btn-edit i,
-			.btn-hapus i {
-				font-size: 0.6rem;
-			}
 		}
 
 		/* ============================================ */
 		/* UTILITY */
 		/* ============================================ */
 
-		.text-truncate {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-
-		.gap-1 {
-			gap: 4px;
-		}
-
-		.gap-2 {
-			gap: 8px;
-		}
-
-		.gap-3 {
-			gap: 12px;
-		}
-
-		.gap-4 {
-			gap: 16px;
-		}
-
-		.gap-5 {
-			gap: 24px;
-		}
-
-		.d-flex-center {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
-		/* ============================================ */
-		/* EMPTY STATE */
-		/* ============================================ */
-
-		.empty-state {
-			padding: 60px 20px;
-			text-align: center;
-		}
-
-		.empty-state i {
-			font-size: 3rem;
-			color: #D1C9C0;
-			display: block;
-			margin-bottom: 16px;
-		}
-
-		.empty-state h5 {
-			font-weight: 700;
-			color: var(--dark-coffee);
-		}
-
-		.empty-state p {
-			color: var(--text-secondary);
-			font-size: 0.9rem;
-		}
-
-		.empty-state a {
-			color: var(--amber-cream);
-			font-weight: 600;
-			text-decoration: none;
-		}
-
-		.empty-state a:hover {
-			text-decoration: underline;
-		}
-
-		/* ============================================ */
-		/* FOTO PRODUK */
-		/* ============================================ */
-
 		.product-thumb {
-			width: 55px;
-			height: 55px;
+			width: 50px;
+			height: 50px;
 			object-fit: cover;
 			border-radius: 10px;
 			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -988,49 +864,17 @@
 		}
 
 		.product-thumb-placeholder {
-			width: 55px;
-			height: 55px;
+			width: 50px;
+			height: 50px;
 			background: var(--bg-cream);
 			border-radius: 10px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			color: var(--text-secondary);
-			font-size: 0.65rem;
+			font-size: 0.6rem;
 			border: 1px dashed rgba(74, 44, 17, 0.15);
 		}
-
-		/* ============================================ */
-		/* GRADE BADGE DI TABEL */
-		/* ============================================ */
-
-		.grade-badge {
-			background: var(--bg-cream);
-			padding: 4px 12px;
-			border-radius: 6px;
-			font-size: 0.75rem;
-			font-weight: 600;
-			color: var(--text-secondary);
-			display: inline-block;
-		}
-
-		/* ============================================ */
-		/* STOK DI TABEL */
-		/* ============================================ */
-
-		.stok-number {
-			font-weight: 600;
-			color: var(--dark-coffee);
-		}
-
-		.stok-unit {
-			font-size: 0.65rem;
-			color: var(--text-secondary);
-		}
-
-		/* ============================================ */
-		/* FONT WEIGHT */
-		/* ============================================ */
 
 		.fw-600 {
 			font-weight: 600;
@@ -1042,6 +886,11 @@
 
 		.text-amber {
 			color: var(--amber-cream);
+		}
+
+		.stok-unit {
+			font-size: 0.6rem;
+			color: var(--text-secondary);
 		}
 	</style>
 </head>
@@ -1066,17 +915,26 @@
 						<i class="bi bi-grid-1x2-fill"></i>Dashboard
 					</a>
 				</li>
+				<!-- MANAJEMEN USER - Badge User Baru -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/user'); ?>">
 						<i class="bi bi-people-fill"></i>Manajemen User
-						<span class="menu-badge">12</span>
+						<?php if (isset($user_baru) && $user_baru > 0): ?>
+							<span class="menu-badge" style="background: #EF4444; color: white;"><?= $user_baru; ?></span>
+						<?php endif; ?>
 					</a>
 				</li>
+
+				<!-- DATA PETANI - Badge Petani Belum Diverifikasi -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/petani'); ?>">
 						<i class="bi bi-person-badge-fill"></i>Data Petani
+						<?php if (isset($petani_baru_count) && $petani_baru_count > 0): ?>
+							<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $petani_baru_count; ?></span>
+						<?php endif; ?>
 					</a>
 				</li>
+
 				<li class="menu-item">
 					<a href="<?= base_url('admin/lahan'); ?>">
 						<i class="bi bi-map-fill"></i>Manajemen Lahan
@@ -1092,20 +950,34 @@
 						<i class="bi bi-box-seam-fill"></i>Manajemen Produk
 					</a>
 				</li>
+				<!-- TRANSAKSI - Badge Pending -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/transaksi'); ?>">
 						<i class="bi bi-wallet2"></i>Transaksi
-						<span class="menu-badge">8</span>
+						<?php if (isset($transaksi_pending) && $transaksi_pending > 0): ?>
+							<span class="menu-badge" style="background: #EF4444; color: white;"><?= $transaksi_pending; ?></span>
+						<?php endif; ?>
 					</a>
 				</li>
+
 				<li class="menu-item">
 					<a href="<?= base_url('admin/kurir'); ?>">
 						<i class="bi bi-truck"></i>Manajemen Kurir
 					</a>
 				</li>
+				<!-- MANAJEMEN MITRA - Badge Mitra Baru -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/mitra'); ?>">
 						<i class="bi bi-shop"></i>Manajemen Mitra
+						<?php if (isset($mitra_baru) && $mitra_baru > 0): ?>
+							<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $mitra_baru; ?></span>
+						<?php endif; ?>
+					</a>
+				</li>
+				<!-- TRACKING PENGIRIMAN -->
+				<li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+					<a href="<?= base_url('admin/tracking'); ?>">
+						<i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
 					</a>
 				</li>
 				<li class="menu-item">
@@ -1140,7 +1012,7 @@
 					<span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span>
 				</p>
 			</div>
-			<div class="d-flex align-items-center gap-3" style="gap: 12px;">
+			<div class="header-right">
 				<!-- NOTIFICATION BELL -->
 				<div style="position: relative;">
 					<button class="notif-btn" id="notifToggle">
@@ -1213,8 +1085,8 @@
 
 				<!-- USER BADGE -->
 				<?php
-				$nama = $this->session->userdata('nama') ?? 'User';
-				$role = $this->session->userdata('role') ?? 'Member';
+				$nama = $this->session->userdata('nama') ?? 'Admin';
+				$role = $this->session->userdata('role') ?? 'Administrator';
 				?>
 				<div class="user-badge">
 					<i class="bi bi-person-circle"></i>
@@ -1229,7 +1101,7 @@
 		<!-- SEARCH & TAMBAH -->
 		<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap" style="gap: 15px;">
 			<form method="get" action="<?= base_url('admin/produk'); ?>" class="d-flex align-items-center" style="gap: 10px; flex-grow: 1; max-width: 600px;">
-				<input type="text" name="keyword" class="search-input form-control" placeholder="Cari nama produk, jenis kopi, atau grade..." value="<?= $this->input->get('keyword'); ?>" style="flex:1;">
+				<input type="text" name="keyword" class="search-input form-control" placeholder="Cari nama produk, jenis kopi..." value="<?= $this->input->get('keyword'); ?>" style="flex:1;">
 				<button type="submit" class="btn-search">
 					<i class="bi bi-search"></i> Cari
 				</button>
@@ -1247,15 +1119,15 @@
 			<table class="table-custom">
 				<thead>
 					<tr>
-						<th style="width:50px;">No</th>
-						<th style="width:80px;">Foto</th>
-						<th>Nama Produk</th>
-						<th>Jenis Kopi</th>
-						<th>Grade</th>
-						<th>Harga</th>
-						<th>Stok</th>
-						<th>Status</th>
-						<th style="width:240px;">Aksi</th>
+						<th style="width:35px;">No</th>
+						<th style="width:60px;">Foto</th>
+						<th style="width:170px; text-align:center;">Nama Produk</th>
+						<th style="width:110px;">Jenis Kopi</th>
+						<th style="width:160px;">Proses Pengolahan</th>
+						<th style="width:130px;">Harga</th>
+						<th style="width:80px;">Stok</th>
+						<th style="width:90px;">Status</th>
+						<th style="width:220px;">Aksi</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -1267,24 +1139,20 @@
 								<td>
 									<?php if (!empty($row->foto_utama)) : ?>
 										<img src="<?= base_url('uploads/produk/' . $row->foto_utama); ?>"
-											width="55" height="55" style="object-fit:cover; border-radius:10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+											width="45" height="45" style="object-fit:cover; border-radius:10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
 									<?php else : ?>
-										<div style="width:55px; height:55px; background:var(--bg-cream); border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--text-secondary); font-size:0.7rem;">
+										<div style="width:45px; height:45px; background:var(--bg-cream); border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--text-secondary); font-size:0.6rem; margin:0 auto;">
 											No Image
 										</div>
 									<?php endif; ?>
 								</td>
-								<td class="font-weight-bold" style="font-size: 0.9rem; color: var(--dark-coffee);"><?= $row->nama_produk; ?></td>
+								<td style="text-align:center; font-weight:600; color:var(--dark-coffee);"><?= $row->nama_produk; ?></td>
 								<td><?= $row->jenis_kopi; ?></td>
-								<td>
-									<span style="background:var(--bg-cream); padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:600;">
-										<?= $row->grade; ?>
-									</span>
-								</td>
-								<td class="font-weight-bold" style="color: var(--dark-coffee);">Rp <?= number_format($row->harga, 0, ',', '.'); ?></td>
+								<td><?= !empty($row->proses) ? $row->proses : '<span style="color:#999; font-style:italic;">-</span>'; ?></td>
+								<td style="font-weight:600; color:var(--dark-coffee);">Rp <?= number_format($row->harga, 0, ',', '.'); ?></td>
 								<td>
 									<?= $row->stok_produk; ?>
-									<small class="text-muted" style="font-size:0.65rem;">kg</small>
+									<small class="stok-unit">kg</small>
 								</td>
 								<td>
 									<?php
@@ -1295,7 +1163,7 @@
 									<span class="status-badge <?= $status_class; ?>"><?= $status_text; ?></span>
 								</td>
 								<td>
-									<div class="d-flex flex-wrap" style="gap: 4px;">
+									<div class="d-flex flex-wrap justify-content-center" style="gap: 3px;">
 										<a class="btn-detail" href="<?= base_url('admin/produk/detail/' . $row->id_produk); ?>">
 											<i class="bi bi-eye"></i> Detail
 										</a>
@@ -1410,10 +1278,37 @@
 			};
 			const el = document.getElementById('currentDateTime');
 			if (el) {
-				el.textContent = 'Jumat, 26 Juni 2026 pukul 21.58';
+				el.textContent = now.toLocaleDateString('id-ID', options);
 			}
 		}
 		updateDateTime();
+
+		// ============================================
+		// 5. AUTO FILL PROSES PENGOLAHAN
+		// ============================================
+		document.addEventListener('DOMContentLoaded', function() {
+			const namaProduk = document.getElementById('nama_produk');
+			const proses = document.getElementById('proses');
+
+			if (namaProduk && proses) {
+				namaProduk.addEventListener('change', function() {
+					const value = this.value;
+					switch (value) {
+						case 'Ceri':
+							proses.value = '';
+							break;
+						case 'Biji Kopi':
+							proses.value = 'Pengupasan, Penjemuran';
+							break;
+						case 'Kopi Bubuk':
+							proses.value = 'Pengupasan, Penjemuran, Penggilingan, Pengemasan';
+							break;
+						default:
+							proses.value = '';
+					}
+				});
+			}
+		});
 
 		console.log('✅ Manajemen Produk siap digunakan!');
 		console.log('📋 Fitur yang tersedia:');
@@ -1421,7 +1316,9 @@
 		console.log('   - Search & Filter Produk');
 		console.log('   - CRUD Produk (Tambah, Edit, Hapus, Detail)');
 		console.log('   - Notifikasi Real-time');
-		console.log('   - Status Stok & Produk');
+		console.log('   - Status Produk');
+		console.log('   - Stok Ketersediaan');
+		console.log('   - Auto fill Proses Pengolahan berdasarkan Nama Produk');
 	</script>
 </body>
 

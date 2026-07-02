@@ -27,7 +27,6 @@ class Transaksi extends CI_Controller {
         $data['title'] = 'Riwayat Transaksi';
         $id_user = $this->session->userdata('id_user');
         
-        // 🔥 GANTI: panggil method dengan produk list
         $data['transaksi'] = $this->Transaksi_model->get_transaksi_by_user_with_products($id_user);
         
         $data['total_transaksi'] = count($data['transaksi']);
@@ -70,7 +69,7 @@ class Transaksi extends CI_Controller {
     }
 
     // ============================================================
-    // DETAIL TRANSAKSI
+    // 🔥 FIX: DETAIL TRANSAKSI
     // ============================================================
     public function detail($id_transaksi) {
         $data['title'] = 'Detail Transaksi';
@@ -87,9 +86,7 @@ class Transaksi extends CI_Controller {
             show_404();
         }
         
-        // ============================================
-        // FIX: HITUNG ULANG SEMUA TOTAL DARI DETAIL
-        // ============================================
+        // Ambil detail produk
         $data['details'] = $this->Transaksi_model->get_detail_transaksi($id_transaksi);
         if (!is_array($data['details'])) {
             $data['details'] = [];
@@ -98,7 +95,6 @@ class Transaksi extends CI_Controller {
         // Hitung ulang total dari detail produk
         $total_dari_detail = 0;
         foreach ($data['details'] as &$detail) {
-            // Hitung subtotal per item
             $harga_satuan = floatval($detail['harga_satuan'] ?? 0);
             $jumlah = intval($detail['jumlah'] ?? 0);
             $subtotal = $harga_satuan * $jumlah;
@@ -109,23 +105,16 @@ class Transaksi extends CI_Controller {
         // Ambil ongkir dari database atau default 0
         $ongkir = floatval($data['transaksi']['ongkir'] ?? 0);
         
-        // ============================================
-        // REKALKULASI TOTAL - PAKAI YANG DARI DETAIL
-        // ============================================
-        // Jika total dari detail > 0, gunakan itu (lebih akurat)
+        // Gunakan total dari detail jika lebih akurat
         if ($total_dari_detail > 0) {
             $data['transaksi']['total_harga'] = $total_dari_detail;
         } else {
-            // Fallback ke data dari database
             $data['transaksi']['total_harga'] = floatval($data['transaksi']['total_harga'] ?? 0);
         }
         
-        // Hitung ulang grand total
         $data['transaksi']['grand_total'] = $data['transaksi']['total_harga'] + $ongkir;
         
-        // ============================================
-        // SET DEFAULT VALUES UNTUK VIEW
-        // ============================================
+        // Set default values untuk view
         $data['transaksi']['status_pesanan'] = $data['transaksi']['status_pesanan'] ?? 'Pending';
         $data['transaksi']['status_bayar'] = $data['transaksi']['status_bayar'] ?? 'Belum Bayar';
         $data['transaksi']['metode_bayar'] = $data['transaksi']['metode_bayar'] ?? '-';
@@ -133,6 +122,11 @@ class Transaksi extends CI_Controller {
         $data['transaksi']['kota_kirim'] = $data['transaksi']['kota_kirim'] ?? '-';
         $data['transaksi']['kode_pos'] = $data['transaksi']['kode_pos'] ?? '-';
         $data['transaksi']['ongkir'] = $ongkir;
+        $data['transaksi']['id_transaksi'] = $data['transaksi']['id_transaksi'] ?? $id_transaksi;
+        $data['transaksi']['invoice'] = $data['transaksi']['invoice'] ?? '-';
+        $data['transaksi']['nama_pembeli'] = $data['transaksi']['nama_pembeli'] ?? 'Guest';
+        $data['transaksi']['no_hp'] = $data['transaksi']['no_hp'] ?? '-';
+        $data['transaksi']['tanggal_transaksi'] = $data['transaksi']['tanggal_transaksi'] ?? date('Y-m-d H:i:s');
         
         $data['bukti'] = $this->Transaksi_model->get_bukti_by_transaksi($id_transaksi);
         if (empty($data['bukti'])) {
@@ -158,9 +152,7 @@ class Transaksi extends CI_Controller {
             show_404();
         }
         
-        // ============================================
-        // FIX: HITUNG ULANG TOTAL DARI DETAIL
-        // ============================================
+        // Ambil detail produk
         $data['details'] = $this->Transaksi_model->get_detail_transaksi($id_transaksi);
         if (!is_array($data['details'])) {
             $data['details'] = [];
@@ -178,7 +170,6 @@ class Transaksi extends CI_Controller {
         
         $ongkir = floatval($data['transaksi']['ongkir'] ?? 0);
         
-        // Gunakan total dari detail
         if ($total_dari_detail > 0) {
             $data['transaksi']['total_harga'] = $total_dari_detail;
         } else {
@@ -188,9 +179,7 @@ class Transaksi extends CI_Controller {
         $data['transaksi']['grand_total'] = $data['transaksi']['total_harga'] + $ongkir;
         $data['transaksi']['ongkir'] = $ongkir;
         
-        // ============================================
-        // SET DEFAULT VALUES
-        // ============================================
+        // Set default values
         $data['transaksi']['status_pesanan'] = $data['transaksi']['status_pesanan'] ?? 'Pending';
         $data['transaksi']['status_bayar'] = $data['transaksi']['status_bayar'] ?? 'Belum Bayar';
         $data['transaksi']['metode_bayar'] = $data['transaksi']['metode_bayar'] ?? '-';
@@ -200,6 +189,9 @@ class Transaksi extends CI_Controller {
         $data['transaksi']['nama_pembeli'] = $data['transaksi']['nama_pembeli'] ?? 'Guest';
         $data['transaksi']['id_transaksi'] = $data['transaksi']['id_transaksi'] ?? $id_transaksi;
         $data['transaksi']['tanggal_transaksi'] = $data['transaksi']['tanggal_transaksi'] ?? date('Y-m-d H:i:s');
+        $data['transaksi']['invoice'] = $data['transaksi']['invoice'] ?? '-';
+        $data['transaksi']['no_hp'] = $data['transaksi']['no_hp'] ?? '-';
+        $data['transaksi']['nama_penerima'] = $data['transaksi']['nama_penerima'] ?? '-';
         
         $this->load->view('pembeli/transaksi/invoice', $data);
     }
@@ -269,13 +261,5 @@ class Transaksi extends CI_Controller {
         $this->session->set_flashdata('success', '✅ Transaksi berhasil dibatalkan');
         redirect('pembeli/transaksi/history');
     }
-
-    // ============================================================
-    // ❌ UPLOAD BUKTI - DIHAPUS (pindah ke modul kurir)
-    // ============================================================
-    // Method upload_bukti() telah dihapus karena form upload bukti
-    // sudah tidak digunakan lagi di halaman detail transaksi.
-    // Bukti pembayaran akan di-handle oleh admin/kurir di modul selanjutnya.
-    // ============================================================
 }
 ?>

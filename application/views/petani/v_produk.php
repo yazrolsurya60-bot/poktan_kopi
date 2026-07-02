@@ -894,13 +894,7 @@
                             <span>Notifikasi</span>
                             <a href="#" id="markAllRead">Tandai semua dibaca</a>
                         </div>
-                        <div class="notif-dropdown-list" id="notifList">
-                            <div class="notif-item unread">
-                                <div class="notif-icon warning"><i class="bi bi-clock"></i></div>
-                                <div class="notif-text">
-                                    Stok Liberika Grade A menipis (tersisa 15 kg)
-                                    <span class="notif-time">5 menit lalu</span>
-                                </div>
+            
                             </div>
                             <div class="notif-item unread">
                                 <div class="notif-icon success"><i class="bi bi-cart-check"></i></div>
@@ -952,16 +946,6 @@
 
 <!-- FILTER -->
 <form method="get" action="<?= base_url('petani/produk'); ?>" class="mb-4">
-    <div class="row">
-        <div class="col-md-5">
-            <input
-                type="text"
-                name="keyword"
-                class="form-control"
-                placeholder="Cari nama produk, jenis kopi, atau grade..."
-                value="<?= $this->input->get('keyword'); ?>">
-        </div>
-
         <div class="col-md-2">
             <button
                 type="submit"
@@ -988,7 +972,6 @@
 							<th>Foto</th>
 							<th>Nama Produk</th>
 							<th>Jenis Kopi</th>
-							<th>Grade</th>
 							<th>Harga</th>
 							<th>Stok</th>
 							<th>Status</th>

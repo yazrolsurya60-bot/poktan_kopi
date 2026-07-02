@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Produk - Petani Kopi</title>
+    <title>Katalog Produk - Petani Kopi</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -36,7 +36,10 @@
             overflow-x: hidden;
         }
 
-        /* ===== SIDEBAR ===== */
+        /* ============================================ */
+        /* SIDEBAR */
+        /* ============================================ */
+
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -169,7 +172,26 @@
             border-color: rgba(230, 161, 92, 0.2);
         }
 
-        /* ===== MAIN CONTENT ===== */
+        /* ============================================ */
+        /* SIDEBAR OVERLAY */
+        /* ============================================ */
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 99;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* ============================================ */
+        /* MAIN CONTENT */
+        /* ============================================ */
+
         .main-content {
             margin-left: var(--sidebar-width);
             padding: 30px 40px 40px;
@@ -177,10 +199,18 @@
             transition: var(--transition-smooth);
         }
 
+        /* ============================================ */
+        /* PAGE HEADER */
+        /* ============================================ */
+
         .page-header {
             border-bottom: 1px solid rgba(74, 44, 17, 0.08);
             padding-bottom: 20px;
             margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .page-header h2 {
@@ -195,7 +225,58 @@
             margin-top: 2px;
         }
 
-        /* ===== NOTIFICATION ===== */
+        /* ============================================ */
+        /* HEADER RIGHT - NOTIF + USER BADGE */
+        /* ============================================ */
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        /* ============================================ */
+        /* USER BADGE */
+        /* ============================================ */
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            background: var(--card-white);
+            border: 1px solid rgba(74, 44, 17, 0.06);
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: default;
+            min-width: 90px;
+        }
+
+        .user-badge i {
+            font-size: 1.4rem;
+            color: var(--amber-cream);
+        }
+
+        .user-badge .user-name {
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: var(--dark-coffee);
+            line-height: 1.2;
+        }
+
+        .user-badge .user-role {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ============================================ */
+        /* NOTIFICATION BELL & DROPDOWN */
+        /* ============================================ */
+
         .notif-btn {
             position: relative;
             background: var(--card-white);
@@ -277,11 +358,6 @@
             color: var(--amber-cream);
             font-weight: 500;
             text-decoration: none;
-            cursor: pointer;
-        }
-
-        .notif-dropdown-header a:hover {
-            text-decoration: underline;
         }
 
         .notif-dropdown-list {
@@ -297,10 +373,14 @@
             gap: 12px;
             transition: var(--transition-smooth);
             cursor: pointer;
+            text-decoration: none;
+            color: inherit;
         }
 
         .notif-item:hover {
             background: var(--bg-cream);
+            text-decoration: none;
+            color: inherit;
         }
 
         .notif-item .notif-icon {
@@ -318,17 +398,14 @@
             background: #D1FAE5;
             color: #065F46;
         }
-
         .notif-item .notif-icon.warning {
             background: #FEF3C7;
             color: #92400E;
         }
-
         .notif-item .notif-icon.info {
             background: #DBEAFE;
             color: #1E40AF;
         }
-
         .notif-item .notif-icon.danger {
             background: #FEE2E2;
             color: #991B1B;
@@ -363,7 +440,10 @@
             align-self: center;
         }
 
-        /* ===== TABLE ===== */
+        /* ============================================ */
+        /* TABLE */
+        /* ============================================ */
+
         .table-custom {
             font-size: 0.85rem;
             width: 100%;
@@ -371,6 +451,7 @@
             border-radius: var(--radius-card);
             overflow: hidden;
             box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(74, 44, 17, 0.06);
         }
 
         .table-custom thead th {
@@ -381,14 +462,17 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            padding: 14px 16px;
+            padding: 10px 12px;
+            text-align: center;
+            white-space: nowrap;
         }
 
         .table-custom tbody td {
-            padding: 14px 16px;
+            padding: 10px 12px;
             border-bottom: 1px solid rgba(74, 44, 17, 0.04);
             vertical-align: middle;
             background: var(--card-white);
+            text-align: center;
         }
 
         .table-custom tbody tr:hover td {
@@ -399,9 +483,12 @@
             border-bottom: none;
         }
 
-        /* ===== STATUS BADGE ===== */
+        /* ============================================ */
+        /* STATUS BADGE */
+        /* ============================================ */
+
         .status-badge {
-            padding: 4px 14px;
+            padding: 4px 12px;
             border-radius: 20px;
             font-size: 0.7rem;
             font-weight: 600;
@@ -418,34 +505,23 @@
             color: #991B1B;
         }
 
-        .status-badge.stok_aman {
-            background: #D1FAE5;
-            color: #065F46;
-        }
+        /* ============================================ */
+        /* TOMBOL */
+        /* ============================================ */
 
-        .status-badge.stok_tipis {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-badge.stok_habis {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        /* ===== TOMBOL ===== */
         .btn-detail {
             background: #DBEAFE;
             color: #1E40AF;
             border: none;
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 6px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             transition: var(--transition-smooth);
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
+            text-decoration: none;
         }
 
         .btn-detail:hover {
@@ -458,14 +534,15 @@
             background: #FEF3C7;
             color: #92400E;
             border: none;
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 6px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             transition: var(--transition-smooth);
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
+            text-decoration: none;
         }
 
         .btn-edit:hover {
@@ -478,14 +555,15 @@
             background: #FEE2E2;
             color: #991B1B;
             border: none;
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 6px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             transition: var(--transition-smooth);
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
+            text-decoration: none;
         }
 
         .btn-hapus:hover {
@@ -506,6 +584,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            text-decoration: none;
         }
 
         .btn-tambah:hover {
@@ -516,7 +595,10 @@
             text-decoration: none;
         }
 
-        /* ===== SEARCH ===== */
+        /* ============================================ */
+        /* SEARCH */
+        /* ============================================ */
+
         .search-input {
             border: 1px solid rgba(74, 44, 17, 0.1);
             border-radius: 10px;
@@ -542,11 +624,16 @@
             font-weight: 600;
             font-size: 0.85rem;
             transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
         }
 
         .btn-search:hover {
             background: var(--dark-coffee);
             color: white;
+            text-decoration: none;
         }
 
         .btn-reset {
@@ -558,6 +645,10 @@
             font-weight: 600;
             font-size: 0.85rem;
             transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
         }
 
         .btn-reset:hover {
@@ -566,73 +657,10 @@
             text-decoration: none;
         }
 
-        /* ===== SIDEBAR OVERLAY ===== */
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 99;
-        }
-
-        .sidebar-overlay.active {
-            display: block;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 991.98px) {
-            .sidebar {
-                left: calc(-1 * var(--sidebar-width));
-                box-shadow: none;
-            }
-
-            .sidebar.open {
-                left: 0;
-                box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px 16px 30px;
-            }
-
-            .page-header h2 {
-                font-size: 1.3rem;
-            }
-
-            .notif-dropdown {
-                width: calc(100vw - 32px);
-                right: -60px;
-            }
-
-            .sidebar-overlay.active {
-                display: block;
-            }
-        }
-
-        @media (max-width: 575.98px) {
-            .main-content {
-                padding: 16px 12px 20px;
-            }
-
-            .table-custom thead th,
-            .table-custom tbody td {
-                padding: 10px 12px;
-                font-size: 0.75rem;
-            }
-
-            .notif-dropdown {
-                width: calc(100vw - 24px);
-                right: -70px;
-            }
-
-            .btn-tambah {
-                padding: 8px 16px;
-                font-size: 0.75rem;
-            }
-        }
-
+        /* ============================================ */
         /* SCROLLBAR */
+        /* ============================================ */
+
         .sidebar-menu-wrapper::-webkit-scrollbar,
         .notif-dropdown-list::-webkit-scrollbar {
             width: 3px;
@@ -647,6 +675,181 @@
         .notif-dropdown-list::-webkit-scrollbar-thumb {
             background: rgba(230, 161, 92, 0.3);
             border-radius: 10px;
+        }
+
+        /* ============================================ */
+        /* RESPONSIVE */
+        /* ============================================ */
+
+        @media (max-width: 991.98px) {
+            .sidebar {
+                left: calc(-1 * var(--sidebar-width));
+                box-shadow: none;
+            }
+            .sidebar.open {
+                left: 0;
+                box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+            }
+            .sidebar-overlay.active {
+                display: block;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px 16px 30px;
+            }
+            .page-header h2 {
+                font-size: 1.3rem;
+            }
+            .notif-dropdown {
+                width: calc(100vw - 32px);
+                right: -60px;
+            }
+            .user-badge {
+                padding: 4px 10px;
+                min-width: 70px;
+            }
+            .user-badge i {
+                font-size: 1.1rem;
+            }
+            .user-badge .user-name {
+                font-size: 0.7rem;
+            }
+            .user-badge .user-role {
+                font-size: 0.5rem;
+            }
+            .header-right {
+                gap: 8px;
+            }
+            .table-custom thead th,
+            .table-custom tbody td {
+                padding: 8px 10px;
+                font-size: 0.7rem;
+            }
+            .btn-tambah {
+                padding: 8px 18px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .main-content {
+                padding: 16px 12px 20px;
+            }
+            .page-header h2 {
+                font-size: 1.1rem;
+            }
+            .notif-dropdown {
+                width: calc(100vw - 24px);
+                right: -70px;
+            }
+            .user-badge {
+                padding: 4px 8px;
+                min-width: 60px;
+                gap: 5px;
+            }
+            .user-badge i {
+                font-size: 0.9rem;
+            }
+            .user-badge .user-name {
+                font-size: 0.6rem;
+            }
+            .user-badge .user-role {
+                display: none;
+            }
+            .header-right {
+                gap: 6px;
+            }
+            .table-custom thead th {
+                font-size: 0.5rem;
+                padding: 6px 6px;
+            }
+            .table-custom tbody td {
+                padding: 6px 6px;
+                font-size: 0.65rem;
+            }
+            .table-custom tbody td img {
+                width: 35px !important;
+                height: 35px !important;
+            }
+            .btn-detail,
+            .btn-edit,
+            .btn-hapus {
+                font-size: 0.55rem;
+                padding: 2px 6px;
+            }
+            .btn-tambah {
+                padding: 6px 14px;
+                font-size: 0.7rem;
+            }
+            .search-input {
+                padding: 6px 10px;
+                font-size: 0.7rem;
+            }
+            .btn-search,
+            .btn-reset {
+                padding: 6px 12px;
+                font-size: 0.7rem;
+            }
+            .d-flex.justify-content-between.mb-4 {
+                flex-direction: column;
+                align-items: stretch !important;
+            }
+            .d-flex.justify-content-between.mb-4 form {
+                max-width: 100% !important;
+                flex-wrap: wrap;
+            }
+            .d-flex.justify-content-between.mb-4 form input {
+                flex: 1 1 100%;
+                margin-bottom: 6px;
+            }
+            .btn-tambah {
+                width: 100%;
+                justify-content: center;
+                margin-top: 4px;
+            }
+        }
+
+        /* ============================================ */
+        /* UTILITY */
+        /* ============================================ */
+
+        .product-thumb {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(74, 44, 17, 0.06);
+        }
+
+        .product-thumb-placeholder {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-cream);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.6rem;
+            border: 1px dashed rgba(74, 44, 17, 0.15);
+        }
+
+        .fw-600 {
+            font-weight: 600;
+        }
+
+        .fw-700 {
+            font-weight: 700;
+        }
+
+        .text-amber {
+            color: var(--amber-cream);
+        }
+
+        .stok-unit {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
         }
     </style>
 </head>
@@ -664,44 +867,38 @@
             </div>
             <span>PETANI <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
         </div>
+
         <div class="sidebar-menu-wrapper">
             <ul class="sidebar-menu">
                 <li class="menu-item">
                     <a href="<?= base_url('petani/dashboard'); ?>">
-                        <i class="bi bi-grid-1x2-fill"></i>Dashboard
+                        <i class="bi bi-grid-1x2-fill"></i> Dashboard
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="<?= base_url('petani/lahan'); ?>">
-                        <i class="bi bi-geo-alt-fill"></i>Kelola Lahan
-                        <span class="menu-badge">3</span>
+                        <i class="bi bi-geo-alt-fill"></i> Kelola Lahan
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="<?= base_url('petani/panen'); ?>">
-                        <i class="bi bi-tree-fill"></i>Manajemen Panen
+                        <i class="bi bi-tree-fill"></i> Manajemen Panen
                     </a>
                 </li>
                 <li class="menu-item active">
                     <a href="<?= base_url('petani/produk'); ?>">
-                        <i class="bi bi-box-seam-fill"></i>Katalog Produk
-                        <span class="menu-badge">5</span>
+                        <i class="bi bi-box-seam-fill"></i> Katalog Produk
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="<?= base_url('petani/transaksi'); ?>">
-                        <i class="bi bi-cart-check-fill"></i>Pesanan Masuk
-                        <span class="menu-badge">8</span>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('petani/tracking'); ?>">
-                        <i class="bi bi-truck"></i>Tracking Kiriman
+                        <i class="bi bi-cart-check-fill"></i> Pesanan Masuk
                     </a>
                 </li>
             
             </ul>
         </div>
+
         <div class="sidebar-footer">
             <button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
                 <i class="bi bi-box-arrow-right"></i> Keluar
@@ -727,8 +924,8 @@
                     <span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span>
                 </p>
             </div>
-            <div class="d-flex align-items-center gap-3" style="gap: 12px;">
-                <!-- NOTIFICATION -->
+            <div class="header-right">
+                <!-- NOTIFICATION BELL -->
                 <div style="position: relative;">
                     <button class="notif-btn" id="notifToggle">
                         <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
@@ -739,6 +936,7 @@
                         <?php endif; ?>
                     </button>
 
+                    <!-- NOTIFICATION DROPDOWN -->
                     <div class="notif-dropdown" id="notifDropdown">
                         <div class="notif-dropdown-header">
                             <span>
@@ -746,9 +944,11 @@
                             </span>
                             <div>
                                 <?php if (isset($unread_count) && $unread_count > 0): ?>
-                                    <a href="#" id="markAllReadBtn" class="mr-2" style="font-size:0.7rem;">Tandai semua</a>
+                                    <a href="#" id="markAllReadBtn" class="mr-2"
+                                        style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
                                 <?php endif; ?>
-                                <a href="<?= base_url('petani/dashboard/history'); ?>" style="font-size:0.7rem;">Lihat Semua</a>
+                                <a href="<?= base_url('petani/dashboard/history'); ?>"
+                                    style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
                             </div>
                         </div>
                         <div class="notif-dropdown-list" id="notifList">
@@ -785,19 +985,27 @@
                                 </div>
                             <?php endif; ?>
                         </div>
-                        <div class="p-2 text-center border-top" style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
-                            <a href="<?= base_url('petani/dashboard/settings'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
+                        <div class="p-2 text-center border-top"
+                            style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+                            <a href="<?= base_url('petani/dashboard/settings'); ?>"
+                                class="small text-secondary font-weight-bold text-decoration-none">
                                 <i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- USER AVATAR -->
-                <div class="d-flex align-items-center gap-2"
-                    style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
-                    <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-                 <span style="font-weight:500; font-size:0.85rem;"><?= $this->session->userdata('nama') ?? 'Petani' ?></span>
+                <!-- USER BADGE -->
+                <?php
+                $nama = $this->session->userdata('nama') ?? 'Petani';
+                $role = $this->session->userdata('role') ?? 'Petani';
+                ?>
+                <div class="user-badge">
+                    <i class="bi bi-person-circle"></i>
+                    <div>
+                        <div class="user-name"><?= $nama; ?></div>
+                        <div class="user-role"><?= $role; ?></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -805,7 +1013,7 @@
         <!-- SEARCH & TAMBAH -->
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap" style="gap: 15px;">
             <form method="get" action="<?= base_url('petani/produk'); ?>" class="d-flex align-items-center" style="gap: 10px; flex-grow: 1; max-width: 600px;">
-                <input type="text" name="keyword" class="search-input form-control" placeholder="Cari nama produk, jenis kopi, atau grade..." value="<?= $this->input->get('keyword'); ?>" style="flex:1;">
+                <input type="text" name="keyword" class="search-input form-control" placeholder="Cari nama produk, jenis kopi..." value="<?= $this->input->get('keyword'); ?>" style="flex:1;">
                 <button type="submit" class="btn-search">
                     <i class="bi bi-search"></i> Cari
                 </button>
@@ -823,15 +1031,16 @@
             <table class="table-custom">
                 <thead>
                     <tr>
-                        <th style="width:50px;">No</th>
-                        <th style="width:80px;">Foto</th>
-                        <th>Nama Produk</th>
-                        <th>Jenis Kopi</th>
-                        <th>Grade</th>
-                        <th>Harga</th>
-                        <th>Stok</th>
-                        <th>Status</th>
-                        <th style="width:240px;">Aksi</th>
+                        <th style="width:35px;">No</th>
+                        <th style="width:60px;">Foto</th>
+                        <th style="width:150px; text-align:center;">Nama Produk</th>
+                        <th style="width:100px;">Jenis Kopi</th>
+                        <th style="width:160px;">Proses Pengolahan</th>
+                        <th style="width:120px;">Harga</th>
+                        <th style="width:80px;">Stok</th>
+                        <th style="width:130px;">Total Pendapatan</th>
+                        <th style="width:80px;">Status</th>
+                        <th style="width:220px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -843,24 +1052,28 @@
                                 <td>
                                     <?php if (!empty($row->foto_utama)) : ?>
                                         <img src="<?= base_url('uploads/produk/' . $row->foto_utama); ?>"
-                                            width="55" height="55" style="object-fit:cover; border-radius:10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                                            width="45" height="45" style="object-fit:cover; border-radius:10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
                                     <?php else : ?>
-                                        <div style="width:55px; height:55px; background:var(--bg-cream); border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--text-secondary); font-size:0.7rem;">
+                                        <div style="width:45px; height:45px; background:var(--bg-cream); border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--text-secondary); font-size:0.6rem; margin:0 auto;">
                                             No Image
                                         </div>
                                     <?php endif; ?>
                                 </td>
-                                <td class="font-weight-bold" style="font-size: 0.9rem; color: var(--dark-coffee);"><?= $row->nama_produk; ?></td>
+                                <td style="text-align:center; font-weight:600; color:var(--dark-coffee);"><?= $row->nama_produk; ?></td>
                                 <td><?= $row->jenis_kopi; ?></td>
-                                <td>
-                                    <span style="background:var(--bg-cream); padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:600;">
-                                        <?= $row->grade; ?>
-                                    </span>
-                                </td>
-                                <td class="font-weight-bold" style="color: var(--dark-coffee);">Rp <?= number_format($row->harga, 0, ',', '.'); ?></td>
+                                <td><?= !empty($row->proses) ? $row->proses : '<span style="color:#999; font-style:italic;">-</span>'; ?></td>
+                                <td style="font-weight:600; color:var(--dark-coffee);">Rp <?= number_format($row->harga, 0, ',', '.'); ?></td>
                                 <td>
                                     <?= $row->stok_produk; ?>
-                                    <small class="text-muted" style="font-size:0.65rem;">kg</small>
+                                    <small class="stok-unit">kg</small>
+                                </td>
+                                <td style="font-weight:700; color:var(--roasted-brown);">
+                                    <?php
+                                    $harga = $row->harga ?? 0;
+                                    $stok = $row->stok_produk ?? 0;
+                                    $total = $harga * $stok;
+                                    echo 'Rp ' . number_format($total, 0, ',', '.');
+                                    ?>
                                 </td>
                                 <td>
                                     <?php
@@ -871,7 +1084,7 @@
                                     <span class="status-badge <?= $status_class; ?>"><?= $status_text; ?></span>
                                 </td>
                                 <td>
-                                    <div class="d-flex flex-wrap" style="gap: 4px;">
+                                    <div class="d-flex flex-wrap justify-content-center" style="gap: 3px;">
                                         <a class="btn-detail" href="<?= base_url('petani/produk/detail/' . $row->id_produk); ?>">
                                             <i class="bi bi-eye"></i> Detail
                                         </a>
@@ -888,7 +1101,7 @@
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="9" class="text-center py-4 text-muted">
+                            <td colspan="10" class="text-center py-4 text-muted">
                                 <i class="bi bi-box" style="font-size:2rem; display:block; margin-bottom:8px; opacity:0.3;"></i>
                                 Belum ada produk. <a href="<?= base_url('petani/produk/tambah'); ?>" style="color: var(--amber-cream); font-weight:600;">Tambah produk pertama</a>
                             </td>
@@ -900,12 +1113,11 @@
 
     </div>
 
-    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // ============================================
-        // 1. SIDEBAR TOGGLE
+        // SIDEBAR TOGGLE
         // ============================================
         const sidebar = document.getElementById('sidebarMenu');
         const overlay = document.getElementById('sidebarOverlay');
@@ -928,7 +1140,7 @@
         });
 
         // ============================================
-        // 2. NOTIFICATION DROPDOWN
+        // NOTIFICATION DROPDOWN
         // ============================================
         const notifToggle = document.getElementById('notifToggle');
         const notifDropdown = document.getElementById('notifDropdown');
@@ -947,7 +1159,7 @@
         });
 
         // ============================================
-        // 3. MARK ALL READ
+        // MARK ALL READ
         // ============================================
         function markAllRead() {
             if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
@@ -972,7 +1184,7 @@
         });
 
         // ============================================
-        // 4. CURRENT DATE TIME
+        // CURRENT DATE TIME
         // ============================================
         function updateDateTime() {
             const now = new Date();
@@ -997,7 +1209,11 @@
         console.log('   - Search & Filter Produk');
         console.log('   - CRUD Produk (Tambah, Edit, Hapus, Detail)');
         console.log('   - Notifikasi Real-time');
-        console.log('   - Status Produk (Aktif/Nonaktif)');
+        console.log('   - Status Produk');
+        console.log('   - Stok Ketersediaan');
+        console.log('   - Harga Produk');
+        console.log('   - Total Pendapatan (Harga × Stok)');
+        console.log('   - Proses Pengolahan');
     </script>
 </body>
 
