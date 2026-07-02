@@ -5,70 +5,81 @@ class Lahan extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        // Me-load database, model, dan library yang diperlukan
         $this->load->model('Lahan_model');
+        $this->load->model('Notifikasi_model'); 
         $this->load->library('form_validation');
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->helper('text');
+
+        // Proteksi login dasar (Opsional namun disarankan)
+        if (!$this->session->userdata('id_user')) {
+            redirect('auth/login');
+        }
     }
 
     public function index() {
-        // 🔄 REVISI: Menangkap parameter 'keyword' dari input GET view index.php
+        $id_user = $this->session->userdata('id_user');
+        
+        // AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Petani';
+        
         $filters = [
             'status_lahan' => $this->input->get('status_lahan'),
             'keyword'      => $this->input->get('keyword')
         ];
 
         $data['title'] = "Panel petani: Data Lahan Kopi";
-        // Menggunakan get_all_lahan() dengan parameter null agar admin bisa memonitor seluruh petani
-        $data['lahan'] = $this->Lahan_model->get_all_lahan(null, $filters);
+        
+        // 🔄 REVISI 1: Parameter pertama diganti $id_user agar petani hanya melihat lahannya sendiri
+        $data['lahan'] = $this->Lahan_model->get_all_lahan($id_user, $filters);
 
-        // Load halaman view admin utama Anda
         $this->load->view('petani/lahan/index', $data);
     }
 
     public function tambah() {
-        // 1. Cek apakah ada data yang dikirim
+        $id_user = $this->session->userdata('id_user');
+        
+        // AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Petani';
+        
         if ($this->input->server('REQUEST_METHOD') != 'POST') {
-            // Jika bukan akses POST, arahkan ke halaman form
-            $this->load->view('petani/lahan/tambah');
+            $this->load->view('petani/lahan/tambah', $data);
             return;
         }
 
-        // 2. Konfigurasi Upload
         $config['upload_path']   = './assets/uploads/lahan/';
-        $config['allowed_types'] = 'jpg|jpeg|png|gif';
+        $config['allowed_types'] = 'jpg|jpeg|png|gif|webp';
         $config['max_size']      = 2048;
         $this->load->library('upload', $config);
 
-        // 3. Tangkap Data
-        $data = array(
-            'id_user'      => $this->session->userdata('id_user'),
+        $data_insert = array(
+            'id_user'      => $id_user,
             'nama_lahan'   => $this->input->post('nama_lahan'),
             'jenis_kopi'   => $this->input->post('jenis_kopi'),
-            'jenis_tanah'  => $this->input->post('jenis_tanah'),
+            'jenis_tanah'  => $this->input->post('jenis_tanah'), // Pastikan diinput
             'luas'         => $this->input->post('luas'),
             'lokasi'       => $this->input->post('lokasi'),
             'latitude'     => $this->input->post('latitude'),
             'longitude'    => $this->input->post('longitude'),
             'status_lahan' => $this->input->post('status_lahan'),
-            'catatan'      => $this->input->post('catatan') // Pastikan 'catatan' ada di input name
+            'catatan'      => $this->input->post('catatan')
         );
 
-        // 4. Proses Upload Foto
         if (!empty($_FILES['foto_lahan']['name'])) {
             if ($this->upload->do_upload('foto_lahan')) {
-                $data['foto_lahan'] = $this->upload->data('file_name');
+                $data_insert['foto_lahan'] = $this->upload->data('file_name');
             } else {
-                // Tampilkan error jika gagal upload
                 $this->session->set_flashdata('error', $this->upload->display_errors());
                 redirect('petani/lahan/tambah');
             }
         }
 
-        // 5. Insert ke Database
-        if ($this->db->insert('tb_lahan', $data)) {
+        if ($this->db->insert('tb_lahan', $data_insert)) {
             $this->session->set_flashdata('success', 'Data lahan berhasil disimpan!');
             redirect('petani/lahan');
         } else {
@@ -77,10 +88,15 @@ class Lahan extends CI_Controller {
     }
 
     public function edit($id) {
-        // Mengambil data lahan berdasarkan ID
+        $id_user = $this->session->userdata('id_user');
+        
+        // AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Petani';
+        
         $data['lahan'] = $this->db->get_where('tb_lahan', ['id_lahan' => $id])->row_array();
 
-        // Memastikan data ditemukan
         if (!$data['lahan']) {
             show_404();
         }
@@ -89,26 +105,25 @@ class Lahan extends CI_Controller {
     }
 
     public function update() {
-        // 1. Ambil ID dari input hidden
         $id = $this->input->post('id_lahan');
 
-        // 2. Siapkan data yang akan diupdate
+        // 🔄 REVISI 2: Menambahkan data 'jenis_tanah' dan 'catatan' agar ikut ter-update
         $data = array(
             'nama_lahan'   => $this->input->post('nama_lahan'),
             'jenis_kopi'   => $this->input->post('jenis_kopi'),
-            'jenis_tanah'  => $this->input->post('jenis_tanah'),
+            'jenis_tanah'  => $this->input->post('jenis_tanah'), 
             'luas'         => $this->input->post('luas'),
             'lokasi'       => $this->input->post('lokasi'),
             'latitude'     => $this->input->post('latitude'),
             'longitude'    => $this->input->post('longitude'),
-            'catatan'      => $this->input->post('catatan'),
-            'status_lahan' => $this->input->post('status_lahan')
+            'status_lahan' => $this->input->post('status_lahan'),
+            'catatan'      => $this->input->post('catatan')
         );
 
-        // 3. Proses upload foto jika user memilih file baru
+        // 🔄 REVISI 3: Menambahkan upload penanganan foto baru pada form edit
         if (!empty($_FILES['foto_lahan']['name'])) {
             $config['upload_path']   = './assets/uploads/lahan/';
-            $config['allowed_types'] = 'jpg|jpeg|png|gif';
+            $config['allowed_types'] = 'jpg|jpeg|png|gif|webp';
             $config['max_size']      = 2048;
             $this->load->library('upload', $config);
 
@@ -117,35 +132,36 @@ class Lahan extends CI_Controller {
             }
         }
 
-        // 4. Lakukan update ke database
         $this->db->where('id_lahan', $id);
-        $this->db->update('tb_lahan', $data); // Sesuaikan dengan nama tabel Anda
+        $this->db->update('tb_lahan', $data);
 
-        // 5. Redirect kembali ke halaman daftar lahan
-        $this->session->set_flashdata('message', 'Data berhasil diupdate!');
+        $this->session->set_flashdata('success', 'Data lahan berhasil diupdate!');
         redirect('petani/lahan');
     }
 
     public function detail($id) {
-        // 1. Ambil data lahan
+        $id_user = $this->session->userdata('id_user');
+        
+        // AMBIL NOTIFIKASI - 3 BARIS
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role'] = 'Petani';
+        
         $data['lahan'] = $this->Lahan_model->get_detail($id);
         
-        // Validasi jika lahan tidak ditemukan
         if (empty($data['lahan'])) {
             show_404();
         }
 
-        // 2. Ambil data panen (Memanggil model milik teman Anda)
         $this->load->model('Panen_model'); 
         $data['riwayat_panen'] = $this->Panen_model->get_panen_by_lahan($id);
         
-        // 3. Load view
         $this->load->view('petani/lahan/detail', $data);
     }
 
     public function hapus($id) {
         $this->Lahan_model->hapus_data($id);
-        $this->session->set_flashdata('message', 'Data berhasil dihapus');
+        $this->session->set_flashdata('success', 'Data berhasil dihapus');
         redirect('petani/lahan');
     }
-} 
+}

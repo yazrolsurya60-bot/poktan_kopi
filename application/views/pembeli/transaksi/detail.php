@@ -275,7 +275,7 @@
                 <div class="card-body-custom">
                     <div class="row mb-2">
                         <div class="col-5 detail-label">ID Transaksi</div>
-                        <div class="col-7 detail-value">#<?= $transaksi['id_transaksi']; ?></div>
+                        <div class="col-7 detail-value">#<?= $transaksi['id_transaksi'] ?? 'N/A'; ?></div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-5 detail-label">Tanggal</div>

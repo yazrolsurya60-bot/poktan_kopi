@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- FontAwesome tetap dipertahankan hanya untuk konten utama jika diperlukan -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
@@ -555,10 +554,8 @@
 
 <body>
 
-    <!-- SIDEBAR OVERLAY -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebarMenu">
         <div class="sidebar-brand">
             <div class="brand-icon">
@@ -576,14 +573,22 @@
                 <li class="menu-item">
                     <a href="<?= base_url('admin/user'); ?>">
                         <i class="bi bi-people-fill"></i>Manajemen User
-                        <span class="menu-badge">12</span>
+                        <?php if (isset($user_baru) && $user_baru > 0): ?>
+                        <span class="menu-badge" style="background: #EF4444; color: white;"><?= $user_baru; ?></span>
+                        <?php endif; ?>
                     </a>
                 </li>
+
                 <li class="menu-item">
                     <a href="<?= base_url('admin/petani'); ?>">
                         <i class="bi bi-person-badge-fill"></i>Data Petani
+                        <?php if (isset($petani_baru_count) && $petani_baru_count > 0): ?>
+                        <span class="menu-badge"
+                            style="background: #F59E0B; color: white;"><?= $petani_baru_count; ?></span>
+                        <?php endif; ?>
                     </a>
                 </li>
+
                 <li class="menu-item active">
                     <a href="<?= base_url('admin/lahan'); ?>">
                         <i class="bi bi-map-fill"></i>Manajemen Lahan
@@ -599,12 +604,17 @@
                         <i class="bi bi-box-seam-fill"></i>Manajemen Produk
                     </a>
                 </li>
+
                 <li class="menu-item">
                     <a href="<?= base_url('admin/transaksi'); ?>">
                         <i class="bi bi-wallet2"></i>Transaksi
-                        <span class="menu-badge">8</span>
+                        <?php if (isset($transaksi_pending) && $transaksi_pending > 0): ?>
+                        <span class="menu-badge"
+                            style="background: #EF4444; color: white;"><?= $transaksi_pending; ?></span>
+                        <?php endif; ?>
                     </a>
                 </li>
+
                 <li class="menu-item">
                     <a href="<?= base_url('admin/kurir'); ?>">
                         <i class="bi bi-truck"></i>Manajemen Kurir
@@ -613,8 +623,18 @@
                 <li class="menu-item">
                     <a href="<?= base_url('admin/mitra'); ?>">
                         <i class="bi bi-shop"></i>Manajemen Mitra
+                        <?php if (isset($mitra_baru) && $mitra_baru > 0): ?>
+                        <span class="menu-badge" style="background: #F59E0B; color: white;"><?= $mitra_baru; ?></span>
+                        <?php endif; ?>
                     </a>
                 </li>
+
+                <li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/tracking'); ?>">
+                        <i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
+                    </a>
+                </li>
+
                 <li class="menu-item">
                     <a href="<?= base_url('admin/laporan'); ?>">
                         <i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
@@ -629,10 +649,8 @@
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
     <div class="main-content">
 
-        <!-- PAGE HEADER DENGAN NOTIFIKASI & USER PROFILE -->
         <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
             <div>
                 <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
@@ -646,7 +664,6 @@
                     terdaftar di sistem.</p>
             </div>
             <div class="header-right">
-                <!-- NOTIFICATION BELL -->
                 <div style="position: relative;">
                     <button class="notif-btn" id="notifToggle">
                         <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
@@ -657,7 +674,6 @@
                         <?php endif; ?>
                     </button>
 
-                    <!-- NOTIFICATION DROPDOWN -->
                     <div class="notif-dropdown" id="notifDropdown">
                         <div class="notif-dropdown-header">
                             <span>
@@ -678,15 +694,15 @@
                             <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
                                 href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
                                 <?php
-                                        $icon_type = $n['icon'] ?? 'info';
-                                        $icon_map = [
-                                            'success' => 'bi-check-circle-fill',
-                                            'warning' => 'bi-exclamation-triangle-fill',
-                                            'danger' => 'bi-x-circle-fill',
-                                            'info' => 'bi-info-circle-fill'
-                                        ];
-                                        $icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
-                                        ?>
+										$icon_type = $n['icon'] ?? 'info';
+										$icon_map = [
+											'success' => 'bi-check-circle-fill',
+											'warning' => 'bi-exclamation-triangle-fill',
+											'danger' => 'bi-x-circle-fill',
+											'info' => 'bi-info-circle-fill'
+										];
+										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+										?>
                                 <div class="notif-icon <?= $icon_type; ?>">
                                     <i class="bi <?= $icon_class; ?>"></i>
                                 </div>
@@ -717,11 +733,10 @@
                     </div>
                 </div>
 
-                <!-- USER BADGE -->
                 <?php
-                $nama = $this->session->userdata('nama') ?? 'Admin';
-                $role = $this->session->userdata('role') ?? 'Admin';
-                ?>
+				$nama = $this->session->userdata('nama') ?? 'Admin';
+				$role = $this->session->userdata('role') ?? 'Admin';
+				?>
                 <div class="user-badge">
                     <i class="bi bi-person-circle"></i>
                     <div>
@@ -732,7 +747,6 @@
             </div>
         </div>
 
-        <!-- FLASH MESSAGE -->
         <?php if ($this->session->flashdata('success')) : ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="fas fa-check-circle mr-1"></i> <?= $this->session->flashdata('success'); ?>
@@ -742,7 +756,6 @@
         </div>
         <?php endif; ?>
 
-        <!-- FILTER DATA LAHAN (SUDAH DIPERBARUI MENJADI PENCARIAN UNIVERSAL) -->
         <div class="card shadow-sm border-0 mb-4" style="border-radius: var(--radius-card);">
             <div class="card-body bg-white rounded-lg">
                 <h6 class="font-weight-bold text-muted mb-3"><i class="fas fa-filter mr-1"></i> Filter Data Lahan</h6>
@@ -761,13 +774,16 @@
                                 </option>
                             </select>
                         </div>
+
                         <div class="col-md-5 mb-2">
-                            <label class="small font-weight-bold text-secondary">Cari Nama Lahan / Lokasi</label>
+                            <label class="small font-weight-bold text-secondary">Cari Nama Lahan / Alamat /
+                                Lokasi</label>
                             <input type="text" name="keyword" class="form-control form-control-sm"
                                 style="border-color: #bfa594; height: 38px; border-radius: 8px;"
-                                placeholder="Masukkan nama lahan atau lokasi..."
-                                value="<?= $this->input->get('keyword'); ?>">
+                                placeholder="Masukkan nama lahan, daerah, atau kota..."
+                                value="<?= htmlspecialchars($this->input->get('keyword') ?? ''); ?>">
                         </div>
+
                         <div class="col-md-3 mb-2">
                             <div class="btn-group w-100">
                                 <button type="submit" class="btn btn-coffee-submit btn-sm w-100 font-weight-bold"
@@ -785,7 +801,6 @@
             </div>
         </div>
 
-        <!-- DAFTAR LAHAN -->
         <div class="card shadow border-0" style="border-radius: var(--radius-card); overflow: hidden;">
             <div class="card-header card-header-coffee d-flex justify-content-between align-items-center py-3">
                 <h5 class="m-0 font-weight-bold" style="font-size: 1.05rem;"><i
@@ -812,7 +827,8 @@
                         </thead>
                         <tbody>
                             <?php if (!empty($lahan)) : ?>
-                            <?php $no = 1; foreach ($lahan as $lh) : ?>
+                            <?php $no = 1;
+								foreach ($lahan as $lh) : ?>
                             <tr>
                                 <td class="text-center align-middle font-weight-bold text-muted"><?= $no++; ?></td>
                                 <td class="text-center align-middle">
@@ -878,14 +894,28 @@
     function toggleSidebar() {
         sidebar.classList.toggle('open');
         overlay.classList.toggle('active');
+        document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
     }
 
     if (toggleBtn) {
         toggleBtn.addEventListener('click', toggleSidebar);
     }
-    overlay.addEventListener('click', toggleSidebar);
+    if (overlay) {
+        overlay.addEventListener('click', toggleSidebar);
+    }
 
-    // INTERAKSI DROPDOWN NOTIFIKASI
+    document.addEventListener('click', function(e) {
+        if (window.innerWidth > 991.98) return;
+        if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
+            if (sidebar.classList.contains('open')) {
+                toggleSidebar();
+            }
+        }
+    });
+
+    // ============================================
+    // NOTIFICATION DROPDOWN
+    // ============================================
     const notifToggle = document.getElementById('notifToggle');
     const notifDropdown = document.getElementById('notifDropdown');
 
@@ -896,12 +926,28 @@
         });
     }
 
-    // Tutup dropdown notifikasi jika klik di luar area dropdown
     document.addEventListener('click', function(e) {
-        if (notifDropdown && !notifDropdown.contains(e.target) && e.target !== notifToggle) {
+        if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
             notifDropdown.classList.remove('show');
         }
     });
+
+    // ============================================
+    // MARK ALL READ
+    // ============================================
+    function markAllRead() {
+        if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+            $.ajax({
+                url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
+                type: 'POST',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) location.reload();
+                    else alert('Gagal menandai semua notifikasi.');
+                }
+            });
+        }
+    }
     </script>
 </body>
 

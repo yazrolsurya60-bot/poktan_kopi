@@ -96,16 +96,6 @@ class Dashboard extends CI_Controller
         // ============================================
         $data['produk_terjual'] = $this->Notifikasi_model->get_petani_top_products($id_user, 5);
 
-        // ============================================
-        // 8. JADWAL PANEN
-        // ============================================
-        $data['jadwal_panen'] = $this->db
-            ->where('id_user', $id_user)
-            ->where('tanggal_panen >=', date('Y-m-d'))
-            ->order_by('tanggal_panen', 'ASC')
-            ->limit(5)
-            ->get('tb_panen')
-            ->result_array();
 
         // ============================================
         // 9. LOAD VIEW

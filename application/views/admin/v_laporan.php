@@ -1206,21 +1206,18 @@
 							<div class="p-3 rounded" style="background:#FFF7ED; border:1px solid rgba(230,161,92,0.2);">
 								<div class="stat-title">Petani Aktif</div>
 								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);"><?= $kpi['total_petani'] ?? 0; ?></h4>
-								<small class="text-muted">dari tb_petani</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-6 mb-3">
 							<div class="p-3 rounded" style="background:#F0FDF4; border:1px solid rgba(16,185,129,0.2);">
 								<div class="stat-title">Mitra Aktif</div>
 								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);"><?= $kpi['total_mitra'] ?? 0; ?></h4>
-								<small class="text-muted">dari tb_mitra</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-6 mb-3">
 							<div class="p-3 rounded" style="background:#EFF6FF; border:1px solid rgba(59,130,246,0.2);">
 								<div class="stat-title">Rata-rata Transaksi</div>
 								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);">Rp <?= number_format($kpi['rata_transaksi'] ?? 0, 0, ',', '.'); ?></h4>
-								<small class="text-muted">per pesanan</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-6 mb-3">
@@ -1229,7 +1226,6 @@
 								<?php $tr = $tracking ?? [];
 								$stat = $tr['statistik'] ?? []; ?>
 								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);"><?= $tr['total'] ?? 0; ?></h4>
-								<small class="text-muted"><?= ($stat['Selesai'] ?? 0); ?> selesai, <?= ($stat['Pending'] ?? 0); ?> pending</small>
 							</div>
 						</div>
 					</div>
@@ -1730,6 +1726,9 @@
 							cornerRadius: 8,
 							callbacks: {
 								label: function(ctx) {
+									if (ctx.label === 'Belum Ada Penjualan') {
+										return ctx.label;
+									}
 									return ctx.label + ': ' + ctx.parsed + ' kg';
 								}
 							}

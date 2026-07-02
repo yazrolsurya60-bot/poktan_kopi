@@ -923,14 +923,24 @@
                         <i class="bi bi-grid-1x2-fill"></i>Dashboard
                     </a>
                 </li>
+
+                <!-- MANAJEMEN USER - Badge User Baru -->
                 <li class="menu-item">
                     <a href="<?= base_url('admin/user'); ?>">
                         <i class="bi bi-people-fill"></i>Manajemen User
+                        <?php if (isset($user_baru) && $user_baru > 0): ?>
+                        <span class="menu-badge" style="background: #EF4444; color: white;"><?= $user_baru; ?></span>
+                        <?php endif; ?>
                     </a>
                 </li>
+
                 <li class="menu-item active">
                     <a href="<?= base_url('admin/petani'); ?>">
                         <i class="bi bi-person-badge-fill"></i>Data Petani
+                        <?php if (isset($petani_baru_count) && $petani_baru_count > 0): ?>
+                        <span class="menu-badge"
+                            style="background: #F59E0B; color: white;"><?= $petani_baru_count; ?></span>
+                        <?php endif; ?>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -948,9 +958,14 @@
                         <i class="bi bi-box-seam-fill"></i>Manajemen Produk
                     </a>
                 </li>
+                <!-- TRANSAKSI - Badge Pending -->
                 <li class="menu-item">
                     <a href="<?= base_url('admin/transaksi'); ?>">
                         <i class="bi bi-wallet2"></i>Transaksi
+                        <?php if (isset($transaksi_pending) && $transaksi_pending > 0): ?>
+                        <span class="menu-badge"
+                            style="background: #EF4444; color: white;"><?= $transaksi_pending; ?></span>
+                        <?php endif; ?>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -958,11 +973,23 @@
                         <i class="bi bi-truck"></i>Manajemen Kurir
                     </a>
                 </li>
+                <!-- MANAJEMEN MITRA - Badge Mitra Baru -->
                 <li class="menu-item">
                     <a href="<?= base_url('admin/mitra'); ?>">
                         <i class="bi bi-shop"></i>Manajemen Mitra
+                        <?php if (isset($mitra_baru) && $mitra_baru > 0): ?>
+                        <span class="menu-badge" style="background: #F59E0B; color: white;"><?= $mitra_baru; ?></span>
+                        <?php endif; ?>
                     </a>
                 </li>
+
+                <!-- TRACKING PENGIRIMAN -->
+                <li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/tracking'); ?>">
+                        <i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
+                    </a>
+                </li>
+
                 <li class="menu-item">
                     <a href="<?= base_url('admin/laporan'); ?>">
                         <i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
@@ -1022,15 +1049,15 @@
                             <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
                                 href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
                                 <?php
-                                        $icon_type = $n['icon'] ?? 'info';
-                                        $icon_map = [
-                                            'success' => 'bi-check-circle-fill',
-                                            'warning' => 'bi-exclamation-triangle-fill',
-                                            'danger' => 'bi-x-circle-fill',
-                                            'info' => 'bi-info-circle-fill'
-                                        ];
-                                        $icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
-                                        ?>
+										$icon_type = $n['icon'] ?? 'info';
+										$icon_map = [
+											'success' => 'bi-check-circle-fill',
+											'warning' => 'bi-exclamation-triangle-fill',
+											'danger' => 'bi-x-circle-fill',
+											'info' => 'bi-info-circle-fill'
+										];
+										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+										?>
                                 <div class="notif-icon <?= $icon_type; ?>">
                                     <i class="bi <?= $icon_class; ?>"></i>
                                 </div>
@@ -1063,9 +1090,9 @@
 
                 <!-- USER BADGE -->
                 <?php
-                $nama = $this->session->userdata('nama') ?? 'Admin';
-                $role = $this->session->userdata('role') ?? 'Admin';
-                ?>
+				$nama = $this->session->userdata('nama') ?? 'Admin';
+				$role = $this->session->userdata('role') ?? 'Admin';
+				?>
                 <div class="user-badge">
                     <i class="bi bi-person-circle"></i>
                     <div>
@@ -1236,15 +1263,16 @@
                             </thead>
                             <tbody id="tbodyPetani">
                                 <?php if (!empty($daftar_petani)): ?>
-                                <?php $no = 1; foreach ($daftar_petani as $p): ?>
+                                <?php $no = 1;
+									foreach ($daftar_petani as $p): ?>
                                 <tr
                                     style="box-shadow: 0 2px 6px rgba(0,0,0,0.02); background-color: #fff; border-radius: 8px;">
                                     <td class="border-0 fw-bold"
                                         style="border-top-left-radius: 8px; border-bottom-left-radius: 8px; padding-left: 15px; width: 50px;">
                                         <?= $no++; ?></td>
                                     <td class="border-0">
-                                        <?php if(!empty($p['foto_profil'])): ?>
-                                        <img src="<?= base_url('uploads/dokumen/'.$p['foto_profil']); ?>"
+                                        <?php if (!empty($p['foto_profil'])): ?>
+                                        <img src="<?= base_url('uploads/dokumen/' . $p['foto_profil']); ?>"
                                             class="rounded-circle object-fit-cover" width="40" height="40">
                                         <?php else: ?>
                                         <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white"
@@ -1270,13 +1298,22 @@
                                         <?php endif; ?>
                                     </td>
                                     <td class="border-0">
-                                        <?php 
-                                                    $badge_color = 'bg-secondary';
-                                                    $text_color = 'text-white';
-                                                    if ($p['status_petani'] == 'Active') { $badge_color = '#E8F5E9'; $text_color = '#4CAF50'; }
-                                                    if ($p['status_petani'] == 'Inactive') { $badge_color = '#FFF8E1'; $text_color = '#FFC107'; }
-                                                    if ($p['status_petani'] == 'Suspended') { $badge_color = '#FFEBEE'; $text_color = '#F44336'; }
-                                                ?>
+                                        <?php
+												$badge_color = 'bg-secondary';
+												$text_color = 'text-white';
+												if ($p['status_petani'] == 'Active') {
+													$badge_color = '#E8F5E9';
+													$text_color = '#4CAF50';
+												}
+												if ($p['status_petani'] == 'Inactive') {
+													$badge_color = '#FFF8E1';
+													$text_color = '#FFC107';
+												}
+												if ($p['status_petani'] == 'Suspended') {
+													$badge_color = '#FFEBEE';
+													$text_color = '#F44336';
+												}
+												?>
                                         <span class="badge rounded-pill px-3 py-2"
                                             style="background-color: <?= $badge_color; ?>; color: <?= $text_color; ?>; font-weight: 600; letter-spacing: 0.5px;">
                                             <?= $p['status_petani']; ?>

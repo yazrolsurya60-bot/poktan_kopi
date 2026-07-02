@@ -259,6 +259,356 @@
             padding: 20px 16px 30px;
         }
     }
+
+    /* ============================================ */
+    /* HEADER RIGHT - NOTIF + USER BADGE */
+    /* ============================================ */
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+    }
+
+    /* ============================================ */
+    /* USER BADGE */
+    /* ============================================ */
+
+    .user-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 10px;
+        background: var(--card-white);
+        border: 1px solid rgba(74, 44, 17, 0.06);
+        font-weight: 500;
+        font-size: 0.85rem;
+        cursor: default;
+        min-width: 90px;
+        transition: var(--transition-smooth);
+    }
+
+    .user-badge:hover {
+        background: var(--bg-cream);
+        border-color: var(--amber-cream);
+    }
+
+    .user-badge i {
+        font-size: 1.4rem;
+        color: var(--amber-cream);
+        flex-shrink: 0;
+    }
+
+    .user-badge .user-name {
+        font-weight: 600;
+        font-size: 0.82rem;
+        color: var(--dark-coffee);
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .user-badge .user-role {
+        font-size: 0.6rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+
+    /* --- NOTIFICATION BELL --- */
+    .notif-btn {
+        position: relative;
+        background: var(--card-white);
+        border: 1px solid rgba(74, 44, 17, 0.06);
+        border-radius: 12px;
+        padding: 8px 14px;
+        color: var(--dark-coffee);
+        transition: var(--transition-smooth);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .notif-btn:hover {
+        background: var(--bg-cream);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .notif-btn .notif-dot {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 18px;
+        height: 18px;
+        background: #EF4444;
+        border-radius: 50%;
+        font-size: 0.6rem;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        border: 2px solid white;
+    }
+
+    /* --- NOTIFICATION DROPDOWN --- */
+    .notif-dropdown {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 10px);
+        width: 380px;
+        max-height: 400px;
+        background: var(--card-white);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-hover);
+        border: 1px solid rgba(74, 44, 17, 0.06);
+        overflow: hidden;
+        display: none;
+        z-index: 50;
+    }
+
+    .notif-dropdown.show {
+        display: block;
+        animation: slideDown 0.25s ease;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .notif-dropdown-header {
+        padding: 14px 18px;
+        border-bottom: 1px solid rgba(74, 44, 17, 0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+    }
+
+    .notif-dropdown-header a {
+        font-size: 0.75rem;
+        color: var(--amber-cream);
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .notif-dropdown-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .notif-item {
+        padding: 12px 18px;
+        border-bottom: 1px solid rgba(74, 44, 17, 0.04);
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        transition: var(--transition-smooth);
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .notif-item:hover {
+        background: var(--bg-cream);
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .notif-item .notif-icon {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+
+    .notif-item .notif-icon.success {
+        background: #D1FAE5;
+        color: #065F46;
+    }
+
+    .notif-item .notif-icon.warning {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    .notif-item .notif-icon.info {
+        background: #DBEAFE;
+        color: #1E40AF;
+    }
+
+    .notif-item .notif-icon.danger {
+        background: #FEE2E2;
+        color: #991B1B;
+    }
+
+    .notif-item .notif-text {
+        flex: 1;
+        font-size: 0.85rem;
+    }
+
+    .notif-item .notif-text .notif-time {
+        font-size: 0.7rem;
+        color: var(--text-secondary);
+        display: block;
+        margin-top: 2px;
+    }
+
+    .notif-item.unread {
+        background: rgba(230, 161, 92, 0.05);
+    }
+
+    .notif-item.unread .notif-text {
+        font-weight: 600;
+    }
+
+    .notif-badge-new {
+        background: var(--amber-cream);
+        color: white;
+        font-size: 0.55rem;
+        padding: 2px 8px;
+        border-radius: 10px;
+        align-self: center;
+    }
+
+    .notif-empty {
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .notif-empty i {
+        font-size: 2.5rem;
+        color: #D1C9C0;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .notif-empty p {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    /* 🔔 NOTIFIKASI ANIMASI */
+    @keyframes notifPulse {
+
+        0%,
+        100% {
+            transform: scale(1);
+        }
+
+        30% {
+            transform: scale(1.5);
+            background: #EF4444;
+        }
+
+        60% {
+            transform: scale(0.9);
+        }
+    }
+
+    @keyframes bellRing {
+
+        0%,
+        100% {
+            transform: rotate(0);
+        }
+
+        25% {
+            transform: rotate(10deg);
+        }
+
+        50% {
+            transform: rotate(-10deg);
+        }
+
+        75% {
+            transform: rotate(5deg);
+        }
+    }
+
+    .notif-dot.pulse {
+        animation: notifPulse 0.6s ease 3;
+    }
+
+    .notif-btn.ring {
+        animation: bellRing 0.5s ease 1;
+    }
+
+    /* RESPONSIVE NOTIF & BADGE */
+    @media (max-width: 991.98px) {
+        .user-badge {
+            padding: 4px 10px;
+            min-width: 60px;
+        }
+
+        .user-badge i {
+            font-size: 1.1rem;
+        }
+
+        .user-badge .user-name {
+            font-size: 0.7rem;
+        }
+
+        .user-badge .user-role {
+            font-size: 0.5rem;
+        }
+
+        .header-right {
+            gap: 8px;
+        }
+
+        .notif-dropdown {
+            width: calc(100vw - 32px);
+            right: -60px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .user-badge {
+            padding: 4px 8px;
+            min-width: 50px;
+            gap: 4px;
+        }
+
+        .user-badge i {
+            font-size: 0.9rem;
+        }
+
+        .user-badge .user-name {
+            font-size: 0.6rem;
+        }
+
+        .user-badge .user-role {
+            display: none;
+        }
+
+        .header-right {
+            gap: 6px;
+        }
+
+        .notif-dropdown {
+            width: calc(100vw - 24px);
+            right: -70px;
+        }
+    }
     </style>
 </head>
 
@@ -266,6 +616,7 @@
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebarMenu">
         <div class="sidebar-brand">
             <div class="brand-icon">
@@ -303,11 +654,7 @@
                         <i class="bi bi-cart-check-fill"></i> Pesanan Masuk
                     </a>
                 </li>
-                <li class="menu-item <?= ($this->uri->segment(2) == 'tracking') ? 'active' : ''; ?>">
-                    <a href="<?= base_url('petani/tracking'); ?>">
-                        <i class="bi bi-truck"></i> Tracking Kiriman
-                    </a>
-                </li>
+
             </ul>
         </div>
 
@@ -318,6 +665,7 @@
         </div>
     </div>
 
+    <!-- MAIN KONTEN -->
     <div class="main-content">
 
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -330,6 +678,88 @@
                     style="letter-spacing: -0.5px;">Manajemen Lahan</h3>
                 <p class="text-muted small mb-0">Dashboard / Kelola Lahan</p>
             </div>
+
+            <!-- HEADER RIGHT - NOTIF + USER BADGE -->
+            <div class="header-right">
+                <!-- NOTIFICATION BELL -->
+                <div style="position: relative;">
+                    <button class="notif-btn" id="notifToggle">
+                        <i class="bi bi-bell" style="font-size: 1.2rem;"></i>
+                        <?php if (isset($unread_count) && $unread_count > 0): ?>
+                        <span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
+                        <?php else: ?>
+                        <span class="notif-dot" id="notifCount" style="display:none;">0</span>
+                        <?php endif; ?>
+                    </button>
+
+                    <div class="notif-dropdown" id="notifDropdown">
+                        <div class="notif-dropdown-header">
+                            <span><?= (isset($unread_count) && $unread_count > 0) ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
+                            <div>
+                                <?php if (isset($unread_count) && $unread_count > 0): ?>
+                                <a href="#" id="markAllReadBtn" class="mr-2">Tandai semua</a>
+                                <?php endif; ?>
+                                <a href="<?= base_url('petani/dashboard/history'); ?>">Lihat Semua</a>
+                            </div>
+                        </div>
+                        <div class="notif-dropdown-list" id="notifList">
+                            <?php if (!empty($notifikasi)): ?>
+                            <?php foreach ($notifikasi as $n): ?>
+                            <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
+                                href="<?= base_url('petani/dashboard/read/' . $n['id_notifikasi']); ?>">
+                                <?php
+										$icon_type = $n['icon'] ?? 'info';
+										$icon_map = [
+											'success' => 'bi-check-circle-fill',
+											'warning' => 'bi-exclamation-triangle-fill',
+											'danger' => 'bi-x-circle-fill',
+											'info' => 'bi-info-circle-fill'
+										];
+										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+										?>
+                                <div class="notif-icon <?= $icon_type; ?>">
+                                    <i class="bi <?= $icon_class; ?>"></i>
+                                </div>
+                                <div class="notif-text">
+                                    <?= htmlspecialchars($n['isi_notifikasi']); ?>
+                                    <span
+                                        class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+                                </div>
+                                <?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
+                                <span class="notif-badge-new">Baru</span>
+                                <?php endif; ?>
+                            </a>
+                            <?php endforeach; ?>
+                            <?php else: ?>
+                            <div class="notif-empty">
+                                <i class="bi bi-bell-slash"></i>
+                                <p>Tidak ada notifikasi</p>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="p-2 text-center border-top"
+                            style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
+                            <a href="<?= base_url('petani/dashboard/settings'); ?>"
+                                class="small text-secondary font-weight-bold text-decoration-none">
+                                <i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- USER BADGE -->
+                <?php
+				$nama = $this->session->userdata('nama') ?? 'Petani';
+				$role = $this->session->userdata('role') ?? 'Petani';
+				?>
+                <div class="user-badge">
+                    <i class="bi bi-person-circle"></i>
+                    <div>
+                        <div class="user-name"><?= $nama; ?></div>
+                        <div class="user-role"><?= $role; ?></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <?php if ($this->session->flashdata('success')): ?>
@@ -341,6 +771,7 @@
         </div>
         <?php endif; ?>
 
+        <!-- Statistik -->
         <div class="row no-gutters mx-n2 mb-4">
             <div class="col-12 col-sm-6 col-md-3 px-2 mb-3 mb-md-0">
                 <div class="card border-0 shadow-sm h-100" style="border-radius: var(--radius-card);">
@@ -365,12 +796,12 @@
                             <span class="text-muted font-weight-bold small d-block mb-1">Lahan Aktif</span>
                             <h2 class="font-weight-bold text-dark mb-0">
                                 <?php
-                                $aktif = 0;
-                                foreach ($lahan as $lh) {
-                                    if (strtolower($lh['status_lahan']) == 'active' || $lh['status_lahan'] == 'aktif') $aktif++;
-                                }
-                                echo $aktif;
-                                ?>
+								$aktif = 0;
+								foreach ($lahan as $lh) {
+									if (strtolower($lh['status_lahan']) == 'active' || $lh['status_lahan'] == 'aktif') $aktif++;
+								}
+								echo $aktif;
+								?>
                             </h2>
                             <span class="text-success font-weight-bold d-block mt-1" style="font-size: 11px;">
                                 <?= count($lahan) > 0 ? round(($aktif / count($lahan)) * 100, 1) : 0; ?>% dari total
@@ -391,12 +822,12 @@
                             <span class="text-muted font-weight-bold small d-block mb-1">Lahan Nonaktif</span>
                             <h2 class="font-weight-bold text-dark mb-0">
                                 <?php
-                                $nonaktif = 0;
-                                foreach ($lahan as $lh) {
-                                    if (strtolower($lh['status_lahan']) == 'inactive' || $lh['status_lahan'] == 'nonaktif') $nonaktif++;
-                                }
-                                echo $nonaktif;
-                                ?>
+								$nonaktif = 0;
+								foreach ($lahan as $lh) {
+									if (strtolower($lh['status_lahan']) == 'inactive' || $lh['status_lahan'] == 'nonaktif') $nonaktif++;
+								}
+								echo $nonaktif;
+								?>
                             </h2>
                             <span class="text-muted d-block mt-1" style="font-size: 11px;">
                                 <?= count($lahan) > 0 ? round(($nonaktif / count($lahan)) * 100, 1) : 0; ?>% dari total
@@ -417,12 +848,12 @@
                             <span class="text-muted font-weight-bold small d-block mb-1">Total Luas (Ha)</span>
                             <h2 class="font-weight-bold text-dark mb-0">
                                 <?php
-                                $total_luas = 0;
-                                foreach ($lahan as $lh) {
-                                    $total_luas += (float)$lh['luas'];
-                                }
-                                echo number_format($total_luas, 2, ',', '.');
-                                ?>
+								$total_luas = 0;
+								foreach ($lahan as $lh) {
+									$total_luas += (float)$lh['luas'];
+								}
+								echo number_format($total_luas, 2, ',', '.');
+								?>
                             </h2>
                             <span class="text-info font-weight-bold d-block mt-1" style="font-size: 11px;">Hektar
                                 Lahan</span>
@@ -436,6 +867,7 @@
             </div>
         </div>
 
+        <!-- Filter & Tambah -->
         <div class="card border-0 shadow-sm mb-4" style="border-radius: var(--radius-card);">
             <div class="card-body p-3">
                 <form action="<?= base_url('petani/lahan') ?>" method="GET" class="m-0">
@@ -443,9 +875,10 @@
                         <div class="col-12 col-md-8">
                             <div class="form-row">
                                 <div class="col-12 col-sm-5 mb-2 mb-sm-0">
+                                    <!-- REVISI DI SINI: name diubah dari 'lokasi' menjadi 'keyword' -->
                                     <input type="text" name="keyword"
                                         class="form-control form-control-sm bg-light border-0 pl-3"
-                                        placeholder="Cari nama lahan atau lokasi..."
+                                        placeholder="Cari nama lahan atau alamat..."
                                         value="<?= $this->input->get('keyword'); ?>"
                                         style="height: 38px; border-radius: 6px;">
                                 </div>
@@ -486,6 +919,7 @@
             </div>
         </div>
 
+        <!-- Tabel Data Lahan -->
         <div class="card border-0 shadow-sm" style="border-radius: var(--radius-card); overflow: hidden;">
             <div class="table-responsive">
                 <table class="table table-modern align-middle mb-0">
@@ -495,7 +929,7 @@
                             <th width="10%" class="text-center">Foto Lahan</th>
                             <th width="16%">Nama Lahan</th>
                             <th width="12%">Jenis Kopi</th>
-                            <th width="12%">Jenis Tanah</th>
+                            <th width="12%">Jenis Tanah</th> <!-- KOLOM BARU -->
                             <th width="8%">Luas (Ha)</th>
                             <th width="15%">Lokasi / Alamat</th>
                             <th width="12%">Catatan</th>
@@ -505,7 +939,8 @@
                     </thead>
                     <tbody>
                         <?php if (!empty($lahan)): ?>
-                        <?php $no = 1; foreach ($lahan as $lh): ?>
+                        <?php $no = 1;
+							foreach ($lahan as $lh): ?>
                         <tr>
                             <td class="text-center align-middle font-weight-bold text-muted"><?= $no++; ?></td>
                             <td class="text-center align-middle">
@@ -528,6 +963,7 @@
                             </td>
                             <td class="align-middle text-dark font-weight-medium">
                                 <?= isset($lh['jenis_tanah']) ? $lh['jenis_tanah'] : '<span class="text-muted font-italic">-</span>'; ?>
+                                <!-- DATA BARU -->
                             </td>
                             <td class="align-middle font-weight-bold text-dark">
                                 <?= number_format((float)$lh['luas'], 2, ',', '.'); ?>
@@ -566,10 +1002,11 @@
                         <?php else: ?>
                         <tr>
                             <td colspan="10" class="text-center text-muted py-5 bg-white">
+                                <!-- Colspan disesuaikan jadi 10 -->
                                 <i class="fas fa-folder-open fa-3x mb-3 text-secondary"></i>
-                                <h6 class="font-weight-bold text-secondary mb-1">Data Lahan Tidak Ditemukan</h6>
-                                <small class="text-muted">Kata kunci pencarian tidak cocok atau Anda belum menambahkan
-                                    data lahan.</small>
+                                <h6 class="font-weight-bold text-secondary mb-1">Belum Ada Data Lahan Kopi</h6>
+                                <small class="text-muted">Silakan lakukan penambahan titik koordinat lahan baru
+                                    menggunakan menu di atas.</small>
                             </td>
                         </tr>
                         <?php endif; ?>
@@ -599,6 +1036,54 @@
             sidebarOverlay.classList.remove('active');
         });
     }
+
+    // ============================================
+    // NOTIFICATION DROPDOWN
+    // ============================================
+    const notifToggle = document.getElementById('notifToggle');
+    const notifDropdown = document.getElementById('notifDropdown');
+
+    if (notifToggle) {
+        notifToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            notifDropdown.classList.toggle('show');
+        });
+    }
+
+    document.addEventListener('click', function(e) {
+        if (notifDropdown && !notifDropdown.contains(e.target) && notifToggle && !notifToggle.contains(e
+                .target)) {
+            notifDropdown.classList.remove('show');
+        }
+    });
+
+    // ============================================
+    // MARK ALL READ
+    // ============================================
+    function markAllRead() {
+        if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+            $.ajax({
+                url: '<?= base_url('petani/dashboard/mark_all_read_ajax'); ?>',
+                type: 'POST',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert('Gagal menandai semua notifikasi.');
+                    }
+                },
+                error: function() {
+                    alert('Terjadi kesalahan. Silakan coba lagi.');
+                }
+            });
+        }
+    }
+
+    document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        markAllRead();
+    });
     </script>
 </body>
 

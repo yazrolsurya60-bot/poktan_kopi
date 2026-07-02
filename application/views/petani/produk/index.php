@@ -895,11 +895,7 @@
                         <i class="bi bi-cart-check-fill"></i> Pesanan Masuk
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="<?= base_url('petani/tracking'); ?>">
-                        <i class="bi bi-truck"></i> Tracking Kiriman
-                    </a>
-                </li>
+            
             </ul>
         </div>
 
