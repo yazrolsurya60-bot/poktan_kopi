@@ -413,16 +413,16 @@
                             <p>Satu platform digital yang menghubungkan petani, pengolah, distributor, dan konsumen dalam rantai pasok yang transparan.</p>
                             <div class="hero-stat-row">
                                 <div class="hero-stat">
-                                    <div class="num">150+</div>
+                                    <div class="num"><?= number_format($total_petani) ?></div>
                                     <div class="label">Petani</div>
                                 </div>
                                 <div class="hero-stat">
-                                    <div class="num green">34</div>
-                                    <div class="label">Provinsi</div>
+                                    <div class="num green"><?= number_format($total_mitra) ?></div>
+                                    <div class="label">Mitra</div>
                                 </div>
                                 <div class="hero-stat">
-                                    <div class="num brown">3+</div>
-                                    <div class="label">Mitra</div>
+                                    <div class="num brown"><?= number_format($total_produk) ?></div>
+                                    <div class="label">Produk</div>
                                 </div>
                             </div>
                         </div>
@@ -437,20 +437,16 @@
         <div class="container">
             <div class="stats-grid">
                 <div class="stat-item">
-                    <div class="stat-num">150+</div>
-                    <div class="stat-label">Petani Aktif</div>
+                    <div class="stat-num"><?= number_format($total_petani) ?></div>
+                    <div class="stat-label">Petani</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-num brown">6</div>
-                    <div class="stat-label">Produk Kopi</div>
+                    <div class="stat-num brown"><?= number_format($total_produk) ?></div>
+                    <div class="stat-label">Produk</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-num green">3+</div>
-                    <div class="stat-label">Mitra Bisnis</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-num">34</div>
-                    <div class="stat-label">Provinsi</div>
+                    <div class="stat-num green"><?= number_format($total_mitra) ?></div>
+                    <div class="stat-label">Mitra</div>
                 </div>
             </div>
         </div>
