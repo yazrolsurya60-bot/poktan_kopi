@@ -27,7 +27,7 @@ class Tracking extends CI_Controller
     {
         $id_user = $this->session->userdata('id_user');
 
-        $data['trackings'] = $this->Tracking_model->get_tracking_by_status(null, 10);
+        $data['trackings'] = $this->Tracking_model->get_kurir_tracking($id_user, 10);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user, 5);
 

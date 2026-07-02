@@ -495,6 +495,9 @@ $base_url = base_url();
                 <li class="menu-item <?= strpos(current_url(), 'admin/kurir') !== false ? 'active' : '' ?>">
                     <a href="<?= base_url('admin/kurir'); ?>"><i class="bi bi-truck"></i>Manajemen Kurir</a>
                 </li>
+                <li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/tracking'); ?>"><i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman</a>
+                </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/mitra') !== false ? 'active' : '' ?>">
                     <a href="<?= base_url('admin/mitra'); ?>"><i class="bi bi-shop"></i>Manajemen Mitra</a>
                 </li>

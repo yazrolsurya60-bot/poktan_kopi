@@ -12,7 +12,22 @@ class Transaksi_model extends CI_Model {
     
     public function buat_transaksi($data) {
         $this->db->insert('tb_transaksi', $data);
-        return $this->db->insert_id();
+        $id_transaksi = $this->db->insert_id();
+        
+        // Buat tracking otomatis
+        $tracking_data = [
+            'id_transaksi' => $id_transaksi,
+            'status_pengiriman' => 'pending',
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        $this->db->insert('tb_tracking', $tracking_data);
+        $id_tracking = $this->db->insert_id();
+        
+        // Update id_tracking di tb_transaksi
+        $this->db->where('id_transaksi', $id_transaksi);
+        $this->db->update('tb_transaksi', ['id_tracking' => $id_tracking]);
+        
+        return $id_transaksi;
     }
 
     public function tambah_detail($data) {

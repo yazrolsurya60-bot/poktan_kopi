@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Tracking extends CI_Controller
@@ -8,139 +11,205 @@ class Tracking extends CI_Controller
         parent::__construct();
         date_default_timezone_set('Asia/Jakarta');
 
-        // CEK LOGIN
         if (!$this->session->userdata('id_user')) {
             redirect('auth/login');
         }
 
-        // CEK ROLE ADMIN
         $current_role = $this->session->userdata('role');
         if ($current_role != 'Admin') {
-            if ($current_role == 'Petani') {
-                redirect('petani/dashboard');
-            } elseif ($current_role == 'Pembeli') {
-                redirect('pembeli/dashboard');
-            } elseif ($current_role == 'Kurir') {
-                redirect('kurir/tracking');
-            } else {
-                $this->session->sess_destroy();
-                redirect('auth/login');
-            }
+            if ($current_role == 'Petani')        redirect('petani/dashboard');
+            elseif ($current_role == 'Pembeli')   redirect('pembeli/dashboard');
+            elseif ($current_role == 'Kurir')     redirect('kurir/tracking');
+            else { $this->session->sess_destroy(); redirect('auth/login'); }
         }
 
         $this->load->model('Tracking_model');
+        $this->load->model('Kurir_model');
         $this->load->model('Notifikasi_model');
         $this->load->helper('notifikasi');
         $this->load->library('form_validation');
     }
 
-    /**
-     * M07-F02: Daftar tracking yang perlu diupdate oleh Admin
-     */
+    // ============================================================
+    // INDEX — Daftar semua tracking
+    // ============================================================
     public function index()
     {
+        // Sinkronisasi transaksi lama yang belum ada tracking
+        $this->Tracking_model->create_tracking_for_existing_transactions();
+
         $id_user = $this->session->userdata('id_user');
 
-        $data['trackings'] = $this->Tracking_model->get_tracking_by_status(null, 20);
+        $data['trackings']    = $this->Tracking_model->get_tracking_by_status(null, 50);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user, 5);
-        $data['role'] = 'Admin';
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user, 5);
+        $data['role']         = 'Admin';
 
         foreach ($data['trackings'] as &$track) {
-            $status_info = $this->Tracking_model->get_status_label($track->status_pengiriman);
-            $track->status_label = $status_info['label'];
-            $track->status_class = $status_info['class'];
-            $track->status_icon = $status_info['icon'];
+            $info = $this->Tracking_model->get_status_label($track->status_pengiriman);
+            $track->status_label = $info['label'];
+            $track->status_class = $info['class'];
+            $track->status_icon  = $info['icon'];
         }
 
-        $this->load->view('template/header', ['title' => 'Update Status Pengiriman - Admin']);
+        $this->load->view('template/header', ['title' => 'Tracking Pengiriman - Admin', 'role' => 'Admin']);
         $this->load->view('admin/tracking_list', $data);
         $this->load->view('template/footer');
     }
 
-    /**
-     * M07-F02: Form update status oleh Admin
-     */
+    // ============================================================
+    // UPDATE — Update status + assign kurir
+    // ============================================================
     public function update($id_tracking)
     {
         $id_user = $this->session->userdata('id_user');
 
         $tracking = $this->Tracking_model->get_tracking_by_id($id_tracking);
-        if (!$tracking) {
-            show_404();
+        if (!$tracking) show_404();
+
+        // ---- Handle POST ----
+        if ($this->input->post('action') == 'update_status') {
+            $this->_handle_update_status($tracking, $id_user);
+        } elseif ($this->input->post('action') == 'assign_kurir') {
+            $this->_handle_assign_kurir($tracking, $id_user);
         }
 
-        if ($this->input->post()) {
-            $this->form_validation->set_rules('status', 'Status', 'required');
+        // ---- Re-fetch setelah kemungkinan update ----
+        $tracking = $this->Tracking_model->get_tracking_by_id($id_tracking);
 
-            if ($this->form_validation->run() == TRUE) {
-                $status = $this->input->post('status');
-                $keterangan = $this->input->post('keterangan');
+        $data['tracking']      = $tracking;
+        $data['status_options']= $this->_get_status_options($tracking->status_pengiriman);
+        $data['kurir_list']    = $this->Kurir_model->get_available_kurir();
+        $data['unread_count']  = $this->Notifikasi_model->count_unread($id_user);
+        $data['notifikasi']    = $this->Notifikasi_model->get_unread_notif($id_user, 5);
+        $data['role']          = 'Admin';
 
-                // Update status dengan mencatat admin yang melakukan update
-                $result = $this->Tracking_model->update_status_admin($id_tracking, $status, $keterangan, $id_user);
-
-                if ($result) {
-                    $status_label = $this->Tracking_model->get_status_label($status);
-
-                    // Notifikasi ke pembeli
-                    notifikasi_tracking(
-                        $tracking->pembeli_id,
-                        $tracking->invoice,
-                        $status_label['label'],
-                        $keterangan ?: "Status diperbarui oleh Admin ke: {$status_label['label']}"
-                    );
-
-                    // Notifikasi ke semua Admin (opsional)
-                    notifikasi_semua_admin(
-                        'Update Status Pengiriman',
-                        "Admin mengupdate status #{$tracking->invoice} menjadi: {$status_label['label']}",
-                        'info',
-                        base_url('admin/tracking')
-                    );
-
-                    $this->session->set_flashdata('success', 'Status pengiriman berhasil diperbarui oleh Admin.');
-                    redirect('admin/tracking');
-                } else {
-                    $this->session->set_flashdata('error', 'Gagal memperbarui status.');
-                }
-            }
-        }
-
-        $data['tracking'] = $tracking;
-        $data['status_options'] = $this->get_status_options($tracking->status_pengiriman);
-        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user, 5);
-        $data['role'] = 'Admin';
-
-        $this->load->view('template/header', ['title' => 'Update Status - Admin']);
+        $this->load->view('template/header', ['title' => 'Update Tracking - Admin', 'role' => 'Admin']);
         $this->load->view('admin/tracking_update', $data);
         $this->load->view('template/footer');
     }
 
-    /**
-     * Get available status options based on current status
-     */
-    private function get_status_options($current_status)
+    // ============================================================
+    // PRIVATE — Handle update status
+    // ============================================================
+    private function _handle_update_status($tracking, $id_user)
     {
-        $flow = [
-            'pending' => ['diproses', 'dibatalkan'],
-            'diproses' => ['dikirim', 'dibatalkan'],
-            'dikirim' => ['dalam_perjalanan'],
-            'dalam_perjalanan' => ['tiba_di_kota_tujuan'],
-            'tiba_di_kota_tujuan' => ['out_for_delivery'],
-            'out_for_delivery' => ['delivered'],
-            'delivered' => ['diterima']
-        ];
+        $status     = $this->input->post('status');
+        $keterangan = $this->input->post('keterangan');
 
-        $options = isset($flow[$current_status]) ? $flow[$current_status] : [];
-        $result = [];
-
-        foreach ($options as $status) {
-            $label = $this->Tracking_model->get_status_label($status);
-            $result[] = ['value' => $status, 'label' => $label['label']];
+        if (!$status) {
+            $this->session->set_flashdata('error', 'Pilih status terlebih dahulu.');
+            return;
         }
 
+        $result = $this->Tracking_model->update_status_admin(
+            $tracking->id_tracking, $status, $keterangan, $id_user
+        );
+
+        if ($result) {
+            $label = $this->Tracking_model->get_status_label($status);
+
+            // Notifikasi ke pembeli
+            notifikasi_tracking(
+                $tracking->pembeli_id,
+                $tracking->invoice,
+                $label['label'],
+                $keterangan ?: "Status diperbarui ke: {$label['label']}"
+            );
+
+            $this->session->set_flashdata('success', 'Status berhasil diperbarui ke: ' . $label['label']);
+            redirect('admin/tracking/update/' . $tracking->id_tracking);
+        } else {
+            $this->session->set_flashdata('error', 'Gagal memperbarui status.');
+        }
+    }
+
+    // ============================================================
+    // PRIVATE — Handle assign kurir
+    // ============================================================
+    private function _handle_assign_kurir($tracking, $id_user)
+    {
+        $id_kurir = (int)$this->input->post('id_kurir');
+
+        if (!$id_kurir) {
+            $this->session->set_flashdata('error', 'Pilih kurir terlebih dahulu.');
+            return;
+        }
+
+        $kurir = $this->Kurir_model->get_kurir_by_id($id_kurir);
+        if (!$kurir) {
+            $this->session->set_flashdata('error', 'Kurir tidak ditemukan.');
+            return;
+        }
+
+        // Update id_kurir di tb_tracking
+        $this->db->where('id_tracking', $tracking->id_tracking);
+        $result = $this->db->update('tb_tracking', [
+            'id_kurir'   => $id_kurir,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
+        if ($result) {
+            // Simpan history
+            $this->Tracking_model->save_history(
+                $tracking->id_tracking,
+                $tracking->status_pengiriman,
+                "Kurir ditugaskan: {$kurir->nama_kurir}"
+            );
+
+            // Notifikasi ke pembeli
+            notifikasi_tracking(
+                $tracking->pembeli_id,
+                $tracking->invoice,
+                'Kurir Ditugaskan',
+                "Kurir {$kurir->nama_kurir} telah ditugaskan untuk mengantar pesanan Anda."
+            );
+
+            // Notifikasi ke user kurir (jika ada email yang cocok di tb_user)
+            $user_kurir = $this->db
+                ->where('email', $kurir->email)
+                ->where('role', 'Kurir')
+                ->get('tb_user')->row();
+
+            if ($user_kurir) {
+                send_notifikasi(
+                    $user_kurir->id_user,
+                    'Kurir',
+                    'Penugasan Pengiriman Baru',
+                    "Anda ditugaskan mengantar pesanan #{$tracking->invoice}. Segera upload bukti pengiriman.",
+                    'info',
+                    base_url('kurir/tracking')
+                );
+            }
+
+            $this->session->set_flashdata('success', "Kurir {$kurir->nama_kurir} berhasil ditugaskan.");
+            redirect('admin/tracking/update/' . $tracking->id_tracking);
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menugaskan kurir.');
+        }
+    }
+
+    // ============================================================
+    // PRIVATE — Status flow options
+    // ============================================================
+    private function _get_status_options($current_status)
+    {
+        $flow = [
+            'pending'              => ['diproses', 'dibatalkan'],
+            'diproses'             => ['dikirim', 'dibatalkan'],
+            'dikirim'              => ['dalam_perjalanan'],
+            'dalam_perjalanan'     => ['tiba_di_kota_tujuan'],
+            'tiba_di_kota_tujuan'  => ['out_for_delivery'],
+            'out_for_delivery'     => ['delivered'],
+            'delivered'            => ['diterima'],
+        ];
+
+        $options = $flow[$current_status] ?? [];
+        $result  = [];
+        foreach ($options as $s) {
+            $info     = $this->Tracking_model->get_status_label($s);
+            $result[] = ['value' => $s, 'label' => $info['label']];
+        }
         return $result;
     }
 }
