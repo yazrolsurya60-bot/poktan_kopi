@@ -165,18 +165,16 @@
             line-height: 1.4;
         }
 
-        .custom-switch {
-            padding-left: 0;
+        .setting-switch {
             display: flex;
             align-items: center;
-            gap: 12px;
         }
 
-        .custom-switch .custom-control-input {
+        .setting-switch input {
             display: none;
         }
 
-        .custom-switch .custom-control-label {
+        .setting-switch label {
             position: relative;
             display: inline-block;
             width: 44px;
@@ -189,7 +187,7 @@
             margin-bottom: 0;
         }
 
-        .custom-switch .custom-control-label::after {
+        .setting-switch label::after {
             content: '';
             position: absolute;
             top: 2px;
@@ -202,11 +200,11 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .custom-switch .custom-control-input:checked+.custom-control-label {
-            background: var(--roasted-brown);
+        .setting-switch input:checked+label {
+            background: var(--roasted-brown) !important;
         }
 
-        .custom-switch .custom-control-input:checked+.custom-control-label::after {
+        .setting-switch input:checked+label::after {
             transform: translateX(20px);
         }
 
@@ -279,17 +277,17 @@
                 font-size: 0.8rem;
             }
 
-            .custom-switch .custom-control-label {
+            .setting-switch label {
                 width: 38px;
                 height: 20px;
             }
 
-            .custom-switch .custom-control-label::after {
+            .setting-switch label::after {
                 width: 16px;
                 height: 16px;
             }
 
-            .custom-switch .custom-control-input:checked+.custom-control-label::after {
+            .setting-switch input:checked+label::after {
                 transform: translateX(18px);
             }
         }
@@ -346,10 +344,10 @@
                     <div class="switch-content">
                         <div class="switch-label">
                             <span><?= $is_admin ? 'Lansiran Transaksi Masuk Baru' : 'Lansiran Pesanan Baru' ?></span>
-                            <div class="custom-switch ml-auto">
-                                <input type="checkbox" class="custom-control-input" id="notif_transaksi" name="notif_transaksi"
+                            <div class="setting-switch ml-auto">
+                                <input type="checkbox" id="notif_transaksi" name="notif_transaksi"
                                     <?= isset($settings['notif_transaksi']) && $settings['notif_transaksi'] == 1 ? 'checked' : ''; ?>>
-                                <label class="custom-control-label" for="notif_transaksi"></label>
+                                <label for="notif_transaksi"></label>
                             </div>
                         </div>
                         <small class="switch-desc"><?= $is_admin ? 'Dapatkan pesan instan setiap kali ada order masuk.' : 'Notifikasi saat ada pesanan baru dari pembeli.' ?></small>
@@ -366,10 +364,10 @@
                     <div class="switch-content">
                         <div class="switch-label">
                             <span>Lansiran Status Pesanan</span>
-                            <div class="custom-switch ml-auto">
-                                <input type="checkbox" class="custom-control-input" id="notif_pesanan" name="notif_pesanan"
+                            <div class="setting-switch ml-auto">
+                                <input type="checkbox" id="notif_pesanan" name="notif_pesanan"
                                     <?= isset($settings['notif_pesanan']) && $settings['notif_pesanan'] == 1 ? 'checked' : ''; ?>>
-                                <label class="custom-control-label" for="notif_pesanan"></label>
+                                <label for="notif_pesanan"></label>
                             </div>
                         </div>
                         <small class="switch-desc">Notifikasi setiap ada perubahan status pesanan Anda.</small>
@@ -385,10 +383,10 @@
                 <div class="switch-content">
                     <div class="switch-label">
                         <span>Lansiran Konfirmasi Pembayaran</span>
-                        <div class="custom-switch ml-auto">
-                            <input type="checkbox" class="custom-control-input" id="notif_pembayaran" name="notif_pembayaran"
+                        <div class="setting-switch ml-auto">
+                            <input type="checkbox" id="notif_pembayaran" name="notif_pembayaran"
                                 <?= isset($settings['notif_pembayaran']) && $settings['notif_pembayaran'] == 1 ? 'checked' : ''; ?>>
-                            <label class="custom-control-label" for="notif_pembayaran"></label>
+                            <label for="notif_pembayaran"></label>
                         </div>
                     </div>
                     <small class="switch-desc">Notifikasi saat pembayaran berhasil diverifikasi oleh admin.</small>
@@ -411,10 +409,10 @@
                     <div class="switch-content">
                         <div class="switch-label">
                             <span>Lansiran Peringatan Minimum Stok</span>
-                            <div class="custom-switch ml-auto">
-                                <input type="checkbox" class="custom-control-input" id="notif_stok" name="notif_stok"
+                            <div class="setting-switch ml-auto">
+                                <input type="checkbox" id="notif_stok" name="notif_stok"
                                     <?= isset($settings['notif_stok']) && $settings['notif_stok'] == 1 ? 'checked' : ''; ?>>
-                                <label class="custom-control-label" for="notif_stok"></label>
+                                <label for="notif_stok"></label>
                             </div>
                         </div>
                         <small class="switch-desc">Kirim peringatan otomatis saat stok kopi di gudang mencapai batas minimum.</small>
@@ -438,10 +436,10 @@
                     <div class="switch-content">
                         <div class="switch-label">
                             <span><?= $is_pembeli ? 'Lansiran Tracking Kiriman' : 'Lansiran Status Pengiriman' ?></span>
-                            <div class="custom-switch ml-auto">
-                                <input type="checkbox" class="custom-control-input" id="notif_kurir" name="notif_kurir"
+                            <div class="setting-switch ml-auto">
+                                <input type="checkbox" id="notif_kurir" name="notif_kurir"
                                     <?= isset($settings['notif_kurir']) && $settings['notif_kurir'] == 1 ? 'checked' : ''; ?>>
-                                <label class="custom-control-label" for="notif_kurir"></label>
+                                <label for="notif_kurir"></label>
                             </div>
                         </div>
                         <small class="switch-desc"><?= $is_pembeli ? 'Update tracking kurir dan status pengiriman pesanan Anda.' : 'Update tracking kurir dan status pengiriman.' ?></small>
@@ -465,10 +463,10 @@
                     <div class="switch-content">
                         <div class="switch-label">
                             <span>Lansiran Registrasi Petani Baru</span>
-                            <div class="custom-switch ml-auto">
-                                <input type="checkbox" class="custom-control-input" id="notif_petani" name="notif_petani"
+                            <div class="setting-switch ml-auto">
+                                <input type="checkbox" id="notif_petani" name="notif_petani"
                                     <?= isset($settings['notif_petani']) && $settings['notif_petani'] == 1 ? 'checked' : ''; ?>>
-                                <label class="custom-control-label" for="notif_petani"></label>
+                                <label for="notif_petani"></label>
                             </div>
                         </div>
                         <small class="switch-desc">Notifikasi saat ada petani baru yang mendaftar di platform.</small>
@@ -491,10 +489,10 @@
                 <div class="switch-content">
                     <div class="switch-label">
                         <span>Lansiran Maintenance & Update Sistem</span>
-                        <div class="custom-switch ml-auto">
-                            <input type="checkbox" class="custom-control-input" id="notif_sistem" name="notif_sistem"
+                        <div class="setting-switch ml-auto">
+                            <input type="checkbox" id="notif_sistem" name="notif_sistem"
                                 <?= isset($settings['notif_sistem']) && $settings['notif_sistem'] == 1 ? 'checked' : ''; ?>>
-                            <label class="custom-control-label" for="notif_sistem"></label>
+                            <label for="notif_sistem"></label>
                         </div>
                     </div>
                     <small class="switch-desc">Terima kabar pemeliharaan server dan update fitur dari tim teknis.</small>
@@ -531,7 +529,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.custom-control-input').forEach(function(input) {
+            document.querySelectorAll('.setting-switch input').forEach(function(input) {
                 updateLabelStyle(input);
                 input.addEventListener('change', function() {
                     updateLabelStyle(this);
@@ -540,7 +538,7 @@
 
             function updateLabelStyle(input) {
                 const label = input.nextElementSibling;
-                if (label && label.classList.contains('custom-control-label')) {
+                if (label && label.tagName === 'LABEL') {
                     if (input.checked) {
                         label.style.background = '#4A2C11';
                     } else {
