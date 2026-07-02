@@ -31,7 +31,7 @@ class Tracking extends CI_Controller
     }
 
     // ============================================================
-    // INDEX — Daftar semua tracking
+    // INDEX — Daftar semua 
     // ============================================================
     public function index()
     {
