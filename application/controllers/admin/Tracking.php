@@ -17,10 +17,16 @@ class Tracking extends CI_Controller
 
         $current_role = $this->session->userdata('role');
         if ($current_role != 'Admin') {
-            if ($current_role == 'Petani')        redirect('petani/dashboard');
-            elseif ($current_role == 'Pembeli')   redirect('pembeli/dashboard');
-            elseif ($current_role == 'Kurir')     redirect('kurir/tracking');
-            else { $this->session->sess_destroy(); redirect('auth/login'); }
+            if ($current_role == 'Petani')
+                redirect('petani/dashboard');
+            elseif ($current_role == 'Pembeli')
+                redirect('pembeli/dashboard');
+            elseif ($current_role == 'Kurir')
+                redirect('kurir/tracking');
+            else {
+                $this->session->sess_destroy();
+                redirect('auth/login');
+            }
         }
 
         $this->load->model('Tracking_model');
@@ -40,16 +46,16 @@ class Tracking extends CI_Controller
 
         $id_user = $this->session->userdata('id_user');
 
-        $data['trackings']    = $this->Tracking_model->get_tracking_by_status(null, 50);
+        $data['trackings'] = $this->Tracking_model->get_tracking_by_status(null, 50);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user, 5);
-        $data['role']         = 'Admin';
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user, 5);
+        $data['role'] = 'Admin';
 
         foreach ($data['trackings'] as &$track) {
             $info = $this->Tracking_model->get_status_label($track->status_pengiriman);
             $track->status_label = $info['label'];
             $track->status_class = $info['class'];
-            $track->status_icon  = $info['icon'];
+            $track->status_icon = $info['icon'];
         }
 
         $this->load->view('template/header', ['title' => 'Tracking Pengiriman - Admin', 'role' => 'Admin']);
@@ -65,7 +71,8 @@ class Tracking extends CI_Controller
         $id_user = $this->session->userdata('id_user');
 
         $tracking = $this->Tracking_model->get_tracking_by_id($id_tracking);
-        if (!$tracking) show_404();
+        if (!$tracking)
+            show_404();
 
         // ---- Handle POST ----
         if ($this->input->post('action') == 'update_status') {
@@ -78,13 +85,13 @@ class Tracking extends CI_Controller
         $tracking = $this->Tracking_model->get_tracking_by_id($id_tracking);
 
         $this->load->model('Transaksi_model');
-        $data['tracking']      = $tracking;
-        $data['bukti_bayar']   = $this->Transaksi_model->get_bukti_by_transaksi($tracking->id_transaksi);
-        $data['status_options']= $this->_get_status_options($tracking->status_pengiriman);
-        $data['kurir_list']    = $this->Kurir_model->get_available_kurir();
-        $data['unread_count']  = $this->Notifikasi_model->count_unread($id_user);
-        $data['notifikasi']    = $this->Notifikasi_model->get_unread_notif($id_user, 5);
-        $data['role']          = 'Admin';
+        $data['tracking'] = $tracking;
+        $data['bukti_bayar'] = $this->Transaksi_model->get_bukti_by_transaksi($tracking->id_transaksi);
+        $data['status_options'] = $this->_get_status_options($tracking->status_pengiriman);
+        $data['kurir_list'] = $this->Kurir_model->get_available_kurir();
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user, 5);
+        $data['role'] = 'Admin';
 
         $this->load->view('template/header', ['title' => 'Update Tracking - Admin', 'role' => 'Admin']);
         $this->load->view('admin/tracking_update', $data);
@@ -96,7 +103,7 @@ class Tracking extends CI_Controller
     // ============================================================
     private function _handle_update_status($tracking, $id_user)
     {
-        $status     = $this->input->post('status');
+        $status = $this->input->post('status');
         $keterangan = $this->input->post('keterangan');
 
         if (!$status) {
@@ -105,7 +112,10 @@ class Tracking extends CI_Controller
         }
 
         $result = $this->Tracking_model->update_status_admin(
-            $tracking->id_tracking, $status, $keterangan, $id_user
+            $tracking->id_tracking,
+            $status,
+            $keterangan,
+            $id_user
         );
 
         if ($result) {
@@ -131,7 +141,7 @@ class Tracking extends CI_Controller
     // ============================================================
     private function _handle_assign_kurir($tracking, $id_user)
     {
-        $id_kurir = (int)$this->input->post('id_kurir');
+        $id_kurir = (int) $this->input->post('id_kurir');
 
         if (!$id_kurir) {
             $this->session->set_flashdata('error', 'Pilih kurir terlebih dahulu.');
@@ -147,9 +157,9 @@ class Tracking extends CI_Controller
         // Update id_kurir dan status_pengiriman di tb_tracking
         $this->db->where('id_tracking', $tracking->id_tracking);
         $result = $this->db->update('tb_tracking', [
-            'id_kurir'          => $id_kurir,
+            'id_kurir' => $id_kurir,
             'status_pengiriman' => 'diproses',
-            'updated_at'        => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s')
         ]);
 
         if ($result) {
@@ -200,17 +210,17 @@ class Tracking extends CI_Controller
         // ALUR SEDERHANA UNTUK PENGIRIMAN INTERNAL
         // TIDAK ADA: tiba_di_kota_tujuan, out_for_delivery
         $flow = [
-            'pending'   => ['dikirim', 'dibatalkan'],
-            'diproses'  => ['dikirim', 'dibatalkan'],
-            'dikirim'   => ['dalam_perjalanan', 'dibatalkan'],
+            'pending' => ['dikirim', 'dibatalkan'],
+            'diproses' => ['dikirim', 'dibatalkan'],
+            'dikirim' => ['dalam_perjalanan', 'dibatalkan'],
             'dalam_perjalanan' => ['delivered', 'dibatalkan'],
             'delivered' => ['diterima'],
         ];
 
         $options = $flow[$current_status] ?? [];
-        $result  = [];
+        $result = [];
         foreach ($options as $s) {
-            $info     = $this->Tracking_model->get_status_label($s);
+            $info = $this->Tracking_model->get_status_label($s);
             $result[] = ['value' => $s, 'label' => $info['label']];
         }
         return $result;
