@@ -127,18 +127,18 @@ class Laporan extends CI_Controller {
         $data['admin'] = $this->session->userdata('nama') ?? 'Admin';
 
         switch ($tab) {
-            case 'petani':   $data['rows'] = $this->Laporan_model->get_laporan_petani();   break;
-            case 'produk':   $data['rows'] = $this->Laporan_model->get_laporan_produk();   break;
+            case 'petani':   $data['rows'] = $this->Laporan_model->get_laporan_petani($poktan);   break;
+            case 'produk':   $data['rows'] = $this->Laporan_model->get_laporan_produk($poktan);   break;
             case 'keuangan':
-                $keu = $this->Laporan_model->get_laporan_keuangan();
+                $keu = $this->Laporan_model->get_laporan_keuangan($poktan);
                 $data['rows']    = $keu['detail'];
                 $data['summary'] = $keu;
                 break;
-            case 'panen':    $data['rows'] = $this->Laporan_model->get_laporan_panen();    break;
-            case 'mitra':    $data['rows'] = $this->Laporan_model->get_laporan_mitra();    break;
-            default:         $data['rows'] = $this->Laporan_model->get_laporan_penjualan();break;
+            case 'panen':    $data['rows'] = $this->Laporan_model->get_laporan_panen($poktan);    break;
+            case 'mitra':    $data['rows'] = $this->Laporan_model->get_laporan_mitra($poktan);    break;
+            default:         $data['rows'] = $this->Laporan_model->get_laporan_penjualan([], $poktan);break;
         }
-        $data['kpi'] = $this->Laporan_model->get_kpi_laporan();
+        $data['kpi'] = $this->Laporan_model->get_kpi_laporan($poktan);
         $this->load->view('admin/v_laporan_print', $data);
     }
 
