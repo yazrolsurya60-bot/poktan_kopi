@@ -330,6 +330,43 @@ class Kurir_model extends CI_Model
             'keterangan'  => 'Kurir ' . ($kurir['nama_kurir'] ?? '') . ' ditugaskan untuk pengiriman ini',
         ]);
 
+        // Kirim Notifikasi ke Pembeli dan Kurir
+        $tracking = $this->db->select('t.id_transaksi, tr.id_user as pembeli_id, tr.invoice')
+            ->from('tb_tracking t')
+            ->join('tb_transaksi tr', 'tr.id_transaksi = t.id_transaksi')
+            ->where('t.id_tracking', $id_tracking)
+            ->get()->row();
+
+        if ($tracking && $kurir) {
+            $CI =& get_instance();
+            $CI->load->helper('notifikasi');
+            
+            // 1. Notifikasi ke pembeli
+            notifikasi_tracking(
+                $tracking->pembeli_id,
+                $tracking->invoice,
+                'Kurir Ditugaskan',
+                "Kurir " . ($kurir['nama_kurir'] ?? 'Kurir') . " telah ditugaskan untuk mengantar pesanan Anda."
+            );
+
+            // 2. Notifikasi ke kurir
+            $user_kurir = $this->db
+                ->where('email', $kurir['email'])
+                ->where('role', 'Kurir')
+                ->get('tb_user')->row();
+
+            if ($user_kurir) {
+                send_notifikasi(
+                    $user_kurir->id_user,
+                    'Kurir',
+                    'Penugasan Pengiriman Baru',
+                    "Anda ditugaskan mengantar pesanan #{$tracking->invoice}. Segera upload bukti pengiriman.",
+                    'info',
+                    base_url('kurir/tracking')
+                );
+            }
+        }
+
         $this->db->trans_complete();
         return $this->db->trans_status();
     }

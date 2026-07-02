@@ -121,6 +121,35 @@ class Transaksi extends CI_Controller {
         
         $this->Transaksi_model->update_status($id_transaksi, $status);
         
+        // SINKRONISASI STATUS KE TRACKING PENGIRIMAN
+        $this->load->model('Tracking_model');
+        $tracking = $this->Tracking_model->get_tracking_by_transaksi($id_transaksi);
+        if ($tracking) {
+            $tracking_status = null;
+            $keterangan = null;
+            if ($status == 'Diproses') {
+                $tracking_status = 'diproses';
+                $keterangan = 'Status diperbarui ke Diproses melalui transaksi.';
+            } elseif ($status == 'Dikirim') {
+                $tracking_status = 'dikirim';
+                $keterangan = 'Status diperbarui ke Dikirim melalui transaksi.';
+            } elseif ($status == 'Selesai') {
+                $tracking_status = 'diterima';
+                $keterangan = 'Pesanan selesai. Status diperbarui ke Diterima.';
+            } elseif ($status == 'Dibatalkan') {
+                $tracking_status = 'dibatalkan';
+                $keterangan = 'Transaksi dibatalkan.';
+            }
+
+            if ($tracking_status) {
+                $this->db->where('id_transaksi', $id_transaksi)->update('tb_tracking', [
+                    'status_pengiriman' => $tracking_status,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+                $this->Tracking_model->save_history($tracking->id_tracking, $tracking_status, $keterangan);
+            }
+        }
+        
         $transaksi = $this->Transaksi_model->get_transaksi($id_transaksi);
         if ($transaksi['id_user']) {
             $icon = ($status == 'Selesai') ? 'success' : (($status == 'Dibatalkan') ? 'danger' : 'info');

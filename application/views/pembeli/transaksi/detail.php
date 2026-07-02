@@ -159,7 +159,7 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="<?= base_url('pembeli/tracking'); ?>"><i class="bi bi-geo-alt-fill"></i>Lacak Pengiriman</a>
+                <a href="<?= base_url('pembeli/tracking'); ?>"><i class="bi bi-geo-alt-fill"></i>Status Pengiriman</a>
             </li>
             <li class="menu-item">
                 <a href="<?= base_url('pembeli/poin'); ?>"><i class="bi bi-gift-fill"></i>Tukar Poin Hadiah</a>
