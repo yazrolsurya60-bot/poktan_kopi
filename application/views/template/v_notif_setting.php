@@ -507,7 +507,7 @@
 
                 <?php 
                 // ============================================
-                // 🔴 TENTUKAN DASHBOARD URL BERDASARKAN ROLE
+                // TENTUKAN DASHBOARD URL BERDASARKAN ROLE
                 // ============================================
                 if ($role == 'Admin') {
                     $dashboard_url = base_url('admin/dashboard');

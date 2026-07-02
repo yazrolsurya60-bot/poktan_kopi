@@ -190,12 +190,17 @@
             border-bottom: 1px solid rgba(74, 44, 17, 0.08);
             padding-bottom: 20px;
             margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .page-header h2 {
             font-weight: 700;
             color: var(--dark-coffee);
             letter-spacing: -0.02em;
+            margin-bottom: 0;
         }
 
         .page-header .subtitle {
@@ -226,12 +231,19 @@
             font-weight: 600;
         }
 
+        /* ===== HEADER RIGHT ===== */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
         /* ===== NOTIFICATION ===== */
         .notif-btn {
             position: relative;
             background: var(--card-white);
             border: 1px solid rgba(74, 44, 17, 0.06);
-            border-radius: 12px;
+            border-radius: 50px;
             padding: 8px 14px;
             color: var(--dark-coffee);
             transition: var(--transition-smooth);
@@ -388,6 +400,56 @@
             align-self: center;
         }
 
+        /* ===== USER AVATAR ===== */
+        .user-avatar-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px 6px 10px;
+            border-radius: 50px;
+            background: var(--card-white);
+            border: 1px solid rgba(74, 44, 17, 0.06);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .user-avatar-wrapper:hover {
+            box-shadow: var(--shadow-soft);
+            border-color: var(--amber-cream);
+        }
+
+        .user-avatar-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--amber-cream);
+        }
+
+        .user-avatar-icon {
+            font-size: 1.6rem;
+            color: var(--amber-cream);
+        }
+
+        .user-avatar-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--dark-coffee);
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-avatar-role {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            background: var(--bg-cream);
+            padding: 1px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -423,6 +485,16 @@
             .sidebar-overlay.active {
                 display: block;
             }
+            .header-right {
+                gap: 10px;
+            }
+            .user-avatar-name {
+                max-width: 60px;
+                font-size: 0.75rem;
+            }
+            .user-avatar-role {
+                display: none;
+            }
         }
 
         @media (max-width: 575.98px) {
@@ -433,13 +505,28 @@
                 width: calc(100vw - 24px);
                 right: -70px;
             }
+            .user-avatar-wrapper {
+                padding: 4px 10px 4px 6px;
+            }
+            .user-avatar-icon {
+                font-size: 1.3rem;
+            }
+            .user-avatar-name {
+                max-width: 50px;
+                font-size: 0.7rem;
+            }
+            .header-right {
+                gap: 6px;
+            }
+            .notif-btn {
+                padding: 6px 10px;
+            }
         }
 
         /* ============================================================
-           PROFIL STYLE - DESAIN BARU (TIDAK KETUTUPAN)
+           PROFIL STYLE
            ============================================================ */
 
-        /* --- COVER & AVATAR - DESAIN TERPISAH --- */
         .profile-cover {
             background: linear-gradient(135deg, var(--roasted-brown) 0%, var(--dark-coffee) 100%);
             border-radius: var(--radius-card) var(--radius-card) 0 0;
@@ -476,7 +563,6 @@
             pointer-events: none;
         }
 
-        /* AVATAR - Tidak overlap dengan cover */
         .profile-avatar {
             width: 110px;
             height: 110px;
@@ -507,7 +593,6 @@
             object-fit: cover;
         }
 
-        /* USER INFO - Sejajar dengan avatar */
         .profile-cover .user-info {
             color: white;
             position: relative;
@@ -556,7 +641,6 @@
             color: #991B1B;
         }
 
-        /* --- CARD --- */
         .profile-card {
             background: var(--card-white);
             border-radius: var(--radius-card);
@@ -574,7 +658,6 @@
             padding: 30px 35px 30px;
         }
 
-        /* --- FORM --- */
         .profile-card .form-group {
             margin-bottom: 18px;
         }
@@ -624,7 +707,6 @@
             opacity: 0.8;
         }
 
-        /* --- TOMBOL --- */
         .btn-edit {
             background: var(--roasted-brown);
             color: white;
@@ -707,7 +789,6 @@
             text-decoration: none;
         }
 
-        /* --- STATISTIK MINI (3 KOLOM) --- */
         .stat-mini-card {
             background: var(--bg-cream);
             border-radius: 12px;
@@ -745,7 +826,6 @@
             font-weight: 600;
         }
 
-        /* --- INFO ROW --- */
         .info-row {
             display: flex;
             align-items: center;
@@ -791,7 +871,6 @@
             color: var(--dark-coffee);
         }
 
-        /* --- BADGE EMAIL --- */
         .badge-email-verified {
             font-size: 0.6rem;
             padding: 4px 12px;
@@ -810,7 +889,6 @@
             color: #92400E;
         }
 
-        /* --- ALERT --- */
         .alert-custom {
             border-radius: 12px;
             padding: 14px 20px;
@@ -831,7 +909,6 @@
             color: #991B1B;
         }
 
-        /* --- SECTION TITLE --- */
         .section-title {
             font-weight: 700;
             color: var(--roasted-brown);
@@ -846,14 +923,12 @@
             font-size: 1.1rem;
         }
 
-        /* --- DIVIDER --- */
         .divider-custom {
             border: none;
             border-top: 2px solid rgba(74, 44, 17, 0.06);
             margin: 24px 0;
         }
 
-        /* --- FOOTER --- */
         .footer-bottom {
             color: var(--text-secondary);
             font-size: 0.75rem;
@@ -863,17 +938,11 @@
             text-align: center;
         }
 
-        /* ============================================================
-           SCROLLBAR GLOBAL
-           ============================================================ */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-cream); }
         ::-webkit-scrollbar-thumb { background: var(--amber-cream); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--roasted-brown); }
 
-        /* ============================================================
-           RESPONSIVE FIX
-           ============================================================ */
         @media (max-width: 767.98px) {
             .profile-cover {
                 flex-direction: column;
@@ -1043,13 +1112,13 @@
     <div class="main-content">
 
         <!-- PAGE HEADER -->
-        <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
+        <div class="page-header">
             <div>
                 <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
                     style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
                     <i class="bi bi-list"></i>
                 </button>
-                <h2 class="d-inline-block align-middle mb-0">
+                <h2 class="d-inline-block align-middle">
                     <i class="bi bi-person-fill" style="color: var(--amber-cream);"></i> Profil Saya
                 </h2>
                 <nav aria-label="breadcrumb">
@@ -1059,7 +1128,8 @@
                     </ol>
                 </nav>
             </div>
-            <div class="d-flex align-items-center gap-3" style="gap: 12px;">
+
+            <div class="header-right">
                 <!-- NOTIFICATION -->
                 <div style="position: relative;">
                     <button class="notif-btn" id="notifToggle">
@@ -1076,18 +1146,18 @@
                             <span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
                             <div>
                                 <?php if (isset($unread_count) && $unread_count > 0): ?>
-                                    <a href="#" id="markAllReadBtn" class="mr-2" style="font-size:0.7rem;">Tandai semua</a>
+                                    <a href="#" id="markAllReadBtn" class="mr-2" style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
                                 <?php endif; ?>
-                                <a href="<?= base_url('pembeli/dashboard/history'); ?>" style="font-size:0.7rem;">Lihat Semua</a>
+                                <a href="<?= base_url('pembeli/dashboard/history'); ?>" style="font-size:0.75rem; color: var(--amber-cream); font-weight:500; text-decoration:none;">Lihat Semua</a>
                             </div>
                         </div>
                         <div class="notif-dropdown-list" id="notifList">
                             <?php if (!empty($notifikasi)): ?>
                                 <?php foreach ($notifikasi as $n): ?>
-                                    <a class="notif-item <?= (isset($n->status_baca) && $n->status_baca == 0) ? 'unread' : ''; ?>"
-                                       href="<?= base_url('pembeli/dashboard/read/' . $n->id_notifikasi); ?>">
+                                    <a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == 0) ? 'unread' : ''; ?>"
+                                       href="<?= base_url('pembeli/dashboard/read/' . $n['id_notifikasi']); ?>">
                                         <?php
-                                        $icon_type = $n->icon ?? 'info';
+                                        $icon_type = $n['icon'] ?? 'info';
                                         $icon_map = [
                                             'success' => 'bi-check-circle-fill',
                                             'warning' => 'bi-exclamation-triangle-fill',
@@ -1101,10 +1171,11 @@
                                             <i class="bi <?= $icon_class; ?>"></i>
                                         </div>
                                         <div class="notif-text">
-                                            <?= htmlspecialchars($n->isi_notifikasi ?? 'Notifikasi'); ?>
-                                            <span class="notif-time"><?= date('d M Y, H:i', strtotime($n->tanggal_buat)); ?></span>
+                                            <?= htmlspecialchars($n['judul'] ?? 'Notifikasi'); ?><br>
+                                            <small><?= htmlspecialchars($n['isi_notifikasi']); ?></small>
+                                            <span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
                                         </div>
-                                        <?php if (isset($n->status_baca) && $n->status_baca == 0): ?>
+                                        <?php if (isset($n['status_baca']) && $n['status_baca'] == 0): ?>
                                             <span class="notif-badge-new">Baru</span>
                                         <?php endif; ?>
                                     </a>
@@ -1125,10 +1196,18 @@
                 </div>
 
                 <!-- USER AVATAR -->
-                <div class="d-flex align-items-center gap-2"
-                    style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
-                    <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-                    <span style="font-weight:500; font-size:0.85rem;"><?= $user->nama ?? 'Pembeli' ?></span>
+                <div class="user-avatar-wrapper" onclick="window.location.href='<?= base_url('pembeli/profil'); ?>'">
+                    <?php 
+                    $user_foto = $this->session->userdata('foto');
+                    if (!empty($user_foto) && file_exists('./uploads/profil/' . $user_foto)): 
+                    ?>
+                        <img src="<?= base_url('uploads/profil/' . $user_foto); ?>" alt="Avatar" class="user-avatar-img">
+                    <?php else: ?>
+                        <i class="bi bi-person-circle user-avatar-icon"></i>
+                    <?php endif; ?>
+                    <span class="user-avatar-name"><?= $user->nama ?? 'Pembeli' ?></span>
+                    <span class="user-avatar-role">Member</span>
+                    <i class="bi bi-chevron-down" style="font-size:0.6rem; color: var(--text-secondary);"></i>
                 </div>
             </div>
         </div>
@@ -1149,7 +1228,7 @@
         <!-- === PROFIL CARD === -->
         <div class="profile-card">
 
-            <!-- COVER - DESAIN BARU (AVATAR & USER INFO SEJAJAR) -->
+            <!-- COVER -->
             <div class="profile-cover">
                 <div class="profile-avatar">
                     <?php if (!empty($user->foto) && file_exists('./uploads/profil/' . $user->foto)): ?>
@@ -1210,7 +1289,7 @@
                     </button>
                 </div>
 
-                <form id="profileForm" method="POST" action="<?= base_url('pembeli/profil/update'); ?>">
+                <form id="profileForm" method="POST" action="<?= base_url('pembeli/profil/update'); ?>" enctype="multipart/form-data">
 
                     <div class="row">
                         <div class="col-md-6">
@@ -1241,6 +1320,17 @@
                                     <input type="email" name="email" class="form-control" id="inputEmail"
                                         value="<?= $user->email ?? 'pembeli@poktan.com' ?>" disabled>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Foto Profil</label>
+                                <div class="input-group-custom">
+                                    <span class="input-icon"><i class="bi bi-image"></i></span>
+                                    <input type="file" name="foto" class="form-control" id="inputFoto"
+                                        style="padding-left:44px; padding-top:10px; padding-bottom:10px;" disabled>
+                                </div>
+                                <small class="text-muted" style="font-size:0.7rem;">Format: JPG, PNG, GIF | Maks: 2MB</small>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -1291,7 +1381,7 @@
                         <div class="info-label">Email Terverifikasi</div>
                         <div class="info-value">
                             <?= $user->email ?? 'pembeli@poktan.com' ?>
-                            <?php if (!empty($user->email_verified_at)): ?>
+                            <?php if (!empty($user->email_verified_at) || !empty($user->kontak_terverifikasi)): ?>
                                 <span class="badge-email-verified verified"><i class="bi bi-check-circle-fill"></i> Terverifikasi</span>
                             <?php else: ?>
                                 <span class="badge-email-verified unverified"><i class="bi bi-exclamation-circle-fill"></i> Belum Verifikasi</span>
@@ -1367,10 +1457,11 @@
         // ============================================
         // 3. MARK ALL READ
         // ============================================
-        function markAllRead() {
+        document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
             if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
                 $.ajax({
-                    url: '<?= base_url('pembeli/dashboard/mark_all_read'); ?>',
+                    url: '<?= base_url('pembeli/dashboard/mark_all_read_ajax'); ?>',
                     type: 'POST',
                     dataType: 'json',
                     success: function(response) {
@@ -1382,11 +1473,6 @@
                     }
                 });
             }
-        }
-
-        document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            markAllRead();
         });
 
         // ============================================
@@ -1396,7 +1482,8 @@
 
         function toggleEdit() {
             isEditing = !isEditing;
-            const inputs = document.querySelectorAll('#profileForm .form-control');
+            const inputs = document.querySelectorAll('#profileForm .form-control:not([id="inputJoined"])');
+            const fileInput = document.getElementById('inputFoto');
             const actions = document.getElementById('editActions');
             const btnEdit = document.getElementById('btnEdit');
 
@@ -1409,6 +1496,12 @@
                     icon.style.opacity = isEditing ? '0.5' : '0.3';
                 }
             });
+
+            if (fileInput) {
+                fileInput.disabled = !isEditing;
+                fileInput.style.background = isEditing ? 'white' : '#F3F0EB';
+                fileInput.style.opacity = isEditing ? '1' : '0.8';
+            }
 
             if (isEditing) {
                 actions.style.display = 'block';
@@ -1433,6 +1526,7 @@
                 document.getElementById('inputNama').value = '<?= $user->nama ?? 'Budi Pembeli' ?>';
                 document.getElementById('inputUsername').value = '<?= $user->username ?? 'pembeli' ?>';
                 document.getElementById('inputEmail').value = '<?= $user->email ?? 'pembeli@poktan.com' ?>';
+                document.getElementById('inputFoto').value = '';
             }
         }
 
