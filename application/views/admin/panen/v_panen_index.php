@@ -872,7 +872,8 @@
 					<a href="<?= base_url('admin/petani'); ?>">
 						<i class="bi bi-person-badge-fill"></i>Data Petani
 						<?php if (isset($petani_baru_count) && $petani_baru_count > 0): ?>
-							<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $petani_baru_count; ?></span>
+							<span class="menu-badge"
+								style="background: #F59E0B; color: white;"><?= $petani_baru_count; ?></span>
 						<?php endif; ?>
 					</a>
 				</li>
@@ -895,7 +896,8 @@
 					<a href="<?= base_url('admin/transaksi'); ?>">
 						<i class="bi bi-wallet2"></i>Transaksi
 						<?php if (isset($transaksi_pending) && $transaksi_pending > 0): ?>
-							<span class="menu-badge" style="background: #EF4444; color: white;"><?= $transaksi_pending; ?></span>
+							<span class="menu-badge"
+								style="background: #EF4444; color: white;"><?= $transaksi_pending; ?></span>
 						<?php endif; ?>
 					</a>
 				</li>
@@ -994,7 +996,8 @@
 										</div>
 										<div class="notif-text">
 											<?= htmlspecialchars($n['isi_notifikasi']); ?>
-											<span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+											<span
+												class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
 										</div>
 										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
 											<span class="notif-badge-new">Baru</span>
@@ -1172,7 +1175,7 @@
 			overlay.addEventListener('click', toggleSidebar);
 		}
 
-		document.addEventListener('click', function(e) {
+		document.addEventListener('click', function (e) {
 			if (window.innerWidth > 991.98) return;
 			if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
 				if (sidebar.classList.contains('open')) {
@@ -1188,13 +1191,13 @@
 		const notifDropdown = document.getElementById('notifDropdown');
 
 		if (notifToggle) {
-			notifToggle.addEventListener('click', function(e) {
+			notifToggle.addEventListener('click', function (e) {
 				e.stopPropagation();
 				notifDropdown.classList.toggle('show');
 			});
 		}
 
-		document.addEventListener('click', function(e) {
+		document.addEventListener('click', function (e) {
 			if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
 				notifDropdown.classList.remove('show');
 			}
@@ -1203,18 +1206,18 @@
 		// ============================================
 		// 3. MARK ALL READ
 		// ============================================
-		document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
+		document.getElementById('markAllReadBtn')?.addEventListener('click', function (e) {
 			e.preventDefault();
 			if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
 				$.ajax({
 					url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
 					type: 'POST',
 					dataType: 'json',
-					success: function(response) {
+					success: function (response) {
 						if (response.success) location.reload();
 						else alert('Gagal menandai semua notifikasi.');
 					},
-					error: function() {
+					error: function () {
 						alert('Terjadi kesalahan. Silakan coba lagi.');
 					}
 				});
