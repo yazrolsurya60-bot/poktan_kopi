@@ -28,7 +28,8 @@ class Transaksi_model extends CI_Model {
     }
 
     public function get_detail_transaksi($id_transaksi) {
-        $this->db->select('d.*, p.nama_produk, p.foto_produk');
+        // 🔥 FIX: kolom yang benar adalah 'foto_utama', bukan 'foto_produk'
+        $this->db->select('d.*, p.nama_produk, p.foto_utama');
         $this->db->from('tb_detail_transaksi d');
         $this->db->join('tb_produk p', 'd.id_produk = p.id_produk', 'left');
         $this->db->where('d.id_transaksi', $id_transaksi);
