@@ -1193,9 +1193,16 @@
 						<?php endif; ?>
 					</a>
 				</li>
+					<!-- TRACKING PENGIRIMAN -->
+					<li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+						<a href="<?= base_url('admin/tracking'); ?>">
+							<i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
+						</a>
+					</li>
+				
 				<li class="menu-item">
 					<a href="<?= base_url('admin/laporan'); ?>">
-						<i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan & Analytics
+						<i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
 					</a>
 				</li>
 			</ul>
@@ -1352,9 +1359,7 @@
 					<form method="get" action="<?= base_url('admin/kurir'); ?>" class="d-flex">
 						<input type="text" name="keyword" class="form-control-custom" placeholder="Cari nama / telepon..." value="<?= htmlspecialchars($keyword ?? ''); ?>" style="min-width:180px;">
 					</form>
-					<a href="<?= base_url('admin/kurir/assign'); ?>" class="btn-outline-custom">
-						<i class="bi bi-truck"></i> Tugaskan Kurir
-					</a>
+
 					<a href="<?= base_url('admin/kurir/performance'); ?>" class="btn-outline-custom">
 						<i class="bi bi-bar-chart-fill"></i> Performance
 					</a>

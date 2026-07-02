@@ -1258,17 +1258,26 @@
 						<i class="bi bi-grid-1x2-fill"></i>Dashboard
 					</a>
 				</li>
+				<!-- MANAJEMEN USER - Badge User Baru -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/user'); ?>">
 						<i class="bi bi-people-fill"></i>Manajemen User
-						<span class="menu-badge">12</span>
+						<?php if (isset($user_baru) && $user_baru > 0): ?>
+							<span class="menu-badge" style="background: #EF4444; color: white;"><?= $user_baru; ?></span>
+						<?php endif; ?>
 					</a>
 				</li>
+
+				<!-- DATA PETANI - Badge Petani Belum Diverifikasi -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/petani'); ?>">
 						<i class="bi bi-person-badge-fill"></i>Data Petani
+						<?php if (isset($petani_baru_count) && $petani_baru_count > 0): ?>
+							<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $petani_baru_count; ?></span>
+						<?php endif; ?>
 					</a>
 				</li>
+
 				<li class="menu-item">
 					<a href="<?= base_url('admin/lahan'); ?>">
 						<i class="bi bi-map-fill"></i>Manajemen Lahan
@@ -1287,7 +1296,9 @@
 				<li class="menu-item active">
 					<a href="<?= base_url('admin/transaksi'); ?>">
 						<i class="bi bi-wallet2"></i>Transaksi
-						<span class="menu-badge"><?= count($transaksi ?? []); ?></span>
+						<?php if (isset($transaksi_pending) && $transaksi_pending > 0): ?>
+							<span class="menu-badge" style="background: #EF4444; color: white;"><?= $transaksi_pending; ?></span>
+						<?php endif; ?>
 					</a>
 				</li>
 				<li class="menu-item">
@@ -1295,9 +1306,20 @@
 						<i class="bi bi-truck"></i>Manajemen Kurir
 					</a>
 				</li>
+				<!-- MANAJEMEN MITRA - Badge Mitra Baru -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/mitra'); ?>">
 						<i class="bi bi-shop"></i>Manajemen Mitra
+						<?php if (isset($mitra_baru) && $mitra_baru > 0): ?>
+							<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $mitra_baru; ?></span>
+						<?php endif; ?>
+					</a>
+				</li>
+
+				<!-- TRACKING PENGIRIMAN -->
+				<li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+					<a href="<?= base_url('admin/tracking'); ?>">
+						<i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
 					</a>
 				</li>
 				<li class="menu-item">
