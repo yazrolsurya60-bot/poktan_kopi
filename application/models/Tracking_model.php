@@ -42,6 +42,8 @@ class Tracking_model extends CI_Model {
             tr.id_user as pembeli_id,
             tr.invoice,
             tr.total_harga,
+            tr.grand_total,
+            tr.metode_bayar,
             k.nama_kurir,
             k.no_telepon as kurir_telp,
             k.lat_terakhir as kurir_lat,
@@ -360,7 +362,7 @@ class Tracking_model extends CI_Model {
         $kurir = $this->db->get_where('tb_kurir', ['email' => $user->email])->row();
         if (!$kurir) return [];
 
-        $this->db->select('t.*, tr.invoice, u.nama as pembeli, k.nama_kurir, t.bukti_pengiriman');
+        $this->db->select('t.*, tr.invoice, tr.metode_bayar, u.nama as pembeli, k.nama_kurir, t.bukti_pengiriman');
         $this->db->from('tb_tracking t');
         $this->db->join('tb_transaksi tr', 'tr.id_transaksi = t.id_transaksi');
         $this->db->join('tb_user u', 'u.id_user = tr.id_user');

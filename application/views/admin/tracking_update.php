@@ -258,8 +258,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
                                     <i class="bi bi-diagram-3 mr-1"></i> Alur Status Pengiriman
                                 </small>
                                 <div style="font-size:0.72rem; color:#6B7280; line-height:1.8;">
-                                    Pending → Diproses → Dikirim → Dalam Perjalanan →
-                                    Tiba di Kota Tujuan → Telah Dikirim → Diterima
+                                    Dikirim → Dalam Perjalanan → Telah Dikirim (Delivered) → Diterima
                                 </div>
                             </div>
 
@@ -277,6 +276,105 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
             </div>
         </div>
     </div><!-- /.row -->
+
+    <!-- ===== BUKTI PENGIRIMAN & PEMBAYARAN COD ===== -->
+    <?php if (!empty($tracking->bukti_pengiriman) || !empty($bukti_bayar)): ?>
+        <div class="page-card mb-4 mt-3">
+            <div class="card-head" style="background: rgba(74,44,17,0.02);">
+                <div class="head-icon brown"><i class="bi bi-file-earmark-image"></i></div>
+                <div>
+                    <h6 class="mb-0 font-weight-bold">Bukti Dokumentasi (Pengiriman &amp; COD)</h6>
+                    <small class="text-muted">Bukti foto/berkas yang diunggah oleh kurir</small>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Bukti Pengiriman Card -->
+                    <?php if (!empty($tracking->bukti_pengiriman)): ?>
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3 border rounded h-100" style="background: #fff; border-color: rgba(74,44,17,0.08) !important;">
+                                <h6 class="font-weight-bold pb-2 border-bottom mb-3" style="color: var(--roasted-brown);">
+                                    <i class="bi bi-truck mr-1"></i> Bukti Pengiriman (Kurir)
+                                </h6>
+                                <div class="text-center py-2">
+                                    <?php 
+                                    $ext = pathinfo($tracking->bukti_pengiriman, PATHINFO_EXTENSION);
+                                    if (strtolower($ext) === 'pdf'): 
+                                    ?>
+                                        <div class="py-3">
+                                            <i class="bi bi-file-earmark-pdf-fill text-danger display-4"></i>
+                                            <p class="mb-2 text-muted small"><?= $tracking->bukti_pengiriman ?></p>
+                                        </div>
+                                    <?php else: ?>
+                                        <a href="<?= base_url('assets/uploads/bukti_pengiriman/' . $tracking->bukti_pengiriman) ?>" target="_blank">
+                                            <img src="<?= base_url('assets/uploads/bukti_pengiriman/' . $tracking->bukti_pengiriman) ?>" 
+                                                 class="img-fluid img-thumbnail shadow-sm mb-2" 
+                                                 style="max-height: 180px; object-fit: contain; border-radius: 8px;" alt="Bukti Pengiriman">
+                                        </a>
+                                    <?php endif; ?>
+                                    <div class="mt-2">
+                                        <a href="<?= base_url('assets/uploads/bukti_pengiriman/' . $tracking->bukti_pengiriman) ?>" 
+                                           target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill">
+                                            <i class="bi bi-eye"></i> Lihat Berkas Pengiriman
+                                        </a>
+                                    </div>
+                                    <small class="text-muted d-block mt-2">Diupload pada: <?= date('d M Y H:i', strtotime($tracking->bukti_upload_at)) ?></small>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Bukti Pembayaran COD Card -->
+                    <?php if (!empty($bukti_bayar)): ?>
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3 border rounded h-100" style="background: #fff; border-color: rgba(74,44,17,0.08) !important;">
+                                <h6 class="font-weight-bold pb-2 border-bottom mb-3" style="color: var(--roasted-brown);">
+                                    <i class="bi bi-cash-coin mr-1"></i> Bukti Pembayaran COD
+                                </h6>
+                                <div class="mb-3 small text-left">
+                                    <div class="mb-1"><strong>Tipe Pembayaran:</strong> <span class="badge badge-secondary"><?= $bukti_bayar['nama_bank'] ?></span></div>
+                                    <div class="mb-1"><strong>Jumlah Diterima:</strong> Rp <?= number_format($bukti_bayar['jumlah_transfer'], 0, ',', '.') ?></div>
+                                    <div class="mb-1"><strong>Catatan Kurir:</strong> <?= htmlspecialchars($bukti_bayar['keterangan']) ?></div>
+                                    <div class="mb-1"><strong>Status Verifikasi:</strong> 
+                                        <span class="status-pill p-1 px-2 font-weight-bold <?= strtolower($bukti_bayar['status_verifikasi']) == 'diverifikasi' ? 'complete' : (strtolower($bukti_bayar['status_verifikasi']) == 'ditolak' ? 'cancelled' : 'pending'); ?>" style="font-size:0.75rem;">
+                                            <?= $bukti_bayar['status_verifikasi'] ?>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="text-center py-2">
+                                    <?php 
+                                    $ext_pay = pathinfo($bukti_bayar['file_bukti'], PATHINFO_EXTENSION);
+                                    if (strtolower($ext_pay) === 'pdf'): 
+                                    ?>
+                                        <div class="py-3">
+                                            <i class="bi bi-file-earmark-pdf-fill text-danger display-4"></i>
+                                            <p class="mb-2 text-muted small"><?= $bukti_bayar['file_bukti'] ?></p>
+                                        </div>
+                                    <?php else: ?>
+                                        <a href="<?= base_url('uploads/bukti/' . $bukti_bayar['file_bukti']) ?>" target="_blank">
+                                            <img src="<?= base_url('uploads/bukti/' . $bukti_bayar['file_bukti']) ?>" 
+                                                 class="img-fluid img-thumbnail shadow-sm mb-2" 
+                                                 style="max-height: 180px; object-fit: contain; border-radius: 8px;" alt="Bukti Pembayaran COD">
+                                        </a>
+                                    <?php endif; ?>
+                                    <div class="mt-2">
+                                        <a href="<?= base_url('uploads/bukti/' . $bukti_bayar['file_bukti']) ?>" 
+                                           target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill mr-2">
+                                            <i class="bi bi-eye"></i> Lihat Berkas Bayar
+                                        </a>
+                                        <a href="<?= base_url('admin/transaksi/detail/' . $tracking->id_transaksi) ?>" 
+                                           class="btn btn-sm btn-amber rounded-pill" style="padding: 4px 12px; font-size: 0.78rem;">
+                                            <i class="bi bi-patch-check"></i> Verifikasi Pembayaran
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 
     <!-- Back button -->
     <div class="mb-4">

@@ -77,7 +77,9 @@ class Tracking extends CI_Controller
         // ---- Re-fetch setelah kemungkinan update ----
         $tracking = $this->Tracking_model->get_tracking_by_id($id_tracking);
 
+        $this->load->model('Transaksi_model');
         $data['tracking']      = $tracking;
+        $data['bukti_bayar']   = $this->Transaksi_model->get_bukti_by_transaksi($tracking->id_transaksi);
         $data['status_options']= $this->_get_status_options($tracking->status_pengiriman);
         $data['kurir_list']    = $this->Kurir_model->get_available_kurir();
         $data['unread_count']  = $this->Notifikasi_model->count_unread($id_user);
@@ -142,18 +144,19 @@ class Tracking extends CI_Controller
             return;
         }
 
-        // Update id_kurir di tb_tracking
+        // Update id_kurir dan status_pengiriman di tb_tracking
         $this->db->where('id_tracking', $tracking->id_tracking);
         $result = $this->db->update('tb_tracking', [
-            'id_kurir'   => $id_kurir,
-            'updated_at' => date('Y-m-d H:i:s')
+            'id_kurir'          => $id_kurir,
+            'status_pengiriman' => 'diproses',
+            'updated_at'        => date('Y-m-d H:i:s')
         ]);
 
         if ($result) {
             // Simpan history
             $this->Tracking_model->save_history(
                 $tracking->id_tracking,
-                $tracking->status_pengiriman,
+                'diproses',
                 "Kurir ditugaskan: {$kurir->nama_kurir}"
             );
 
@@ -197,10 +200,10 @@ class Tracking extends CI_Controller
         // ALUR SEDERHANA UNTUK PENGIRIMAN INTERNAL
         // TIDAK ADA: tiba_di_kota_tujuan, out_for_delivery
         $flow = [
-            'pending'   => ['diproses', 'dibatalkan'],
+            'pending'   => ['dikirim', 'dibatalkan'],
             'diproses'  => ['dikirim', 'dibatalkan'],
-            'dikirim'   => ['dalam_perjalanan'],
-            'dalam_perjalanan' => ['delivered'],
+            'dikirim'   => ['dalam_perjalanan', 'dibatalkan'],
+            'dalam_perjalanan' => ['delivered', 'dibatalkan'],
             'delivered' => ['diterima'],
         ];
 

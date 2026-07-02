@@ -16,7 +16,7 @@
                         <div class="col-md-6">
                             <table class="table table-sm table-borderless">
                                 <tr><td><strong>Invoice</strong></td><td>#<?= $tracking->invoice ?></td></tr>
-                                <tr><td><strong>Total Harga</strong></td><td>Rp <?= number_format($tracking->total_harga, 0, ',', '.') ?></td></tr>
+                                <tr><td><strong>Total Bayar</strong></td><td>Rp <?= number_format($tracking->grand_total ?? $tracking->total_harga, 0, ',', '.') ?></td></tr>
                                 <?php if ($tracking->nama_kurir): ?>
                                 <tr><td><strong>Kurir</strong></td><td><?= $tracking->nama_kurir ?></td></tr>
                                 <tr><td><strong>Telepon Kurir</strong></td><td><?= $tracking->kurir_telp ?></td></tr>
@@ -41,8 +41,8 @@
                         <h5>Status Pengiriman</h5>
                         <div class="tracking-progress">
                             <?php 
-                            $step_labels = ['Menunggu', 'Diproses', 'Dikirim', 'Dalam Perjalanan','Telah Dikirim', 'Diterima'];
-                            $status_values = ['pending', 'diproses', 'dikirim', 'dalam_perjalanan', 'delivered', 'diterima'];
+                            $step_labels = ['Diproses', 'Dikirim', 'Dalam Perjalanan', 'Telah Dikirim', 'Diterima'];
+                            $status_values = ['diproses', 'dikirim', 'dalam_perjalanan', 'delivered', 'diterima'];
                             $current_index = array_search($tracking->status_pengiriman, $status_values);
                             if ($current_index === false) $current_index = 0;
                             ?>
@@ -66,12 +66,7 @@
                         </div>
                     </div>
 
-                    <?php if ($tracking->kurir_lat && $tracking->kurir_lng): ?>
-                    <div class="mb-4">
-                        <h5><i class="bi bi-geo-alt"></i> Lokasi Kurir</h5>
-                        <div id="trackingMap" style="height: 400px; width: 100%; border-radius: 8px;" data-lat="<?= $tracking->kurir_lat ?>" data-lng="<?= $tracking->kurir_lng ?>" data-kurir="<?= $tracking->nama_kurir ?>" data-invoice="<?= $tracking->invoice ?>"></div>
-                    </div>
-                    <?php endif; ?>
+
 
                     <?php if (!empty($tracking->bukti_pengiriman)): ?>
                     <div class="mb-4">
@@ -118,7 +113,7 @@
                                         <?php if ($h->lokasi): ?>
                                             <p class="mb-0 text-muted"><i class="bi bi-geo-alt"></i> <?= $h->lokasi ?></p>
                                         <?php endif; ?>
-                                        <?php if ($h->keterangan): ?>
+                                        <?php if ($h->keterangan && stripos($h->keterangan, 'Status diperbarui oleh Admin') === false): ?>
                                             <p class="mb-0 small"><?= $h->keterangan ?></p>
                                         <?php endif; ?>
                                     </div>
@@ -168,22 +163,4 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-
 .timeline-content { background: var(--card-white); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(74,44,17,0.06); transition: all 0.3s; }
 .timeline-content:hover { border-color: var(--amber-cream); box-shadow: 0 8px 30px rgba(44,24,8,0.08); }
 .bukti-card { background: #FAF6F0; border-radius: 12px; border: 1px solid rgba(74,44,17,0.08); }
-</style>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const mapContainer = document.getElementById('trackingMap');
-    if (!mapContainer) return;
-    const lat = parseFloat(mapContainer.dataset.lat);
-    const lng = parseFloat(mapContainer.dataset.lng);
-    const kurir = mapContainer.dataset.kurir;
-    const invoice = mapContainer.dataset.invoice;
-    if (isNaN(lat) || isNaN(lng)) return;
-    const map = L.map('trackingMap').setView([lat, lng], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
-    const markerIcon = L.divIcon({ html: `<div style="background:#4A2C11;color:white;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:3px solid #E6A15C;box-shadow:0 2px 10px rgba(0,0,0,0.3);"><i class="bi bi-truck" style="font-size:18px;"></i></div>`, iconSize: [40,40], iconAnchor: [20,20] });
-    L.marker([lat, lng], { icon: markerIcon }).addTo(map).bindPopup(`<strong>${kurir}</strong><br>Invoice: #${invoice}`);
-});
-</script>
+</style>

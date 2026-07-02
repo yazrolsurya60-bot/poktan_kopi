@@ -146,49 +146,131 @@ class Tracking extends CI_Controller
             show_404();
         }
 
-        if ($this->input->server('REQUEST_METHOD') === 'POST') {
-            $upload_path = './assets/uploads/bukti_pengiriman/';
-            if (!is_dir($upload_path)) {
-                mkdir($upload_path, 0755, TRUE);
-            }
+        $this->load->model('Transaksi_model');
 
-            $config['upload_path']   = $upload_path;
-            $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
-            $config['max_size']      = 2048; // max 2MB
-            $config['encrypt_name']  = TRUE;
+        if ($this->input->server('REQUEST_METHOD') === 'POST') {
+            $file_bukti_pengiriman = $tracking->bukti_pengiriman;
+            $file_bukti_pembayaran = '';
 
             $this->load->library('upload');
-            $this->upload->initialize($config);
 
-            if ($this->upload->do_upload('bukti_file')) {
-                $upload_data = $this->upload->data();
-                $file_name = $upload_data['file_name'];
-                $id_user = $this->session->userdata('id_user');
+            // 1. Upload Bukti Pengiriman (wajib jika belum ada, opsional jika sudah ada)
+            if (!empty($_FILES['bukti_file']['name'])) {
+                $upload_path_pengiriman = './assets/uploads/bukti_pengiriman/';
+                if (!is_dir($upload_path_pengiriman)) {
+                    mkdir($upload_path_pengiriman, 0755, TRUE);
+                }
 
-                $result = $this->Tracking_model->upload_bukti($id_tracking, $file_name, $id_user);
+                $config_pengiriman['upload_path']   = $upload_path_pengiriman;
+                $config_pengiriman['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+                $config_pengiriman['max_size']      = 2048; // max 2MB
+                $config_pengiriman['encrypt_name']  = TRUE;
 
-                if ($result) {
-                    // Send notification to buyer
-                    notifikasi_tracking(
-                        $tracking->pembeli_id,
-                        $tracking->invoice,
-                        'delivered',
-                        'Bukti pengiriman telah diunggah oleh kurir.'
-                    );
+                $this->upload->initialize($config_pengiriman);
 
-                    $this->session->set_flashdata('success', 'Bukti pengiriman berhasil diunggah.');
-                    redirect('kurir/tracking');
+                if ($this->upload->do_upload('bukti_file')) {
+                    $upload_data = $this->upload->data();
+                    // Hapus berkas lama jika ada
+                    if ($tracking->bukti_pengiriman && file_exists('./assets/uploads/bukti_pengiriman/' . $tracking->bukti_pengiriman)) {
+                        @unlink('./assets/uploads/bukti_pengiriman/' . $tracking->bukti_pengiriman);
+                    }
+                    $file_bukti_pengiriman = $upload_data['file_name'];
                 } else {
-                    $this->session->set_flashdata('error', 'Gagal menyimpan bukti pengiriman ke database.');
+                    $this->session->set_flashdata('error', 'Gagal upload bukti pengiriman: ' . $this->upload->display_errors('', ''));
                     redirect('kurir/tracking/upload_bukti/' . $id_tracking);
                 }
+            } elseif (empty($tracking->bukti_pengiriman)) {
+                $this->session->set_flashdata('error', 'Silakan pilih berkas bukti pengiriman.');
+                redirect('kurir/tracking/upload_bukti/' . $id_tracking);
+            }
+
+            // 2. Upload Bukti Pembayaran (wajib jika metode bayar COD dan belum ada bukti sebelumnya, opsional jika sudah ada)
+            $existing_bukti = $this->Transaksi_model->get_bukti_by_transaksi($tracking->id_transaksi);
+            if ($tracking->metode_bayar === 'COD') {
+                if (!empty($_FILES['bukti_bayar_file']['name'])) {
+                    $upload_path_pembayaran = './uploads/bukti/';
+                    if (!is_dir($upload_path_pembayaran)) {
+                        mkdir($upload_path_pembayaran, 0777, TRUE);
+                    }
+
+                    $config_pembayaran['upload_path']   = $upload_path_pembayaran;
+                    $config_pembayaran['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+                    $config_pembayaran['max_size']      = 2048; // max 2MB
+                    $config_pembayaran['encrypt_name']  = TRUE;
+
+                    $this->upload->initialize($config_pembayaran);
+
+                    if ($this->upload->do_upload('bukti_bayar_file')) {
+                        $upload_data = $this->upload->data();
+                        $file_bukti_pembayaran = $upload_data['file_name'];
+                    } else {
+                        // Cleanup first uploaded file if second one fails
+                        if ($file_bukti_pengiriman && $file_bukti_pengiriman !== $tracking->bukti_pengiriman) {
+                            @unlink('./assets/uploads/bukti_pengiriman/' . $file_bukti_pengiriman);
+                        }
+                        $this->session->set_flashdata('error', 'Gagal upload bukti pembayaran COD: ' . $this->upload->display_errors('', ''));
+                        redirect('kurir/tracking/upload_bukti/' . $id_tracking);
+                    }
+                } elseif (!$existing_bukti) {
+                    $this->session->set_flashdata('error', 'Silakan pilih berkas bukti pembayaran COD.');
+                    redirect('kurir/tracking/upload_bukti/' . $id_tracking);
+                }
+            }
+
+            // Simpan Bukti Pengiriman ke database
+            $id_user = $this->session->userdata('id_user');
+            $result = $this->Tracking_model->upload_bukti($id_tracking, $file_bukti_pengiriman, $id_user);
+
+            // Simpan Bukti Pembayaran ke database jika COD
+            if ($tracking->metode_bayar === 'COD') {
+                $nama_kurir = $this->session->userdata('nama') ?? 'Kurir';
+                $tipe_bayar = ($this->input->post('tipe_bayar') === 'cash') ? 'Cash COD' : ($this->input->post('nama_bank_cod') ?: 'Transfer COD');
+                
+                $bukti_data = [
+                    'id_transaksi' => $tracking->id_transaksi,
+                    'nama_bank' => $tipe_bayar,
+                    'nama_pengirim' => 'Kurir: ' . $nama_kurir,
+                    'tanggal_transfer' => date('Y-m-d'),
+                    'jumlah_transfer' => (int)$this->input->post('jumlah_bayar'),
+                    'status_verifikasi' => 'Pending',
+                    'keterangan' => $this->input->post('keterangan_bayar') ?: 'COD Payment collected by Kurir',
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
+
+                if ($file_bukti_pembayaran) {
+                    $bukti_data['file_bukti'] = $file_bukti_pembayaran;
+                }
+
+                if ($existing_bukti) {
+                    if ($file_bukti_pembayaran && $existing_bukti['file_bukti'] && file_exists('./uploads/bukti/' . $existing_bukti['file_bukti'])) {
+                        @unlink('./uploads/bukti/' . $existing_bukti['file_bukti']);
+                    }
+                    $this->db->where('id_transaksi', $tracking->id_transaksi);
+                    $this->db->update('tb_bukti_bayar', $bukti_data);
+                } else {
+                    $this->db->insert('tb_bukti_bayar', $bukti_data);
+                }
+            }
+
+            if ($result) {
+                // Kirim notifikasi ke pembeli
+                notifikasi_tracking(
+                    $tracking->pembeli_id,
+                    $tracking->invoice,
+                    'delivered',
+                    'Pesanan telah sampai. Bukti pengiriman ' . ($tracking->metode_bayar === 'COD' ? 'dan pembayaran COD ' : '') . 'telah diunggah oleh kurir.'
+                );
+
+                $this->session->set_flashdata('success', 'Bukti berhasil diunggah.');
+                redirect('kurir/tracking');
             } else {
-                $this->session->set_flashdata('error', $this->upload->display_errors());
+                $this->session->set_flashdata('error', 'Gagal menyimpan bukti ke database.');
                 redirect('kurir/tracking/upload_bukti/' . $id_tracking);
             }
         }
 
         $data['tracking'] = $tracking;
+        $data['bukti_bayar'] = $this->Transaksi_model->get_bukti_by_transaksi($tracking->id_transaksi);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($this->session->userdata('id_user'));
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($this->session->userdata('id_user'), 5);
 
