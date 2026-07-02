@@ -742,7 +742,7 @@
         </div>
         <?php endif; ?>
 
-        <!-- FILTER DATA LAHAN -->
+        <!-- FILTER DATA LAHAN (SUDAH DIPERBARUI MENJADI PENCARIAN UNIVERSAL) -->
         <div class="card shadow-sm border-0 mb-4" style="border-radius: var(--radius-card);">
             <div class="card-body bg-white rounded-lg">
                 <h6 class="font-weight-bold text-muted mb-3"><i class="fas fa-filter mr-1"></i> Filter Data Lahan</h6>
@@ -762,11 +762,11 @@
                             </select>
                         </div>
                         <div class="col-md-5 mb-2">
-                            <label class="small font-weight-bold text-secondary">Cari Lokasi / Alamat</label>
-                            <input type="text" name="lokasi" class="form-control form-control-sm"
+                            <label class="small font-weight-bold text-secondary">Cari Nama Lahan / Lokasi</label>
+                            <input type="text" name="keyword" class="form-control form-control-sm"
                                 style="border-color: #bfa594; height: 38px; border-radius: 8px;"
-                                placeholder="Masukkan nama daerah atau kota..."
-                                value="<?= $this->input->get('lokasi'); ?>">
+                                placeholder="Masukkan nama lahan atau lokasi..."
+                                value="<?= $this->input->get('keyword'); ?>">
                         </div>
                         <div class="col-md-3 mb-2">
                             <div class="btn-group w-100">
@@ -803,7 +803,7 @@
                                 <th width="10%" class="align-middle">Foto Lahan</th>
                                 <th class="align-middle">Nama Lahan</th>
                                 <th class="align-middle">Jenis Kopi</th>
-                                <th class="align-middle">Jenis Tanah</th> <!-- KOLOM BARU DITAMBAHKAN -->
+                                <th class="align-middle">Jenis Tanah</th>
                                 <th class="align-middle">Luas (Ha)</th>
                                 <th class="align-middle">Alamat / Lokasi</th>
                                 <th class="align-middle">Catatan Perawatan</th>
@@ -832,7 +832,6 @@
                                 <td class="align-middle text-center font-weight-bold"><?= $lh['jenis_kopi']; ?></td>
                                 <td class="align-middle text-center">
                                     <?= isset($lh['jenis_tanah']) && !empty($lh['jenis_tanah']) ? $lh['jenis_tanah'] : '<span class="text-muted font-italic">-</span>'; ?>
-                                    <!-- KOLOM BARU DITAMBAHKAN -->
                                 </td>
                                 <td class="align-middle text-center text-dark font-weight-bold">
                                     <?= number_format($lh['luas'], 2, ',', '.'); ?> Ha</td>
@@ -879,28 +878,14 @@
     function toggleSidebar() {
         sidebar.classList.toggle('open');
         overlay.classList.toggle('active');
-        document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
     }
 
     if (toggleBtn) {
         toggleBtn.addEventListener('click', toggleSidebar);
     }
-    if (overlay) {
-        overlay.addEventListener('click', toggleSidebar);
-    }
+    overlay.addEventListener('click', toggleSidebar);
 
-    document.addEventListener('click', function(e) {
-        if (window.innerWidth > 991.98) return;
-        if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
-            if (sidebar.classList.contains('open')) {
-                toggleSidebar();
-            }
-        }
-    });
-
-    // ============================================
-    // NOTIFICATION DROPDOWN
-    // ============================================
+    // INTERAKSI DROPDOWN NOTIFIKASI
     const notifToggle = document.getElementById('notifToggle');
     const notifDropdown = document.getElementById('notifDropdown');
 
@@ -911,21 +896,13 @@
         });
     }
 
+    // Tutup dropdown notifikasi jika klik di luar area dropdown
     document.addEventListener('click', function(e) {
-        if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
+        if (notifDropdown && !notifDropdown.contains(e.target) && e.target !== notifToggle) {
             notifDropdown.classList.remove('show');
         }
     });
+    </script>
+</body>
 
-    // ============================================
-    // MARK ALL READ
-    // ============================================
-    function markAllRead() {
-        if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
-            $.ajax({
-                        url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
-                        type: 'POST',
-                        dataType: 'json',
-                        success: function(response) {
-                                if (response.success) location.reload();
-                                else alert('Gagal menandai semua notifikasi.');
+</html>

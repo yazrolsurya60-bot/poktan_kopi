@@ -266,7 +266,6 @@
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebarMenu">
         <div class="sidebar-brand">
             <div class="brand-icon">
@@ -319,7 +318,6 @@
         </div>
     </div>
 
-    <!-- MAIN KONTEN -->
     <div class="main-content">
 
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -343,7 +341,6 @@
         </div>
         <?php endif; ?>
 
-        <!-- Statistik -->
         <div class="row no-gutters mx-n2 mb-4">
             <div class="col-12 col-sm-6 col-md-3 px-2 mb-3 mb-md-0">
                 <div class="card border-0 shadow-sm h-100" style="border-radius: var(--radius-card);">
@@ -439,7 +436,6 @@
             </div>
         </div>
 
-        <!-- Filter & Tambah -->
         <div class="card border-0 shadow-sm mb-4" style="border-radius: var(--radius-card);">
             <div class="card-body p-3">
                 <form action="<?= base_url('petani/lahan') ?>" method="GET" class="m-0">
@@ -447,10 +443,10 @@
                         <div class="col-12 col-md-8">
                             <div class="form-row">
                                 <div class="col-12 col-sm-5 mb-2 mb-sm-0">
-                                    <input type="text" name="lokasi"
+                                    <input type="text" name="keyword"
                                         class="form-control form-control-sm bg-light border-0 pl-3"
-                                        placeholder="Cari lahan atau lokasi..."
-                                        value="<?= $this->input->get('lokasi'); ?>"
+                                        placeholder="Cari nama lahan atau lokasi..."
+                                        value="<?= $this->input->get('keyword'); ?>"
                                         style="height: 38px; border-radius: 6px;">
                                 </div>
                                 <div class="col-12 col-sm-4 mb-2 mb-sm-0">
@@ -490,7 +486,6 @@
             </div>
         </div>
 
-        <!-- Tabel Data Lahan -->
         <div class="card border-0 shadow-sm" style="border-radius: var(--radius-card); overflow: hidden;">
             <div class="table-responsive">
                 <table class="table table-modern align-middle mb-0">
@@ -500,7 +495,7 @@
                             <th width="10%" class="text-center">Foto Lahan</th>
                             <th width="16%">Nama Lahan</th>
                             <th width="12%">Jenis Kopi</th>
-                            <th width="12%">Jenis Tanah</th> <!-- KOLOM BARU -->
+                            <th width="12%">Jenis Tanah</th>
                             <th width="8%">Luas (Ha)</th>
                             <th width="15%">Lokasi / Alamat</th>
                             <th width="12%">Catatan</th>
@@ -533,7 +528,6 @@
                             </td>
                             <td class="align-middle text-dark font-weight-medium">
                                 <?= isset($lh['jenis_tanah']) ? $lh['jenis_tanah'] : '<span class="text-muted font-italic">-</span>'; ?>
-                                <!-- DATA BARU -->
                             </td>
                             <td class="align-middle font-weight-bold text-dark">
                                 <?= number_format((float)$lh['luas'], 2, ',', '.'); ?>
@@ -572,11 +566,10 @@
                         <?php else: ?>
                         <tr>
                             <td colspan="10" class="text-center text-muted py-5 bg-white">
-                                <!-- Colspan disesuaikan jadi 10 -->
                                 <i class="fas fa-folder-open fa-3x mb-3 text-secondary"></i>
-                                <h6 class="font-weight-bold text-secondary mb-1">Belum Ada Data Lahan Kopi</h6>
-                                <small class="text-muted">Silakan lakukan penambahan titik koordinat lahan baru
-                                    menggunakan menu di atas.</small>
+                                <h6 class="font-weight-bold text-secondary mb-1">Data Lahan Tidak Ditemukan</h6>
+                                <small class="text-muted">Kata kunci pencarian tidak cocok atau Anda belum menambahkan
+                                    data lahan.</small>
                             </td>
                         </tr>
                         <?php endif; ?>
