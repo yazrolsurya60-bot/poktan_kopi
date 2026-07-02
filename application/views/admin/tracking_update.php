@@ -259,7 +259,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
                                 </small>
                                 <div style="font-size:0.72rem; color:#6B7280; line-height:1.8;">
                                     Pending → Diproses → Dikirim → Dalam Perjalanan →
-                                    Tiba di Kota Tujuan → Out for Delivery → Telah Dikirim → Diterima
+                                    Tiba di Kota Tujuan → Telah Dikirim → Diterima
                                 </div>
                             </div>
 

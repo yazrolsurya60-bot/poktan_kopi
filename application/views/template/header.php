@@ -457,7 +457,7 @@ $base_url = base_url();
         </div>
         <span>
             <?php if ($role == 'Admin'): ?>
-                ADMIN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
+                POKTAN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
             <?php elseif ($role == 'Petani'): ?>
                 PETANI <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
             <?php else: ?>

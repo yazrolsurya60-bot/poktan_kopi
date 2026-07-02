@@ -190,18 +190,18 @@ class Tracking extends CI_Controller
     }
 
     // ============================================================
-    // PRIVATE — Status flow options
+    // PRIVATE — Status flow options (SEDERHANA UNTUK INTERNAL)
     // ============================================================
     private function _get_status_options($current_status)
     {
+        // ALUR SEDERHANA UNTUK PENGIRIMAN INTERNAL
+        // TIDAK ADA: tiba_di_kota_tujuan, out_for_delivery
         $flow = [
-            'pending'              => ['diproses', 'dibatalkan'],
-            'diproses'             => ['dikirim', 'dibatalkan'],
-            'dikirim'              => ['dalam_perjalanan'],
-            'dalam_perjalanan'     => ['tiba_di_kota_tujuan'],
-            'tiba_di_kota_tujuan'  => ['out_for_delivery'],
-            'out_for_delivery'     => ['delivered'],
-            'delivered'            => ['diterima'],
+            'pending'   => ['diproses', 'dibatalkan'],
+            'diproses'  => ['dikirim', 'dibatalkan'],
+            'dikirim'   => ['dalam_perjalanan'],
+            'dalam_perjalanan' => ['delivered'],
+            'delivered' => ['diterima'],
         ];
 
         $options = $flow[$current_status] ?? [];

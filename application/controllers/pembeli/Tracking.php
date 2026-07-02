@@ -123,7 +123,6 @@ class Tracking extends CI_Controller {
             'diproses' => 'Diproses',
             'dikirim' => 'Dikirim',
             'dalam_perjalanan' => 'Dalam Perjalanan',
-            'out_for_delivery' => 'Out for Delivery',
             'delivered' => 'Telah Dikirim',
             'diterima' => 'Diterima'
         ];

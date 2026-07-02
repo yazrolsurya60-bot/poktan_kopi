@@ -41,8 +41,8 @@
                         <h5>Status Pengiriman</h5>
                         <div class="tracking-progress">
                             <?php 
-                            $step_labels = ['Menunggu', 'Diproses', 'Dikirim', 'Dalam Perjalanan', 'Out for Delivery', 'Telah Dikirim', 'Diterima'];
-                            $status_values = ['pending', 'diproses', 'dikirim', 'dalam_perjalanan', 'out_for_delivery', 'delivered', 'diterima'];
+                            $step_labels = ['Menunggu', 'Diproses', 'Dikirim', 'Dalam Perjalanan','Telah Dikirim', 'Diterima'];
+                            $status_values = ['pending', 'diproses', 'dikirim', 'dalam_perjalanan', 'delivered', 'diterima'];
                             $current_index = array_search($tracking->status_pengiriman, $status_values);
                             if ($current_index === false) $current_index = 0;
                             ?>

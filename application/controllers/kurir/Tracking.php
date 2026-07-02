@@ -146,7 +146,7 @@ class Tracking extends CI_Controller
             show_404();
         }
 
-        if ($this->input->post()) {
+        if ($this->input->server('REQUEST_METHOD') === 'POST') {
             $upload_path = './assets/uploads/bukti_pengiriman/';
             if (!is_dir($upload_path)) {
                 mkdir($upload_path, 0755, TRUE);
@@ -157,7 +157,8 @@ class Tracking extends CI_Controller
             $config['max_size']      = 2048; // max 2MB
             $config['encrypt_name']  = TRUE;
 
-            $this->load->library('upload', $config);
+            $this->load->library('upload');
+            $this->upload->initialize($config);
 
             if ($this->upload->do_upload('bukti_file')) {
                 $upload_data = $this->upload->data();
@@ -179,9 +180,11 @@ class Tracking extends CI_Controller
                     redirect('kurir/tracking');
                 } else {
                     $this->session->set_flashdata('error', 'Gagal menyimpan bukti pengiriman ke database.');
+                    redirect('kurir/tracking/upload_bukti/' . $id_tracking);
                 }
             } else {
                 $this->session->set_flashdata('error', $this->upload->display_errors());
+                redirect('kurir/tracking/upload_bukti/' . $id_tracking);
             }
         }
 
