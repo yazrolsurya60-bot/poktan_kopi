@@ -44,6 +44,7 @@ class Laporan extends CI_Controller {
         $data['chart_penjualan'] = $this->Laporan_model->get_chart_penjualan_bulanan();
         $data['chart_produk']    = $this->Laporan_model->get_chart_produk_terlaris();
         $data['chart_status']    = $this->Laporan_model->get_chart_status_transaksi();
+        $data['produk_terlaris'] = $this->Laporan_model->get_produk_terlaris(0);
 
         $data['filter_status'] = '';
 
@@ -69,6 +70,7 @@ class Laporan extends CI_Controller {
         $data['chart_penjualan'] = $this->Laporan_model->get_chart_penjualan_bulanan();
         $data['chart_produk']    = $this->Laporan_model->get_chart_produk_terlaris();
         $data['chart_status']    = $this->Laporan_model->get_chart_status_transaksi();
+        $data['produk_terlaris'] = $this->Laporan_model->get_produk_terlaris(0);
 
         $data['filter_status'] = $filter['status'];
         $this->load->view('admin/v_laporan', $data);
