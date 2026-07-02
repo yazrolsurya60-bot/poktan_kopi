@@ -897,78 +897,44 @@
 						<i class="bi bi-grid-1x2-fill"></i>Dashboard
 					</a>
 				</li>
-				<!-- MANAJEMEN USER - Badge User Baru -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/user'); ?>">
 						<i class="bi bi-people-fill"></i>Manajemen User
-						<?php if (isset($user_baru) && $user_baru > 0): ?>
-							<span class="menu-badge" style="background: #EF4444; color: white;"><?= $user_baru; ?></span>
-						<?php endif; ?>
 					</a>
 				</li>
-
-				<!-- DATA PETANI - Badge Petani Belum Diverifikasi -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/petani'); ?>">
 						<i class="bi bi-person-badge-fill"></i>Data Petani
-						<?php if (isset($petani_baru_count) && $petani_baru_count > 0): ?>
-							<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $petani_baru_count; ?></span>
-						<?php endif; ?>
 					</a>
 				</li>
-
-				<!-- MANAJEMEN LAHAN -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/lahan'); ?>">
 						<i class="bi bi-map-fill"></i>Manajemen Lahan
 					</a>
 				</li>
-
-				<!-- MANAJEMEN PANEN -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/panen'); ?>">
 						<i class="bi bi-tree-fill"></i>Manajemen Panen
 					</a>
 				</li>
-
-				<!-- MANAJEMEN PRODUK -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/produk'); ?>">
 						<i class="bi bi-box-seam-fill"></i>Manajemen Produk
 					</a>
 				</li>
-
-				<!-- TRANSAKSI - Badge Pending -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/transaksi'); ?>">
 						<i class="bi bi-wallet2"></i>Transaksi
-						<?php if (isset($transaksi_pending) && $transaksi_pending > 0): ?>
-							<span class="menu-badge" style="background: #EF4444; color: white;"><?= $transaksi_pending; ?></span>
-						<?php endif; ?>
 					</a>
 				</li>
-
-				<!-- MANAJEMEN KURIR -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/kurir'); ?>">
 						<i class="bi bi-truck"></i>Manajemen Kurir
 					</a>
 				</li>
-
-				<!-- MANAJEMEN MITRA - Badge Mitra Baru -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/mitra'); ?>">
 						<i class="bi bi-shop"></i>Manajemen Mitra
-						<?php if (isset($mitra_baru) && $mitra_baru > 0): ?>
-							<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $mitra_baru; ?></span>
-						<?php endif; ?>
-					</a>
-				</li>
-
-				<!-- TRACKING PENGIRIMAN -->
-				<li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
-					<a href="<?= base_url('admin/tracking'); ?>">
-						<i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
 					</a>
 				</li>
 				<li class="menu-item active">
@@ -1010,13 +976,13 @@
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownPdfBtn" style="min-width:230px; border-radius:10px; box-shadow:0 8px 24px rgba(44,24,8,0.15); border:none; padding:8px;">
 						<div style="font-size:0.72rem; font-weight:700; color:#70655E; text-transform:uppercase; letter-spacing:0.5px; padding:4px 12px 8px;">Pilih Kelompok Tani</div>
 						<a class="dropdown-item pdf-poktan-link" href="#" data-poktan="1"
-							style="border-radius:8px; font-size:0.83rem; padding:8px 12px;">
+						   style="border-radius:8px; font-size:0.83rem; padding:8px 12px;">
 							<i class="bi bi-geo-alt-fill mr-1" style="color:#8B4513;"></i>
 							<b>Kel. Tani Harum Manis</b><br>
 							<small style="color:#888; margin-left:18px;">Desa Sempadian, Tekarang</small>
 						</a>
 						<a class="dropdown-item pdf-poktan-link" href="#" data-poktan="2"
-							style="border-radius:8px; font-size:0.83rem; padding:8px 12px; margin-top:4px;">
+						   style="border-radius:8px; font-size:0.83rem; padding:8px 12px; margin-top:4px;">
 							<i class="bi bi-geo-alt-fill mr-1" style="color:#8B4513;"></i>
 							<b>Kel. Tani Batu Layar Sejahtera</b><br>
 							<small style="color:#888; margin-left:18px;">Desa Sendoyan, Sejangkung</small>
@@ -1240,21 +1206,18 @@
 							<div class="p-3 rounded" style="background:#FFF7ED; border:1px solid rgba(230,161,92,0.2);">
 								<div class="stat-title">Petani Aktif</div>
 								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);"><?= $kpi['total_petani'] ?? 0; ?></h4>
-								<small class="text-muted">dari tb_petani</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-6 mb-3">
 							<div class="p-3 rounded" style="background:#F0FDF4; border:1px solid rgba(16,185,129,0.2);">
 								<div class="stat-title">Mitra Aktif</div>
 								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);"><?= $kpi['total_mitra'] ?? 0; ?></h4>
-								<small class="text-muted">dari tb_mitra</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-6 mb-3">
 							<div class="p-3 rounded" style="background:#EFF6FF; border:1px solid rgba(59,130,246,0.2);">
 								<div class="stat-title">Rata-rata Transaksi</div>
 								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);">Rp <?= number_format($kpi['rata_transaksi'] ?? 0, 0, ',', '.'); ?></h4>
-								<small class="text-muted">per pesanan</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-6 mb-3">
@@ -1263,7 +1226,6 @@
 								<?php $tr = $tracking ?? [];
 								$stat = $tr['statistik'] ?? []; ?>
 								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);"><?= $tr['total'] ?? 0; ?></h4>
-								<small class="text-muted"><?= ($stat['Selesai'] ?? 0); ?> selesai, <?= ($stat['Pending'] ?? 0); ?> pending</small>
 							</div>
 						</div>
 					</div>
@@ -1764,6 +1726,9 @@
 							cornerRadius: 8,
 							callbacks: {
 								label: function(ctx) {
+									if (ctx.label === 'Belum Ada Penjualan') {
+										return ctx.label;
+									}
 									return ctx.label + ': ' + ctx.parsed + ' kg';
 								}
 							}
@@ -1908,8 +1873,8 @@
 			el.addEventListener('click', function(e) {
 				e.preventDefault();
 				const poktan = this.getAttribute('data-poktan');
-				const tab = this.getAttribute('data-tab') || 'penjualan';
-				const url = '<?= base_url('admin/laporan/print_pdf'); ?>?tab=' + tab + '&poktan=' + poktan;
+				const tab    = this.getAttribute('data-tab') || 'penjualan';
+				const url    = '<?= base_url('admin/laporan/print_pdf'); ?>?tab=' + tab + '&poktan=' + poktan;
 				window.open(url, '_blank');
 			});
 		});
