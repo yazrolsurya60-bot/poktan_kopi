@@ -284,7 +284,7 @@
 			overflow-y: auto;
 		}
 
-		.notif-item-drop {
+		.notif-item {
 			padding: 12px 18px;
 			border-bottom: 1px solid rgba(74, 44, 17, 0.04);
 			display: flex;
@@ -296,13 +296,13 @@
 			color: inherit;
 		}
 
-		.notif-item-drop:hover {
+		.notif-item:hover {
 			background: var(--bg-cream);
 			text-decoration: none;
 			color: inherit;
 		}
 
-		.notif-item-drop .notif-icon {
+		.notif-item .notif-icon {
 			width: 36px;
 			height: 36px;
 			min-width: 36px;
@@ -313,24 +313,44 @@
 			font-size: 0.9rem;
 		}
 
-		.notif-icon.success {
+		.notif-item .notif-icon.success {
 			background: #D1FAE5;
 			color: #065F46;
 		}
 
-		.notif-icon.warning {
+		.notif-item .notif-icon.warning {
 			background: #FEF3C7;
 			color: #92400E;
 		}
 
-		.notif-icon.info {
+		.notif-item .notif-icon.info {
 			background: #DBEAFE;
 			color: #1E40AF;
 		}
 
-		.notif-icon.danger {
+		.notif-item .notif-icon.danger {
 			background: #FEE2E2;
 			color: #991B1B;
+		}
+
+		.notif-item .notif-text {
+			flex: 1;
+			font-size: 0.85rem;
+		}
+
+		.notif-item .notif-text .notif-time {
+			font-size: 0.7rem;
+			color: var(--text-secondary);
+			display: block;
+			margin-top: 2px;
+		}
+
+		.notif-item.unread {
+			background: rgba(230, 161, 92, 0.05);
+		}
+
+		.notif-item.unread .notif-text {
+			font-weight: 600;
 		}
 
 		/* --- KPI STAT BOX --- */
@@ -936,7 +956,11 @@
 					<a href="<?= base_url('admin/mitra'); ?>">
 						<i class="bi bi-shop"></i>Manajemen Mitra
 					</a>
-				</li>
+							<li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+						<a href="<?= base_url('admin/tracking'); ?>">
+							<i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
+						</a>
+					</li>
 				<li class="menu-item active">
 					<a href="<?= base_url('admin/laporan'); ?>">
 						<i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
@@ -1206,18 +1230,21 @@
 							<div class="p-3 rounded" style="background:#FFF7ED; border:1px solid rgba(230,161,92,0.2);">
 								<div class="stat-title">Petani Aktif</div>
 								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);"><?= $kpi['total_petani'] ?? 0; ?></h4>
+								<small class="text-muted">dari tb_petani</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-6 mb-3">
 							<div class="p-3 rounded" style="background:#F0FDF4; border:1px solid rgba(16,185,129,0.2);">
 								<div class="stat-title">Mitra Aktif</div>
 								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);"><?= $kpi['total_mitra'] ?? 0; ?></h4>
+								<small class="text-muted">dari tb_mitra</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-6 mb-3">
 							<div class="p-3 rounded" style="background:#EFF6FF; border:1px solid rgba(59,130,246,0.2);">
 								<div class="stat-title">Rata-rata Transaksi</div>
 								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);">Rp <?= number_format($kpi['rata_transaksi'] ?? 0, 0, ',', '.'); ?></h4>
+								<small class="text-muted">per pesanan</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-6 mb-3">
@@ -1226,6 +1253,7 @@
 								<?php $tr = $tracking ?? [];
 								$stat = $tr['statistik'] ?? []; ?>
 								<h4 class="font-weight-bold mt-1 mb-0" style="color:var(--dark-coffee);"><?= $tr['total'] ?? 0; ?></h4>
+								<small class="text-muted"><?= ($stat['Selesai'] ?? 0); ?> selesai, <?= ($stat['Pending'] ?? 0); ?> pending</small>
 							</div>
 						</div>
 					</div>
