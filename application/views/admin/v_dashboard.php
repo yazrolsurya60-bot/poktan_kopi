@@ -236,7 +236,7 @@
 		}
 
 		/* ============================================ */
-		/* USER BADGE - SEDERHANA (SAMA DENGAN MITRA) */
+		/* USER BADGE */
 		/* ============================================ */
 
 		.user-badge {
@@ -414,6 +414,11 @@
 			color: #991B1B;
 		}
 
+		.notif-item .notif-icon.primary {
+			background: #EDE9FE;
+			color: #5B21B6;
+		}
+
 		.notif-item .notif-text {
 			flex: 1;
 			font-size: 0.85rem;
@@ -444,159 +449,206 @@
 		}
 
 		/* ============================================ */
-		/* STAT BOX - SAMA DENGAN LAPORAN */
+		/* KPI CARDS */
 		/* ============================================ */
 
-		.stat-box {
+		.kpi-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 20px;
+			margin-bottom: 30px;
+		}
+
+		@media (max-width: 1199.98px) {
+			.kpi-grid {
+				grid-template-columns: repeat(2, 1fr);
+				gap: 16px;
+			}
+		}
+
+		@media (max-width: 575.98px) {
+			.kpi-grid {
+				grid-template-columns: 1fr 1fr;
+				gap: 12px;
+			}
+		}
+
+		.kpi-card {
 			background: var(--card-white);
 			border: 1px solid rgba(74, 44, 17, 0.06);
 			border-radius: var(--radius-card);
-			padding: 22px 24px;
+			padding: 20px 22px 18px;
 			position: relative;
 			box-shadow: var(--shadow-soft);
 			transition: var(--transition-smooth);
 			overflow: hidden;
-			min-height: 140px;
+			min-height: 120px;
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
 		}
 
-		.stat-box:hover {
-			transform: translateY(-3px);
+		.kpi-card:hover {
+			transform: translateY(-4px);
 			box-shadow: var(--shadow-hover);
+			border-color: rgba(230, 161, 92, 0.2);
 		}
 
-		.stat-box .stat-decoration {
+		.kpi-card .kpi-decoration {
 			position: absolute;
-			right: -20px;
-			top: -20px;
-			width: 80px;
-			height: 80px;
+			right: -30px;
+			top: -30px;
+			width: 100px;
+			height: 100px;
 			border-radius: 50%;
-			background: rgba(230, 161, 92, 0.05);
+			background: rgba(230, 161, 92, 0.04);
 			pointer-events: none;
 		}
 
-		.stat-title {
-			font-size: 0.7rem;
+		.kpi-card .kpi-top {
+			display: flex;
+			align-items: flex-start;
+			justify-content: space-between;
+			margin-bottom: 4px;
+		}
+
+		.kpi-card .kpi-title {
+			font-size: 0.65rem;
 			font-weight: 700;
 			text-transform: uppercase;
 			color: var(--text-secondary);
 			letter-spacing: 0.7px;
-			margin-bottom: 4px;
-		}
-
-		.stat-num {
-			font-size: 1.5rem;
-			font-weight: 700;
-			margin-top: 2px;
-			margin-bottom: 0;
-			color: var(--dark-coffee);
-			padding-right: 55px;
-			word-break: break-word;
+			margin: 0;
 			line-height: 1.3;
 		}
 
-		.stat-num.rupiah {
-			font-size: 1.3rem;
-			letter-spacing: -0.5px;
-		}
-
-		.stat-change {
-			font-size: 0.75rem;
-			font-weight: 600;
-			margin-top: 8px;
-		}
-
-		.stat-change.up {
-			color: #10b981;
-		}
-
-		.stat-change.down {
-			color: #EF4444;
-		}
-
-		.stat-badge {
-			position: absolute;
-			right: 16px;
-			top: 50%;
-			transform: translateY(-50%);
-			width: 44px;
-			height: 44px;
-			border-radius: 12px;
+		.kpi-card .kpi-badge {
+			width: 38px;
+			height: 38px;
+			min-width: 38px;
+			border-radius: 10px;
 			background: var(--bg-cream);
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: 1.2rem;
+			font-size: 1rem;
 			color: var(--roasted-brown);
 			transition: var(--transition-smooth);
 		}
 
-		.stat-box:hover .stat-badge {
-			transform: translateY(-50%) scale(1.05) rotate(-3deg);
+		.kpi-card:hover .kpi-badge {
+			transform: scale(1.05) rotate(-3deg);
+		}
+
+		.kpi-card .kpi-badge.amber {
+			background: var(--amber-cream);
+			color: white;
+		}
+
+		.kpi-card .kpi-badge.green {
+			background: #059669;
+			color: white;
+		}
+
+		.kpi-card .kpi-badge.dark {
+			background: var(--dark-coffee);
+			color: white;
+		}
+
+		.kpi-card .kpi-badge.blue {
+			background: #3B82F6;
+			color: white;
+		}
+
+		.kpi-card .kpi-number {
+			font-size: 1.6rem;
+			font-weight: 700;
+			color: var(--dark-coffee);
+			margin: 2px 0 0;
+			line-height: 1.2;
+			padding-right: 10px;
+			letter-spacing: -0.5px;
+		}
+
+		.kpi-card .kpi-number.rupiah {
+			font-size: 1.3rem;
+		}
+
+		.kpi-card .kpi-footer {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			margin-top: 8px;
+			font-size: 0.7rem;
+			color: var(--text-secondary);
+		}
+
+		.kpi-card .kpi-footer .label {
+			color: var(--text-secondary);
+			font-weight: 400;
 		}
 
 		/* ============================================ */
-		/* RESPONSIVE UNTUK KPI - SAMA DENGAN LAPORAN */
+		/* QUICK ACTION BUTTONS - RAPI */
 		/* ============================================ */
 
-		@media (max-width: 1199.98px) {
-			.stat-box .stat-num {
-				font-size: 1.3rem;
-				padding-right: 50px;
-			}
-
-			.stat-box .stat-num.rupiah {
-				font-size: 1.1rem;
-			}
+		.quick-actions-grid {
+			display: grid;
+			grid-template-columns: repeat(5, 1fr);
+			gap: 12px;
+			margin-bottom: 30px;
 		}
 
 		@media (max-width: 991.98px) {
-			.stat-box .stat-num {
-				font-size: 1.2rem;
-				padding-right: 45px;
-			}
-
-			.stat-box .stat-num.rupiah {
-				font-size: 1rem;
-			}
-
-			.stat-badge {
-				width: 38px;
-				height: 38px;
-				font-size: 1rem;
-				right: 12px;
+			.quick-actions-grid {
+				grid-template-columns: repeat(3, 1fr);
+				gap: 10px;
 			}
 		}
 
 		@media (max-width: 575.98px) {
-			.stat-box {
-				padding: 16px 18px;
-				min-height: 110px;
+			.quick-actions-grid {
+				grid-template-columns: repeat(2, 1fr);
+				gap: 8px;
 			}
+		}
 
-			.stat-box .stat-num {
-				font-size: 1rem;
-				padding-right: 40px;
-				white-space: normal;
-			}
+		.quick-action-btn {
+			padding: 12px 14px;
+			border: 1px solid rgba(74, 44, 17, 0.06);
+			border-radius: 10px;
+			background: var(--card-white);
+			color: var(--dark-coffee);
+			transition: var(--transition-smooth);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			font-weight: 600;
+			font-size: 0.8rem;
+			cursor: pointer;
+			width: 100%;
+			text-decoration: none;
+			text-align: center;
+		}
 
-			.stat-box .stat-num.rupiah {
-				font-size: 0.9rem;
-			}
+		.quick-action-btn:hover {
+			background: var(--bg-cream);
+			border-color: var(--amber-cream);
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-soft);
+			text-decoration: none;
+			color: var(--dark-coffee);
+		}
 
-			.stat-badge {
-				width: 34px;
-				height: 34px;
-				font-size: 0.85rem;
-				right: 10px;
-			}
+		.quick-action-btn i {
+			font-size: 1.1rem;
+			color: var(--amber-cream);
+		}
 
-			.stat-title {
-				font-size: 0.6rem;
-			}
+		.quick-action-btn .btn-label {
+			font-size: 0.7rem;
+			font-weight: 500;
 		}
 
 		/* ============================================ */
@@ -714,116 +766,9 @@
 			color: #065F46;
 		}
 
-		/* ============================================ */
-		/* QUICK ACTION BUTTONS */
-		/* ============================================ */
-
-		.quick-action-btn {
-			padding: 10px 16px;
-			border: 1px solid rgba(74, 44, 17, 0.06);
-			border-radius: 10px;
-			background: var(--card-white);
-			color: var(--dark-coffee);
-			transition: var(--transition-smooth);
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			font-weight: 500;
-			font-size: 0.85rem;
-			cursor: pointer;
-			width: 100%;
-			text-decoration: none;
-		}
-
-		.quick-action-btn:hover {
-			background: var(--bg-cream);
-			border-color: var(--amber-cream);
-			transform: translateX(4px);
-			text-decoration: none;
-			color: var(--dark-coffee);
-		}
-
-		.quick-action-btn i {
-			font-size: 1.1rem;
-			color: var(--amber-cream);
-		}
-
-		/* ============================================ */
-		/* ACTION CARD */
-		/* ============================================ */
-
-		.action-card {
-			background: var(--card-white);
-			border: 1px solid rgba(74, 44, 17, 0.06);
-			border-radius: var(--radius-card);
-			padding: 18px 22px;
-			display: flex;
-			align-items: center;
-			transition: var(--transition-smooth);
-			color: var(--dark-coffee);
-			font-weight: 600;
-			font-size: 0.9rem;
-			box-shadow: var(--shadow-soft);
-			text-decoration: none;
-			position: relative;
-			overflow: hidden;
-		}
-
-		.action-card::after {
-			content: '';
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			height: 3px;
-			background: linear-gradient(90deg, var(--amber-cream), transparent);
-			opacity: 0;
-			transition: var(--transition-smooth);
-		}
-
-		.action-card:hover {
-			text-decoration: none;
-			color: var(--dark-coffee);
-			transform: translateY(-4px);
-			box-shadow: var(--shadow-hover);
-			border-color: transparent;
-		}
-
-		.action-card:hover::after {
-			opacity: 1;
-		}
-
-		.action-icon {
-			width: 44px;
-			height: 44px;
-			min-width: 44px;
-			border-radius: 10px;
-			background: #FDF5ED;
-			color: var(--amber-cream);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			margin-right: 15px;
-			font-size: 1.2rem;
-			transition: var(--transition-smooth);
-		}
-
-		.action-card:hover .action-icon {
-			background: var(--amber-cream);
-			color: white;
-			transform: scale(1.05);
-		}
-
-		.action-card .action-arrow {
-			margin-left: auto;
-			color: var(--text-secondary);
-			transition: var(--transition-smooth);
-			font-size: 0.9rem;
-		}
-
-		.action-card:hover .action-arrow {
-			color: var(--amber-cream);
-			transform: translateX(4px);
+		.status-badge.review {
+			background: #FEF3C7;
+			color: #92400E;
 		}
 
 		/* ============================================ */
@@ -905,34 +850,6 @@
 				font-size: 1.3rem;
 			}
 
-			.stat-num {
-				font-size: 1.3rem;
-				padding-right: 45px;
-			}
-
-			.stat-badge {
-				width: 38px;
-				height: 38px;
-				font-size: 1rem;
-				right: 12px;
-			}
-
-			.action-card {
-				padding: 14px 16px;
-				font-size: 0.8rem;
-			}
-
-			.action-icon {
-				width: 36px;
-				height: 36px;
-				min-width: 36px;
-				font-size: 1rem;
-			}
-
-			.chart-container {
-				height: 200px;
-			}
-
 			.notif-dropdown {
 				width: calc(100vw - 32px);
 				right: -60px;
@@ -965,31 +882,6 @@
 				padding: 16px 12px 20px;
 			}
 
-			.stat-box {
-				padding: 16px 18px;
-				min-height: 110px;
-			}
-
-			.stat-num {
-				font-size: 1.1rem;
-				padding-right: 40px;
-			}
-
-			.stat-badge {
-				width: 34px;
-				height: 34px;
-				font-size: 0.85rem;
-				right: 10px;
-			}
-
-			.stat-title {
-				font-size: 0.6rem;
-			}
-
-			.custom-card .card-body-custom {
-				padding: 16px;
-			}
-
 			.notif-dropdown {
 				width: calc(100vw - 24px);
 				right: -70px;
@@ -1020,59 +912,106 @@
 			.page-header .subtitle {
 				font-size: 0.75rem;
 			}
-
-			.quick-action-btn {
-				font-size: 0.75rem;
-				padding: 8px 12px;
-			}
-
-			.quick-action-btn i {
-				font-size: 0.9rem;
-			}
-		}
-
-		/* ============================================ */
-		/* UTILITY */
-		/* ============================================ */
-
-		.text-truncate {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-
-		.gap-1 {
-			gap: 4px;
-		}
-
-		.gap-2 {
-			gap: 8px;
-		}
-
-		.gap-3 {
-			gap: 12px;
-		}
-
-		.gap-4 {
-			gap: 16px;
-		}
-
-		.gap-5 {
-			gap: 24px;
-		}
-
-		.d-flex-center {
-			display: flex;
-			align-items: center;
-			justify-content: center;
 		}
 	</style>
 </head>
 
 <body>
 
+	<!-- SIDEBAR -->
+	<div class="sidebar" id="sidebarMenu">
+		<div class="sidebar-brand">
+			<div class="brand-icon">
+				<i class="bi bi-patch-check-fill"></i>
+			</div>
+			<span>POKTAN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small></span>
+		</div>
+		<div class="sidebar-menu-wrapper">
+			<ul class="sidebar-menu">
+				<li class="menu-item active">
+					<a href="<?= base_url('admin/dashboard'); ?>">
+						<i class="bi bi-grid-1x2-fill"></i>Dashboard
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/user'); ?>">
+						<i class="bi bi-people-fill"></i>Manajemen User
+						<?php if (isset($user_baru) && $user_baru > 0): ?>
+							<span class="menu-badge" style="background: #EF4444; color: white;"><?= $user_baru; ?></span>
+						<?php endif; ?>
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/petani'); ?>">
+						<i class="bi bi-person-badge-fill"></i>Data Petani
+						<?php if (isset($petani_baru_count) && $petani_baru_count > 0): ?>
+							<span class="menu-badge"
+								style="background: #F59E0B; color: white;"><?= $petani_baru_count; ?></span>
+						<?php endif; ?>
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/lahan'); ?>">
+						<i class="bi bi-map-fill"></i>Manajemen Lahan
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/panen'); ?>">
+						<i class="bi bi-tree-fill"></i>Manajemen Panen
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/produk'); ?>">
+						<i class="bi bi-box-seam-fill"></i>Manajemen Produk
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/transaksi'); ?>">
+						<i class="bi bi-wallet2"></i>Transaksi
+						<?php if (isset($transaksi_pending) && $transaksi_pending > 0): ?>
+							<span class="menu-badge"
+								style="background: #EF4444; color: white;"><?= $transaksi_pending; ?></span>
+						<?php endif; ?>
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/kurir'); ?>">
+						<i class="bi bi-truck"></i>Manajemen Kurir
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/mitra'); ?>">
+						<i class="bi bi-shop"></i>Manajemen Mitra
+						<?php if (isset($mitra_baru) && $mitra_baru > 0): ?>
+							<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $mitra_baru; ?></span>
+						<?php endif; ?>
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/tracking'); ?>">
+						<i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
+					</a>
+				</li>
+				<li class="menu-item">
+					<a href="<?= base_url('admin/laporan'); ?>">
+						<i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="sidebar-footer">
+			<button class="btn-logout" onclick="window.location.href='<?= base_url('auth/logout'); ?>'">
+				<i class="bi bi-box-arrow-right"></i> Keluar
+			</button>
+		</div>
+	</div>
+
+	<!-- SIDEBAR OVERLAY -->
+	<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 	<!-- MAIN CONTENT -->
 	<div class="main-content">
+
 		<!-- PAGE HEADER -->
 		<div class="page-header">
 			<div>
@@ -1081,12 +1020,15 @@
 					<i class="bi bi-list"></i>
 				</button>
 				<h2 class="d-inline-block align-middle mb-0">Dashboard</h2>
-				<p class="subtitle mb-0 mt-1">Selamat datang, <span
-						style="color: var(--amber-cream); font-weight:600;"><?= $this->session->userdata('nama') ?? 'Admin' ?></span>!
+				<p class="subtitle mb-0 mt-1">
+					Selamat datang, <span style="color: var(--amber-cream); font-weight:600;">
+						<?= $this->session->userdata('nama') ?? 'Admin' ?>
+					</span>!
 					<span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span>
 				</p>
 			</div>
 			<div class="header-right">
+
 				<!-- NOTIFICATION BELL -->
 				<div style="position: relative;">
 					<button class="notif-btn" id="notifToggle">
@@ -1098,7 +1040,6 @@
 						<?php endif; ?>
 					</button>
 
-					<!-- NOTIFICATION DROPDOWN -->
 					<div class="notif-dropdown" id="notifDropdown">
 						<div class="notif-dropdown-header">
 							<span>
@@ -1116,23 +1057,24 @@
 						<div class="notif-dropdown-list" id="notifList">
 							<?php if (!empty($notifikasi)): ?>
 								<?php foreach ($notifikasi as $n): ?>
+									<?php
+									$icon_type = $n['icon'] ?? 'info';
+									$icon_map = [
+										'success' => 'bi-check-circle-fill',
+										'warning' => 'bi-exclamation-triangle-fill',
+										'danger' => 'bi-x-circle-fill',
+										'info' => 'bi-info-circle-fill',
+										'primary' => 'bi-star-fill'
+									];
+									$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
+									?>
 									<a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
 										href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
-										<?php
-										$icon_type = $n['icon'] ?? 'info';
-										$icon_map = [
-											'success' => 'bi-check-circle-fill',
-											'warning' => 'bi-exclamation-triangle-fill',
-											'danger' => 'bi-x-circle-fill',
-											'info' => 'bi-info-circle-fill'
-										];
-										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
-										?>
 										<div class="notif-icon <?= $icon_type; ?>">
 											<i class="bi <?= $icon_class; ?>"></i>
 										</div>
 										<div class="notif-text">
-											<?= htmlspecialchars($n['isi_notifikasi']); ?>
+											<?= htmlspecialchars($n['isi_notifikasi'] ?? $n['judul'] ?? 'Notifikasi'); ?>
 											<span
 												class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
 										</div>
@@ -1158,7 +1100,7 @@
 					</div>
 				</div>
 
-				<!-- USER BADGE - SEDERHANA (SAMA DENGAN MITRA) -->
+				<!-- USER BADGE -->
 				<?php
 				$nama = $this->session->userdata('nama') ?? 'Admin';
 				$role = $this->session->userdata('role') ?? 'Admin';
@@ -1170,102 +1112,108 @@
 						<div class="user-role"><?= $role; ?></div>
 					</div>
 				</div>
+
 			</div>
 		</div>
 
-		<!-- SIDEBAR & OVERLAY -->
-	<?php $this->load->view('admin/layout/sidebar'); ?>
-
-		<!-- QUICK ACTION BUTTONS -->
+		<!-- ============================================ -->
+		<!-- QUICK ACTION BUTTONS - RAPI PAKAI GRID -->
+		<!-- ============================================ -->
 		<h5 class="font-weight-bold mb-3"
 			style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
 			<i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
 		</h5>
-		<div class="row mb-4">
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/petani'); ?>" class="quick-action-btn">
-					<i class="bi bi-person-check-fill"></i> Verifikasi Petani
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/transaksi/konfirmasi'); ?>" class="quick-action-btn">
-					<i class="bi bi-credit-card-fill"></i> Konfirmasi Bayar
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/kurir/assign'); ?>" class="quick-action-btn">
-					<i class="bi bi-truck"></i> Tugaskan Kurir
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/laporan/'); ?>" class="quick-action-btn">
-					<i class="bi bi-file-earmark-pdf-fill"></i> Buat Laporan
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/produk/tambah'); ?>" class="quick-action-btn">
-					<i class="bi bi-plus-circle-fill"></i> Tambah Produk
-				</a>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mb-2">
-				<a href="<?= base_url('admin/mitra/add'); ?>" class="quick-action-btn">
-					<i class="bi bi-shop"></i> Tambah Mitra
-				</a>
-			</div>
+		<div class="quick-actions-grid">
+			<a href="<?= base_url('admin/petani'); ?>" class="quick-action-btn">
+				<i class="bi bi-person-check-fill"></i>
+				<span class="btn-label">Verifikasi Petani</span>
+			</a>
+			<a href="<?= base_url('admin/transaksi/konfirmasi'); ?>" class="quick-action-btn">
+				<i class="bi bi-credit-card-fill"></i>
+				<span class="btn-label">Konfirmasi Bayar</span>
+			</a>
+			<a href="<?= base_url('admin/laporan'); ?>" class="quick-action-btn">
+				<i class="bi bi-file-earmark-pdf-fill"></i>
+				<span class="btn-label">Buat Laporan</span>
+			</a>
+			<a href="<?= base_url('admin/produk/tambah'); ?>" class="quick-action-btn">
+				<i class="bi bi-plus-circle-fill"></i>
+				<span class="btn-label">Tambah Produk</span>
+			</a>
+			<a href="<?= base_url('admin/mitra/add'); ?>" class="quick-action-btn">
+				<i class="bi bi-shop"></i>
+				<span class="btn-label">Tambah Mitra</span>
+			</a>
 		</div>
 
-		<!-- KPI CARDS -->
-		<div class="row mb-4">
+		<!-- ============================================ -->
+		<!-- KPI CARDS - RAPI PAKAI GRID -->
+		<!-- ============================================ -->
+		<div class="kpi-grid">
 			<!-- Total Pendapatan -->
-			<div class="col-xl-3 col-md-6 mb-4">
-				<div class="stat-box">
-					<div class="stat-decoration"></div>
-					<div class="stat-title">Total Pendapatan</div>
-					<h3 class="stat-num rupiah">Rp <?= number_format($kpi_total_revenue ?? 0, 0, ',', '.'); ?></h3>
-					<div class="stat-change up"><i class="bi bi-arrow-up"></i> Akumulasi seluruh penjualan</div>
-					<div class="stat-badge" style="background: var(--amber-cream); color: white;">
+			<div class="kpi-card">
+				<div class="kpi-decoration"></div>
+				<div class="kpi-top">
+					<span class="kpi-title">Total Pendapatan</span>
+					<div class="kpi-badge amber">
 						<i class="bi bi-currency-dollar"></i>
 					</div>
+				</div>
+				<div class="kpi-number rupiah">Rp <?= number_format($kpi_total_revenue ?? 0, 0, ',', '.'); ?></div>
+				<div class="kpi-footer">
+					<span class="label">Akumulasi seluruh penjualan</span>
 				</div>
 			</div>
 
 			<!-- Total Transaksi -->
-			<div class="col-xl-3 col-md-6 mb-4">
-				<div class="stat-box">
-					<div class="stat-decoration"></div>
-					<div class="stat-title">Total Transaksi</div>
-					<h3 class="stat-num"><?= number_format($kpi_transaksi_aktif ?? 0, 0, ',', '.'); ?></h3>
-					<div class="stat-change up"><i class="bi bi-arrow-up"></i> Semua status pesanan</div>
-					<div class="stat-badge"><i class="bi bi-receipt"></i></div>
+			<div class="kpi-card">
+				<div class="kpi-decoration"></div>
+				<div class="kpi-top">
+					<span class="kpi-title">Total Transaksi</span>
+					<div class="kpi-badge blue">
+						<i class="bi bi-receipt"></i>
+					</div>
+				</div>
+				<div class="kpi-number"><?= number_format($kpi_transaksi_aktif ?? 0, 0, ',', '.'); ?></div>
+				<div class="kpi-footer">
+					<span class="label">Semua status pesanan</span>
 				</div>
 			</div>
 
 			<!-- Petani Aktif -->
-			<div class="col-xl-3 col-md-6 mb-4">
-				<div class="stat-box">
-					<div class="stat-decoration"></div>
-					<div class="stat-title">Petani Aktif</div>
-					<h3 class="stat-num"><?= number_format($kpi_petani_terverifikasi ?? 0, 0, ',', '.'); ?></h3>
-					<div class="stat-change up"><i class="bi bi-arrow-up"></i> Petani terverifikasi</div>
-					<div class="stat-badge"><i class="bi bi-people-fill"></i></div>
+			<div class="kpi-card">
+				<div class="kpi-decoration"></div>
+				<div class="kpi-top">
+					<span class="kpi-title">Petani Aktif</span>
+					<div class="kpi-badge green">
+						<i class="bi bi-people-fill"></i>
+					</div>
+				</div>
+				<div class="kpi-number"><?= number_format($kpi_petani_terverifikasi ?? 0, 0, ',', '.'); ?></div>
+				<div class="kpi-footer">
+					<span class="label">Petani terverifikasi</span>
 				</div>
 			</div>
 
 			<!-- Mitra Aktif -->
-			<div class="col-xl-3 col-md-6 mb-4">
-				<div class="stat-box">
-					<div class="stat-decoration"></div>
-					<div class="stat-title">Mitra Aktif</div>
-					<h3 class="stat-num"><?= number_format($kpi_mitra_cafe ?? 0, 0, ',', '.'); ?></h3>
-					<div class="stat-change up"><i class="bi bi-arrow-up"></i> Kerjasama aktif</div>
-					<div class="stat-badge" style="background: var(--dark-coffee); color: white;">
+			<div class="kpi-card">
+				<div class="kpi-decoration"></div>
+				<div class="kpi-top">
+					<span class="kpi-title">Mitra Aktif</span>
+					<div class="kpi-badge dark">
 						<i class="bi bi-shop"></i>
 					</div>
+				</div>
+				<div class="kpi-number"><?= number_format($kpi_mitra_cafe ?? 0, 0, ',', '.'); ?></div>
+				<div class="kpi-footer">
+					<span class="label">Kerjasama aktif</span>
 				</div>
 			</div>
 		</div>
 
+		<!-- ============================================ -->
 		<!-- GRAFIK & PRODUK TERLARIS -->
+		<!-- ============================================ -->
 		<div class="row">
 			<div class="col-lg-8 mb-4">
 				<div class="custom-card">
@@ -1303,13 +1251,14 @@
 											style="background: <?= $index === 0 ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= $index === 0 ? 'white' : 'var(--text-secondary)'; ?>; width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;">
 											<?= $index + 1; ?>
 										</span>
-										<span style="font-weight:600; font-size:0.85rem;"><?= $product['nama']; ?></span>
+										<span
+											style="font-weight:600; font-size:0.85rem;"><?= $product['nama'] ?? $product['nama_produk'] ?? 'Produk'; ?></span>
 									</div>
 									<div class="text-right">
-										<span style="font-weight:600; font-size:0.85rem;"><?= $product['total_terjual']; ?>
+										<span style="font-weight:600; font-size:0.85rem;"><?= $product['total_terjual'] ?? 0; ?>
 											kg</span>
 										<small class="d-block text-muted" style="font-size:0.7rem;">Rp
-											<?= number_format($product['pendapatan'], 0, ',', '.'); ?></small>
+											<?= number_format($product['pendapatan'] ?? 0, 0, ',', '.'); ?></small>
 									</div>
 								</div>
 							<?php endforeach; ?>
@@ -1321,7 +1270,9 @@
 			</div>
 		</div>
 
+		<!-- ============================================ -->
 		<!-- PESANAN TERBARU & PETANI BARU -->
+		<!-- ============================================ -->
 		<div class="row">
 			<div class="col-lg-6 mb-4">
 				<div class="custom-card">
@@ -1348,8 +1299,11 @@
 												<td><b>#<?= $order['id_transaksi']; ?></b></td>
 												<td><?= $order['metode_bayar'] ?? 'Transfer'; ?></td>
 												<td>Rp <?= number_format($order['total_harga'] ?? 0, 0, ',', '.'); ?></td>
-												<td><span
-														class="status-badge <?= strtolower($order['status_pesanan'] ?? 'pending'); ?>"><?= ucfirst($order['status_pesanan'] ?? 'Pending'); ?></span>
+												<td>
+													<span
+														class="status-badge <?= strtolower($order['status_pesanan'] ?? 'pending'); ?>">
+														<?= ucfirst($order['status_pesanan'] ?? 'Pending'); ?>
+													</span>
 												</td>
 											</tr>
 										<?php endforeach; ?>
@@ -1364,6 +1318,7 @@
 					</div>
 				</div>
 			</div>
+			<!-- PETANI BARU -->
 			<div class="col-lg-6 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1376,7 +1331,7 @@
 							<table class="table table-custom mb-0">
 								<thead>
 									<tr>
-										<th>Nama Petani</th>
+										<th>Nama</th>
 										<th>Status</th>
 										<th>Tgl Daftar</th>
 										<th>Verifikasi</th>
@@ -1386,12 +1341,20 @@
 									<?php if (!empty($petani_baru)): ?>
 										<?php foreach ($petani_baru as $farmer): ?>
 											<tr>
-												<td><b><?= $farmer['nama_petani']; ?></b></td>
-												<td><?= $farmer['status_petani'] == 'Active' ? 'Aktif' : 'Menunggu'; ?></td>
-												<td><?= date('d-m-Y', strtotime($farmer['tanggal_daftar'] ?? date('Y-m-d'))); ?>
+												<td><b><?= $farmer['nama'] ?? $farmer['nama_petani'] ?? '-'; ?></b></td>
+												<td>
+													<?php
+													$status = $farmer['status'] ?? $farmer['status_petani'] ?? 'Pending';
+													echo $status == 'Active' ? 'Aktif' : 'Menunggu';
+													?>
 												</td>
-												<td><span
-														class="status-badge <?= ($farmer['status_petani'] ?? 'Pending') === 'Active' ? 'complete' : 'pending'; ?>"><?= ($farmer['status_petani'] ?? 'Pending') === 'Active' ? 'Terverifikasi' : 'Review'; ?></span>
+												<td><?= date('d-m-Y', strtotime($farmer['created_at'] ?? $farmer['tanggal_daftar'] ?? date('Y-m-d'))); ?>
+												</td>
+												<td>
+													<span
+														class="status-badge <?= ($status == 'Active' || $status == 'verified') ? 'verified' : 'review'; ?>">
+														<?= ($status == 'Active' || $status == 'verified') ? 'Terverifikasi' : 'Review'; ?>
+													</span>
 												</td>
 											</tr>
 										<?php endforeach; ?>
@@ -1408,24 +1371,26 @@
 			</div>
 		</div>
 
-		<!-- SETTING NOTIFIKASI - SESUAI ROLE ADMIN -->
+		<!-- ============================================ -->
+		<!-- SETTING NOTIFIKASI - TANPA LAPORAN BULANAN -->
+		<!-- ============================================ -->
 		<div class="row">
 			<div class="col-12">
 				<div class="custom-card">
 					<div class="card-header-custom">
 						<h6><i class="bi bi-gear-fill text-secondary mr-2"></i> Preferensi Notifikasi</h6>
-						<span class="badge" style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;">Pengaturan</span>
+						<span class="badge"
+							style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;">Pengaturan</span>
 					</div>
 					<div class="card-body-custom">
 						<?php
-						// Default settings untuk Admin
+						// Default settings untuk Admin - TANPA LAPORAN BULANAN
 						$default_settings = [
 							'notif_transaksi' => 1,
 							'notif_pembayaran' => 1,
 							'notif_stok' => 1,
 							'notif_petani' => 1,
 							'notif_kurir' => 1,
-							'notif_laporan' => 0,
 							'notif_sistem' => 1
 						];
 
@@ -1433,12 +1398,12 @@
 						if (!empty($settings)) {
 							foreach ($default_settings as $key => $value) {
 								if (isset($settings[$key])) {
-									$default_settings[$key] = (int)$settings[$key];
+									$default_settings[$key] = (int) $settings[$key];
 								}
 							}
 						}
 						?>
-						<form method="POST" action="<?= base_url('admin/dashboard/settings'); ?>" id="formNotifSetting">
+						<form method="POST" action="<?= base_url('admin/dashboard/settings'); ?>">
 							<div class="row">
 								<div class="col-md-3 col-6 mb-2">
 									<div class="custom-control custom-switch">
@@ -1482,14 +1447,6 @@
 								</div>
 								<div class="col-md-3 col-6 mb-2">
 									<div class="custom-control custom-switch">
-										<input type="checkbox" class="custom-control-input" id="notif_laporan"
-											name="notif_laporan" <?= $default_settings['notif_laporan'] == 1 ? 'checked' : ''; ?>>
-										<label class="custom-control-label" for="notif_laporan"
-											style="font-size:0.85rem;">Laporan Bulanan</label>
-									</div>
-								</div>
-								<div class="col-md-3 col-6 mb-2">
-									<div class="custom-control custom-switch">
 										<input type="checkbox" class="custom-control-input" id="notif_sistem"
 											name="notif_sistem" <?= $default_settings['notif_sistem'] == 1 ? 'checked' : ''; ?>>
 										<label class="custom-control-label" for="notif_sistem"
@@ -1498,7 +1455,8 @@
 								</div>
 							</div>
 							<div class="mt-3 pt-2 border-top" style="border-color: rgba(74,44,17,0.06);">
-								<button type="submit" class="btn" style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
+								<button type="submit" class="btn"
+									style="background: var(--roasted-brown); color: white; border-radius:10px; padding: 8px 24px; font-weight:600; font-size:0.85rem;">
 									<i class="bi bi-save mr-1"></i> Simpan Pengaturan
 								</button>
 							</div>
@@ -1508,212 +1466,229 @@
 			</div>
 		</div>
 
-		<!-- SCRIPTS -->
-		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-		<script>
-			// Sidebar Toggle
-			const sidebar = document.getElementById('sidebarMenu');
-			const overlay = document.getElementById('sidebarOverlay');
-			const toggleBtn = document.getElementById('sidebarToggle');
+	</div>
 
-			function toggleSidebar() {
-				sidebar.classList.toggle('open');
-				overlay.classList.toggle('active');
-				document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+	<!-- SCRIPTS -->
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		// ============================================
+		// 1. SIDEBAR TOGGLE
+		// ============================================
+		const sidebar = document.getElementById('sidebarMenu');
+		const overlay = document.getElementById('sidebarOverlay');
+		const toggleBtn = document.getElementById('sidebarToggle');
+
+		function toggleSidebar() {
+			sidebar.classList.toggle('open');
+			overlay.classList.toggle('active');
+			document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+		}
+
+		if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+		if (overlay) overlay.addEventListener('click', toggleSidebar);
+
+		document.addEventListener('click', function (e) {
+			if (window.innerWidth > 991.98) return;
+			if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
+				if (sidebar.classList.contains('open')) toggleSidebar();
 			}
+		});
 
-			if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
-			if (overlay) overlay.addEventListener('click', toggleSidebar);
+		// ============================================
+		// 2. NOTIFICATION DROPDOWN
+		// ============================================
+		const notifToggle = document.getElementById('notifToggle');
+		const notifDropdown = document.getElementById('notifDropdown');
 
-			document.addEventListener('click', function(e) {
-				if (window.innerWidth > 991.98) return;
-				if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
-					if (sidebar.classList.contains('open')) toggleSidebar();
-				}
+		if (notifToggle) {
+			notifToggle.addEventListener('click', function (e) {
+				e.stopPropagation();
+				notifDropdown.classList.toggle('show');
 			});
+		}
 
-			// Notification Dropdown
-			const notifToggle = document.getElementById('notifToggle');
-			const notifDropdown = document.getElementById('notifDropdown');
-
-			if (notifToggle) {
-				notifToggle.addEventListener('click', function(e) {
-					e.stopPropagation();
-					notifDropdown.classList.toggle('show');
-				});
+		document.addEventListener('click', function (e) {
+			if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
+				notifDropdown.classList.remove('show');
 			}
+		});
 
-			document.addEventListener('click', function(e) {
-				if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
-					notifDropdown.classList.remove('show');
-				}
-			});
-
-			// Mark All Read
-			function markAllRead() {
-				if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
-					$.ajax({
-						url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
-						type: 'POST',
-						dataType: 'json',
-						success: function(response) {
-							if (response.success) location.reload();
-							else alert('Gagal menandai semua notifikasi.');
-						},
-						error: function() {
-							alert('Terjadi kesalahan. Silakan coba lagi.');
-						}
-					});
-				}
-			}
-
-			document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
-				e.preventDefault();
-				markAllRead();
-			});
-
-			// Chart
-			let salesChart;
-
-			function initChart() {
-				const ctx = document.getElementById('salesChart')?.getContext('2d');
-				if (!ctx) return;
-
-				const chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
-				const chartData = <?= isset($grafik_penjualan['values']) ? json_encode($grafik_penjualan['values']) : json_encode(array_fill(0, 12, 0)); ?>;
-
-				salesChart = new Chart(ctx, {
-					type: 'line',
-					data: {
-						labels: chartLabels,
-						datasets: [{
-							label: 'Penjualan (Kg)',
-							data: chartData,
-							borderColor: '#E6A15C',
-							backgroundColor: 'rgba(230, 161, 92, 0.08)',
-							fill: true,
-							tension: 0.4,
-							pointBackgroundColor: '#E6A15C',
-							pointBorderColor: '#FFFFFF',
-							pointBorderWidth: 2,
-							pointRadius: 4,
-							pointHoverRadius: 7,
-							borderWidth: 2.5
-						}]
+		// ============================================
+		// 3. MARK ALL READ
+		// ============================================
+		function markAllRead() {
+			if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
+				$.ajax({
+					url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
+					type: 'POST',
+					dataType: 'json',
+					success: function (response) {
+						if (response.success) location.reload();
+						else alert('Gagal menandai semua notifikasi.');
 					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: false,
-						plugins: {
-							legend: {
-								display: false
-							},
-							tooltip: {
-								backgroundColor: '#2C1808',
-								titleColor: '#E6A15C',
-								bodyColor: '#FAF6F0',
-								cornerRadius: 8,
-								padding: 10,
-								callbacks: {
-									label: function(context) {
-										return context.parsed.y.toLocaleString('id-ID') + ' kg';
-									}
-								}
-							}
-						},
-						scales: {
-							y: {
-								beginAtZero: true,
-								grid: {
-									color: 'rgba(74, 44, 17, 0.06)',
-									drawBorder: false
-								},
-								ticks: {
-									font: {
-										size: 10,
-										family: 'Plus Jakarta Sans'
-									},
-									color: '#70655E',
-									stepSize: 50,
-									callback: function(value) {
-										return value.toLocaleString('id-ID') + ' kg';
-									}
-								}
-							},
-							x: {
-								grid: {
-									display: false
-								},
-								ticks: {
-									font: {
-										size: 10,
-										family: 'Plus Jakarta Sans'
-									},
-									color: '#70655E'
-								}
-							}
-						},
-						interaction: {
-							intersect: false,
-							mode: 'index'
-						}
+					error: function () {
+						alert('Terjadi kesalahan. Silakan coba lagi.');
 					}
 				});
 			}
+		}
 
-			function refreshChart() {
-				if (salesChart) {
-					$.get('<?= base_url('admin/dashboard/get_chart_data'); ?>', function(data) {
-						if (data.success) {
-							salesChart.data.datasets[0].data = data.values;
-							salesChart.update();
+		document.getElementById('markAllReadBtn')?.addEventListener('click', function (e) {
+			e.preventDefault();
+			markAllRead();
+		});
+
+		// ============================================
+		// 4. CHART
+		// ============================================
+		let salesChart;
+
+		function initChart() {
+			const ctx = document.getElementById('salesChart')?.getContext('2d');
+			if (!ctx) return;
+
+			const chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+			const chartData = <?= isset($grafik_penjualan['values']) ? json_encode($grafik_penjualan['values']) : json_encode(array_fill(0, 12, 0)); ?>;
+
+			salesChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: chartLabels,
+					datasets: [{
+						label: 'Penjualan (Kg)',
+						data: chartData,
+						borderColor: '#E6A15C',
+						backgroundColor: 'rgba(230, 161, 92, 0.08)',
+						fill: true,
+						tension: 0.4,
+						pointBackgroundColor: '#E6A15C',
+						pointBorderColor: '#FFFFFF',
+						pointBorderWidth: 2,
+						pointRadius: 4,
+						pointHoverRadius: 7,
+						borderWidth: 2.5
+					}]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: false
+						},
+						tooltip: {
+							backgroundColor: '#2C1808',
+							titleColor: '#E6A15C',
+							bodyColor: '#FAF6F0',
+							cornerRadius: 8,
+							padding: 10,
+							callbacks: {
+								label: function (context) {
+									return context.parsed.y.toLocaleString('id-ID') + ' kg';
+								}
+							}
 						}
-					});
+					},
+					scales: {
+						y: {
+							beginAtZero: true,
+							grid: {
+								color: 'rgba(74, 44, 17, 0.06)',
+								drawBorder: false
+							},
+							ticks: {
+								font: {
+									size: 10,
+									family: 'Plus Jakarta Sans'
+								},
+								color: '#70655E',
+								stepSize: 50,
+								callback: function (value) {
+									return value.toLocaleString('id-ID') + ' kg';
+								}
+							}
+						},
+						x: {
+							grid: {
+								display: false
+							},
+							ticks: {
+								font: {
+									size: 10,
+									family: 'Plus Jakarta Sans'
+								},
+								color: '#70655E'
+							}
+						}
+					},
+					interaction: {
+						intersect: false,
+						mode: 'index'
+					}
 				}
-			}
-
-			document.addEventListener('DOMContentLoaded', function() {
-				initChart();
 			});
+		}
 
-			// Current DateTime
-			function updateDateTime() {
-				const now = new Date();
-				const options = {
-					weekday: 'long',
-					year: 'numeric',
-					month: 'long',
-					day: 'numeric',
-					hour: '2-digit',
-					minute: '2-digit'
-				};
-				const el = document.getElementById('currentDateTime');
-				if (el) el.textContent = now.toLocaleDateString('id-ID', options);
-			}
-			updateDateTime();
-			setInterval(updateDateTime, 60000);
-
-			// Switch handling
-			document.querySelectorAll('.custom-control-input').forEach(function(switchEl) {
-				switchEl.addEventListener('change', function() {
-					const label = this.closest('.custom-control').querySelector('.custom-control-label');
-					const setting = label ? label.textContent.trim() : 'Unknown';
-					console.log('Notifikasi ' + setting + (this.checked ? ' diaktifkan' : ' dinonaktifkan'));
+		function refreshChart() {
+			if (salesChart) {
+				$.get('<?= base_url('admin/dashboard/get_chart_data'); ?>', function (data) {
+					if (data.success) {
+						salesChart.data.datasets[0].data = data.values;
+						salesChart.update();
+					}
 				});
-			});
+			}
+		}
 
-			console.log('✅ Dashboard Admin siap digunakan!');
-			console.log('📋 Fitur yang tersedia:');
-			console.log('   - KPI Cards (M11-F01) - Data Real');
-			console.log('   - Grafik Penjualan (M10-F02) - Data Real');
-			console.log('   - Produk Terlaris (M10-F04) - Data Real');
-			console.log('   - Pesanan Terbaru (M11-F01) - Data Real');
-			console.log('   - Petani Baru (M11-F01) - Data Real');
-			console.log('   - Quick Action (M11-F04)');
-			console.log('   - Notifikasi Real-time (M11-F01)');
-			console.log('   - Setting Notifikasi (M11-F03) - Sesuai Role Admin');
-		</script>
+		// ============================================
+		// 5. CURRENT DATE TIME
+		// ============================================
+		function updateDateTime() {
+			const now = new Date();
+			const options = {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit'
+			};
+			const el = document.getElementById('currentDateTime');
+			if (el) el.textContent = now.toLocaleDateString('id-ID', options);
+		}
+		updateDateTime();
+		setInterval(updateDateTime, 60000);
+
+		// ============================================
+		// 6. SWITCH HANDLING
+		// ============================================
+		document.querySelectorAll('.custom-control-input').forEach(function (switchEl) {
+			switchEl.addEventListener('change', function () {
+				const label = this.closest('.custom-control').querySelector('.custom-control-label');
+				const setting = label ? label.textContent.trim() : 'Unknown';
+				console.log('Notifikasi ' + setting + (this.checked ? ' diaktifkan' : ' dinonaktifkan'));
+			});
+		});
+
+		// ============================================
+		// 7. INITIALIZE
+		// ============================================
+		document.addEventListener('DOMContentLoaded', function () {
+			initChart();
+		});
+
+		console.log('✅ Dashboard Admin siap digunakan!');
+		console.log('📋 Fitur yang tersedia:');
+		console.log('   - KPI Cards (M11-F01) - Data Real');
+		console.log('   - Grafik Penjualan (M10-F02) - Data Real');
+		console.log('   - Produk Terlaris (M10-F04) - Data Real');
+		console.log('   - Pesanan Terbaru (M11-F01) - Data Real');
+		console.log('   - Petani Baru (M11-F01) - Data Real');
+		console.log('   - Quick Action (M11-F04) - 5 Aksi Rapi');
+		console.log('   - Notifikasi Real-time (M11-F01)');
+		console.log('   - Setting Notifikasi (M11-F03) - 6 Opsi (Tanpa Laporan Bulanan)');
+	</script>
 </body>
 
 </html>
