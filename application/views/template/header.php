@@ -526,7 +526,7 @@ if (!isset($unread_count) || !isset($notifikasi)) {
                     <a href="<?= base_url('admin/mitra'); ?>"><i class="bi bi-shop"></i>Manajemen Mitra</a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/laporan') !== false ? 'active' : '' ?>">
-                    <a href="<?= base_url('admin/laporan'); ?>"><i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan & Analytics</a>
+                    <a href="<?= base_url('admin/laporan'); ?>"><i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan</a>
                 </li>
 
             <?php elseif ($role == 'Petani'): ?>
