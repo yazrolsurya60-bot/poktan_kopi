@@ -21,14 +21,20 @@ class Transaksi extends CI_Controller {
     }
 
     // ============================================================
-    // 🔥 FIX: HISTORY - PAKAI METHOD DENGAN PRODUK LIST
+    // HISTORY - DENGAN NOTIFIKASI
     // ============================================================
     public function history() {
         $data['title'] = 'Riwayat Transaksi';
         $id_user = $this->session->userdata('id_user');
         
+        // 🔴 AMBIL DATA NOTIFIKASI
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        
+        // AMBIL DATA TRANSAKSI
         $data['transaksi'] = $this->Transaksi_model->get_transaksi_by_user_with_products($id_user);
         
+        // HITUNG STATISTIK
         $data['total_transaksi'] = count($data['transaksi']);
         $data['total_selesai'] = 0;
         $data['total_pending'] = 0;
@@ -69,10 +75,15 @@ class Transaksi extends CI_Controller {
     }
 
     // ============================================================
-    // 🔥 FIX: DETAIL TRANSAKSI
+    // DETAIL TRANSAKSI - DENGAN NOTIFIKASI
     // ============================================================
     public function detail($id_transaksi) {
         $data['title'] = 'Detail Transaksi';
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL DATA NOTIFIKASI
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
         
         // Ambil data transaksi
         $data['transaksi'] = $this->Transaksi_model->get_transaksi($id_transaksi);
@@ -81,8 +92,8 @@ class Transaksi extends CI_Controller {
             show_404();
         }
         
-        $id_user = $data['transaksi']['id_user'] ?? null;
-        if ($id_user != $this->session->userdata('id_user')) {
+        $id_user_transaksi = $data['transaksi']['id_user'] ?? null;
+        if ($id_user_transaksi != $id_user) {
             show_404();
         }
         
@@ -137,18 +148,23 @@ class Transaksi extends CI_Controller {
     }
 
     // ============================================================
-    // INVOICE
+    // INVOICE - DENGAN NOTIFIKASI
     // ============================================================
     public function invoice($id_transaksi) {
         $data['title'] = 'Invoice';
+        $id_user = $this->session->userdata('id_user');
+        
+        // 🔴 AMBIL DATA NOTIFIKASI
+        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
         
         $data['transaksi'] = $this->Transaksi_model->get_transaksi($id_transaksi);
         if (!$data['transaksi']) {
             show_404();
         }
         
-        $id_user = $data['transaksi']['id_user'] ?? null;
-        if ($id_user != $this->session->userdata('id_user')) {
+        $id_user_transaksi = $data['transaksi']['id_user'] ?? null;
+        if ($id_user_transaksi != $id_user) {
             show_404();
         }
         

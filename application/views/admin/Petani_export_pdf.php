@@ -155,23 +155,35 @@
             <?php $no = 1; foreach ($daftar_petani as $p): ?>
                 <?php
                     // Hanya 3 status resmi sesuai modul: Active / Inactive / Suspended
-                    $stat = strtolower($p['status_petani']);
+                    // Semua field di-fallback dulu (?? '') supaya aman kalau data null/kosong,
+                    // biar tidak muncul PHP warning yang bisa merusak HTML sebelum di-render Dompdf.
+                    $status_petani = $p['status_petani'] ?? '';
+                    $stat = strtolower($status_petani);
                     if ($stat == 'active') $badge = 'badge-active';
                     elseif ($stat == 'suspended') $badge = 'badge-suspended';
                     elseif ($stat == 'inactive') $badge = 'badge-inactive';
                     else $badge = 'badge-other';
+
+                    $nama_petani    = $p['nama_petani'] ?? '-';
+                    $nik            = $p['nik'] ?? '';
+                    $no_hp          = $p['no_hp'] ?? '';
+                    $email          = $p['email'] ?? '';
+                    $alamat         = $p['alamat'] ?? '';
+                    $tanggal_raw    = $p['tanggal_daftar'] ?? '';
+                    $tanggal_ts     = !empty($tanggal_raw) ? strtotime($tanggal_raw) : false;
+                    $tanggal_daftar = $tanggal_ts ? date('d/m/Y', $tanggal_ts) : '-';
                 ?>
                 <tr>
                     <td><?= $no++; ?></td>
-                    <td><strong><?= htmlspecialchars($p['nama_petani']); ?></strong></td>
-                    <td><?= htmlspecialchars($p['nik'] ?: '-'); ?></td>
-                    <td><?= htmlspecialchars($p['no_hp'] ?: '-'); ?></td>
-                    <td><?= htmlspecialchars($p['email'] ?: '-'); ?></td>
-                    <td><?= htmlspecialchars($p['alamat'] ?: '-'); ?></td>
+                    <td><strong><?= htmlspecialchars($nama_petani); ?></strong></td>
+                    <td><?= htmlspecialchars($nik ?: '-'); ?></td>
+                    <td><?= htmlspecialchars($no_hp ?: '-'); ?></td>
+                    <td><?= htmlspecialchars($email ?: '-'); ?></td>
+                    <td><?= htmlspecialchars($alamat ?: '-'); ?></td>
                     <td style="text-align: center;">
-                        <span class="badge-status <?= $badge; ?>"><?= htmlspecialchars($p['status_petani']); ?></span>
+                        <span class="badge-status <?= $badge; ?>"><?= htmlspecialchars($status_petani ?: '-'); ?></span>
                     </td>
-                    <td><?= date('d/m/Y', strtotime($p['tanggal_daftar'])); ?></td>
+                    <td><?= $tanggal_daftar; ?></td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
@@ -188,5 +200,10 @@
     </tr>
 </table>
 
+<script>
+    window.onload = function() {
+        window.print();
+    };
+</script>
 </body>
 </html>

@@ -16,6 +16,8 @@ class Laporan extends CI_Controller {
                 redirect('petani/dashboard');
             } elseif ($current_role == 'Pembeli') {
                 redirect('pembeli/dashboard');
+            } elseif ($current_role == 'Kurir') {
+                redirect('kurir/tracking');
             } else {
                 $this->session->sess_destroy();
                 redirect('auth/login');
@@ -44,6 +46,7 @@ class Laporan extends CI_Controller {
         $data['chart_penjualan'] = $this->Laporan_model->get_chart_penjualan_bulanan();
         $data['chart_produk']    = $this->Laporan_model->get_chart_produk_terlaris();
         $data['chart_status']    = $this->Laporan_model->get_chart_status_transaksi();
+        $data['produk_terlaris'] = $this->Laporan_model->get_produk_terlaris(0);
 
         $data['filter_status'] = '';
 
@@ -69,6 +72,7 @@ class Laporan extends CI_Controller {
         $data['chart_penjualan'] = $this->Laporan_model->get_chart_penjualan_bulanan();
         $data['chart_produk']    = $this->Laporan_model->get_chart_produk_terlaris();
         $data['chart_status']    = $this->Laporan_model->get_chart_status_transaksi();
+        $data['produk_terlaris'] = $this->Laporan_model->get_produk_terlaris(0);
 
         $data['filter_status'] = $filter['status'];
         $this->load->view('admin/v_laporan', $data);
@@ -125,18 +129,18 @@ class Laporan extends CI_Controller {
         $data['admin'] = $this->session->userdata('nama') ?? 'Admin';
 
         switch ($tab) {
-            case 'petani':   $data['rows'] = $this->Laporan_model->get_laporan_petani();   break;
-            case 'produk':   $data['rows'] = $this->Laporan_model->get_laporan_produk();   break;
+            case 'petani':   $data['rows'] = $this->Laporan_model->get_laporan_petani($poktan);   break;
+            case 'produk':   $data['rows'] = $this->Laporan_model->get_laporan_produk($poktan);   break;
             case 'keuangan':
-                $keu = $this->Laporan_model->get_laporan_keuangan();
+                $keu = $this->Laporan_model->get_laporan_keuangan($poktan);
                 $data['rows']    = $keu['detail'];
                 $data['summary'] = $keu;
                 break;
-            case 'panen':    $data['rows'] = $this->Laporan_model->get_laporan_panen();    break;
-            case 'mitra':    $data['rows'] = $this->Laporan_model->get_laporan_mitra();    break;
-            default:         $data['rows'] = $this->Laporan_model->get_laporan_penjualan();break;
+            case 'panen':    $data['rows'] = $this->Laporan_model->get_laporan_panen($poktan);    break;
+            case 'mitra':    $data['rows'] = $this->Laporan_model->get_laporan_mitra($poktan);    break;
+            default:         $data['rows'] = $this->Laporan_model->get_laporan_penjualan([], $poktan);break;
         }
-        $data['kpi'] = $this->Laporan_model->get_kpi_laporan();
+        $data['kpi'] = $this->Laporan_model->get_kpi_laporan($poktan);
         $this->load->view('admin/v_laporan_print', $data);
     }
 

@@ -284,7 +284,7 @@
 			overflow-y: auto;
 		}
 
-		.notif-item-drop {
+		.notif-item {
 			padding: 12px 18px;
 			border-bottom: 1px solid rgba(74, 44, 17, 0.04);
 			display: flex;
@@ -296,13 +296,13 @@
 			color: inherit;
 		}
 
-		.notif-item-drop:hover {
+		.notif-item:hover {
 			background: var(--bg-cream);
 			text-decoration: none;
 			color: inherit;
 		}
 
-		.notif-item-drop .notif-icon {
+		.notif-item .notif-icon {
 			width: 36px;
 			height: 36px;
 			min-width: 36px;
@@ -313,24 +313,44 @@
 			font-size: 0.9rem;
 		}
 
-		.notif-icon.success {
+		.notif-item .notif-icon.success {
 			background: #D1FAE5;
 			color: #065F46;
 		}
 
-		.notif-icon.warning {
+		.notif-item .notif-icon.warning {
 			background: #FEF3C7;
 			color: #92400E;
 		}
 
-		.notif-icon.info {
+		.notif-item .notif-icon.info {
 			background: #DBEAFE;
 			color: #1E40AF;
 		}
 
-		.notif-icon.danger {
+		.notif-item .notif-icon.danger {
 			background: #FEE2E2;
 			color: #991B1B;
+		}
+
+		.notif-item .notif-text {
+			flex: 1;
+			font-size: 0.85rem;
+		}
+
+		.notif-item .notif-text .notif-time {
+			font-size: 0.7rem;
+			color: var(--text-secondary);
+			display: block;
+			margin-top: 2px;
+		}
+
+		.notif-item.unread {
+			background: rgba(230, 161, 92, 0.05);
+		}
+
+		.notif-item.unread .notif-text {
+			font-weight: 600;
 		}
 
 		/* --- KPI STAT BOX --- */
@@ -897,80 +917,50 @@
 						<i class="bi bi-grid-1x2-fill"></i>Dashboard
 					</a>
 				</li>
-				<!-- MANAJEMEN USER - Badge User Baru -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/user'); ?>">
 						<i class="bi bi-people-fill"></i>Manajemen User
-						<?php if (isset($user_baru) && $user_baru > 0): ?>
-							<span class="menu-badge" style="background: #EF4444; color: white;"><?= $user_baru; ?></span>
-						<?php endif; ?>
 					</a>
 				</li>
-
-				<!-- DATA PETANI - Badge Petani Belum Diverifikasi -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/petani'); ?>">
 						<i class="bi bi-person-badge-fill"></i>Data Petani
-						<?php if (isset($petani_baru_count) && $petani_baru_count > 0): ?>
-							<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $petani_baru_count; ?></span>
-						<?php endif; ?>
 					</a>
 				</li>
-
-				<!-- MANAJEMEN LAHAN -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/lahan'); ?>">
 						<i class="bi bi-map-fill"></i>Manajemen Lahan
 					</a>
 				</li>
-
-				<!-- MANAJEMEN PANEN -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/panen'); ?>">
 						<i class="bi bi-tree-fill"></i>Manajemen Panen
 					</a>
 				</li>
-
-				<!-- MANAJEMEN PRODUK -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/produk'); ?>">
 						<i class="bi bi-box-seam-fill"></i>Manajemen Produk
 					</a>
 				</li>
-
-				<!-- TRANSAKSI - Badge Pending -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/transaksi'); ?>">
 						<i class="bi bi-wallet2"></i>Transaksi
-						<?php if (isset($transaksi_pending) && $transaksi_pending > 0): ?>
-							<span class="menu-badge" style="background: #EF4444; color: white;"><?= $transaksi_pending; ?></span>
-						<?php endif; ?>
 					</a>
 				</li>
-
-				<!-- MANAJEMEN KURIR -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/kurir'); ?>">
 						<i class="bi bi-truck"></i>Manajemen Kurir
 					</a>
 				</li>
-
-				<!-- MANAJEMEN MITRA - Badge Mitra Baru -->
 				<li class="menu-item">
 					<a href="<?= base_url('admin/mitra'); ?>">
 						<i class="bi bi-shop"></i>Manajemen Mitra
-						<?php if (isset($mitra_baru) && $mitra_baru > 0): ?>
-							<span class="menu-badge" style="background: #F59E0B; color: white;"><?= $mitra_baru; ?></span>
-						<?php endif; ?>
 					</a>
-				</li>
-
-				<!-- TRACKING PENGIRIMAN -->
-				<li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
-					<a href="<?= base_url('admin/tracking'); ?>">
-						<i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
-					</a>
-				</li>
+					<li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+						<a href="<?= base_url('admin/tracking'); ?>">
+							<i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman
+						</a>
+					</li>
 				<li class="menu-item active">
 					<a href="<?= base_url('admin/laporan'); ?>">
 						<i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan
@@ -1010,13 +1000,13 @@
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownPdfBtn" style="min-width:230px; border-radius:10px; box-shadow:0 8px 24px rgba(44,24,8,0.15); border:none; padding:8px;">
 						<div style="font-size:0.72rem; font-weight:700; color:#70655E; text-transform:uppercase; letter-spacing:0.5px; padding:4px 12px 8px;">Pilih Kelompok Tani</div>
 						<a class="dropdown-item pdf-poktan-link" href="#" data-poktan="1"
-							style="border-radius:8px; font-size:0.83rem; padding:8px 12px;">
+						   style="border-radius:8px; font-size:0.83rem; padding:8px 12px;">
 							<i class="bi bi-geo-alt-fill mr-1" style="color:#8B4513;"></i>
 							<b>Kel. Tani Harum Manis</b><br>
 							<small style="color:#888; margin-left:18px;">Desa Sempadian, Tekarang</small>
 						</a>
 						<a class="dropdown-item pdf-poktan-link" href="#" data-poktan="2"
-							style="border-radius:8px; font-size:0.83rem; padding:8px 12px; margin-top:4px;">
+						   style="border-radius:8px; font-size:0.83rem; padding:8px 12px; margin-top:4px;">
 							<i class="bi bi-geo-alt-fill mr-1" style="color:#8B4513;"></i>
 							<b>Kel. Tani Batu Layar Sejahtera</b><br>
 							<small style="color:#888; margin-left:18px;">Desa Sendoyan, Sejangkung</small>
@@ -1764,6 +1754,9 @@
 							cornerRadius: 8,
 							callbacks: {
 								label: function(ctx) {
+									if (ctx.label === 'Belum Ada Penjualan') {
+										return ctx.label;
+									}
 									return ctx.label + ': ' + ctx.parsed + ' kg';
 								}
 							}
@@ -1908,8 +1901,8 @@
 			el.addEventListener('click', function(e) {
 				e.preventDefault();
 				const poktan = this.getAttribute('data-poktan');
-				const tab = this.getAttribute('data-tab') || 'penjualan';
-				const url = '<?= base_url('admin/laporan/print_pdf'); ?>?tab=' + tab + '&poktan=' + poktan;
+				const tab    = this.getAttribute('data-tab') || 'penjualan';
+				const url    = '<?= base_url('admin/laporan/print_pdf'); ?>?tab=' + tab + '&poktan=' + poktan;
 				window.open(url, '_blank');
 			});
 		});

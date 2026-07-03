@@ -29,9 +29,10 @@ class Lahan extends CI_Controller {
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
         $data['role'] = 'Admin';
         
+        // 🔄 REVISI: Mengubah 'lokasi' menjadi pencarian universal 'keyword'
         $filters = [
             'status_lahan' => $this->input->get('status_lahan'),
-            'lokasi' => $this->input->get('lokasi')
+            'keyword'      => $this->input->get('keyword')
         ];
 
         $data['title'] = "Panel Admin: Data Lahan Kopi";

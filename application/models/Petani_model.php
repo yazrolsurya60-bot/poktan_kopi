@@ -7,116 +7,156 @@ class Petani_model extends CI_Model {
     protected $table_wilayah = 'tb_wilayah';
     protected $table_petani_wilayah = 'tb_petani_wilayah';
 
-    // Mengambil daftar petani dengan penanganan filter yang lebih aman
-    public function get_daftar_petani($status = null, $id_wilayah = null) {
-        $this->db->select($this->table . '.*');
-        $this->db->from($this->table);
-        $this->db->where('is_deleted', 0);
-        
-        // Cek jika status ada dan bukan string kosong
-        if (!empty($status)) {
-            $this->db->where('status_petani', $status);
-        }
-
-        // Filter berdasarkan wilayah (Sempadian / Sendoyan / dll)
-        if (!empty($id_wilayah)) {
-            $this->db->join($this->table_petani_wilayah . ' pwf', 'pwf.id_petani = ' . $this->table . '.id_petani');
-            $this->db->where('pwf.id_wilayah', $id_wilayah);
-            $this->db->group_by($this->table . '.id_petani');
-        }
-        
-        // Urutkan terbaru di atas (opsional tapi disarankan untuk admin)
-        $this->db->order_by('id_petani', 'DESC');
-        
-        $daftar = $this->db->get()->result_array();
-
-        // Lampirkan daftar wilayah untuk masing-masing petani (1 query tambahan, lalu mapping di PHP)
-        if (!empty($daftar)) {
-            $ids = array_column($daftar, 'id_petani');
-            $this->db->select('pw.id_petani, w.id_wilayah, w.nama_wilayah');
-            $this->db->from($this->table_petani_wilayah . ' pw');
-            $this->db->join($this->table_wilayah . ' w', 'w.id_wilayah = pw.id_wilayah');
-            $this->db->where_in('pw.id_petani', $ids);
-            $rows = $this->db->get()->result_array();
-
-            $map = [];
-            foreach ($rows as $r) {
-                $map[$r['id_petani']][] = $r;
-            }
-
-            foreach ($daftar as &$p) {
-                $p['wilayah'] = $map[$p['id_petani']] ?? [];
-            }
-        }
-
-        return $daftar;
+    public function __construct() {
+        parent::__construct();
+        $this->load->database();
     }
 
-    // Mengambil 1 data petani spesifik dengan pengecekan
+    // ============================================
+    // GET PETANI BARU - DARI TB_USER (KARENA TB_PETANI KOSONG)
+    // ============================================
+    public function get_petani_baru($limit = 5) {
+        // 🔴 AMBIL DARI TB_USER DULU (karena tb_petani kosong)
+        $this->db->select('
+            id_user as id_petani,
+            nama as nama_petani,
+            status,
+            created_at as tanggal_daftar,
+            no_hp,
+            email,
+            is_verified
+        ');
+        $this->db->from('tb_user');
+        $this->db->where('role', 'Petani');
+        $this->db->where('status', 'Pending');
+        $this->db->order_by('created_at', 'DESC');
+        $this->db->limit($limit);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        
+        // 🔴 FALLBACK: Jika tidak ada, ambil semua petani
+        $this->db->select('
+            id_user as id_petani,
+            nama as nama_petani,
+            status,
+            created_at as tanggal_daftar,
+            no_hp,
+            email,
+            is_verified
+        ');
+        $this->db->from('tb_user');
+        $this->db->where('role', 'Petani');
+        $this->db->order_by('created_at', 'DESC');
+        $this->db->limit($limit);
+        $query = $this->db->get();
+        
+        return $query->result_array();
+    }
+
+    // ============================================
+    // HITUNG PETANI BELUM DIVERIFIKASI
+    // ============================================
+    public function count_petani_pending() {
+        // 🔴 HITUNG DARI TB_USER
+        $this->db->where('role', 'Petani');
+        $this->db->where('status', 'Pending');
+        return $this->db->count_all_results('tb_user');
+    }
+
+    // ============================================
+    // HITUNG PETANI AKTIF (TERVERIFIKASI)
+    // ============================================
+    public function count_petani_aktif() {
+        // 🔴 HITUNG DARI TB_USER
+        $this->db->where('role', 'Petani');
+        $this->db->where('status', 'Active');
+        return $this->db->count_all_results('tb_user');
+    }
+
+    // ============================================
+    // GET ALL PETANI - DARI TB_USER
+    // ============================================
+    public function get_daftar_petani($status = null, $id_wilayah = null) {
+        $this->db->select('
+            id_user as id_petani,
+            nama as nama_petani,
+            status,
+            created_at as tanggal_daftar,
+            no_hp,
+            email,
+            is_verified
+        ');
+        $this->db->from('tb_user');
+        $this->db->where('role', 'Petani');
+        
+        if (!empty($status)) {
+            $this->db->where('status', $status);
+        }
+        
+        $this->db->order_by('created_at', 'DESC');
+        return $this->db->get()->result_array();
+    }
+
+    // ============================================
+    // GET PETANI BY ID - DARI TB_USER
+    // ============================================
     public function get_petani_by_id($id) {
         if (empty($id)) {
             return false;
         }
-        $petani = $this->db->get_where($this->table, ['id_petani' => $id])->row_array();
-        if ($petani) {
-            $petani['wilayah'] = $this->get_wilayah_by_petani($id);
-        }
-        return $petani;
+        $this->db->where('id_user', $id);
+        $this->db->where('role', 'Petani');
+        return $this->db->get('tb_user')->row_array();
     }
 
-    // Mengambil semua master wilayah (untuk checkbox di form tambah/edit)
+    // ============================================
+    // GET WILAYAH (jika ada)
+    // ============================================
     public function get_all_wilayah() {
-        return $this->db->order_by('nama_wilayah', 'ASC')->get($this->table_wilayah)->result_array();
-    }
-
-    // Mengambil wilayah yang sedang dipilih oleh seorang petani (lengkap dengan alamat wilayah)
-    public function get_wilayah_by_petani($id_petani) {
-        $this->db->select('w.id_wilayah, w.nama_wilayah, w.alamat_wilayah');
-        $this->db->from($this->table_petani_wilayah . ' pw');
-        $this->db->join($this->table_wilayah . ' w', 'w.id_wilayah = pw.id_wilayah');
-        $this->db->where('pw.id_petani', $id_petani);
-        return $this->db->get()->result_array();
-    }
-
-    // Menyimpan ulang relasi petani <-> wilayah (dipakai saat tambah & edit)
-    // $id_wilayah_list adalah array berisi id_wilayah yang dicentang, boleh lebih dari 1
-    public function simpan_wilayah_petani($id_petani, $id_wilayah_list) {
-        $this->db->where('id_petani', $id_petani);
-        $this->db->delete($this->table_petani_wilayah);
-
-        if (!empty($id_wilayah_list)) {
-            $insert_batch = [];
-            foreach ($id_wilayah_list as $id_wilayah) {
-                $insert_batch[] = [
-                    'id_petani'  => $id_petani,
-                    'id_wilayah' => $id_wilayah,
-                ];
-            }
-            $this->db->insert_batch($this->table_petani_wilayah, $insert_batch);
+        if ($this->db->table_exists('tb_wilayah')) {
+            return $this->db->order_by('nama_wilayah', 'ASC')->get('tb_wilayah')->result_array();
         }
+        return [];
     }
 
-    // Memasukkan data pendaftaran petani baru
+    public function get_wilayah_by_petani($id_petani) {
+        return [];
+    }
+
+    public function simpan_wilayah_petani($id_petani, $id_wilayah_list) {
+        // Tidak digunakan karena pakai tb_user
+        return true;
+    }
+
+    // ============================================
+    // CRUD PETANI - KE TB_USER
+    // ============================================
     public function insert_petani($data) {
-        $this->db->insert($this->table, $data);
+        // Pastikan role = Petani
+        $data['role'] = 'Petani';
+        $this->db->insert('tb_user', $data);
         return $this->db->insert_id();
     }
 
-    // Mengubah data petani
     public function update_petani($id, $data) {
         if (empty($id)) {
             return false;
         }
-        $this->db->where('id_petani', $id);
-        return $this->db->update($this->table, $data);
+        $this->db->where('id_user', $id);
+        $this->db->where('role', 'Petani');
+        return $this->db->update('tb_user', $data);
     }
 
-    // Menghapus baris data petani (Soft Delete)
     public function delete_petani($id) {
         if (empty($id)) {
             return false;
         }
-        $this->db->where('id_petani', $id);
-        return $this->db->update($this->table, ['is_deleted' => 1]);
+        $this->db->where('id_user', $id);
+        $this->db->where('role', 'Petani');
+        return $this->db->update('tb_user', ['status' => 'Inactive']);
     }
 }
+?>

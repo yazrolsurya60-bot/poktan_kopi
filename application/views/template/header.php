@@ -177,12 +177,17 @@
             border-bottom: 1px solid rgba(74, 44, 17, 0.08);
             padding-bottom: 20px;
             margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .page-header h2 {
             font-weight: 700;
             color: var(--dark-coffee);
             letter-spacing: -0.02em;
+            margin-bottom: 0;
         }
 
         .page-header .subtitle {
@@ -192,13 +197,74 @@
         }
 
         /* ============================================
+           HEADER RIGHT
+           ============================================ */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* ============================================
+           USER AVATAR - RAPI UNTUK PEMBELI
+           ============================================ */
+        .user-avatar-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px 6px 10px;
+            border-radius: 50px;
+            background: var(--card-white);
+            border: 1px solid rgba(74, 44, 17, 0.06);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .user-avatar-wrapper:hover {
+            box-shadow: var(--shadow-soft);
+            border-color: var(--amber-cream);
+        }
+
+        .user-avatar-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--amber-cream);
+        }
+
+        .user-avatar-icon {
+            font-size: 1.6rem;
+            color: var(--amber-cream);
+        }
+
+        .user-avatar-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--dark-coffee);
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-avatar-role {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            background: var(--bg-cream);
+            padding: 1px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* ============================================
            NOTIFICATION BELL
            ============================================ */
         .notif-btn {
             position: relative;
             background: var(--card-white);
             border: 1px solid rgba(74, 44, 17, 0.06);
-            border-radius: 12px;
+            border-radius: 50px;
             padding: 8px 14px;
             color: var(--dark-coffee);
             transition: var(--transition-smooth);
@@ -344,7 +410,7 @@
         }
 
         /* ============================================
-           STATUS BADGE (konsisten dengan dashboard)
+           STATUS BADGE
            ============================================ */
         .status-badge {
             padding: 4px 12px;
@@ -361,6 +427,19 @@
         .status-badge.delivery { background: #EDE9FE; color: #5B21B6; }
         .status-badge.complete { background: #D1FAE5; color: #065F46; }
         .status-badge.cancelled { background: #FEE2E2; color: #991B1B; }
+
+        /* ============================================
+           SIDEBAR OVERLAY
+           ============================================ */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 99;
+        }
+
+        .sidebar-overlay.active { display: block; }
 
         /* ============================================
            RESPONSIVE
@@ -383,6 +462,16 @@
                 width: calc(100vw - 32px);
                 right: -60px;
             }
+            .header-right {
+                gap: 10px;
+            }
+            .user-avatar-name {
+                max-width: 60px;
+                font-size: 0.75rem;
+            }
+            .user-avatar-role {
+                display: none;
+            }
         }
 
         @media (max-width: 575.98px) {
@@ -391,23 +480,22 @@
                 width: calc(100vw - 24px);
                 right: -70px;
             }
-        }
-
-        /* ============================================
-           SIDEBAR OVERLAY
-           ============================================ */
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 99;
-        }
-
-        .sidebar-overlay.active { display: block; }
-
-        @media (max-width: 991.98px) {
-            .sidebar-overlay.active { display: block; }
+            .user-avatar-wrapper {
+                padding: 4px 10px 4px 6px;
+            }
+            .user-avatar-icon {
+                font-size: 1.3rem;
+            }
+            .user-avatar-name {
+                max-width: 50px;
+                font-size: 0.7rem;
+            }
+            .header-right {
+                gap: 6px;
+            }
+            .notif-btn {
+                padding: 6px 10px;
+            }
         }
 
         /* ============================================
@@ -442,6 +530,26 @@
 $role = $this->session->userdata('role');
 $nama_user = $this->session->userdata('nama') ?? 'User';
 $base_url = base_url();
+
+// Fallback untuk meload notifikasi secara dinamis jika tidak dikirim dari controller
+$CI =& get_instance();
+if (!isset($unread_count) || !isset($notifikasi)) {
+    if (!isset($CI->Notifikasi_model)) {
+        $CI->load->model('Notifikasi_model');
+    }
+    $id_user = $CI->session->userdata('id_user');
+    if ($id_user) {
+        if (!isset($unread_count)) {
+            $unread_count = $CI->Notifikasi_model->count_unread($id_user);
+        }
+        if (!isset($notifikasi)) {
+            $notifikasi = $CI->Notifikasi_model->get_unread_notif($id_user, 5);
+        }
+    } else {
+        if (!isset($unread_count)) $unread_count = 0;
+        if (!isset($notifikasi)) $notifikasi = [];
+    }
+}
 ?>
 
 <div class="sidebar" id="sidebarMenu">
@@ -451,15 +559,19 @@ $base_url = base_url();
                 <i class="bi bi-patch-check-fill"></i>
             <?php elseif ($role == 'Petani'): ?>
                 <i class="bi bi-patch-check-fill"></i>
+            <?php elseif ($role == 'Kurir'): ?>
+                <i class="bi bi-truck"></i>
             <?php else: ?>
                 <i class="bi bi-cup-hot-fill"></i>
             <?php endif; ?>
         </div>
         <span>
             <?php if ($role == 'Admin'): ?>
-                ADMIN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
+                POKTAN <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
             <?php elseif ($role == 'Petani'): ?>
                 PETANI <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
+            <?php elseif ($role == 'Kurir'): ?>
+                KURIR <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
             <?php else: ?>
                 MEMBER <br><small style="font-weight:400; font-size:0.7rem; color:#A8988A;">Liberchain</small>
             <?php endif; ?>
@@ -475,7 +587,7 @@ $base_url = base_url();
                     <a href="<?= base_url('admin/dashboard'); ?>"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/user') !== false ? 'active' : '' ?>">
-                    <a href="<?= base_url('admin/user'); ?>"><i class="bi bi-people-fill"></i>Manajemen User <span class="menu-badge">12</span></a>
+                    <a href="<?= base_url('admin/user'); ?>"><i class="bi bi-people-fill"></i>Manajemen User</a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/petani') !== false ? 'active' : '' ?>">
                     <a href="<?= base_url('admin/petani'); ?>"><i class="bi bi-person-badge-fill"></i>Data Petani</a>
@@ -490,16 +602,19 @@ $base_url = base_url();
                     <a href="<?= base_url('admin/produk'); ?>"><i class="bi bi-box-seam-fill"></i>Manajemen Produk</a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/transaksi') !== false ? 'active' : '' ?>">
-                    <a href="<?= base_url('admin/transaksi'); ?>"><i class="bi bi-wallet2"></i>Transaksi <span class="menu-badge">8</span></a>
+                    <a href="<?= base_url('admin/transaksi'); ?>"><i class="bi bi-wallet2"></i>Transaksi</a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/kurir') !== false ? 'active' : '' ?>">
                     <a href="<?= base_url('admin/kurir'); ?>"><i class="bi bi-truck"></i>Manajemen Kurir</a>
+                </li>
+                <li class="menu-item <?= strpos(current_url(), 'admin/tracking') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('admin/tracking'); ?>"><i class="bi bi-geo-alt-fill"></i>Tracking Pengiriman</a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/mitra') !== false ? 'active' : '' ?>">
                     <a href="<?= base_url('admin/mitra'); ?>"><i class="bi bi-shop"></i>Manajemen Mitra</a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'admin/laporan') !== false ? 'active' : '' ?>">
-                    <a href="<?= base_url('admin/laporan'); ?>"><i class="bi bi-file-earmark-bar-graph-fill"></i>Laporan & Analytics</a>
+                    <a href="<?= base_url('admin/laporan'); ?>"><i class="bi bi-file-earmark-bar-graph-fill"></i>Analisis & Laporan</a>
                 </li>
 
             <?php elseif ($role == 'Petani'): ?>
@@ -523,23 +638,42 @@ $base_url = base_url();
                     <a href="<?= base_url('petani/tracking'); ?>"><i class="bi bi-truck"></i>Tracking Kiriman</a>
                 </li>
 
+            <?php elseif ($role == 'Kurir'): ?>
+                <!-- ====== MENU KURIR ====== -->
+                <li class="menu-item <?= strpos(current_url(), 'kurir/tracking') !== false ? 'active' : '' ?>">
+                    <a href="<?= base_url('kurir/tracking'); ?>"><i class="bi bi-truck"></i>Dashboard Kurir</a>
+                </li>
+
             <?php else: ?>
-                <!-- ====== MENU PEMBELI ====== -->
+                <!-- ==========================================
+                     ====== MENU PEMBELI (DIPERBAIKI) ======
+                     ========================================== -->
                 <li class="menu-item <?= current_url() == base_url('pembeli/dashboard') ? 'active' : '' ?>">
-                    <a href="<?= base_url('pembeli/dashboard'); ?>"><i class="bi bi-house-door-fill"></i>Beranda Akun</a>
+                    <a href="<?= base_url('pembeli/dashboard'); ?>">
+                        <i class="bi bi-house-door-fill"></i>Beranda Akun
+                    </a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'landing/produk') !== false ? 'active' : '' ?>">
-                    <a href="<?= base_url('landing/produk'); ?>"><i class="bi bi-shop-window"></i>Katalog Belanja</a>
+                    <a href="<?= base_url('landing/produk'); ?>">
+                        <i class="bi bi-shop-window"></i>Katalog Belanja
+                    </a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'pembeli/transaksi') !== false ? 'active' : '' ?>">
-                    <a href="<?= base_url('pembeli/transaksi'); ?>"><i class="bi bi-receipt"></i>Riwayat Transaksi <span class="menu-badge">8</span></a>
+                    <a href="<?= base_url('pembeli/transaksi'); ?>">
+                        <i class="bi bi-receipt"></i>Riwayat Transaksi
+                        <span class="menu-badge"><?= $total_transaksi ?? 0 ?></span>
+                    </a>
                 </li>
                 <li class="menu-item <?= strpos(current_url(), 'pembeli/tracking') !== false ? 'active' : '' ?>">
-                    <a href="<?= base_url('pembeli/tracking'); ?>"><i class="bi bi-geo-alt-fill"></i>Lacak Pengiriman <span class="menu-badge">2</span></a>
+                    <a href="<?= base_url('pembeli/tracking'); ?>">
+                        <i class="bi bi-geo-alt-fill"></i>Status Pengiriman
+                        <span class="menu-badge"><?= $total_dikirim ?? 0 ?></span>
+                    </a>
                 </li>
-    
                 <li class="menu-item <?= strpos(current_url(), 'pembeli/profil') !== false ? 'active' : '' ?>">
-                    <a href="<?= base_url('pembeli/profil'); ?>"><i class="bi bi-person-fill"></i>Profil Saya</a>
+                    <a href="<?= base_url('pembeli/profil'); ?>">
+                        <i class="bi bi-person-fill"></i>Profil Saya
+                    </a>
                 </li>
             <?php endif; ?>
 
@@ -561,7 +695,7 @@ $base_url = base_url();
     <!-- ============================================
          PAGE HEADER
          ============================================ -->
-    <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
+    <div class="page-header">
         <div>
             <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle" style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
                 <i class="bi bi-list"></i>
@@ -573,9 +707,9 @@ $base_url = base_url();
             </p>
         </div>
 
-        <div class="d-flex align-items-center gap-3" style="gap: 12px;">
+        <div class="header-right">
             <!-- ==========================================
-                 NOTIFICATION BELL (SAMA DENGAN DASHBOARD)
+                 NOTIFICATION BELL
                  ========================================== -->
             <div style="position: relative;">
                 <button class="notif-btn" id="notifToggle">
@@ -590,14 +724,20 @@ $base_url = base_url();
                 <div class="notif-dropdown" id="notifDropdown">
                     <div class="notif-dropdown-header">
                         <span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
-                        <a href="<?= base_url('notifikasi/history'); ?>">Lihat Semua</a>
+                        <div>
+                            <?php if (isset($unread_count) && $unread_count > 0): ?>
+                                <a href="#" id="markAllReadBtn" class="mr-2" style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
+                            <?php endif; ?>
+                            <a href="<?= base_url('notifikasi/history'); ?>" style="font-size:0.75rem; color: var(--amber-cream); font-weight:500; text-decoration:none;">Lihat Semua</a>
+                        </div>
                     </div>
                     <div class="notif-dropdown-list" id="notifList">
                         <?php if (!empty($notifikasi)): ?>
                             <?php foreach ($notifikasi as $n): ?>
+                                <?php $n = (object) $n; ?>
                                 <?php if (is_object($n)): ?>
                                     <a class="notif-item <?= (isset($n->status_baca) && $n->status_baca == 0) ? 'unread' : ''; ?>" 
-                                       href="<?= base_url('notifikasi/read/'.$n->id_notifikasi); ?>">
+                                       href="<?= base_url('pembeli/dashboard/read/' . $n->id_notifikasi); ?>">
                                         <?php
                                         $icon_type = $n->icon ?? 'info';
                                         $icon_map = [
@@ -638,11 +778,24 @@ $base_url = base_url();
                 </div>
             </div>
 
-            <!-- USER AVATAR -->
-            <div style="cursor: pointer; padding: 6px 12px; border-radius: 10px; background: var(--card-white); border: 1px solid rgba(74,44,17,0.06);">
-                <i class="bi bi-person-circle" style="font-size: 1.5rem; color: var(--amber-cream);"></i>
-                <span style="font-weight:500; font-size:0.85rem;"><?= $nama_user ?></span>
+            <!-- ==========================================
+                 USER AVATAR - RAPI UNTUK PEMBELI
+                 ========================================== -->
+            <?php if ($role !== 'Kurir'): ?>
+            <div class="user-avatar-wrapper" onclick="window.location.href='<?= base_url('pembeli/profil'); ?>'">
+                <?php 
+                $user_foto = $this->session->userdata('foto');
+                if (!empty($user_foto) && file_exists('./uploads/profil/' . $user_foto)): 
+                ?>
+                    <img src="<?= base_url('uploads/profil/' . $user_foto); ?>" alt="Avatar" class="user-avatar-img">
+                <?php else: ?>
+                    <i class="bi bi-person-circle user-avatar-icon"></i>
+                <?php endif; ?>
+                <span class="user-avatar-name"><?= $nama_user ?></span>
+                <span class="user-avatar-role"><?= $role ?></span>
+                <i class="bi bi-chevron-down" style="font-size:0.6rem; color: var(--text-secondary);"></i>
             </div>
+            <?php endif; ?>
         </div>
     </div>
     <!-- END PAGE HEADER -->

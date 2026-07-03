@@ -1359,9 +1359,7 @@
 					<form method="get" action="<?= base_url('admin/kurir'); ?>" class="d-flex">
 						<input type="text" name="keyword" class="form-control-custom" placeholder="Cari nama / telepon..." value="<?= htmlspecialchars($keyword ?? ''); ?>" style="min-width:180px;">
 					</form>
-					<a href="<?= base_url('admin/kurir/assign'); ?>" class="btn-outline-custom">
-						<i class="bi bi-truck"></i> Tugaskan Kurir
-					</a>
+
 					<a href="<?= base_url('admin/kurir/performance'); ?>" class="btn-outline-custom">
 						<i class="bi bi-bar-chart-fill"></i> Performance
 					</a>

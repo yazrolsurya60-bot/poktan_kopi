@@ -21,6 +21,8 @@ class Auth extends CI_Controller
                 redirect('petani/dashboard');
             } elseif ($role === 'Pembeli') {
                 redirect('pembeli/dashboard');
+            } elseif ($role === 'Kurir') {
+                redirect('kurir/tracking');
             }
         }
     }
@@ -63,6 +65,8 @@ class Auth extends CI_Controller
                             redirect('admin/dashboard');
                         } elseif ($user['role'] === 'Petani') {
                             redirect('petani/dashboard');
+                        } elseif ($user['role'] === 'Kurir') {
+                            redirect('kurir/tracking');
                         } else {
                             redirect('pembeli/dashboard');
                         }

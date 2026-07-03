@@ -2,54 +2,54 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 // ============================================
-// NOTIFIKASI UTAMA (M11-F01)
+// NOTIFIKASI UTAMA
 // ============================================
 
 if (!function_exists('send_notifikasi')) {
     function send_notifikasi($user_id, $role, $judul, $pesan, $icon = 'info', $link = null) {
         $CI =& get_instance();
         
-        // Pastikan model di-load
         if (!isset($CI->Notifikasi_model)) {
             $CI->load->model('Notifikasi_model');
         }
         
-        // CEK APAKAH USER ID VALID
+        // Cek user
         $user = $CI->db
             ->where('id_user', $user_id)
             ->get('tb_user')
             ->row_array();
         
-        // JIKA USER TIDAK DITEMUKAN, BATALKAN
         if (!$user) {
             return false;
-        }
-        
-        // CEK APAKAH ROLE SESUAI DENGAN USER
-        if (strtolower($user['role']) != strtolower($role)) {
-            $role = $user['role'];
         }
         
         // Cek setting notifikasi user
         $settings = $CI->Notifikasi_model->get_settings($user_id);
         
-        // Mapping judul ke key setting
+        // Mapping judul ke key setting untuk PEMBELI
         $key_map = [
-            'Pesanan Baru' => 'notif_transaksi',
+            'Status Pesanan' => 'notif_pesanan',
+            'Update Pesanan' => 'notif_pesanan',
+            'Pesanan Dibatalkan' => 'notif_pesanan',
+            'Pesanan Baru' => 'notif_pesanan',
+            'Tracking Kiriman' => 'notif_kurir',
+            'Update Pengiriman' => 'notif_kurir',
+            'Lokasi Kurir' => 'notif_kurir',
+            'Tracking' => 'notif_kurir',
             'Konfirmasi Pembayaran' => 'notif_pembayaran',
+            'Pembayaran Diterima' => 'notif_pembayaran',
+            'Pembayaran Diverifikasi' => 'notif_pembayaran',
+            'Promo' => 'notif_promo',
+            'Diskon' => 'notif_promo',
+            'Update Sistem' => 'notif_sistem',
+            'Maintenance' => 'notif_sistem',
+            // Untuk Admin & Petani
+            'Pesanan Baru Masuk' => 'notif_transaksi',
             'Peringatan Stok' => 'notif_stok',
             'Laporan' => 'notif_laporan',
             'Registrasi Petani' => 'notif_petani',
             'Registrasi User' => 'notif_petani',
             'Pendaftaran' => 'notif_petani',
-            'Status Pengiriman' => 'notif_kurir',
-            'Update Pengiriman' => 'notif_kurir',
-            'Lokasi Kurir' => 'notif_kurir',
-            'Tracking' => 'notif_kurir',
-            'Promo' => 'notif_promo',
-            'Diskon' => 'notif_promo',
-            'Update Sistem' => 'notif_sistem',
-            'Maintenance' => 'notif_sistem',
             'Verifikasi' => 'notif_petani',
             'Terverifikasi' => 'notif_petani',
             'Test' => 'notif_sistem',
@@ -74,42 +74,106 @@ if (!function_exists('send_notifikasi')) {
         $data = [
             'id_user' => $user_id,
             'judul' => $judul,
-            'pesan' => $pesan,
             'isi_notifikasi' => $pesan,
             'link' => $link,
-            'tipe' => $icon,
             'icon' => $icon,
-            'is_read' => 0,
             'status_baca' => 0,
-            'created_at' => date('Y-m-d H:i:s'),
             'tanggal_buat' => date('Y-m-d H:i:s')
         ];
         
-        // Simpan ke database
         return $CI->Notifikasi_model->insert_notification($data);
     }
 }
 
 // ============================================
-// NOTIFIKASI KHUSUS (M07, M11)
+// NOTIFIKASI KHUSUS PEMBELI
 // ============================================
 
-if (!function_exists('notifikasi_tracking')) {
-    function notifikasi_tracking($pembeli_id, $invoice, $status, $status_detail = null) {
-        $judul = 'Update Pengiriman';
-        $pesan = "Pesanan #{$invoice}";
-        if ($status_detail) {
-            $pesan .= " - {$status_detail}";
-        } else {
-            $pesan .= " status: {$status}";
-        }
+if (!function_exists('notifikasi_pembeli_pesanan')) {
+    function notifikasi_pembeli_pesanan($pembeli_id, $invoice, $status) {
+        $judul = 'Status Pesanan';
+        $pesan = "Pesanan #{$invoice} status: {$status}";
         return send_notifikasi(
             $pembeli_id,
             'Pembeli',
             $judul,
             $pesan,
             'info',
-            base_url('pembeli/tracking')
+            base_url('pembeli/transaksi/detail/' . $invoice)
+        );
+    }
+}
+
+if (!function_exists('notifikasi_pembeli_tracking')) {
+    function notifikasi_pembeli_tracking($pembeli_id, $invoice, $status_detail) {
+        $judul = 'Tracking Kiriman';
+        $pesan = "Pesanan #{$invoice} - {$status_detail}";
+        return send_notifikasi(
+            $pembeli_id,
+            'Pembeli',
+            $judul,
+            $pesan,
+            'info',
+            base_url('pembeli/tracking/detail/' . $invoice)
+        );
+    }
+}
+
+if (!function_exists('notifikasi_pembeli_pembayaran')) {
+    function notifikasi_pembeli_pembayaran($pembeli_id, $invoice) {
+        $judul = 'Konfirmasi Pembayaran';
+        $pesan = "Pembayaran untuk pesanan #{$invoice} telah dikonfirmasi.";
+        return send_notifikasi(
+            $pembeli_id,
+            'Pembeli',
+            $judul,
+            $pesan,
+            'success',
+            base_url('pembeli/transaksi/detail/' . $invoice)
+        );
+    }
+}
+
+if (!function_exists('notifikasi_pembeli_promo')) {
+    function notifikasi_pembeli_promo($pembeli_id, $judul, $pesan) {
+        return send_notifikasi(
+            $pembeli_id,
+            'Pembeli',
+            $judul,
+            $pesan,
+            'primary',
+            base_url('landing/produk')
+        );
+    }
+}
+
+// ============================================
+// NOTIFIKASI KHUSUS LAINNYA (BACKWARD COMPATIBLE)
+// ============================================
+
+if (!function_exists('notifikasi_tracking')) {
+    function notifikasi_tracking($pembeli_id, $invoice, $status, $status_detail = null) {
+        return notifikasi_pembeli_tracking($pembeli_id, $invoice, $status_detail ?? $status);
+    }
+}
+
+if (!function_exists('notifikasi_pesanan_pembeli')) {
+    function notifikasi_pesanan_pembeli($pembeli_id, $invoice, $status) {
+        return notifikasi_pembeli_pesanan($pembeli_id, $invoice, $status);
+    }
+}
+
+if (!function_exists('notifikasi_konfirmasi_bayar')) {
+    function notifikasi_konfirmasi_bayar($admin_id, $invoice) {
+        $judul = 'Konfirmasi Pembayaran';
+        $pesan = "Pembayaran #{$invoice} menunggu konfirmasi.";
+        return send_notifikasi(
+            $admin_id,
+            'Admin',
+            $judul,
+            $pesan,
+            'warning',
+            base_url('admin/transaksi/konfirmasi')
         );
     }
 }
@@ -129,36 +193,6 @@ if (!function_exists('notifikasi_pesanan_baru')) {
     }
 }
 
-if (!function_exists('notifikasi_pesanan_pembeli')) {
-    function notifikasi_pesanan_pembeli($pembeli_id, $invoice, $status) {
-        $judul = 'Update Status Pesanan';
-        $pesan = "Pesanan #{$invoice} status: {$status}";
-        return send_notifikasi(
-            $pembeli_id,
-            'Pembeli',
-            $judul,
-            $pesan,
-            'info',
-            base_url('pembeli/transaksi')
-        );
-    }
-}
-
-if (!function_exists('notifikasi_konfirmasi_bayar')) {
-    function notifikasi_konfirmasi_bayar($admin_id, $invoice) {
-        $judul = 'Konfirmasi Pembayaran';
-        $pesan = "Pembayaran #{$invoice} menunggu konfirmasi.";
-        return send_notifikasi(
-            $admin_id,
-            'Admin',
-            $judul,
-            $pesan,
-            'warning',
-            base_url('admin/transaksi/konfirmasi')
-        );
-    }
-}
-
 if (!function_exists('notifikasi_stok_tipis')) {
     function notifikasi_stok_tipis($petani_id, $produk, $sisa) {
         $judul = 'Peringatan Stok Menipis';
@@ -173,10 +207,6 @@ if (!function_exists('notifikasi_stok_tipis')) {
         );
     }
 }
-
-// ============================================
-// NOTIFIKASI KE SEMUA ADMIN (M11-F01)
-// ============================================
 
 if (!function_exists('notifikasi_semua_admin')) {
     function notifikasi_semua_admin($judul, $pesan, $icon = 'info', $link = null) {
@@ -203,10 +233,6 @@ if (!function_exists('notifikasi_semua_admin')) {
         return $results;
     }
 }
-
-// ============================================
-// FUNGSI KHUSUS NOTIFIKASI PER ROLE
-// ============================================
 
 if (!function_exists('notifikasi_pembeli')) {
     function notifikasi_pembeli($pembeli_id, $judul, $pesan, $icon = 'info', $link = null) {
@@ -246,3 +272,4 @@ if (!function_exists('notifikasi_admin')) {
         );
     }
 }
+?>
