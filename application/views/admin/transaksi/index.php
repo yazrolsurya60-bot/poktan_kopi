@@ -1456,9 +1456,6 @@
 					<a href="<?= base_url('admin/transaksi/export_pdf'); ?>" class="quick-action-btn btn-pdf" style="padding: 10px 20px;" onclick="return confirm('Download laporan PDF?')">
 						<i class="bi bi-file-earmark-pdf-fill"></i> Export PDF
 					</a>
-					<a href="#" class="quick-action-btn btn-print" style="padding: 10px 20px;" onclick="window.print(); return false;">
-						<i class="bi bi-printer-fill"></i> Print
-					</a>
 				</div>
 			</div>
 		</div>

@@ -927,8 +927,45 @@
                     </div>
                     <div class="card-body-custom">
 
-                        <?php if ($status_bayar == 'Belum Bayar' || $status_bayar == 'Pending' || $status_bayar == 'Menunggu Pembayaran'): ?>
-                        <!-- 🔥 STATUS: BELUM BAYAR / PENDING -->
+                        <?php if (($status_bayar == 'Belum Bayar' || $status_bayar == 'Pending' || $status_bayar == 'Menunggu Pembayaran') && ($transaksi['metode_bayar'] ?? '') == 'COD'): ?>
+                        <!-- 🔥 STATUS: BELUM BAYAR / PENDING - COD -->
+                        <div class="alert alert-warning instruction-alert">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-info-circle mr-3 mt-1" style="font-size:1.3rem;"></i>
+                                <div>
+                                    <h6 class="mb-2" style="font-weight:700;">🚚 Bayar di Tempat (COD)</h6>
+                                    <p class="mb-2">Pesanan Anda akan dikirim dan dibayar tunai saat barang diterima.
+                                        Mohon siapkan uang pas sesuai total pembayaran berikut:</p>
+
+                                    <div class="payment-info-box">
+                                        <table class="table table-sm table-borderless mb-0">
+                                            <tr>
+                                                <td width="160"><strong>Metode Bayar</strong></td>
+                                                <td>: <span class="bank-name">COD (Bayar di Tempat)</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Total Pembayaran</strong></td>
+                                                <td>: <strong style="color: var(--roasted-brown); font-size:1.1rem;">Rp
+                                                        <?= number_format($grand_total, 0, ',', '.'); ?></strong></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <small class="text-muted mt-2 d-block">
+                                        <i class="bi bi-clock mr-1"></i>
+                                        Status pembayaran akan diperbarui oleh kurir/admin setelah uang diterima saat
+                                        pengiriman.
+                                        <br>
+                                        <i class="bi bi-info-circle mr-1"></i>
+                                        Pastikan ada orang yang dapat menerima pesanan dan melakukan pembayaran di
+                                        alamat tujuan.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php elseif ($status_bayar == 'Belum Bayar' || $status_bayar == 'Pending' || $status_bayar == 'Menunggu Pembayaran'): ?>
+                        <!-- 🔥 STATUS: BELUM BAYAR / PENDING - VIRTUAL ACCOUNT / TRANSFER -->
                         <div class="alert alert-warning instruction-alert">
                             <div class="d-flex align-items-start">
                                 <i class="bi bi-info-circle mr-3 mt-1" style="font-size:1.3rem;"></i>

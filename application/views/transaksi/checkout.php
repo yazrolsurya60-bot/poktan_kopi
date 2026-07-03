@@ -607,7 +607,7 @@
                                             Estimasi Pengiriman: <span id="estimasi_hari">-</span> hari
                                         </div>
                                         <div style="font-size: 0.78rem; color: var(--text-secondary);">Kota asal:
-                                            Pontianak</div>
+                                            <span id="kota_asal_display"><?= $kota_asal; ?></span></div>
                                     </div>
                                     <div style="font-weight: 800; color: var(--roasted-brown); font-size: 1rem;"
                                         id="ongkir_display">Rp 0</div>
@@ -752,7 +752,7 @@
         $(el).find('input[type="radio"]').prop('checked', true);
     }
 
-    // Hitung ongkir - Kota asal PONTIANAK
+    // Hitung ongkir - Kota asal SAMBAS
     $('#kota_kirim').on('change', function() {
         var kota = $(this).val();
         if (!kota) return;
@@ -761,7 +761,7 @@
             url: '<?= base_url("transaksi/hitung_ongkir"); ?>',
             type: 'POST',
             data: {
-                kota_asal: 'Pontianak',
+                kota_asal: '<?= $kota_asal; ?>',
                 kota_tujuan: kota
             },
             dataType: 'json',
@@ -773,6 +773,9 @@
                     $('#ongkir_val').val(ongkir);
                     $('#ongkir_display').text(res.tarif_formatted);
                     $('#estimasi_hari').text(res.estimasi);
+                    if (res.kota_asal) {
+                        $('#kota_asal_display').text(res.kota_asal);
+                    }
                     $('#ongkir-result').addClass('show');
                     $('#ongkir_summary').text(res.tarif_formatted).css({
                         color: 'var(--dark-coffee)',

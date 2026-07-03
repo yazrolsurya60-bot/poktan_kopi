@@ -20,15 +20,28 @@ class Transaksi_model extends CI_Model {
     }
 
     public function get_transaksi($id_transaksi) {
-        $this->db->select('t.*, u.nama as nama_pembeli, u.email, u.no_hp as user_hp');
+        // Kalau pembeli login (id_user ada), pakai data dari tb_user.
+        // Kalau guest (id_user NULL), pakai nama_penerima/email_pembeli yang diisi saat checkout.
+        $this->db->select('t.*, COALESCE(u.nama, t.nama_penerima, t.email_pembeli) as nama_pembeli, COALESCE(u.email, t.email_pembeli) as email, u.no_hp as user_hp');
         $this->db->from('tb_transaksi t');
         $this->db->join('tb_user u', 't.id_user = u.id_user', 'left');
         $this->db->where('t.id_transaksi', $id_transaksi);
         return $this->db->get()->row_array();
     }
 
+    // ============================================================
+    // Ambil transaksi milik seorang PETANI (produk yang dia jual)
+    // ============================================================
+    public function get_transaksi_by_petani($id_petani) {
+        $this->db->select('t.*, COALESCE(u.nama, t.nama_penerima, t.email_pembeli) as nama_pembeli');
+        $this->db->from('tb_transaksi t');
+        $this->db->join('tb_user u', 't.id_user = u.id_user', 'left');
+        $this->db->where('t.id_petani', $id_petani);
+        $this->db->order_by('t.tanggal_transaksi', 'DESC');
+        return $this->db->get()->result_array();
+    }
+
     public function get_detail_transaksi($id_transaksi) {
-        // 🔥 FIX: kolom yang benar adalah 'foto_utama', bukan 'foto_produk'
         $this->db->select('d.*, p.nama_produk, p.foto_utama');
         $this->db->from('tb_detail_transaksi d');
         $this->db->join('tb_produk p', 'd.id_produk = p.id_produk', 'left');
@@ -37,7 +50,45 @@ class Transaksi_model extends CI_Model {
     }
 
     // ============================================================
-    // 🔥 METHOD BARU 1: Ambil transaksi MEMBER saja (untuk admin)
+    // 🔥 METHOD BARU 1: Ambil kota tujuan dari SAMBAS
+    // ============================================================
+    public function get_kota_tujuan_dari_sambas() {
+        $this->db->distinct();
+        $this->db->select('kota_tujuan');
+        $this->db->where('kota_asal', 'Sambas');
+        $this->db->where('status', 'Active');
+        $this->db->order_by('kota_tujuan', 'ASC');
+        $query = $this->db->get('tb_ongkir');
+        
+        $kota = [];
+        foreach ($query->result() as $row) {
+            $kota[] = $row->kota_tujuan;
+        }
+        return $kota;
+    }
+
+    // ============================================================
+    // 🔥 METHOD BARU 2: Ambil semua kecamatan tujuan dari SAMBAS
+    // ============================================================
+    public function get_kecamatan_tujuan_dari_sambas($kota_tujuan = null) {
+        $this->db->select('kecamatan_tujuan');
+        $this->db->where('kota_asal', 'Sambas');
+        $this->db->where('status', 'Active');
+        if ($kota_tujuan) {
+            $this->db->where('kota_tujuan', $kota_tujuan);
+        }
+        $this->db->order_by('kecamatan_tujuan', 'ASC');
+        $query = $this->db->get('tb_ongkir');
+        
+        $kecamatan = [];
+        foreach ($query->result() as $row) {
+            $kecamatan[] = $row->kecamatan_tujuan;
+        }
+        return $kecamatan;
+    }
+
+    // ============================================================
+    // 🔥 METHOD BARU 3: Ambil transaksi MEMBER saja (untuk admin)
     // ============================================================
     public function get_all_transaksi_member($filter = array()) {
         $this->db->select('t.*, u.nama as nama_pembeli');
@@ -63,7 +114,7 @@ class Transaksi_model extends CI_Model {
     }
 
     // ============================================================
-    // 🔥 METHOD BARU 2: Cari transaksi GUEST (untuk tracking guest)
+    // 🔥 METHOD BARU 4: Cari transaksi GUEST (untuk tracking guest)
     // ============================================================
     public function get_guest_transaksi($invoice, $email) {
         $this->db->select('t.*');
@@ -75,7 +126,7 @@ class Transaksi_model extends CI_Model {
     }
 
     // ============================================================
-    // 🔥 METHOD BARU 3: Ambil transaksi user dengan daftar produk
+    // 🔥 METHOD BARU 5: Ambil transaksi user dengan daftar produk
     // ============================================================
     public function get_transaksi_by_user_with_products($id_user, $limit = null) {
         $this->db->select('t.*, 
@@ -176,6 +227,15 @@ class Transaksi_model extends CI_Model {
     public function get_ongkir($kota_asal, $kota_tujuan) {
         $this->db->where('kota_asal', $kota_asal);
         $this->db->where('kota_tujuan', $kota_tujuan);
+        $this->db->where('status', 'Active');
+        return $this->db->get('tb_ongkir')->row_array();
+    }
+
+    public function get_ongkir_by_kecamatan($kota_asal, $kota_tujuan, $kecamatan) {
+        $this->db->where('kota_asal', $kota_asal);
+        $this->db->where('kota_tujuan', $kota_tujuan);
+        $this->db->where('kecamatan_tujuan', $kecamatan);
+        $this->db->where('status', 'Active');
         return $this->db->get('tb_ongkir')->row_array();
     }
 
@@ -185,6 +245,7 @@ class Transaksi_model extends CI_Model {
     public function hitung_ongkir_server($kota_asal, $kota_tujuan, $berat_gram = 1000) {
         $this->db->where('kota_asal', $kota_asal);
         $this->db->where('kota_tujuan', $kota_tujuan);
+        $this->db->where('status', 'Active');
         $ongkir = $this->db->get('tb_ongkir')->row_array();
 
         if (!$ongkir) {
@@ -217,9 +278,11 @@ class Transaksi_model extends CI_Model {
             'success'     => true,
             'kota_asal'   => $kota_asal,
             'kota_tujuan' => $kota_tujuan,
+            'kecamatan'   => isset($ongkir['kecamatan_tujuan']) ? $ongkir['kecamatan_tujuan'] : '',
             'berat_gram'  => $berat_gram,
             'estimasi'    => $estimasi,
             'ongkir'      => $biaya,
+            'tarif_per_kg' => $tarif,
         );
     }
 
@@ -243,7 +306,7 @@ class Transaksi_model extends CI_Model {
 
     // Ambil transaksi yang sudah upload bukti tapi belum diverifikasi
     public function get_transaksi_butuh_konfirmasi() {
-        $this->db->select('t.id_transaksi, t.id_user, t.invoice, t.total_harga, t.ongkir, t.grand_total, t.nama_penerima, t.no_hp, t.status_bayar, t.status_pesanan, t.metode_bayar, t.tanggal_transaksi, u.nama as nama_pembeli, b.id_bukti, b.file_bukti, b.nama_bank, b.nama_pengirim, b.jumlah_transfer, b.tanggal_transfer, b.status_verifikasi');
+        $this->db->select('t.id_transaksi, t.id_user, t.invoice, t.total_harga, t.ongkir, t.grand_total, t.nama_penerima, t.no_hp, t.status_bayar, t.status_pesanan, t.metode_bayar, t.tanggal_transaksi, COALESCE(u.nama, t.nama_penerima, t.email_pembeli) as nama_pembeli, b.id_bukti, b.file_bukti, b.nama_bank, b.nama_pengirim, b.jumlah_transfer, b.tanggal_transfer, b.status_verifikasi');
         $this->db->from('tb_transaksi t');
         $this->db->join('tb_user u', 't.id_user = u.id_user', 'left');
         $this->db->join('tb_bukti_bayar b', 'b.id_transaksi = t.id_transaksi', 'inner');
@@ -252,6 +315,41 @@ class Transaksi_model extends CI_Model {
         $this->db->where('t.status_pesanan !=', 'Dibatalkan');
         $this->db->order_by('t.tanggal_transaksi', 'DESC');
         return $this->db->get()->result_array();
+    }
+
+    // ============================================================
+    // 🔥 METHOD BARU 6: Ambil semua kota asal yang tersedia
+    // ============================================================
+    public function get_all_kota_asal() {
+        $this->db->distinct();
+        $this->db->select('kota_asal');
+        $this->db->where('status', 'Active');
+        $this->db->order_by('kota_asal', 'ASC');
+        $query = $this->db->get('tb_ongkir');
+        
+        $kota = [];
+        foreach ($query->result() as $row) {
+            $kota[] = $row->kota_asal;
+        }
+        return $kota;
+    }
+
+    // ============================================================
+    // 🔥 METHOD BARU 7: Ambil semua kota tujuan berdasarkan kota asal
+    // ============================================================
+    public function get_kota_tujuan_by_asal($kota_asal) {
+        $this->db->distinct();
+        $this->db->select('kota_tujuan');
+        $this->db->where('kota_asal', $kota_asal);
+        $this->db->where('status', 'Active');
+        $this->db->order_by('kota_tujuan', 'ASC');
+        $query = $this->db->get('tb_ongkir');
+        
+        $kota = [];
+        foreach ($query->result() as $row) {
+            $kota[] = $row->kota_tujuan;
+        }
+        return $kota;
     }
 }
 ?>
