@@ -1,832 +1,336 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - Liberchain</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-    :root {
-        --roasted-brown: #6F4E37;
-        --dark-coffee: #3B2A1E;
-        --amber-cream: #8B5E3C;
-        --forest-green: #2D6A4F;
-        --bg-cream: #F5F1EA;
-        --card-white: #FFFFFF;
-        --text-secondary: #7A6A5C;
-        --shadow-soft: 0 10px 40px rgba(111, 78, 55, 0.10);
-        --radius-card: 16px;
-        --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: var(--bg-cream);
-        color: var(--dark-coffee);
-    }
-
-    /* NAVBAR */
-    .navbar-custom {
-        background: rgba(245, 241, 234, 0.95);
-        backdrop-filter: blur(10px);
-        padding: 15px 0;
-        border-bottom: 1px solid rgba(111, 78, 55, 0.07);
-    }
-
-    .navbar-brand {
-        font-family: 'Outfit', sans-serif;
-        font-weight: 800;
-        font-size: 1.5rem;
-        color: var(--dark-coffee) !important;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .brand-icon {
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, var(--roasted-brown), var(--amber-cream));
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.2rem;
-    }
-
-    .nav-btn {
-        background: var(--dark-coffee);
-        color: white;
-        padding: 9px 26px;
-        border-radius: 50px;
-        font-weight: 700;
-        font-size: 0.88rem;
-        transition: var(--transition-smooth);
-        border: 2px solid var(--dark-coffee);
-        text-decoration: none;
-    }
-
-    .nav-btn:hover {
-        background: var(--forest-green);
-        border-color: var(--forest-green);
-        color: white;
-        text-decoration: none;
-    }
-
-    .nav-btn-outline {
-        background: transparent;
-        border-color: var(--roasted-brown);
-        color: var(--roasted-brown);
-    }
-
-    .nav-btn-outline:hover {
-        background: var(--roasted-brown);
-        color: white;
-    }
-
-    .cart-badge {
-        background: #EF4444;
-        color: white;
-        border-radius: 50%;
-        padding: 2px 8px;
-        font-size: 0.7rem;
-        margin-left: 4px;
-    }
-
-    /* MAIN */
-    .checkout-section {
-        padding: 120px 0 80px;
-        min-height: 100vh;
-    }
-
-    .page-title {
-        font-family: 'Outfit', sans-serif;
-        font-weight: 800;
-        font-size: 2rem;
-        color: var(--dark-coffee);
-        margin-bottom: 6px;
-    }
-
-    .page-subtitle {
-        color: var(--text-secondary);
-        font-size: 0.95rem;
-    }
-
-    /* STEPS */
-    .steps-bar {
-        display: flex;
-        align-items: center;
-        gap: 0;
-        margin-bottom: 36px;
-    }
-
-    .step {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.82rem;
-        font-weight: 600;
-        color: var(--text-secondary);
-    }
-
-    .step.active {
-        color: var(--roasted-brown);
-    }
-
-    .step.done {
-        color: var(--forest-green);
-    }
-
-    .step-num {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        border: 2px solid currentColor;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.75rem;
-        font-weight: 700;
-    }
-
-    .step.done .step-num {
-        background: var(--forest-green);
-        border-color: var(--forest-green);
-        color: white;
-    }
-
-    .step.active .step-num {
-        background: var(--roasted-brown);
-        border-color: var(--roasted-brown);
-        color: white;
-    }
-
-    .step-line {
-        flex: 1;
-        height: 2px;
-        background: rgba(111, 78, 55, 0.15);
-        margin: 0 10px;
-        max-width: 60px;
-    }
-
-    /* CARD */
-    .form-card {
-        background: var(--card-white);
-        border-radius: var(--radius-card);
-        box-shadow: var(--shadow-soft);
-        border: 1px solid rgba(111, 78, 55, 0.06);
-        padding: 28px;
-        margin-bottom: 20px;
-    }
-
-    .card-section-title {
-        font-family: 'Outfit', sans-serif;
-        font-weight: 700;
-        font-size: 1rem;
-        color: var(--dark-coffee);
-        margin-bottom: 20px;
-        padding-bottom: 12px;
-        border-bottom: 2px solid var(--bg-cream);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    /* FORM */
-    .form-group label {
-        font-weight: 600;
-        font-size: 0.85rem;
-        color: var(--dark-coffee);
-        margin-bottom: 6px;
-    }
-
-    .form-control {
-        border: 2px solid rgba(111, 78, 55, 0.15);
-        border-radius: 10px;
-        padding: 10px 14px;
-        font-size: 0.9rem;
-        color: var(--dark-coffee);
-        background: var(--bg-cream);
-        transition: var(--transition-smooth);
-    }
-
-    .form-control:focus {
-        border-color: var(--roasted-brown);
-        background: white;
-        box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.08);
-    }
-
-    select.form-control {
-        cursor: pointer;
-    }
-
-    /* METODE BAYAR */
-    .payment-option {
-        border: 2px solid rgba(111, 78, 55, 0.15);
-        border-radius: 12px;
-        padding: 14px 16px;
-        cursor: pointer;
-        transition: var(--transition-smooth);
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 10px;
-    }
-
-    .payment-option:hover {
-        border-color: var(--roasted-brown);
-        background: rgba(111, 78, 55, 0.03);
-    }
-
-    .payment-option.selected {
-        border-color: var(--roasted-brown);
-        background: rgba(111, 78, 55, 0.05);
-    }
-
-    .payment-option input[type="radio"] {
-        accent-color: var(--roasted-brown);
-        width: 16px;
-        height: 16px;
-    }
-
-    .payment-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.1rem;
-    }
-
-    .payment-label {
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: var(--dark-coffee);
-        margin: 0;
-    }
-
-    .payment-desc {
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-        margin: 0;
-    }
-
-    /* ONGKIR */
-    .ongkir-result {
-        background: var(--bg-cream);
-        border-radius: 10px;
-        padding: 12px 16px;
-        margin-top: 10px;
-        display: none;
-    }
-
-    .ongkir-result.show {
-        display: block;
-    }
-
-    /* ORDER SUMMARY */
-    .summary-card {
-        background: var(--card-white);
-        border-radius: var(--radius-card);
-        box-shadow: var(--shadow-soft);
-        border: 1px solid rgba(111, 78, 55, 0.06);
-        padding: 28px;
-        position: sticky;
-        top: 100px;
-    }
-
-    .summary-title {
-        font-family: 'Outfit', sans-serif;
-        font-weight: 700;
-        font-size: 1.1rem;
-        color: var(--dark-coffee);
-        margin-bottom: 20px;
-        padding-bottom: 14px;
-        border-bottom: 2px solid var(--bg-cream);
-    }
-
-    .order-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 0;
-        border-bottom: 1px solid rgba(111, 78, 55, 0.06);
-    }
-
-    .order-item:last-child {
-        border-bottom: none;
-    }
-
-    .order-img {
-        width: 48px;
-        height: 48px;
-        object-fit: cover;
-        border-radius: 8px;
-        background: var(--bg-cream);
-        flex-shrink: 0;
-    }
-
-    .order-item-name {
-        font-weight: 600;
-        font-size: 0.85rem;
-        color: var(--dark-coffee);
-    }
-
-    .order-item-qty {
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-    }
-
-    .order-item-price {
-        font-weight: 700;
-        font-size: 0.85rem;
-        color: var(--roasted-brown);
-        margin-left: auto;
-        white-space: nowrap;
-    }
-
-    .summary-divider {
-        border: none;
-        border-top: 2px solid var(--bg-cream);
-        margin: 16px 0;
-    }
-
-    .summary-row {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.88rem;
-        margin-bottom: 10px;
-    }
-
-    .summary-row .label {
-        color: var(--text-secondary);
-    }
-
-    .summary-row .value {
-        font-weight: 700;
-        color: var(--dark-coffee);
-    }
-
-    .summary-row.total {
-        font-size: 1.1rem;
-        font-weight: 800;
-        margin-top: 4px;
-    }
-
-    .summary-row.total .value {
-        color: var(--roasted-brown);
-        font-size: 1.2rem;
-    }
-
-    /* BUTTONS */
-    .btn-checkout {
-        background: var(--dark-coffee);
-        color: white;
-        border: none;
-        border-radius: 50px;
-        padding: 14px 28px;
-        font-weight: 700;
-        font-size: 0.95rem;
-        width: 100%;
-        margin-top: 20px;
-        transition: var(--transition-smooth);
-        cursor: pointer;
-    }
-
-    .btn-checkout:hover {
-        background: var(--forest-green);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(45, 106, 79, 0.3);
-    }
-
-    .btn-back {
-        background: transparent;
-        color: var(--roasted-brown);
-        border: 2px solid rgba(111, 78, 55, 0.2);
-        border-radius: 50px;
-        padding: 12px 28px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        width: 100%;
-        margin-top: 10px;
-        transition: var(--transition-smooth);
-        text-decoration: none;
-        display: block;
-        text-align: center;
-    }
-
-    .btn-back:hover {
-        background: var(--bg-cream);
-        color: var(--roasted-brown);
-        text-decoration: none;
-    }
-
-    /* FOOTER */
-    .footer {
-        background: var(--dark-coffee);
-        color: rgba(255, 255, 255, 0.7);
-        padding: 28px 0;
-        text-align: center;
-        font-size: 0.85rem;
-    }
-
-    /* TAMBAHAN UNTUK EMAIL GUEST */
-    .email-info {
-        font-size: 0.78rem;
-        color: var(--text-secondary);
-        margin-top: 4px;
-    }
-
-    .email-info i {
-        color: var(--roasted-brown);
-    }
-    </style>
-</head>
-
-<body>
-
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light navbar-custom fixed-top">
-        <div class="container d-flex align-items-center">
-            <a class="navbar-brand" href="<?= base_url(); ?>">
-                <div class="brand-icon"><i class="bi bi-patch-check-fill"></i></div>
-                Liberchain
-            </a>
-            <div class="ml-auto d-flex align-items-center" style="gap: 12px;">
-                <a href="<?= base_url('transaksi/keranjang'); ?>" class="nav-btn nav-btn-outline">
-                    <i class="bi bi-cart"></i> Keranjang
-                </a>
-                <?php if ($this->session->userdata('id_user')): ?>
-                <a href="<?= base_url('auth/logout'); ?>" class="nav-btn">Keluar</a>
-                <?php else: ?>
-                <a href="<?= base_url('auth/login'); ?>" class="nav-btn">Masuk</a>
-                <?php endif; ?>
-            </div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mb-4"><i class="fas fa-shopping-cart"></i> Checkout</h2>
+            <hr>
         </div>
-    </nav>
-
-    <!-- MAIN -->
-    <section class="checkout-section">
-        <div class="container">
-
-            <!-- Header -->
-            <div class="mb-4">
-                <h1 class="page-title"><i class="bi bi-bag-check mr-2"></i>Checkout</h1>
-                <p class="page-subtitle">Lengkapi data pengiriman dan pilih metode pembayaran</p>
-            </div>
-
-            <!-- Steps -->
-            <div class="steps-bar mb-4">
-                <div class="step done">
-                    <div class="step-num"><i class="bi bi-check"></i></div>
-                    <span>Keranjang</span>
-                </div>
-                <div class="step-line"></div>
-                <div class="step active">
-                    <div class="step-num">2</div>
-                    <span>Checkout</span>
-                </div>
-                <div class="step-line"></div>
-                <div class="step">
-                    <div class="step-num">3</div>
-                    <span>Selesai</span>
-                </div>
-            </div>
-
-            <!-- Flash error -->
-            <?php if ($this->session->flashdata('error')): ?>
-            <div class="alert alert-danger" style="border-radius: 12px; border: none;">
-                <?= $this->session->flashdata('error'); ?></div>
-            <?php endif; ?>
-
-            <form action="<?= base_url('transaksi/proses_checkout'); ?>" method="POST" id="checkout-form">
-                <div class="row">
-
-                    <!-- KIRI: Form -->
-                    <div class="col-lg-7">
-
-                        <!-- Data Penerima -->
-                        <div class="form-card">
-                            <div class="card-section-title">
-                                <i class="bi bi-person-circle" style="color: var(--roasted-brown);"></i>
-                                Data Penerima
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Nama Penerima <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_penerima" class="form-control"
-                                            value="<?= $user->nama ?? ''; ?>" placeholder="Nama lengkap penerima"
-                                            required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Nomor HP <span class="text-danger">*</span></label>
-                                        <input type="text" name="no_hp" class="form-control"
-                                            value="<?= $user->no_hp ?? ''; ?>" placeholder="08xxxxxxxxxx" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- EMAIL PEMBELI (WAJIB UNTUK GUEST) -->
-                            <div class="form-group">
-                                <label>
-                                    Email Pembeli
-                                    <?php if (!$this->session->userdata('id_user')): ?>
-                                    <span class="text-danger">*</span>
-                                    <?php endif; ?>
-                                </label>
-                                <input type="email" name="email_pembeli" class="form-control"
-                                    value="<?= $user->email ?? ''; ?>"
-                                    <?= $this->session->userdata('id_user') ? 'readonly' : 'required'; ?>
-                                    placeholder="email@example.com">
-                                <?php if (!$this->session->userdata('id_user')): ?>
-                                <div class="email-info">
-                                    <i class="bi bi-info-circle"></i>
-                                    Email digunakan untuk <strong>tracking pesanan</strong> dan
-                                    <strong>invoice</strong>.
-                                    Pastikan email aktif!
-                                </div>
-                                <?php else: ?>
-                                <div class="email-info">
-                                    <i class="bi bi-check-circle" style="color: var(--forest-green);"></i>
-                                    Email terdaftar sebagai member
-                                </div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-
-                        <!-- Alamat Pengiriman -->
-                        <div class="form-card">
-                            <div class="card-section-title">
-                                <i class="bi bi-geo-alt" style="color: var(--roasted-brown);"></i>
-                                Alamat Pengiriman
-                            </div>
-                            <div class="form-group">
-                                <label>Alamat Lengkap <span class="text-danger">*</span></label>
-                                <textarea name="alamat_kirim" class="form-control" rows="3"
-                                    placeholder="Jl. Nama Jalan, No. Rumah, RT/RW, Kelurahan, Kecamatan"
-                                    required><?= $user->alamat ?? ''; ?></textarea>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label>Kota Tujuan <span class="text-danger">*</span></label>
-                                        <!-- 🔥 INI YANG DIUBAH: ditambah style biar ga kepotong -->
-                                        <select name="kota_kirim" id="kota_kirim" class="form-control"
-                                            style="height:45px; font-size:15px; padding:6px 12px;" required>
-                                            <option value="">-- Pilih Kota --</option>
-                                            <?php foreach ($kota as $k): ?>
-                                            <option value="<?= $k; ?>"><?= $k; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Kode Pos</label>
-                                        <input type="text" name="kode_pos" class="form-control" placeholder="12345">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Hasil ongkir - Kota asal PONTIANAK -->
-                            <div class="ongkir-result" id="ongkir-result">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <div style="font-weight: 700; font-size: 0.85rem; color: var(--dark-coffee);">
-                                            <i class="bi bi-truck mr-1" style="color: var(--roasted-brown);"></i>
-                                            Estimasi Pengiriman: <span id="estimasi_hari">-</span> hari
-                                        </div>
-                                        <div style="font-size: 0.78rem; color: var(--text-secondary);">Kota asal:
-                                            <span id="kota_asal_display"><?= $kota_asal; ?></span></div>
-                                    </div>
-                                    <div style="font-weight: 800; color: var(--roasted-brown); font-size: 1rem;"
-                                        id="ongkir_display">Rp 0</div>
-                                </div>
-                                <input type="hidden" name="ongkir" id="ongkir_val" value="0">
-                            </div>
-                        </div>
-
-                        <!-- 🔥 Metode Pembayaran - Virtual Account -->
-                        <div class="form-card">
-                            <div class="card-section-title">
-                                <i class="bi bi-credit-card" style="color: var(--roasted-brown);"></i>
-                                Metode Pembayaran
-                            </div>
-
-                            <!-- 🔥 Virtual Account (pengganti Transfer Bank) -->
-                            <div class="payment-option" onclick="selectPayment('Virtual Account', this)">
-                                <input type="radio" name="metode_bayar" value="Virtual Account" required>
-                                <div class="payment-icon" style="background: #EEF2FF; color: #4F46E5;">
-                                    <i class="bi bi-qr-code"></i>
-                                </div>
-                                <div>
-                                    <p class="payment-label">Virtual Account</p>
-                                    <p class="payment-desc">BCA, Mandiri, BNI, BRI (Otomatis terverifikasi)</p>
-                                </div>
-                            </div>
-
-                            <div class="payment-option" onclick="selectPayment('COD', this)">
-                                <input type="radio" name="metode_bayar" value="COD">
-                                <div class="payment-icon" style="background: #F0FDF4; color: #16A34A;">
-                                    <i class="bi bi-cash-coin"></i>
-                                </div>
-                                <div>
-                                    <p class="payment-label">COD (Bayar di Tempat)</p>
-                                    <p class="payment-desc">Bayar saat barang tiba</p>
-                                </div>
-                            </div>
-
-                            <div class="payment-option" onclick="selectPayment('E-Wallet', this)">
-                                <input type="radio" name="metode_bayar" value="E-Wallet">
-                                <div class="payment-icon" style="background: #FFF7ED; color: #EA580C;">
-                                    <i class="bi bi-phone"></i>
-                                </div>
-                                <div>
-                                    <p class="payment-label">E-Wallet</p>
-                                    <p class="payment-desc">GoPay, OVO, DANA, ShopeePay</p>
-                                </div>
-                            </div>
-                        </div>
-
+    </div>
+    
+    <?php if ($this->session->flashdata('error')): ?>
+        <div class="alert alert-danger alert-dismissible fade show">
+            <?php echo $this->session->flashdata('error'); ?>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    <?php endif; ?>
+    
+    <?php if ($this->session->flashdata('success')): ?>
+        <div class="alert alert-success alert-dismissible fade show">
+            <?php echo $this->session->flashdata('success'); ?>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    <?php endif; ?>
+    
+    <form action="<?php echo base_url('transaksi/proses_checkout'); ?>" method="POST" id="formCheckout">
+        <div class="row">
+            <!-- Data Penerima -->
+            <div class="col-md-7">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5><i class="fas fa-user"></i> Data Penerima</h5>
                     </div>
-
-                    <!-- KANAN: Summary -->
-                    <div class="col-lg-5">
-                        <div class="summary-card">
-                            <div class="summary-title"><i class="bi bi-receipt mr-2"></i>Ringkasan Pesanan</div>
-
-                            <!-- Item list -->
-                            <div id="order-items">
-                                <?php foreach ($cart_items as $item): ?>
-                                <?php $subtotal_item = $item['harga_satuan'] * $item['jumlah']; ?>
-                                <div class="order-item">
-                                    <img src="<?= base_url('uploads/produk/' . ($item['foto_produk'] ?: 'default.jpg')); ?>"
-                                        class="order-img" alt="<?= $item['nama_produk']; ?>">
-                                    <div>
-                                        <div class="order-item-name"><?= $item['nama_produk']; ?></div>
-                                        <div class="order-item-qty">x<?= $item['jumlah']; ?> kg</div>
-                                    </div>
-                                    <div class="order-item-price">Rp <?= number_format($subtotal_item, 0, ',', '.'); ?>
-                                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nama Penerima <span class="text-danger">*</span></label>
+                                    <input type="text" name="nama_penerima" class="form-control" 
+                                           value="<?php echo $user ? $user['nama'] : ''; ?>" required>
                                 </div>
-                                <?php endforeach; ?>
                             </div>
-
-                            <hr class="summary-divider">
-
-                            <div class="summary-row">
-                                <span class="label">Subtotal</span>
-                                <span class="value">Rp <?= number_format($subtotal, 0, ',', '.'); ?></span>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>No HP <span class="text-danger">*</span></label>
+                                    <input type="text" name="no_hp" class="form-control" 
+                                           value="<?php echo $user ? $user['no_hp'] : ''; ?>" required>
+                                </div>
                             </div>
-                            <div class="summary-row">
-                                <span class="label">Ongkir</span>
-                                <span class="value" id="ongkir_summary"
-                                    style="color: var(--text-secondary); font-weight: 500;">
-                                    Pilih kota dulu
-                                </span>
-                            </div>
-
-                            <hr class="summary-divider">
-
-                            <div class="summary-row total">
-                                <span>Total</span>
-                                <span class="value" id="grand_total_display">
-                                    Rp <?= number_format($subtotal, 0, ',', '.'); ?>
-                                </span>
-                            </div>
-
-                            <!-- INFO UNTUK GUEST -->
+                        </div>
+                        
+                        <!-- EMAIL PEMBELI (WAJIB UNTUK GUEST) -->
+                        <div class="form-group">
+                            <label>
+                                Email Pembeli
+                                <?php if (!$this->session->userdata('id_user')): ?>
+                                    <span class="text-danger">*</span>
+                                <?php endif; ?>
+                            </label>
+                            <input type="email" name="email_pembeli" class="form-control"
+                                   value="<?php echo $user ? $user['email'] : ''; ?>"
+                                   <?php echo $this->session->userdata('id_user') ? 'readonly' : 'required'; ?>
+                                   placeholder="email@example.com">
                             <?php if (!$this->session->userdata('id_user')): ?>
-                            <div
-                                style="background: #FEF3C7; border-radius: 10px; padding: 10px 14px; margin-top: 14px; font-size: 0.78rem; color: #92400E;">
-                                <i class="bi bi-info-circle mr-1"></i>
-                                Kamu checkout sebagai <strong>Guest</strong>. Simpan <strong>invoice</strong> untuk
-                                tracking pesanan di
-                                <a href="<?= base_url('guest/tracking'); ?>" target="_blank"
-                                    style="color: #92400E; font-weight: 700; text-decoration: underline;">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i> 
+                                    Email digunakan untuk <strong>tracking pesanan</strong> dan <strong>invoice</strong>.
+                                </small>
+                            <?php else: ?>
+                                <small class="text-muted">
+                                    <i class="fas fa-check-circle" style="color: green;"></i> 
+                                    Email terdaftar sebagai member
+                                </small>
+                            <?php endif; ?>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Alamat Kirim <span class="text-danger">*</span></label>
+                            <textarea name="alamat_kirim" class="form-control" rows="3" required><?php echo $user ? $user['alamat'] : ''; ?></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Kota <span class="text-danger">*</span></label>
+                                    <input type="text" name="kota_kirim" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Kode Pos <span class="text-danger">*</span></label>
+                                    <input type="text" name="kode_pos" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Metode Pembayaran -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5><i class="fas fa-credit-card"></i> Metode Pembayaran</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Pilih Metode <span class="text-danger">*</span></label>
+                            <select name="metode_bayar" class="form-control" required>
+                                <option value="">Pilih Metode</option>
+                                <option value="Virtual Account">🏦 Virtual Account (BCA, Mandiri, BNI, BRI)</option>
+                                <option value="E-Wallet">📱 E-Wallet (OVO, Gopay, DANA)</option>
+                                <option value="COD">🚚 COD (Bayar di Tempat)</option>
+                            </select>
+                        </div>
+                        <div class="alert alert-info">
+                            <small>
+                                <i class="fas fa-info-circle"></i> 
+                                <?php if ($user): ?>
+                                    ✅ Anda login sebagai member. Poin akan bertambah setiap transaksi.
+                                <?php else: ?>
+                                    👤 Guest checkout. <a href="<?php echo base_url('auth/register'); ?>" class="font-weight-bold">Daftar</a> untuk mendapatkan benefit member.
+                                <?php endif; ?>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ringkasan Pesanan -->
+            <div class="col-md-5">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5><i class="fas fa-receipt"></i> Ringkasan Pesanan</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th>Produk</th>
+                                        <th class="text-center">Qty</th>
+                                        <th class="text-right">Harga</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($cart_items as $item): ?>
+                                    <tr>
+                                        <td>
+                                            <small><?php echo $item['nama_produk']; ?></small>
+                                            <br>
+                                            <small class="text-muted"><?php echo $item['nama_petani']; ?></small>
+                                        </td>
+                                        <td class="text-center"><?php echo $item['jumlah']; ?></td>
+                                        <td class="text-right">Rp <?php echo number_format($item['harga_satuan'] * $item['jumlah'], 0, ',', '.'); ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="row mb-2">
+                            <div class="col-6"><strong>Subtotal</strong></div>
+                            <div class="col-6 text-right">
+                                Rp <?php echo number_format($subtotal, 0, ',', '.'); ?>
+                            </div>
+                        </div>
+                        
+                        <!-- ========================================== -->
+                        <!-- BAGIAN ONGKIR -->
+                        <!-- ========================================== -->
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <strong>Ongkir</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-5">
+                                <small class="text-muted">Kota Asal</small>
+                                <select name="kota_asal" id="kota_asal" class="form-control form-control-sm" style="border-radius:4px; border:1px solid #ccc; height:32px; font-size:13px; padding:2px 8px; width:100%;">
+                                    <option value="">Kota Asal</option>
+                                    <?php foreach ($kota as $k): ?>
+                                    <option value="<?php echo $k; ?>"><?php echo $k; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-7">
+                                <small class="text-muted">Kota Tujuan</small>
+                                <select name="kota_tujuan" id="kota_tujuan" class="form-control" style="border-radius:4px; border:1px solid #ccc; font-size:15px; padding:8px 12px; height:45px; background:white; width:100%;">
+                                    <option value="">-- Pilih Kota --</option>
+                                    <?php foreach ($kota as $k): ?>
+                                    <option value="<?php echo $k; ?>"><?php echo $k; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <button type="button" id="hitung_ongkir" class="btn btn-warning btn-sm" style="font-weight:600; border-radius:4px; padding:5px 12px; width:100%; font-size:0.82rem;">
+                                    <i class="fas fa-calculator"></i> Hitung Ongkir
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-2" id="ongkir_display">
+                            <div class="col-12 text-right">
+                                <span id="ongkir_biaya" style="font-size:1.2rem; font-weight:700; color:#E6A15C;">Rp 0</span>
+                                <br>
+                                <small id="ongkir_estimasi" class="text-muted"></small>
+                                <input type="hidden" name="ongkir" id="ongkir" value="0">
+                            </div>
+                        </div>
+                        <!-- ========================================== -->
+                        <!-- END BAGIAN ONGKIR -->
+                        <!-- ========================================== -->
+                        
+                        <hr>
+                        
+                        <div class="row">
+                            <div class="col-6"><h5>Grand Total</h5></div>
+                            <div class="col-6 text-right">
+                                <h5 class="text-success" id="grand_total" style="font-size:1.5rem; font-weight:800;">
+                                    Rp <?php echo number_format($subtotal, 0, ',', '.'); ?>
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <!-- INFO GUEST -->
+                        <?php if (!$this->session->userdata('id_user')): ?>
+                            <div class="alert alert-warning" style="border-radius:8px; padding:8px 12px; font-size:0.78rem;">
+                                <i class="fas fa-info-circle"></i> 
+                                Kamu checkout sebagai <strong>Guest</strong>. Simpan <strong>invoice</strong> untuk tracking pesanan di 
+                                <a href="<?php echo base_url('guest/tracking'); ?>" target="_blank" style="font-weight:700; text-decoration:underline;">
                                     Cek Pesanan
                                 </a>
                             </div>
-                            <?php endif; ?>
-
-                            <button type="submit" class="btn-checkout" id="btn-submit">
-                                <i class="bi bi-bag-check mr-1"></i> Buat Pesanan
-                            </button>
-                            <a href="<?= base_url('transaksi/keranjang'); ?>" class="btn-back">
-                                <i class="bi bi-arrow-left mr-1"></i> Kembali ke Keranjang
-                            </a>
-                        </div>
+                        <?php endif; ?>
+                        
+                        <button type="submit" class="btn btn-success btn-block btn-lg" id="btnSubmit">
+                            <i class="fas fa-check"></i> Buat Pesanan
+                        </button>
+                        <a href="<?php echo base_url('transaksi/keranjang'); ?>" class="btn btn-secondary btn-block">
+                            <i class="fas fa-arrow-left"></i> Kembali ke Keranjang
+                        </a>
                     </div>
-
                 </div>
-            </form>
-
+            </div>
         </div>
-    </section>
+    </form>
+</div>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <p class="mb-0">&copy; <?= date('Y'); ?> POKTAN Liberchain. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-    var subtotal = <?= $subtotal; ?>;
-
-    // Pilih metode bayar
-    function selectPayment(value, el) {
-        $('.payment-option').removeClass('selected');
-        $(el).addClass('selected');
-        $(el).find('input[type="radio"]').prop('checked', true);
-    }
-
-    // Hitung ongkir - Kota asal SAMBAS
-    $('#kota_kirim').on('change', function() {
-        var kota = $(this).val();
-        if (!kota) return;
-
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#hitung_ongkir').click(function() {
+        var kota_asal = $('#kota_asal').val();
+        var kota_tujuan = $('#kota_tujuan').val();
+        
+        if (!kota_asal || !kota_tujuan) {
+            alert('⚠️ Pilih kota asal dan tujuan terlebih dahulu!');
+            return;
+        }
+        
+        $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Menghitung...');
+        
         $.ajax({
-            url: '<?= base_url("transaksi/hitung_ongkir"); ?>',
+            url: '<?php echo base_url("transaksi/hitung_ongkir"); ?>',
             type: 'POST',
-            data: {
-                kota_asal: '<?= $kota_asal; ?>',
-                kota_tujuan: kota
-            },
+            data: {kota_asal: kota_asal, kota_tujuan: kota_tujuan},
             dataType: 'json',
-            success: function(res) {
-                if (res.status === 'success') {
-                    var ongkir = res.tarif;
-                    var grand = subtotal + ongkir;
-
-                    $('#ongkir_val').val(ongkir);
-                    $('#ongkir_display').text(res.tarif_formatted);
-                    $('#estimasi_hari').text(res.estimasi);
-                    if (res.kota_asal) {
-                        $('#kota_asal_display').text(res.kota_asal);
-                    }
-                    $('#ongkir-result').addClass('show');
-                    $('#ongkir_summary').text(res.tarif_formatted).css({
-                        color: 'var(--dark-coffee)',
-                        fontWeight: '700'
-                    });
-                    $('#grand_total_display').text('Rp ' + grand.toLocaleString('id-ID'));
+            timeout: 10000,
+            success: function(response) {
+                if (response.status == 'success') {
+                    var tarif = parseInt(response.tarif);
+                    $('#ongkir').val(tarif);
+                    $('#ongkir_biaya').text(response.tarif_formatted);
+                    $('#ongkir_estimasi').text('🚚 Estimasi ' + response.estimasi + ' hari');
+                    
+                    var subtotal = <?php echo $subtotal; ?>;
+                    var total = subtotal + tarif;
+                    $('#grand_total').text('Rp ' + total.toLocaleString('id-ID'));
+                    
+                    $('#ongkir_biaya').css('color', '#28a745');
+                    setTimeout(function() {
+                        $('#ongkir_biaya').css('color', '#E6A15C');
+                    }, 1500);
+                    
                 } else {
-                    $('#ongkir_val').val(0);
-                    $('#ongkir_summary').text('Tidak tersedia').css({
-                        color: 'var(--text-secondary)',
-                        fontWeight: '500'
-                    });
-                    $('#ongkir-result').removeClass('show');
-                    $('#grand_total_display').text('Rp ' + subtotal.toLocaleString('id-ID'));
+                    alert('❌ ' + response.message);
                 }
+            },
+            error: function(xhr, status, error) {
+                alert('❌ Gagal menghitung ongkir. Silakan coba lagi.\nError: ' + status);
+                console.error('AJAX Error:', status, error);
+            },
+            complete: function() {
+                $('#hitung_ongkir').prop('disabled', false).html('<i class="fas fa-calculator"></i> Hitung Ongkir');
             }
         });
     });
-
-    // Validasi sebelum submit
-    $('#checkout-form').on('submit', function(e) {
-        var metode = $('input[name="metode_bayar"]:checked').val();
-        if (!metode) {
+    
+    $('#formCheckout').submit(function(e) {
+        var ongkir = parseInt($('#ongkir').val());
+        if (ongkir <= 0) {
             e.preventDefault();
-            alert('⚠️ Pilih metode pembayaran dulu ya!');
+            alert('⚠️ Silakan hitung ongkir terlebih dahulu!');
+            $('#hitung_ongkir').focus();
             return false;
         }
-
-        // Validasi email untuk guest
-        var id_user = <?= $this->session->userdata('id_user') ? 'true' : 'false'; ?>;
-        if (!id_user) {
-            var email = $('input[name="email_pembeli"]').val().trim();
-            if (!email) {
-                e.preventDefault();
-                alert('⚠️ Email wajib diisi untuk tracking pesanan!');
-                $('input[name="email_pembeli"]').focus();
-                return false;
-            }
-            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-                e.preventDefault();
-                alert('⚠️ Format email tidak valid!');
-                $('input[name="email_pembeli"]').focus();
-                return false;
-            }
+        
+        var nama = $('input[name="nama_penerima"]').val().trim();
+        var alamat = $('textarea[name="alamat_kirim"]').val().trim();
+        var nohp = $('input[name="no_hp"]').val().trim();
+        var kota = $('input[name="kota_kirim"]').val().trim();
+        var metode = $('select[name="metode_bayar"]').val();
+        var email = $('input[name="email_pembeli"]').val().trim();
+        
+        if (!nama || !alamat || !nohp || !kota || !metode) {
+            e.preventDefault();
+            alert('⚠️ Semua field wajib diisi!');
+            return false;
         }
-
-        // Disable tombol biar ga double
-        $('#btn-submit').prop('disabled', true).html('<i class="bi bi-hourglass-split mr-1"></i> Memproses...');
+        
+        var id_user = <?php echo $this->session->userdata('id_user') ? 'true' : 'false'; ?>;
+        if (!id_user && !email) {
+            e.preventDefault();
+            alert('⚠️ Email wajib diisi untuk tracking pesanan!');
+            $('input[name="email_pembeli"]').focus();
+            return false;
+        }
+        
+        $('#btnSubmit').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Memproses...');
     });
-    </script>
-
-</body>
-
-</html>
+});
+</script>
