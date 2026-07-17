@@ -3,8 +3,20 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk - Sistem Supply Chain Kopi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Masuk - LiberChain</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="LiberChain">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LiberChain">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#4A2C11">
+    <link rel="manifest" href="<?= base_url('manifest.json') ?>">
+    <link rel="icon" type="image/svg+xml" href="<?= base_url('assets/images/pwa/Logo_LiberCHain.svg') ?>">
+    <link rel="apple-touch-icon" href="<?= base_url('assets/images/pwa/Logo_LiberCHain.svg') ?>">
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet">
@@ -346,6 +358,21 @@
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('<?= base_url('sw.js') ?>')
+                .then(function(registration) {
+                    console.log('[LiberChain PWA] ServiceWorker registered:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.warn('[LiberChain PWA] ServiceWorker registration failed:', error);
+                });
+        });
+    }
+    </script>
 </body>
 
 </html>
