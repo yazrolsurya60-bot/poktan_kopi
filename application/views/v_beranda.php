@@ -730,6 +730,22 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('<?= base_url('pwa/service_worker') ?>')
+                .then(function(registration) {
+                    console.log('[LiberChain PWA] ServiceWorker registered:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.warn('[LiberChain PWA] ServiceWorker registration failed:', error);
+                });
+        });
+    }
+    </script>
+    
     <script>
         window.addEventListener('scroll', () => {
             const navbar = document.querySelector('.navbar-custom');
