@@ -13,9 +13,13 @@
     <meta name="apple-mobile-web-app-title" content="LiberChain">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#4A2C11">
-    <link rel="manifest" href="<?= base_url('manifest.json') ?>">
-    <link rel="icon" type="image/svg+xml" href="<?= base_url('assets/images/pwa/Logo_LiberCHain.svg') ?>">
-    <link rel="apple-touch-icon" href="<?= base_url('assets/images/pwa/Logo_LiberCHain.svg') ?>">
+    <meta name="msapplication-TileColor" content="#FAF6F0">
+    <meta name="msapplication-TileImage" content="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    <link rel="manifest" href="<?= base_url('pwa/manifest') ?>">
+    <link rel="icon" type="image/png" sizes="192x192" href="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    <link rel="icon" type="image/png" sizes="512x512" href="<?= base_url('assets/images/pwa/icon-512x512.png') ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('assets/images/pwa/apple-touch-icon.png') ?>">
+    <link rel="apple-touch-icon" sizes="192x192" href="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
@@ -345,7 +349,7 @@
                 <button type="submit" class="btn btn-custom">
                     <i class="bi bi-box-arrow-in-right mr-1"></i> Masuk Sekarang
                 </button>
-                <a href="<?= base_url('Beranda'); ?>" class="btn btn-custom mt-3">
+                <a href="<?= base_url('/'); ?>" class="btn btn-custom mt-3">
                     <i class="bi bi-arrow-left mr-1"></i> Kembali ke Halaman Landing
                 </a>
             </form>
@@ -363,7 +367,7 @@
     <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-            navigator.serviceWorker.register('<?= base_url('sw.js') ?>')
+            navigator.serviceWorker.register('<?= base_url('pwa/service_worker') ?>')
                 .then(function(registration) {
                     console.log('[LiberChain PWA] ServiceWorker registered:', registration.scope);
                 })

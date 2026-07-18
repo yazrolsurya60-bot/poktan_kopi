@@ -13,7 +13,7 @@
     // Register Service Worker for PWA
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-            navigator.serviceWorker.register('<?= base_url('sw.js') ?>')
+            navigator.serviceWorker.register('<?= base_url('pwa/service_worker') ?>')
                 .then(function(registration) {
                     console.log('[LiberChain PWA] ServiceWorker registered:', registration.scope);
                 })

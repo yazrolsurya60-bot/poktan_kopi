@@ -2,25 +2,25 @@
   "name": "LiberChain",
   "short_name": "LiberChain",
   "description": "Platform Rantai Pasok Kopi Terintegrasi - Revolusi rantai pasok kopi Indonesia yang berkelanjutan, transparan, dan adil bagi petani",
-  "start_url": "/poktan_kopi/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#FAF6F0",
   "theme_color": "#4A2C11",
   "orientation": "portrait-primary",
   "lang": "id-ID",
-  "scope": "/poktan_kopi/",
+  "scope": "./",
   "icons": [
     {
-      "src": "assets/images/pwa/Logo_LiberCHain.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "assets/images/pwa/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "assets/images/pwa/Logo_LiberCHain.svg",
+      "src": "assets/images/pwa/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "categories": ["business", "food", "agriculture"],
@@ -32,22 +32,22 @@
       "name": "Beranda",
       "short_name": "Beranda",
       "description": "Halaman utama LiberChain",
-      "url": "/poktan_kopi/",
-      "icons": [{ "src": "assets/images/pwa/Logo_LiberCHain.svg", "sizes": "any" }]
+      "url": "./",
+      "icons": [{ "src": "assets/images/pwa/icon-192x192.png", "sizes": "192x192" }]
     },
     {
       "name": "Produk",
       "short_name": "Produk",
       "description": "Lihat produk kopi",
-      "url": "/poktan_kopi/produk",
-      "icons": [{ "src": "assets/images/pwa/Logo_LiberCHain.svg", "sizes": "any" }]
+      "url": "./produk",
+      "icons": [{ "src": "assets/images/pwa/icon-192x192.png", "sizes": "192x192" }]
     },
     {
       "name": "Login",
       "short_name": "Login",
       "description": "Masuk ke akun",
-      "url": "/poktan_kopi/auth/login",
-      "icons": [{ "src": "assets/images/pwa/Logo_LiberCHain.svg", "sizes": "any" }]
+      "url": "./auth/login",
+      "icons": [{ "src": "assets/images/pwa/icon-192x192.png", "sizes": "192x192" }]
     }
   ]
 }

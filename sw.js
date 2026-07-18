@@ -1,16 +1,13 @@
-const CACHE_NAME = 'liberchain-v1';
-const ASSETS_TO_CACHE = [
-  '/poktan_kopi/',
-  '/poktan_kopi/manifest.json',
-  '/poktan_kopi/assets/images/pwa/Logo_LiberCHain.svg',
-  '/poktan_kopi/assets/images/logo-liberchain.svg'
-];
+const CACHE_NAME = 'liberchain-v2';
 
-// CSS/JS dari CDN untuk offline fallback
-const CDN_CACHE = [
-  'https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css',
-  'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css',
-  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap'
+// Get base path dynamically
+const BASE = self.location.pathname.replace('sw.js', '');
+
+const ASSETS_TO_CACHE = [
+  BASE,
+  BASE + 'manifest.json',
+  BASE + 'assets/images/pwa/icon-192x192.png',
+  BASE + 'assets/images/pwa/icon-512x512.png'
 ];
 
 // Install service worker
@@ -24,14 +21,6 @@ self.addEventListener('install', event => {
         });
       })
       .then(() => {
-        return caches.open(CACHE_NAME + '-cdn');
-      })
-      .then(cdnCache => {
-        return cdnCache.addAll(CDN_CACHE).catch(err => {
-          console.warn('[LiberChain SW] CDN cache skipped:', err);
-        });
-      })
-      .then(() => {
         console.log('[LiberChain SW] Skip waiting');
         return self.skipWaiting();
       })
@@ -41,12 +30,11 @@ self.addEventListener('install', event => {
 // Activate service worker
 self.addEventListener('activate', event => {
   console.log('[LiberChain SW] Activated');
-  // Clean old caches
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME && cacheName !== CACHE_NAME + '-cdn') {
+          if (cacheName !== CACHE_NAME) {
             console.log('[LiberChain SW] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
@@ -63,19 +51,11 @@ self.addEventListener('fetch', event => {
   // Skip non-GET requests
   if (event.request.method !== 'GET') return;
 
-  // For API/POST requests - network only
-  if (event.request.url.includes('/auth/') || 
-      event.request.url.includes('api') ||
-      event.request.headers.get('Accept')?.includes('application/json')) {
-    return;
-  }
-
   // For HTML navigations - Network First
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
         .then(response => {
-          // Cache the latest version
           const clonedResponse = response.clone();
           caches.open(CACHE_NAME).then(cache => {
             cache.put(event.request, clonedResponse);
@@ -83,11 +63,9 @@ self.addEventListener('fetch', event => {
           return response;
         })
         .catch(() => {
-          // If offline, serve cached version
           return caches.match(event.request).then(cached => {
             if (cached) return cached;
-            // If no cache, serve offline page
-            return caches.match('/poktan_kopi/');
+            return caches.match(BASE);
           });
         })
     );
@@ -99,7 +77,6 @@ self.addEventListener('fetch', event => {
     caches.match(event.request)
       .then(cachedResponse => {
         if (cachedResponse) {
-          // Return cached version and update in background
           const fetchPromise = fetch(event.request)
             .then(response => {
               if (response.ok) {
@@ -112,7 +89,6 @@ self.addEventListener('fetch', event => {
           return cachedResponse;
         }
 
-        // If not in cache, fetch from network
         return fetch(event.request)
           .then(response => {
             if (response.ok) {
@@ -124,9 +100,8 @@ self.addEventListener('fetch', event => {
             return response;
           })
           .catch(() => {
-            // Offline fallback untuk gambar
             if (event.request.url.match(/\.(jpg|jpeg|png|gif|svg|ico)$/)) {
-              return caches.match('/poktan_kopi/assets/images/pwa/Logo_LiberCHain.svg');
+              return caches.match(BASE + 'assets/images/pwa/icon-192x192.png');
             }
             return new Response('Offline', { status: 503 });
           });
