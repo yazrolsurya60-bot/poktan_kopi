@@ -80,4 +80,29 @@ class Notifikasi extends CI_Controller
 			redirect('notifikasi/history');
 		}
 	}
+
+	/**
+	 * AJAX: Mengambil count dan daftar notifikasi unread real-time
+	 */
+	public function get_notifications_ajax()
+	{
+		// Pastikan response berupa JSON
+		header('Content-Type: application/json');
+
+		$id_user = $this->session->userdata('id_user');
+
+		if (!$id_user) {
+			echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+			return;
+		}
+
+		$unread_count = $this->Notifikasi_model->count_unread($id_user);
+		$notifikasi   = $this->Notifikasi_model->get_unread_notif($id_user, 10);
+
+		echo json_encode([
+			'success'      => true,
+			'unread'       => (int) $unread_count,
+			'notifications' => $notifikasi
+		]);
+	}
 }

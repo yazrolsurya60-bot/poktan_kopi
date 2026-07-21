@@ -47,9 +47,24 @@
             overflow-x: hidden;
         }
 
-        /* ============================================
-           SIDEBAR
-           ============================================ */
+        /* ANIMASI GETAR LONCENG NOTIFIKASI */
+        @keyframes ring {
+            0% { transform: rotate(0); }
+            10% { transform: rotate(15deg); }
+            20% { transform: rotate(-10deg); }
+            30% { transform: rotate(12deg); }
+            40% { transform: rotate(-8deg); }
+            50% { transform: rotate(6deg); }
+            60% { transform: rotate(-4deg); }
+            70% { transform: rotate(0); }
+            100% { transform: rotate(0); }
+        }
+        .notif-btn.ring i {
+            animation: ring 0.8s ease-in-out infinite;
+            color: var(--amber-cream);
+        }
+
+        /* SIDEBAR */
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -183,9 +198,7 @@
             border-color: rgba(230, 161, 92, 0.2);
         }
 
-        /* ============================================
-           MAIN CONTENT
-           ============================================ */
+        /* MAIN CONTENT */
         .main-content {
             margin-left: var(--sidebar-width);
             padding: 30px 40px 40px;
@@ -212,9 +225,7 @@
             margin-top: 2px;
         }
 
-        /* ============================================
-           USER AVATAR - RAPI
-           ============================================ */
+        /* USER AVATAR */
         .user-avatar-wrapper {
             display: flex;
             align-items: center;
@@ -264,9 +275,7 @@
             font-weight: 600;
         }
 
-        /* ============================================
-           NOTIFICATION BELL & DROPDOWN
-           ============================================ */
+        /* NOTIFICATION BELL & DROPDOWN */
         .notif-btn {
             position: relative;
             background: var(--card-white);
@@ -420,9 +429,7 @@
             flex-shrink: 0;
         }
 
-        /* ============================================
-           QUICK ACTION BUTTONS
-           ============================================ */
+        /* QUICK ACTION BUTTONS */
         .quick-action-btn {
             padding: 10px 16px;
             border: 1px solid rgba(74, 44, 17, 0.06);
@@ -456,9 +463,7 @@
             color: var(--amber-cream);
         }
 
-        /* ============================================
-           KPI CARDS - RAPI & TIDAK DEMPET
-           ============================================ */
+        /* KPI CARDS */
         .stat-box {
             background: var(--card-white);
             border: 1px solid rgba(74, 44, 17, 0.06);
@@ -510,10 +515,6 @@
             padding-right: 10px;
         }
 
-        .stat-number-sm {
-            font-size: 1.4rem;
-        }
-
         .stat-change {
             font-size: 0.7rem;
             font-weight: 600;
@@ -543,9 +544,7 @@
             transform: scale(1.05) rotate(-3deg);
         }
 
-        /* ============================================
-           CUSTOM CARD
-           ============================================ */
+        /* CUSTOM CARD */
         .custom-card {
             background: var(--card-white);
             border: 1px solid rgba(74, 44, 17, 0.06);
@@ -579,18 +578,14 @@
             padding: 24px;
         }
 
-        /* ============================================
-           CHART
-           ============================================ */
+        /* CHART */
         .chart-container {
             position: relative;
             height: 220px;
             width: 100%;
         }
 
-        /* ============================================
-           TABLE RESPONSIF
-           ============================================ */
+        /* TABLE RESPONSIF */
         .table-custom {
             font-size: 0.85rem;
         }
@@ -617,9 +612,7 @@
             background: rgba(250, 246, 240, 0.3);
         }
 
-        /* ============================================
-           STATUS BADGE
-           ============================================ */
+        /* STATUS BADGE */
         .status-badge {
             padding: 4px 14px;
             border-radius: 20px;
@@ -634,9 +627,7 @@
         .status-badge.complete, .status-badge.selesai { background: #D1FAE5; color: #065F46; }
         .status-badge.cancelled, .status-badge.dibatalkan { background: #FEE2E2; color: #991B1B; }
 
-        /* ============================================
-           RECOMMENDATION PRODUCTS
-           ============================================ */
+        /* RECOMMENDATION PRODUCTS */
         .rec-product-card {
             background: #FFF;
             border: 1px solid rgba(74, 44, 17, 0.08);
@@ -730,9 +721,7 @@
             text-decoration: none;
         }
 
-        /* ============================================
-           HEADER RIGHT - RAPI
-           ============================================ */
+        /* HEADER RIGHT */
         .header-right {
             display: flex;
             align-items: center;
@@ -740,9 +729,7 @@
             position: relative;
         }
 
-        /* ============================================
-           RESPONSIVE OPTIMIZED
-           ============================================ */
+        /* RESPONSIVE OPTIMIZED */
         @media (max-width: 991.98px) {
             .sidebar {
                 left: calc(-1 * var(--sidebar-width));
@@ -779,7 +766,6 @@
             .user-avatar-role {
                 display: none;
             }
-            /* Notif Dropdown Tablet */
             .notif-dropdown {
                 width: 340px;
                 right: 0;
@@ -810,7 +796,6 @@
             .custom-card .card-body-custom {
                 padding: 16px;
             }
-            /* Notif Dropdown Mobile Fixed */
             .notif-dropdown {
                 position: fixed;
                 top: 70px;
@@ -851,9 +836,7 @@
             }
         }
 
-        /* ============================================
-           SIDEBAR OVERLAY
-           ============================================ */
+        /* SIDEBAR OVERLAY */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -866,9 +849,7 @@
             display: block;
         }
 
-        /* ============================================
-           SCROLLBAR
-           ============================================ */
+        /* SCROLLBAR */
         .sidebar-menu-wrapper::-webkit-scrollbar,
         .notif-dropdown-list::-webkit-scrollbar {
             width: 3px;
@@ -882,26 +863,16 @@
             background: rgba(230, 161, 92, 0.3);
             border-radius: 10px;
         }
-
-        /* ============================================
-           UTILITY
-           ============================================ */
-        .text-amber {
-            color: var(--amber-cream);
-        }
-        .bg-amber-soft {
-            background: #FDF5ED;
-        }
-        .gap-2 {
-            gap: 8px;
-        }
-        .gap-3 {
-            gap: 16px;
-        }
     </style>
 </head>
 
 <body>
+
+    <!-- ELEMEN AUDIO NOTIFIKASI -->
+    <audio id="notifSound" preload="auto">
+        <source src="<?= base_url('assets/sounds/notifikasi.wav'); ?>" type="audio/wav">
+        <source src="<?= base_url('assets/sounds/notifikasi.mp3'); ?>" type="audio/mpeg">
+    </audio>
 
     <!-- SIDEBAR OVERLAY -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -955,9 +926,7 @@
     <!-- MAIN CONTENT -->
     <div class="main-content">
 
-        <!-- ==========================================
-        PAGE HEADER
-        ========================================== -->
+        <!-- PAGE HEADER -->
         <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
             <div>
                 <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
@@ -989,7 +958,7 @@
 
                     <div class="notif-dropdown" id="notifDropdown">
                         <div class="notif-dropdown-header">
-                            <span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
+                            <span id="notifHeaderTitle"><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
                             <div>
                                 <?php if (isset($unread_count) && $unread_count > 0): ?>
                                     <a href="#" id="markAllReadBtn" class="mr-2" style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
@@ -1041,7 +1010,7 @@
                     </div>
                 </div>
 
-                <!-- USER AVATAR - RAPI & TIDAK DEMPET -->
+                <!-- USER AVATAR -->
                 <div class="user-avatar-wrapper" onclick="window.location.href='<?= base_url('pembeli/profil'); ?>'">
                     <?php 
                     $user_foto = $this->session->userdata('foto');
@@ -1059,9 +1028,7 @@
             </div>
         </div>
 
-        <!-- ==========================================
-        QUICK ACTION BUTTONS
-        ========================================== -->
+        <!-- QUICK ACTION BUTTONS -->
         <h5 class="font-weight-bold mb-3"
             style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
             <i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
@@ -1089,9 +1056,7 @@
             </div>
         </div>
 
-        <!-- ==========================================
-        KPI CARDS - RAPI & TIDAK DEMPET
-        ========================================== -->
+        <!-- KPI CARDS -->
         <div class="row mb-4">
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="stat-box">
@@ -1128,9 +1093,7 @@
             </div>
         </div>
 
-        <!-- ==========================================
-        REKOMENDASI PRODUK
-        ========================================== -->
+        <!-- REKOMENDASI PRODUK -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="custom-card">
@@ -1189,9 +1152,7 @@
             </div>
         </div>
 
-        <!-- ==========================================
-        RIWAYAT TRANSAKSI & GRAFIK
-        ========================================== -->
+        <!-- RIWAYAT TRANSAKSI & GRAFIK -->
         <div class="row">
             <div class="col-lg-8 mb-4">
                 <div class="custom-card">
@@ -1253,9 +1214,7 @@
             </div>
         </div>
 
-        <!-- ==========================================
-        SETTING NOTIFIKASI
-        ========================================== -->
+        <!-- SETTING NOTIFIKASI -->
         <div class="row">
             <div class="col-12">
                 <div class="custom-card">
@@ -1328,10 +1287,8 @@
 
     </div>
 
-    <!-- ==========================================
-    SCRIPTS
-    ========================================== -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <!-- SCRIPTS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- PWA Service Worker Registration -->
@@ -1350,9 +1307,22 @@
     </script>
     
     <script>
-        // ============================================
+        // UNLOCK AUDIO BROWSER AUTOPLAY
+        let audioUnlocked = false;
+        document.addEventListener('click', function unlockAudio() {
+            if (!audioUnlocked) {
+                const sound = document.getElementById('notifSound');
+                if (sound) {
+                    sound.play().then(() => {
+                        sound.pause();
+                        sound.currentTime = 0;
+                        audioUnlocked = true;
+                    }).catch(() => {});
+                }
+            }
+        }, { once: true });
+
         // 1. SIDEBAR TOGGLE
-        // ============================================
         const sidebar = document.getElementById('sidebarMenu');
         const overlay = document.getElementById('sidebarOverlay');
         const toggleBtn = document.getElementById('sidebarToggle');
@@ -1363,12 +1333,8 @@
             document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
         }
 
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', toggleSidebar);
-        }
-        if (overlay) {
-            overlay.addEventListener('click', toggleSidebar);
-        }
+        if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+        if (overlay) overlay.addEventListener('click', toggleSidebar);
 
         document.addEventListener('click', function(e) {
             if (window.innerWidth > 991.98) return;
@@ -1379,9 +1345,7 @@
             }
         });
 
-        // ============================================
-        // 2. NOTIFICATION DROPDOWN
-        // ============================================
+        // 2. NOTIFICATION DROPDOWN TOGGLE
         const notifToggle = document.getElementById('notifToggle');
         const notifDropdown = document.getElementById('notifDropdown');
 
@@ -1398,9 +1362,7 @@
             }
         });
 
-        // ============================================
         // 3. MARK ALL READ
-        // ============================================
         function markAllRead() {
             if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
                 $.ajax({
@@ -1426,11 +1388,89 @@
             markAllRead();
         });
 
-        // ============================================
-        // 4. CHART.JS - GRAFIK BELANJA
-        // ============================================
-        let shoppingChart;
+        // 4. PLAY SOUND
+        function playNotifSound() {
+            const sound = document.getElementById('notifSound');
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(err => console.log('Autoplay prevented:', err));
+            }
+        }
 
+        // 5. REAL-TIME POLLING NOTIFIKASI (5 DETIK)
+        let lastUnreadCount = <?= $unread_count ?? 0; ?>;
+
+        function checkNotifications() {
+            $.ajax({
+                url: '<?= base_url('api/notifikasi/get'); ?>',
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    if (res.success) {
+                        const count = res.unread_count;
+                        const countEl = $('#notifCount');
+                        const notifBtn = $('#notifToggle');
+                        const headerTitle = $('#notifHeaderTitle');
+
+                        // Update Badge Angka
+                        if (count > 0) {
+                            countEl.text(count).show();
+                            if (headerTitle.length) headerTitle.text(count + ' Notifikasi Belum Dibaca');
+                        } else {
+                            countEl.hide();
+                            if (headerTitle.length) headerTitle.text('Semua Notifikasi');
+                        }
+
+                        // Jika ada notifikasi baru masuk
+                        if (count > lastUnreadCount) {
+                            playNotifSound();
+                            notifBtn.addClass('ring');
+                            setTimeout(() => notifBtn.removeClass('ring'), 2500);
+
+                            // Auto Render/Update isi Dropdown Notifikasi
+                            if (res.notifikasi && res.notifikasi.length > 0) {
+                                let html = '';
+                                const iconMap = {
+                                    'success': 'bi-check-circle-fill',
+                                    'warning': 'bi-exclamation-triangle-fill',
+                                    'danger': 'bi-x-circle-fill',
+                                    'info': 'bi-info-circle-fill',
+                                    'primary': 'bi-star-fill'
+                                };
+
+                                res.notifikasi.forEach(n => {
+                                    const iconType = n.icon || 'info';
+                                    const iconClass = iconMap[iconType] || 'bi-info-circle-fill';
+                                    const isUnread = (n.status_baca == 0 || n.status_baca == '0');
+
+                                    html += `
+                                        <a class="notif-item ${isUnread ? 'unread' : ''}" 
+                                           href="<?= base_url('pembeli/dashboard/read/'); ?>${n.id_notifikasi}">
+                                            <div class="notif-icon ${iconType}">
+                                                <i class="bi ${iconClass}"></i>
+                                            </div>
+                                            <div class="notif-text">
+                                                ${n.isi_notifikasi || n.judul || 'Notifikasi'}
+                                                <span class="notif-time">${n.tanggal_buat}</span>
+                                            </div>
+                                            ${isUnread ? '<span class="notif-badge-new">Baru</span>' : ''}
+                                        </a>
+                                    `;
+                                });
+                                $('#notifList').html(html);
+                            }
+                        }
+                        lastUnreadCount = count;
+                    }
+                }
+            });
+        }
+
+        // Jalankan Polling setiap 5 detik
+        setInterval(checkNotifications, 5000);
+
+        // 6. CHART.JS - GRAFIK BELANJA
+        let shoppingChart;
         function initChart() {
             const ctx = document.getElementById('shoppingChart')?.getContext('2d');
             if (!ctx) return;
@@ -1479,9 +1519,7 @@
             });
         }
 
-        // ============================================
-        // 5. CURRENT DATE TIME
-        // ============================================
+        // 7. CURRENT DATE TIME
         function updateDateTime() {
             const now = new Date();
             const options = {
@@ -1497,92 +1535,18 @@
                 el.textContent = '• ' + now.toLocaleDateString('id-ID', options);
             }
         }
-        updateDateTime();
-        setInterval(updateDateTime, 60000);
 
-        // ============================================
-        // 6. AUTO-REFRESH NOTIFICATION
-        // ============================================
-        let lastUnreadCount = <?= $unread_count ?? 0; ?>;
-
-        function refreshNotificationCount() {
-            $.get('<?= base_url('pembeli/dashboard/get_notifications_ajax'); ?>', function(response) {
-                if (response.success) {
-                    const currentCount = response.unread;
-                    const countEl = document.getElementById('notifCount');
-                    const notifBtn = document.getElementById('notifToggle');
-
-                    if (countEl) {
-                        if (currentCount > 0) {
-                            countEl.textContent = currentCount;
-                            countEl.style.display = 'flex';
-
-                            if (currentCount > lastUnreadCount) {
-                                playNotifSound();
-                                if (notifBtn) {
-                                    notifBtn.classList.add('ring');
-                                    setTimeout(function() {
-                                        notifBtn.classList.remove('ring');
-                                    }, 600);
-                                }
-                            }
-                        } else {
-                            countEl.style.display = 'none';
-                        }
-                    }
-                    lastUnreadCount = currentCount;
-                }
-            }).fail(function() {
-                console.log('⚠️ Gagal refresh notifikasi');
-            });
-        }
-
-        // ============================================
-        // 7. PLAY NOTIFICATION SOUND
-        // ============================================
-        function playNotifSound() {
-            const audio = document.getElementById('notifSound');
-            if (audio) {
-                audio.currentTime = 0;
-                audio.play().catch(function(e) {
-                    console.log('🔇 Sound play error:', e.message);
-                });
-            }
-        }
-
-        // Add audio element
-        const audioHtml = `
-            <audio id="notifSound" preload="auto">
-                <source src="<?= base_url('assets/sounds/notifikasi.wav'); ?>" type="audio/wav">
-            </audio>
-        `;
-        document.body.insertAdjacentHTML('beforeend', audioHtml);
-
-        // ============================================
         // 8. INITIALIZE ALL
-        // ============================================
         document.addEventListener('DOMContentLoaded', function() {
             initChart();
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
 
             const memberNameEl = document.getElementById('memberName');
             if (memberNameEl) {
                 memberNameEl.textContent = '<?= $this->session->userdata('nama') ?? 'Pembeli' ?>';
             }
         });
-
-        // Refresh notifikasi setiap 30 detik
-        setInterval(refreshNotificationCount, 30000);
-
-        console.log('✅ Dashboard Pembeli siap digunakan!');
-        console.log('📋 Fitur yang tersedia:');
-        console.log('   - KPI Cards (Rapi & Tidak Dempet)');
-        console.log('   - Rekomendasi Produk');
-        console.log('   - Riwayat Transaksi');
-        console.log('   - Grafik Belanja');
-        console.log('   - Quick Action');
-        console.log('   - Notifikasi Real-time');
-        console.log('   - Setting Notifikasi');
-        console.log('   - User Avatar (Rapi)');
     </script>
 
 </body>

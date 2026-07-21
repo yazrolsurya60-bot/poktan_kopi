@@ -819,10 +819,7 @@
 		.toast-item.warning { background: #92400E; }
 		.toast-item.info { background: #1E40AF; }
 
-		/* ============================================ */
 		/* RESPONSIVE OPTIMIZATION */
-		/* ============================================ */
-
 		@media (max-width: 991.98px) {
 			.sidebar {
 				left: calc(-1 * var(--sidebar-width));
@@ -931,7 +928,6 @@
 				padding: 16px;
 			}
 
-			/* Notif Dropdown Mobile Fixed */
 			.notif-dropdown {
 				position: fixed;
 				top: 70px;
@@ -1022,34 +1018,29 @@
 			border-radius: 10px;
 		}
 
-		/* ============================================ */
 		/* 🔔 NOTIFIKASI ANIMASI */
-		/* ============================================ */
-
-		@keyframes notifPulse {
-			0%, 100% { transform: scale(1); }
-			30% { transform: scale(1.5); background: #EF4444; }
-			60% { transform: scale(0.9); }
-		}
-
 		@keyframes bellRing {
 			0%, 100% { transform: rotate(0); }
-			25% { transform: rotate(10deg); }
-			50% { transform: rotate(-10deg); }
-			75% { transform: rotate(5deg); }
+			20% { transform: rotate(15deg); }
+			40% { transform: rotate(-10deg); }
+			60% { transform: rotate(8deg); }
+			80% { transform: rotate(-4deg); }
 		}
 
-		.notif-dot.pulse {
-			animation: notifPulse 0.6s ease 3;
-		}
-
-		.notif-btn.ring {
-			animation: bellRing 0.5s ease 1;
+		.notif-btn.ring i {
+			animation: bellRing 0.8s ease-in-out infinite;
+			color: var(--amber-cream);
 		}
 	</style>
 </head>
 
 <body>
+
+	<!-- ELEMEN AUDIO NOTIFIKASI -->
+	<audio id="notifSound" preload="auto">
+		<source src="<?= base_url('assets/sounds/notifikasi.wav'); ?>" type="audio/wav">
+		<source src="<?= base_url('assets/sounds/notifikasi.mp3'); ?>" type="audio/mpeg">
+	</audio>
 
 	<!-- SIDEBAR OVERLAY -->
 	<div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -1130,7 +1121,7 @@
 					</button>
 					<div class="notif-dropdown" id="notifDropdown">
 						<div class="notif-dropdown-header">
-							<span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
+							<span id="notifHeaderTitle"><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
 							<a href="<?= base_url('petani/dashboard/history'); ?>"
 								style="font-size:0.75rem; color: var(--amber-cream); font-weight:500; text-decoration:none;">Lihat
 								Semua</a>
@@ -1154,9 +1145,8 @@
 											<i class="bi <?= $icon_class; ?>"></i>
 										</div>
 										<div class="notif-text">
-											<?= htmlspecialchars($n['isi_notifikasi']); ?>
-											<span
-												class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+											<?= htmlspecialchars($n['isi_notifikasi'] ?? $n['judul'] ?? 'Notifikasi'); ?>
+											<span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
 										</div>
 										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
 											<span class="notif-badge-new">Baru</span>
@@ -1195,7 +1185,7 @@
 			</div>
 		</div>
 
-		<!-- QUICK ACTION BUTTONS - TANPA TUGASKAN KURIR -->
+		<!-- QUICK ACTION BUTTONS -->
 		<h5 class="font-weight-bold mb-3"
 			style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
 			<i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
@@ -1231,7 +1221,7 @@
 			</div>
 		</div>
 
-		<!-- KPI CARDS - DATA REAL -->
+		<!-- KPI CARDS -->
 		<div class="row mb-4">
 			<div class="col-xl-3 col-md-6 mb-4">
 				<div class="stat-box">
@@ -1276,7 +1266,6 @@
 
 		<!-- GRAFIK & PRODUK -->
 		<div class="row">
-			<!-- GRAFIK PANEN - DATA REAL -->
 			<div class="col-lg-8 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1298,7 +1287,6 @@
 				</div>
 			</div>
 
-			<!-- TOP PRODUK TERJUAL - DATA REAL -->
 			<div class="col-lg-4 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1333,7 +1321,6 @@
 
 		<!-- PESANAN MASUK & STOK -->
 		<div class="row">
-			<!-- PESANAN MASUK TERBARU - DATA REAL -->
 			<div class="col-lg-6 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1373,7 +1360,6 @@
 				</div>
 			</div>
 
-			<!-- PERINGATAN STOK - DATA REAL -->
 			<div class="col-lg-6 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1431,7 +1417,6 @@
 
 		<!-- RINGKASAN PRODUK & SETTING NOTIFIKASI -->
 		<div class="row">
-			<!-- RINGKASAN PRODUK - PENGGANTI JADWAL PANEN -->
 			<div class="col-lg-6 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1440,7 +1425,6 @@
 					</div>
 					<div class="card-body-custom">
 						<?php
-						// Ambil 3 produk terbaru dari database
 						$this->db->where('id_user', $id_user);
 						$this->db->limit(3);
 						$this->db->order_by('id_produk', 'DESC');
@@ -1490,7 +1474,6 @@
 				</div>
 			</div>
 
-			<!-- SETTING NOTIFIKASI -->
 			<div class="col-lg-6 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1499,18 +1482,16 @@
 					</div>
 					<div class="card-body-custom">
 						<?php
-						// 🔴 DEFAULT SETTINGS UNTUK PETANI - LENGKAP 7 ITEM
 						$default_settings = [
-							'notif_transaksi' => 1,   // Pesanan Baru
-							'notif_pembayaran' => 1,  // Konfirmasi Bayar
-							'notif_stok' => 1,        // Peringatan Stok
-							'notif_kurir' => 1,       // Status Kiriman
-							'notif_panen' => 0,       // 🔴 JADWAL PANEN DINONAKTIFKAN
-							'notif_laporan' => 0,     // Laporan Bulanan
-							'notif_sistem' => 1       // Update Sistem
+							'notif_transaksi' => 1,
+							'notif_pembayaran' => 1,
+							'notif_stok' => 1,
+							'notif_kurir' => 1,
+							'notif_panen' => 0,
+							'notif_laporan' => 0,
+							'notif_sistem' => 1
 						];
 
-						// 🔴 GABUNGKAN DENGAN DATA DARI DATABASE
 						if (!empty($settings)) {
 							foreach ($default_settings as $key => $value) {
 								if (isset($settings[$key])) {
@@ -1521,7 +1502,6 @@
 						?>
 						<form method="POST" action="<?= base_url('petani/dashboard/settings'); ?>" id="settingsForm">
 							<div class="row">
-								<!-- Pesanan Baru -->
 								<div class="col-md-6 col-6 mb-2">
 									<div class="custom-control custom-switch">
 										<input type="checkbox" class="custom-control-input" id="notif_transaksi" name="notif_transaksi"
@@ -1529,7 +1509,6 @@
 										<label class="custom-control-label" for="notif_transaksi" style="font-size:0.85rem;">Pesanan Baru</label>
 									</div>
 								</div>
-								<!-- Konfirmasi Bayar -->
 								<div class="col-md-6 col-6 mb-2">
 									<div class="custom-control custom-switch">
 										<input type="checkbox" class="custom-control-input" id="notif_pembayaran" name="notif_pembayaran"
@@ -1537,7 +1516,6 @@
 										<label class="custom-control-label" for="notif_pembayaran" style="font-size:0.85rem;">Konfirmasi Bayar</label>
 									</div>
 								</div>
-								<!-- Peringatan Stok -->
 								<div class="col-md-6 col-6 mb-2">
 									<div class="custom-control custom-switch">
 										<input type="checkbox" class="custom-control-input" id="notif_stok" name="notif_stok"
@@ -1545,7 +1523,6 @@
 										<label class="custom-control-label" for="notif_stok" style="font-size:0.85rem;">Peringatan Stok</label>
 									</div>
 								</div>
-								<!-- Status Kiriman -->
 								<div class="col-md-6 col-6 mb-2">
 									<div class="custom-control custom-switch">
 										<input type="checkbox" class="custom-control-input" id="notif_kurir" name="notif_kurir"
@@ -1553,7 +1530,6 @@
 										<label class="custom-control-label" for="notif_kurir" style="font-size:0.85rem;">Status Kiriman</label>
 									</div>
 								</div>
-								<!-- Update Sistem -->
 								<div class="col-md-6 col-6 mb-2">
 									<div class="custom-control custom-switch">
 										<input type="checkbox" class="custom-control-input" id="notif_sistem" name="notif_sistem"
@@ -1594,9 +1570,22 @@
 		</script>
 		
 		<script>
-			// ============================================
+			// UNLOCK AUDIO BROWSER AUTOPLAY
+			let audioUnlocked = false;
+			document.addEventListener('click', function unlockAudio() {
+				if (!audioUnlocked) {
+					const sound = document.getElementById('notifSound');
+					if (sound) {
+						sound.play().then(() => {
+							sound.pause();
+							sound.currentTime = 0;
+							audioUnlocked = true;
+						}).catch(() => {});
+					}
+				}
+			}, { once: true });
+
 			// 1. SIDEBAR TOGGLE
-			// ============================================
 			const sidebar = document.getElementById('sidebarMenu');
 			const overlay = document.getElementById('sidebarOverlay');
 			const toggleBtn = document.getElementById('sidebarToggle');
@@ -1607,12 +1596,8 @@
 				document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
 			}
 
-			if (toggleBtn) {
-				toggleBtn.addEventListener('click', toggleSidebar);
-			}
-			if (overlay) {
-				overlay.addEventListener('click', toggleSidebar);
-			}
+			if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+			if (overlay) overlay.addEventListener('click', toggleSidebar);
 
 			document.addEventListener('click', function(e) {
 				if (window.innerWidth > 991.98) return;
@@ -1623,9 +1608,7 @@
 				}
 			});
 
-			// ============================================
 			// 2. NOTIFICATION DROPDOWN
-			// ============================================
 			const notifToggle = document.getElementById('notifToggle');
 			const notifDropdown = document.getElementById('notifDropdown');
 
@@ -1642,9 +1625,7 @@
 				}
 			});
 
-			// ============================================
 			// 3. TOAST NOTIFICATION
-			// ============================================
 			function showToast(message, type = 'success') {
 				const container = document.getElementById('toastContainer');
 				if (!container) return;
@@ -1654,21 +1635,15 @@
 				toast.textContent = message;
 				container.appendChild(toast);
 
-				setTimeout(() => {
-					toast.classList.add('show');
-				}, 100);
+				setTimeout(() => toast.classList.add('show'), 100);
 
 				setTimeout(() => {
 					toast.classList.remove('show');
-					setTimeout(() => {
-						toast.remove();
-					}, 400);
+					setTimeout(() => toast.remove(), 400);
 				}, 3000);
 			}
 
-			// ============================================
 			// 4. MARK ALL READ
-			// ============================================
 			function markAllRead() {
 				if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
 					$.ajax({
@@ -1689,9 +1664,84 @@
 				}
 			}
 
-			// ============================================
-			// 5. CHART.JS - GRAFIK PANEN (DATA REAL)
-			// ============================================
+			// 5. PLAY SOUND NOTIFIKASI
+			function playNotifSound() {
+				const sound = document.getElementById('notifSound');
+				if (sound) {
+					sound.currentTime = 0;
+					sound.play().catch(err => console.log('Autoplay prevented:', err));
+				}
+			}
+
+			// 6. REAL-TIME POLLING NOTIFIKASI (5 DETIK)
+			let lastUnreadCount = <?= $unread_count ?? 0; ?>;
+
+			function checkNotifications() {
+				$.ajax({
+					url: '<?= base_url('api/notifikasi/get'); ?>',
+					type: 'GET',
+					dataType: 'json',
+					success: function(res) {
+						if (res.success) {
+							const count = res.unread_count;
+							const countEl = $('#notifCount');
+							const notifBtn = $('#notifToggle');
+							const headerTitle = $('#notifHeaderTitle');
+
+							if (count > 0) {
+								countEl.text(count).show();
+								if (headerTitle.length) headerTitle.text(count + ' Notifikasi Belum Dibaca');
+							} else {
+								countEl.hide();
+								if (headerTitle.length) headerTitle.text('Semua Notifikasi');
+							}
+
+							if (count > lastUnreadCount) {
+								playNotifSound();
+								notifBtn.addClass('ring');
+								setTimeout(() => notifBtn.removeClass('ring'), 2500);
+
+								if (res.notifikasi && res.notifikasi.length > 0) {
+									let html = '';
+									const iconMap = {
+										'success': 'bi-check-circle-fill',
+										'warning': 'bi-exclamation-triangle-fill',
+										'danger': 'bi-x-circle-fill',
+										'info': 'bi-info-circle-fill'
+									};
+
+									res.notifikasi.forEach(n => {
+										const iconType = n.icon || 'info';
+										const iconClass = iconMap[iconType] || 'bi-info-circle-fill';
+										const isUnread = (n.status_baca == 0 || n.status_baca == '0');
+
+										html += `
+											<a class="notif-item ${isUnread ? 'unread' : ''}" 
+											   href="<?= base_url('petani/dashboard/read/'); ?>${n.id_notifikasi}">
+												<div class="notif-icon ${iconType}">
+													<i class="bi ${iconClass}"></i>
+												</div>
+												<div class="notif-text">
+													${n.isi_notifikasi || n.judul || 'Notifikasi'}
+													<span class="notif-time">${n.tanggal_buat}</span>
+												</div>
+												${isUnread ? '<span class="notif-badge-new">Baru</span>' : ''}
+											</a>
+										`;
+									});
+									$('#notifList').html(html);
+								}
+							}
+							lastUnreadCount = count;
+						}
+					}
+				});
+			}
+
+			// Jalankan polling setiap 5 detik
+			setInterval(checkNotifications, 5000);
+
+			// 7. CHART.JS - GRAFIK PANEN
 			let harvestChart;
 
 			function initChart() {
@@ -1719,9 +1769,7 @@
 						responsive: true,
 						maintainAspectRatio: false,
 						plugins: {
-							legend: {
-								display: false
-							},
+							legend: { display: false },
 							tooltip: {
 								backgroundColor: '#2C1808',
 								titleColor: '#E6A15C',
@@ -1743,10 +1791,7 @@
 									drawBorder: false,
 								},
 								ticks: {
-									font: {
-										size: 10,
-										family: 'Plus Jakarta Sans'
-									},
+									font: { size: 10, family: 'Plus Jakarta Sans' },
 									color: '#70655E',
 									stepSize: 50,
 									callback: function(value) {
@@ -1755,14 +1800,9 @@
 								}
 							},
 							x: {
-								grid: {
-									display: false
-								},
+								grid: { display: false },
 								ticks: {
-									font: {
-										size: 10,
-										family: 'Plus Jakarta Sans'
-									},
+									font: { size: 10, family: 'Plus Jakarta Sans' },
 									color: '#70655E',
 								}
 							}
@@ -1785,13 +1825,7 @@
 				}
 			}
 
-			document.addEventListener('DOMContentLoaded', function() {
-				initChart();
-			});
-
-			// ============================================
-			// 6. CURRENT DATE TIME
-			// ============================================
+			// 8. CURRENT DATE TIME
 			function updateDateTime() {
 				const now = new Date();
 				const options = {
@@ -1807,12 +1841,8 @@
 					el.textContent = '• ' + now.toLocaleDateString('id-ID', options);
 				}
 			}
-			updateDateTime();
-			setInterval(updateDateTime, 60000);
 
-			// ============================================
-			// 7. SWITCH HANDLING - UPDATE VIA AJAX (REAL-TIME)
-			// ============================================
+			// 9. SWITCH HANDLING VIA AJAX
 			document.querySelectorAll('.custom-control-input').forEach(function(switchEl) {
 				switchEl.removeEventListener('change', handleSwitchChange);
 				switchEl.addEventListener('change', handleSwitchChange);
@@ -1823,50 +1853,36 @@
 				const value = this.checked ? 1 : 0;
 
 				const allowedFields = ['notif_transaksi', 'notif_pembayaran', 'notif_stok', 'notif_kurir', 'notif_panen', 'notif_laporan', 'notif_sistem'];
-				if (!allowedFields.includes(field)) {
-					return;
-				}
+				if (!allowedFields.includes(field)) return;
 
 				const label = this.closest('.custom-control').querySelector('.custom-control-label');
-				if (label) {
-					label.style.opacity = '0.5';
-				}
+				if (label) label.style.opacity = '0.5';
 
 				$.ajax({
 					url: '<?= base_url('petani/dashboard/update_settings_ajax'); ?>',
 					type: 'POST',
-					data: {
-						field: field,
-						value: value
-					},
+					data: { field: field, value: value },
 					dataType: 'json',
 					success: function(response) {
-						if (label) {
-							label.style.opacity = '1';
-						}
+						if (label) label.style.opacity = '1';
 
 						if (response.success) {
 							const labelText = label ? label.textContent.trim() : field;
 							showToast('✅ ' + labelText + ' ' + (value === 1 ? 'diaktifkan' : 'dinonaktifkan'), 'success');
-							console.log('✅ Setting ' + field + ' updated to ' + value);
 						} else {
 							this.checked = !this.checked;
 							showToast('❌ Gagal memperbarui pengaturan', 'error');
 						}
 					}.bind(this),
 					error: function() {
-						if (label) {
-							label.style.opacity = '1';
-						}
+						if (label) label.style.opacity = '1';
 						this.checked = !this.checked;
 						showToast('❌ Terjadi kesalahan. Silakan coba lagi.', 'error');
 					}.bind(this)
 				});
 			}
 
-			// ============================================
-			// 8. FORM SETTINGS - SUBMIT VIA AJAX
-			// ============================================
+			// 10. FORM SETTINGS SUBMIT VIA AJAX
 			const settingsForm = document.getElementById('settingsForm');
 			if (settingsForm) {
 				settingsForm.addEventListener('submit', function(e) {
@@ -1896,9 +1912,7 @@
 								showToast('✅ Pengaturan notifikasi berhasil diperbarui!', 'success');
 								Object.keys(data).forEach(key => {
 									const el = document.getElementById(key);
-									if (el) {
-										el.checked = data[key] === 1;
-									}
+									if (el) el.checked = data[key] === 1;
 								});
 							} else {
 								showToast('❌ Gagal memperbarui pengaturan', 'error');
@@ -1913,40 +1927,12 @@
 				});
 			}
 
-			// ============================================
-			// 9. AUTO-REFRESH NOTIFICATION COUNT
-			// ============================================
-			function refreshNotificationCount() {
-				$.get('<?= base_url('petani/dashboard/get_notifications_ajax'); ?>', function(response) {
-					if (response.success) {
-						const countEl = document.getElementById('notifCount');
-						if (countEl) {
-							if (response.unread > 0) {
-								countEl.textContent = response.unread;
-								countEl.style.display = 'flex';
-							} else {
-								countEl.style.display = 'none';
-							}
-						}
-					}
-				});
-			}
-
-			setInterval(refreshNotificationCount, 30000);
-
-			console.log('✅ Dashboard Petani siap digunakan!');
-			console.log('📋 Fitur yang tersedia:');
-			console.log('   - KPI Cards - Data Real');
-			console.log('   - Grafik Panen - Data Real');
-			console.log('   - Produk Terjual - Data Real');
-			console.log('   - Pesanan Masuk - Data Real');
-			console.log('   - Peringatan Stok - Data Real');
-			console.log('   - Jadwal Panen - Data Real');
-			console.log('   - Quick Action');
-			console.log('   - Notifikasi Real-time');
-			console.log('   - Setting Notifikasi (selaras dengan database)');
-			console.log('   - Switch update via AJAX (real-time)');
-			console.log('   - Form settings submit via AJAX');
+			// 11. INITIALIZE ALL
+			document.addEventListener('DOMContentLoaded', function() {
+				initChart();
+				updateDateTime();
+				setInterval(updateDateTime, 60000);
+			});
 		</script>
 
 </body>

@@ -452,6 +452,18 @@
 			flex-shrink: 0;
 		}
 
+		/* ANIMASI BERGETAR PADA LONCENG */
+		@keyframes bellRing {
+			0%, 100% { transform: rotate(0); }
+			25% { transform: rotate(12deg); }
+			50% { transform: rotate(-12deg); }
+			75% { transform: rotate(6deg); }
+		}
+
+		.notif-btn.ring {
+			animation: bellRing 0.5s ease 1;
+		}
+
 		/* ============================================ */
 		/* KPI CARDS */
 		/* ============================================ */
@@ -928,6 +940,12 @@
 </head>
 
 <body>
+
+	<!-- 🔔 AUDIO NOTIFIKASI REAL-TIME -->
+	<audio id="notifSound" preload="auto">
+		<source src="<?= base_url('assets/sounds/notifikasi.wav'); ?>" type="audio/wav">
+		<source src="<?= base_url('assets/sounds/notifikasi.mp3'); ?>" type="audio/mpeg">
+	</audio>
 
 	<!-- SIDEBAR -->
 	<div class="sidebar" id="sidebarMenu">
@@ -1465,7 +1483,7 @@
 	</div>
 
 	<!-- SCRIPTS -->
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	
 	<!-- PWA Service Worker Registration -->
@@ -1532,7 +1550,7 @@
 		function markAllRead() {
 			if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
 				$.ajax({
-					url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
+					url: '<?= base_url('api/notifikasi/mark_all_read'); ?>',
 					type: 'POST',
 					dataType: 'json',
 					success: function(response) {
@@ -1684,7 +1702,93 @@
 		});
 
 		// ============================================
-		// 7. INITIALIZE
+		// 7. REAL-TIME NOTIFICATION & SOUND EFFECT
+		// ============================================
+		let currentUnreadCount = <?= isset($unread_count) ? (int)$unread_count : 0; ?>;
+
+		function playNotifSound() {
+			const audio = document.getElementById('notifSound');
+			if (audio) {
+				audio.currentTime = 0;
+				let promise = audio.play();
+				if (promise !== undefined) {
+					promise.catch(function(e) {
+						console.log('🔇 Autoplay ditahan browser sampai ada interaksi klik pertama user.');
+					});
+				}
+			}
+		}
+
+		function fetchRealtimeNotifications() {
+			$.ajax({
+				url: '<?= base_url("api/notifikasi/get"); ?>',
+				type: 'GET',
+				dataType: 'json',
+				success: function(response) {
+					if (response.success) {
+						const newCount = parseInt(response.unread) || 0;
+						const countEl = $('#notifCount');
+						const notifBtn = $('#notifToggle');
+
+						// 🔔 Bunyikan suara & animasi jika ada notifikasi baru
+						if (newCount > currentUnreadCount) {
+							playNotifSound();
+							notifBtn.addClass('ring');
+							setTimeout(function() {
+								notifBtn.removeClass('ring');
+							}, 1000);
+						}
+
+						// Update badge counter
+						currentUnreadCount = newCount;
+						if (newCount > 0) {
+							countEl.text(newCount).show();
+						} else {
+							countEl.text(0).hide();
+						}
+
+						// Update item list dropdown secara dinamis
+						if (response.notifikasi && response.notifikasi.length > 0) {
+							let htmlList = '';
+							$.each(response.notifikasi, function(i, n) {
+								let iconType = n.icon || 'info';
+								let iconMap = {
+									'success': 'bi-check-circle-fill',
+									'warning': 'bi-exclamation-triangle-fill',
+									'danger': 'bi-x-circle-fill',
+									'info': 'bi-info-circle-fill',
+									'primary': 'bi-star-fill'
+								};
+								let iconClass = iconMap[iconType] || 'bi-info-circle-fill';
+
+								htmlList += `
+									<a class="notif-item ${n.status_baca == '0' ? 'unread' : ''}" href="<?= base_url('admin/dashboard/read/'); ?>${n.id_notifikasi}">
+										<div class="notif-icon ${iconType}">
+											<i class="bi ${iconClass}"></i>
+										</div>
+										<div class="notif-text">
+											${n.isi_notifikasi || n.judul || 'Notifikasi'}
+											<span class="notif-time">${n.tanggal_buat}</span>
+										</div>
+										${n.status_baca == '0' ? '<span class="notif-badge-new">Baru</span>' : ''}
+									</a>
+								`;
+							});
+							$('#notifList').html(htmlList);
+						}
+					}
+				},
+				error: function(err) {
+					console.warn('⚠️ Gagal memuat notifikasi real-time');
+				}
+			});
+		}
+
+		// Run real-time polling every 5 seconds
+		setInterval(fetchRealtimeNotifications, 5000);
+
+		// ============================================
+		// 8. INITIALIZE
 		// ============================================
 		document.addEventListener('DOMContentLoaded', function() {
 			initChart();
@@ -1698,7 +1802,7 @@
 		console.log('   - Pesanan Terbaru (M11-F01) - Data Real');
 		console.log('   - Petani Baru (M11-F01) - Data Real');
 		console.log('   - Quick Action (M11-F04) - 5 Aksi Rapi');
-		console.log('   - Notifikasi Real-time (M11-F01)');
+		console.log('   - Notifikasi Real-time & Audio Sound via API (Auto 5 detik)');
 		console.log('   - Setting Notifikasi (M11-F03) - 6 Opsi (Tanpa Laporan Bulanan)');
 	</script>
 </body>
