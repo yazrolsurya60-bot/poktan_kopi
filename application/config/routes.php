@@ -85,6 +85,7 @@ $route['admin/user/delete/(:num)'] = 'admin/Users/delete/$1';
 $route['admin/user/deactivate/(:num)'] = 'admin/Users/deactivate/$1';
 $route['admin/user/activate/(:num)'] = 'admin/Users/activate/$1';
 $route['admin/user/toggle/(:num)'] = 'admin/Users/toggle/$1';
+
 // ============================================
 // MODUL 9: MANAJEMEN MITRA
 // ============================================
@@ -108,12 +109,7 @@ $route['transaksi/keranjang'] = 'transaksi/keranjang';
 $route['transaksi/checkout'] = 'transaksi/checkout';
 $route['transaksi/detail/(:num)'] = 'transaksi/detail/$1';
 $route['transaksi/invoice/(:num)'] = 'transaksi/invoice/$1';
-
-// Catatan: route override lama ke pembeli/transaksi/proses_checkout dihapus
-// karena method proses_checkout() belum ada di pembeli/Transaksi.php (sebabkan 404).
-// URL transaksi/proses_checkout sekarang otomatis diarahkan ke Transaksi::proses_checkout()
-// (controller utama) yang sudah lengkap implementasinya.
-
+$route['transaksi/proses_checkout'] = 'transaksi/proses_checkout';
 $route['transaksi/tambah_keranjang'] = 'transaksi/tambah_keranjang';
 $route['transaksi/update_keranjang'] = 'transaksi/update_keranjang';
 $route['transaksi/hapus_keranjang'] = 'transaksi/hapus_keranjang';
@@ -136,10 +132,9 @@ $route['pembeli/transaksi/detail/(:num)'] = 'pembeli/transaksi/detail/$1';
 $route['pembeli/transaksi/batalkan/(:num)'] = 'pembeli/transaksi/batalkan/$1';
 $route['pembeli/transaksi/upload_bukti'] = 'pembeli/transaksi/upload_bukti';
 $route['pembeli/transaksi/invoice/(:num)'] = 'pembeli/transaksi/invoice/$1';
-$route['pembeli/transaksi/proses_checkout'] = 'pembeli/transaksi/proses_checkout';
 
 // ============================================
-// GUEST TRACKING
+// GUEST TRACKING (BARU)
 // ============================================
 $route['guest/tracking'] = 'Guest_tracking/index';
 $route['guest/tracking/cek'] = 'Guest_tracking/cek';
@@ -150,21 +145,27 @@ $route['guest/tracking/detail/(:num)'] = 'Guest_tracking/detail/$1';
 // ============================================
 $route['landing/produk'] = 'produk/index';
 
-// Pembeli Tracking
+// Pembeli Tracking (M07-F01, M07-F04, M07-F05, M07-F07)
 $route['pembeli/tracking'] = 'pembeli/Tracking/index';
 $route['pembeli/tracking/detail/(:num)'] = 'pembeli/Tracking/detail/$1';
 $route['pembeli/tracking/history'] = 'pembeli/Tracking/history';
 $route['pembeli/tracking/approve/(:num)'] = 'pembeli/Tracking/approve/$1';
 
-// Petani Tracking
+// Petani Tracking (M07-F02)
 $route['petani/tracking'] = 'petani/Tracking/index';
 $route['petani/tracking/update/(:num)'] = 'petani/Tracking/update/$1';
 
-// Kurir Tracking
+// Kurir Tracking (M07-F03)
 $route['kurir/tracking'] = 'kurir/Tracking/index';
 $route['kurir/tracking/update_location/(:num)'] = 'kurir/Tracking/update_location/$1';
 $route['kurir/tracking/api_update_location'] = 'kurir/Tracking/api_update_location';
 $route['kurir/tracking/upload_bukti/(:num)'] = 'kurir/Tracking/upload_bukti/$1';
+
+// ============================================
+// MODUL 7: ADMIN TRACKING (Update Status) 🔥 BARU
+// ============================================
+$route['admin/tracking'] = 'admin/Tracking/index';
+$route['admin/tracking/update/(:num)'] = 'admin/Tracking/update/$1';
 
 // API Tracking
 $route['api/tracking/get'] = 'api/Tracking/get';
@@ -172,7 +173,7 @@ $route['api/tracking/history'] = 'api/Tracking/history';
 $route['api/tracking/estimasi'] = 'api/Tracking/estimasi';
 
 // ============================================================
-// VERIFIKASI OTP
+// VERIFIKASI OTP (sebelum checkout)
 // ============================================================
 $route['verifikasi'] = 'Verifikasi/index';
 $route['verifikasi/kirim'] = 'Verifikasi/kirim';
