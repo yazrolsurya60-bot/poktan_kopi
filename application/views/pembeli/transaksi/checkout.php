@@ -55,14 +55,14 @@
                     
                     <div class="form-group">
                         <label>Metode Pembayaran</label>
-                        <select name="metode_bayar" class="form-control" required>
-                            <option value="Transfer">Transfer Bank</option>
-                            <option value="COD">COD (Bayar di Tempat)</option>
-                            <option value="E-Wallet">E-Wallet</option>
-                        </select>
+                        <div class="alert alert-secondary d-flex align-items-center mb-0" style="border-radius:8px;">
+                            <i class="bi bi-cash-coin mr-2" style="font-size:1.2rem;"></i>
+                            <strong>COD (Bayar di Tempat)</strong>
+                        </div>
+                        <input type="hidden" name="metode_bayar" value="COD">
                     </div>
                     
-                    <button type="submit" class="btn btn-success btn-block">Buat Pesanan</button>
+                    <button type="submit" class="btn btn-success btn-block mt-3">Buat Pesanan</button>
                     </form>
                 </div>
             </div>
