@@ -233,7 +233,7 @@
 		}
 
 		/* ============================================ */
-		/* RESPONSIF */
+		/* RESPONSIF OPTIMIZED (MOBILE & TABLET) */
 		/* ============================================ */
 
 		@media (max-width: 768px) {
@@ -245,31 +245,33 @@
 			}
 
 			.notif-item {
-				padding: 14px 16px;
-				flex-wrap: wrap;
+				padding: 14px;
+				flex-direction: column;
+				align-items: flex-start;
+				gap: 10px;
 			}
 
 			.notif-tanggal {
 				text-align: left;
-				margin-top: 8px;
+				margin-top: 4px;
 				min-width: auto;
 				width: 100%;
 				padding-left: 52px;
 			}
 
 			.notif-judul {
-				font-size: 0.85rem;
+				font-size: 0.88rem;
 			}
 
 			.notif-isi {
-				font-size: 0.8rem;
+				font-size: 0.82rem;
 			}
 
 			.icon-circle {
-				width: 34px;
-				height: 34px;
-				min-width: 34px;
-				font-size: 0.9rem;
+				width: 36px;
+				height: 36px;
+				min-width: 36px;
+				font-size: 0.95rem;
 			}
 		}
 
@@ -285,47 +287,57 @@
 				border-radius: 8px;
 			}
 
-			.notif-judul {
-				font-size: 0.8rem;
-				gap: 4px;
-			}
-
-			.notif-isi {
-				font-size: 0.75rem;
-			}
-
-			.notif-tanggal {
-				font-size: 0.6rem;
-				padding-left: 46px;
-			}
-
-			.icon-circle {
-				width: 30px;
-				height: 30px;
-				min-width: 30px;
-				font-size: 0.75rem;
-			}
-
+			/* Header responsif */
 			.d-flex.justify-content-between.align-items-center {
 				flex-direction: column;
 				align-items: flex-start !important;
 				gap: 12px;
 			}
 
-			.d-flex.gap-2.mt-2.mt-md-0 {
+			.d-flex.gap-2 {
 				width: 100%;
-				flex-wrap: wrap;
+				justify-content: flex-start;
 			}
 
 			.mark-all-btn,
 			.back-btn {
-				font-size: 0.75rem;
-				padding: 6px 12px;
+				flex: 1;
+				justify-content: center;
+				font-size: 0.78rem;
+				padding: 8px 12px;
+			}
+
+			/* Statistik Badge responsif */
+			.d-flex.flex-wrap.gap-3.mb-4 {
+				gap: 8px !important;
 			}
 
 			.badge {
-				font-size: 0.65rem !important;
-				padding: 4px 10px !important;
+				font-size: 0.72rem !important;
+				padding: 6px 12px !important;
+				flex: 1 1 auto;
+				text-align: center;
+			}
+
+			.notif-judul {
+				font-size: 0.82rem;
+				gap: 4px;
+			}
+
+			.notif-isi {
+				font-size: 0.78rem;
+			}
+
+			.notif-tanggal {
+				font-size: 0.65rem;
+				padding-left: 42px;
+			}
+
+			.icon-circle {
+				width: 30px;
+				height: 30px;
+				min-width: 30px;
+				font-size: 0.8rem;
 			}
 		}
 
@@ -335,28 +347,27 @@
 			}
 
 			.notif-item {
-				padding: 10px 10px;
+				padding: 10px;
 			}
 
 			.notif-judul {
-				font-size: 0.7rem;
+				font-size: 0.78rem;
 			}
 
 			.notif-isi {
-				font-size: 0.65rem;
+				font-size: 0.72rem;
 			}
 
 			.notif-tanggal {
-				font-size: 0.55rem;
-				padding-left: 38px;
+				font-size: 0.6rem;
+				padding-left: 36px;
 			}
 
 			.icon-circle {
 				width: 26px;
 				height: 26px;
 				min-width: 26px;
-				font-size: 0.65rem;
-				margin-right: 10px !important;
+				font-size: 0.7rem;
 			}
 		}
 	</style>
@@ -407,14 +418,14 @@
 						<i class="bi bi-inbox mr-1"></i> Total: <?= $total; ?>
 					</span>
 
-					<!-- BELUM DIBACA (KUNING) -->
+					<!-- SUDAH DIBACA (KUNING) -->
 					<?php if ($unread > 0): ?>
 						<span class="badge" style="background: #FFFFFF; color: #92400E; padding: 8px 16px; font-weight:600; font-size:0.8rem; border: 1px solid #EFEAE2;">
 							<i class="bi bi-envelope mr-1"></i> Sudah Dibaca: <?= $unread; ?>
 						</span>
 					<?php endif; ?>
 
-					<!-- SUDAH DIBACA (PUTIH) -->
+					<!-- BELUM DIBACA (PUTIH) -->
 					<?php if ($read > 0): ?>
 						<span class="badge" style="background: #FEF3C7; color: var(--text-secondary); padding: 8px 16px; font-weight:600; font-size:0.8rem; border: 1px solid #EFEAE2;">
 							<i class="bi bi-check-circle mr-1"></i> Belum Dibaca: <?= $read; ?>
@@ -480,11 +491,11 @@
 
 											<!-- BADGE ITEM: BELUM DIBACA = KUNING, SUDAH DIBACA = PUTIH -->
 											<?php if ($is_read == 0): ?>
-												<span class="badge" style="font-size:0.5rem; padding:2px 8px; background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; border-radius:10px; font-weight:600;">
+												<span class="badge" style="font-size:0.5rem; padding:2px 8px; background: #FFFFFF; color: #92400E; border: 1px solid #EFEAE2;  border-radius:10px; font-weight:600;">
 													Sudah Dibaca
 												</span>
 											<?php else: ?>
-												<span class="badge" style="font-size:0.5rem; padding:2px 8px; background: #FFFFFF; color: var(--text-secondary); border: 1px solid #EFEAE2; border-radius:10px; font-weight:600;">
+												<span class="badge" style="font-size:0.5rem; padding:2px 8px; background:  #FEF3C7; color: var(--text-secondary); border: 1px solid #FDE68A; border-radius:10px; font-weight:600;">
 													Belum Dibaca
 												</span>
 											<?php endif; ?>

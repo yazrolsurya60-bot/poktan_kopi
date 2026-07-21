@@ -66,7 +66,7 @@
 			left: 0;
 			background: linear-gradient(180deg, var(--dark-coffee) 0%, #1a0e04 100%);
 			color: var(--bg-cream);
-			z-index: 100;
+			z-index: 1000;
 			transition: var(--transition-smooth);
 			box-shadow: 4px 0 25px rgba(44, 24, 8, 0.2);
 			display: flex;
@@ -195,8 +195,9 @@
 			display: none;
 			position: fixed;
 			inset: 0;
-			background: rgba(0, 0, 0, 0.4);
-			z-index: 99;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 999;
+			backdrop-filter: blur(2px);
 		}
 
 		.sidebar-overlay.active {
@@ -226,6 +227,7 @@
 			justify-content: space-between;
 			align-items: center;
 			flex-wrap: wrap;
+			gap: 16px;
 		}
 
 		.page-header h2 {
@@ -249,6 +251,7 @@
 			align-items: center;
 			gap: 12px;
 			flex-shrink: 0;
+			position: relative;
 		}
 
 		/* ============================================ */
@@ -289,7 +292,7 @@
 		}
 
 		/* ============================================ */
-		/* NOTIFICATION BELL & DROPDOWN */
+		/* NOTIFICATION BELL & DROPDOWN RESPONSIF */
 		/* ============================================ */
 
 		.notif-btn {
@@ -333,14 +336,14 @@
 			right: 0;
 			top: calc(100% + 10px);
 			width: 380px;
-			max-height: 400px;
+			max-height: 420px;
 			background: var(--card-white);
 			border-radius: var(--radius-card);
 			box-shadow: var(--shadow-hover);
-			border: 1px solid rgba(74, 44, 17, 0.06);
+			border: 1px solid rgba(74, 44, 17, 0.08);
 			overflow: hidden;
 			display: none;
-			z-index: 50;
+			z-index: 9999;
 		}
 
 		.notif-dropdown.show {
@@ -367,6 +370,7 @@
 			justify-content: space-between;
 			align-items: center;
 			font-weight: 600;
+			font-size: 0.85rem;
 		}
 
 		.notif-dropdown-header a {
@@ -410,34 +414,17 @@
 			font-size: 0.9rem;
 		}
 
-		.notif-item .notif-icon.success {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.notif-item .notif-icon.warning {
-			background: #FEF3C7;
-			color: #92400E;
-		}
-
-		.notif-item .notif-icon.info {
-			background: #DBEAFE;
-			color: #1E40AF;
-		}
-
-		.notif-item .notif-icon.danger {
-			background: #FEE2E2;
-			color: #991B1B;
-		}
-
-		.notif-item .notif-icon.primary {
-			background: #EDE9FE;
-			color: #5B21B6;
-		}
+		.notif-item .notif-icon.success { background: #D1FAE5; color: #065F46; }
+		.notif-item .notif-icon.warning { background: #FEF3C7; color: #92400E; }
+		.notif-item .notif-icon.info { background: #DBEAFE; color: #1E40AF; }
+		.notif-item .notif-icon.danger { background: #FEE2E2; color: #991B1B; }
+		.notif-item .notif-icon.primary { background: #EDE9FE; color: #5B21B6; }
 
 		.notif-item .notif-text {
 			flex: 1;
 			font-size: 0.85rem;
+			min-width: 0;
+			word-break: break-word;
 		}
 
 		.notif-item .notif-text .notif-time {
@@ -462,6 +449,7 @@
 			padding: 2px 8px;
 			border-radius: 10px;
 			align-self: center;
+			flex-shrink: 0;
 		}
 
 		/* ============================================ */
@@ -556,25 +544,10 @@
 			transform: scale(1.05) rotate(-3deg);
 		}
 
-		.kpi-card .kpi-badge.amber {
-			background: var(--amber-cream);
-			color: white;
-		}
-
-		.kpi-card .kpi-badge.green {
-			background: #059669;
-			color: white;
-		}
-
-		.kpi-card .kpi-badge.dark {
-			background: var(--dark-coffee);
-			color: white;
-		}
-
-		.kpi-card .kpi-badge.blue {
-			background: #3B82F6;
-			color: white;
-		}
+		.kpi-card .kpi-badge.amber { background: var(--amber-cream); color: white; }
+		.kpi-card .kpi-badge.green { background: #059669; color: white; }
+		.kpi-card .kpi-badge.dark { background: var(--dark-coffee); color: white; }
+		.kpi-card .kpi-badge.blue { background: #3B82F6; color: white; }
 
 		.kpi-card .kpi-number {
 			font-size: 1.6rem;
@@ -584,6 +557,7 @@
 			line-height: 1.2;
 			padding-right: 10px;
 			letter-spacing: -0.5px;
+			word-break: break-word;
 		}
 
 		.kpi-card .kpi-number.rupiah {
@@ -729,12 +703,14 @@
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
 			padding: 10px 8px;
+			white-space: nowrap;
 		}
 
 		.table-custom tbody td {
 			padding: 10px 8px;
 			border-bottom: 1px solid rgba(74, 44, 17, 0.04);
 			vertical-align: middle;
+			white-space: nowrap;
 		}
 
 		.table-custom tbody tr:hover {
@@ -750,42 +726,16 @@
 			border-radius: 20px;
 			font-size: 0.7rem;
 			font-weight: 600;
+			display: inline-block;
 		}
 
-		.status-badge.pending {
-			background: #FEF3C7;
-			color: #92400E;
-		}
-
-		.status-badge.processing {
-			background: #DBEAFE;
-			color: #1E40AF;
-		}
-
-		.status-badge.delivery {
-			background: #EDE9FE;
-			color: #5B21B6;
-		}
-
-		.status-badge.complete {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.status-badge.cancelled {
-			background: #FEE2E2;
-			color: #991B1B;
-		}
-
-		.status-badge.verified {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.status-badge.review {
-			background: #FEF3C7;
-			color: #92400E;
-		}
+		.status-badge.pending { background: #FEF3C7; color: #92400E; }
+		.status-badge.processing { background: #DBEAFE; color: #1E40AF; }
+		.status-badge.delivery { background: #EDE9FE; color: #5B21B6; }
+		.status-badge.complete { background: #D1FAE5; color: #065F46; }
+		.status-badge.cancelled { background: #FEE2E2; color: #991B1B; }
+		.status-badge.verified { background: #D1FAE5; color: #065F46; }
+		.status-badge.review { background: #FEF3C7; color: #92400E; }
 
 		/* ============================================ */
 		/* CUSTOM SWITCH */
@@ -839,7 +789,7 @@
 		}
 
 		/* ============================================ */
-		/* RESPONSIVE */
+		/* OPTIMATED RESPONSIVE CSS */
 		/* ============================================ */
 
 		@media (max-width: 991.98px) {
@@ -866,9 +816,10 @@
 				font-size: 1.3rem;
 			}
 
+			/* Fix Notif Dropdown Tablet */
 			.notif-dropdown {
-				width: calc(100vw - 32px);
-				right: -60px;
+				width: 340px;
+				right: 0;
 			}
 
 			.user-badge {
@@ -881,11 +832,11 @@
 			}
 
 			.user-badge .user-name {
-				font-size: 0.7rem;
+				font-size: 0.75rem;
 			}
 
 			.user-badge .user-role {
-				font-size: 0.5rem;
+				font-size: 0.55rem;
 			}
 
 			.header-right {
@@ -898,23 +849,32 @@
 				padding: 16px 12px 20px;
 			}
 
+			/* Notif Dropdown Mobile - Full Width Pass */
 			.notif-dropdown {
+				position: fixed;
+				top: 70px;
+				left: 12px;
+				right: 12px;
 				width: calc(100vw - 24px);
-				right: -70px;
+				max-height: 80vh;
+			}
+
+			.notif-dropdown-list {
+				max-height: 55vh;
 			}
 
 			.user-badge {
 				padding: 4px 8px;
-				min-width: 60px;
+				min-width: auto;
 				gap: 5px;
 			}
 
 			.user-badge i {
-				font-size: 0.9rem;
+				font-size: 1rem;
 			}
 
 			.user-badge .user-name {
-				font-size: 0.6rem;
+				font-size: 0.68rem;
 			}
 
 			.user-badge .user-role {
@@ -925,8 +885,43 @@
 				gap: 6px;
 			}
 
+			.page-header {
+				margin-bottom: 20px;
+				padding-bottom: 14px;
+			}
+
 			.page-header .subtitle {
 				font-size: 0.75rem;
+			}
+
+			.kpi-card .kpi-number {
+				font-size: 1.25rem;
+			}
+
+			.kpi-card .kpi-number.rupiah {
+				font-size: 1.05rem;
+			}
+
+			.custom-card .card-header-custom {
+				padding: 14px 16px;
+			}
+
+			.custom-card .card-body-custom {
+				padding: 16px;
+			}
+
+			.chart-container {
+				height: 200px;
+			}
+		}
+
+		@media (max-width: 380px) {
+			.quick-actions-grid {
+				grid-template-columns: 1fr;
+			}
+			
+			.kpi-grid {
+				grid-template-columns: 1fr;
 			}
 		}
 	</style>
