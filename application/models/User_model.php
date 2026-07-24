@@ -11,7 +11,7 @@ class User_model extends CI_Model
     }
 
     // ============================================
-    // 🔴 TAMBAHKAN METHOD INI (UNTUK NOTIFIKASI)
+    // METHOD UNTUK NOTIFIKASI
     // ============================================
     
     /**
@@ -26,10 +26,10 @@ class User_model extends CI_Model
     }
 
     // ============================================
-    // METHOD YANG SUDAH ADA (PERTAHANKAN)
+    // AUTHENTICATION & USER MANAGEMENT
     // ============================================
 
-    // Authenticate user by username/email and md5 password
+    // Authenticate user by username/phone and md5 password
     public function login($username_or_phone, $password)
     {
         $this->db->group_start()
@@ -62,12 +62,6 @@ class User_model extends CI_Model
     public function get_by_id($id)
     {
         return $this->db->get_where('tb_user', ['id_user' => $id])->row_array();
-    }
-
-    // Get user by email
-    public function get_by_email($email)
-    {
-        return $this->db->get_where('tb_user', ['email' => $email])->row_array();
     }
 
     // Get user by username
@@ -114,7 +108,7 @@ class User_model extends CI_Model
         return $this->db->where('id_user', $id)->delete('tb_user');
     }
 
-    // Retrieve all users with optional filtering
+    // Retrieve all users with optional filtering (Pencarian Email dihapus)
     public function get_all_users($search = '', $role = '', $status = '')
     {
         $this->db->select('*');
@@ -124,7 +118,6 @@ class User_model extends CI_Model
             $this->db->group_start()
                 ->like('nama', $search)
                 ->or_like('username', $search)
-                ->or_like('email', $search)
                 ->or_like('no_telepon', $search)
                 ->group_end();
         }
@@ -151,7 +144,7 @@ class User_model extends CI_Model
         return $this->db->where('id_user', $id)->update('tb_user', ['status' => $newStatus]);
     }
 
-    // Verify token for email verification or password reset
+    // Verify token for password reset / verification
     public function verify_token($token, $type)
     {
         $column = ($type === 'verification') ? 'verification_token' : 'reset_token';
@@ -161,9 +154,10 @@ class User_model extends CI_Model
         return $this->db->get('tb_user')->row_array();
     }
 
-    // ===== OTP Functions =====
+    // ============================================
+    // OTP FUNCTIONS
+    // ============================================
 
-    // Insert OTP ke database
     public function insert_otp($tujuan, $kode_otp, $metode = 'whatsapp', $id_user = NULL)
     {
         $this->db->where('tujuan', $tujuan);
@@ -185,7 +179,6 @@ class User_model extends CI_Model
         return $this->db->insert('tb_otp', $data);
     }
 
-    // Verify OTP
     public function verify_otp($tujuan, $kode_otp, $metode = 'whatsapp')
     {
         $this->db->where('tujuan', $tujuan);
@@ -218,7 +211,6 @@ class User_model extends CI_Model
         return false;
     }
 
-    // Delete OTP
     public function delete_otp($tujuan, $metode = 'whatsapp')
     {
         return $this->db->delete('tb_otp', [
@@ -228,7 +220,6 @@ class User_model extends CI_Model
         ]);
     }
 
-    // Get OTP for resend
     public function get_otp($tujuan, $metode = 'whatsapp')
     {
         $this->db->where('tujuan', $tujuan);
@@ -241,7 +232,6 @@ class User_model extends CI_Model
         return $this->db->get('tb_otp')->row_array();
     }
 
-    // Check if OTP attempt limit reached
     public function is_otp_attempt_exceeded($tujuan, $metode = 'whatsapp', $max_attempt = 5)
     {
         $this->db->where('tujuan', $tujuan);
@@ -255,9 +245,10 @@ class User_model extends CI_Model
         return false;
     }
 
-    // ===== Petani Verification Functions =====
+    // ============================================
+    // PETANI VERIFICATION FUNCTIONS
+    // ============================================
 
-    // Verify petani account oleh admin
     public function verify_petani($id_user)
     {
         return $this->db->where('id_user', $id_user)
@@ -269,7 +260,6 @@ class User_model extends CI_Model
             ]);
     }
 
-    // Reject petani account oleh admin
     public function reject_petani($id_user)
     {
         return $this->db->where('id_user', $id_user)
@@ -281,7 +271,6 @@ class User_model extends CI_Model
             ]);
     }
 
-    // Get unverified petani
     public function get_unverified_petani()
     {
         return $this->db->where('role', 'Petani')
@@ -291,19 +280,10 @@ class User_model extends CI_Model
             ->result_array();
     }
 
-    // Get verified petani
-    public function get_verified_petani()
-    {
-        return $this->db->where('role', 'Petani')
-            ->where('is_verified', '1')
-            ->order_by('created_at', 'DESC')
-            ->get('tb_user')
-            ->result_array();
-    }
+    // ============================================
+    // USER STATUS MANAGEMENT
+    // ============================================
 
-    // ===== User Status Management =====
-
-    // Toggle user active/inactive status
     public function set_user_status($id_user, $status)
     {
         $allowed_status = ['Active', 'Inactive', 'Pending'];
@@ -319,7 +299,6 @@ class User_model extends CI_Model
             ]);
     }
 
-    // Get user status
     public function get_user_status($id_user)
     {
         $user = $this->get_by_id($id_user);

@@ -260,7 +260,7 @@ class Transaksi extends CI_Controller {
         
         $this->Notifikasi_model->save_notifikasi([
             'id_user' => $this->session->userdata('id_user'),
-            'judul' => '❌ Pesanan Dibatalkan',
+            'judul' => 'Pesanan Dibatalkan',
             'isi_notifikasi' => 'Pesanan #' . $id_transaksi . ' telah dibatalkan.',
             'link' => 'pembeli/transaksi/detail/' . $id_transaksi,
             'icon' => 'danger'
@@ -268,7 +268,7 @@ class Transaksi extends CI_Controller {
         
         $this->Notifikasi_model->save_notifikasi([
             'id_user' => 1,
-            'judul' => '📝 Pesanan Dibatalkan',
+            'judul' => 'Pesanan Dibatalkan',
             'isi_notifikasi' => 'Pesanan #' . $id_transaksi . ' dibatalkan oleh pembeli. Alasan: ' . $alasan,
             'link' => 'admin/transaksi/detail/' . $id_transaksi,
             'icon' => 'warning'

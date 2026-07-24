@@ -13,23 +13,13 @@ class Petani_model extends CI_Model {
     }
 
     // ============================================
-    // GET PETANI BARU - DARI TB_USER (KARENA TB_PETANI KOSONG)
+    // GET PETANI BARU - DARI TB_PETANI
     // ============================================
     public function get_petani_baru($limit = 5) {
-        // 🔴 AMBIL DARI TB_USER DULU (karena tb_petani kosong)
-        $this->db->select('
-            id_user as id_petani,
-            nama as nama_petani,
-            status,
-            created_at as tanggal_daftar,
-            no_hp,
-            email,
-            is_verified
-        ');
-        $this->db->from('tb_user');
-        $this->db->where('role', 'Petani');
-        $this->db->where('status', 'Pending');
-        $this->db->order_by('created_at', 'DESC');
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->where('status_petani', 'Pending');
+        $this->db->order_by('tanggal_daftar', 'DESC');
         $this->db->limit($limit);
         $query = $this->db->get();
         
@@ -37,83 +27,107 @@ class Petani_model extends CI_Model {
             return $query->result_array();
         }
         
-        // 🔴 FALLBACK: Jika tidak ada, ambil semua petani
-        $this->db->select('
-            id_user as id_petani,
-            nama as nama_petani,
-            status,
-            created_at as tanggal_daftar,
-            no_hp,
-            email,
-            is_verified
-        ');
-        $this->db->from('tb_user');
-        $this->db->where('role', 'Petani');
-        $this->db->order_by('created_at', 'DESC');
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->order_by('tanggal_daftar', 'DESC');
         $this->db->limit($limit);
-        $query = $this->db->get();
-        
-        return $query->result_array();
-    }
-
-    // ============================================
-    // HITUNG PETANI BELUM DIVERIFIKASI
-    // ============================================
-    public function count_petani_pending() {
-        // 🔴 HITUNG DARI TB_USER
-        $this->db->where('role', 'Petani');
-        $this->db->where('status', 'Pending');
-        return $this->db->count_all_results('tb_user');
-    }
-
-    // ============================================
-    // HITUNG PETANI AKTIF (TERVERIFIKASI)
-    // ============================================
-    public function count_petani_aktif() {
-        // 🔴 HITUNG DARI TB_USER
-        $this->db->where('role', 'Petani');
-        $this->db->where('status', 'Active');
-        return $this->db->count_all_results('tb_user');
-    }
-
-    // ============================================
-    // GET ALL PETANI - DARI TB_USER
-    // ============================================
-    public function get_daftar_petani($status = null, $id_wilayah = null) {
-        $this->db->select('
-            id_user as id_petani,
-            nama as nama_petani,
-            status,
-            created_at as tanggal_daftar,
-            no_hp,
-            email,
-            is_verified
-        ');
-        $this->db->from('tb_user');
-        $this->db->where('role', 'Petani');
-        
-        if (!empty($status)) {
-            $this->db->where('status', $status);
-        }
-        
-        $this->db->order_by('created_at', 'DESC');
         return $this->db->get()->result_array();
     }
 
     // ============================================
-    // GET PETANI BY ID - DARI TB_USER
+    // HITUNG PETANI
+    // ============================================
+    public function count_petani_pending() {
+        $this->db->where('status_petani', 'Pending');
+        return $this->db->count_all_results($this->table);
+    }
+
+    public function count_petani_aktif() {
+        $this->db->where('status_petani', 'Active');
+        return $this->db->count_all_results($this->table);
+    }
+
+    // ============================================
+    // COUNT DATA UNTUK PAGINATION
+    // ============================================
+    public function count_all_petani($status = null, $id_wilayah = null) {
+        $this->db->from($this->table);
+        if (!empty($status)) {
+            $this->db->where('status_petani', $status);
+        }
+        return $this->db->count_all_results();
+    }
+
+    // ============================================
+    // GET ALL PETANI (DENGAN PAGINATION)
+    // ============================================
+    public function get_daftar_petani_paginated($limit = 10, $start = 0, $status = null, $id_wilayah = null) {
+        $this->db->select('*');
+        $this->db->from($this->table);
+
+        if (!empty($status)) {
+            $this->db->where('status_petani', $status);
+        }
+        
+        $this->db->order_by('id_petani', 'DESC');
+        $this->db->limit($limit, $start);
+        $petani = $this->db->get()->result_array();
+
+        foreach ($petani as &$p) {
+            $p['wilayah'] = $this->get_wilayah_by_petani($p['id_petani']);
+            $p['status']  = $p['status_petani'] ?? '-';
+            $p['foto']    = $p['foto_profil'] ?? null;
+        }
+
+        return $petani;
+    }
+
+    // ============================================
+    // GET ALL PETANI - TANPA PAGINATION (EXPORT & STATISTIK)
+    // ============================================
+    public function get_daftar_petani($status = null, $id_wilayah = null) {
+        $this->db->select('*');
+        $this->db->from($this->table);
+
+        if (!empty($status)) {
+            $this->db->where('status_petani', $status);
+        }
+        
+        $this->db->order_by('tanggal_daftar', 'DESC');
+        $petani = $this->db->get()->result_array();
+
+        foreach ($petani as &$p) {
+            $p['wilayah'] = $this->get_wilayah_by_petani($p['id_petani']);
+            $p['status']  = $p['status_petani'] ?? '-';
+            $p['foto']    = $p['foto_profil'] ?? null;
+        }
+
+        return $petani;
+    }
+
+    // ============================================
+    // GET PETANI BY ID - DARI TB_PETANI
     // ============================================
     public function get_petani_by_id($id) {
         if (empty($id)) {
             return false;
         }
-        $this->db->where('id_user', $id);
-        $this->db->where('role', 'Petani');
-        return $this->db->get('tb_user')->row_array();
+        
+        $this->db->select('*');
+        $this->db->where('id_petani', $id);
+        $petani = $this->db->get($this->table)->row_array();
+
+        if ($petani) {
+            $petani['wilayah'] = $this->get_wilayah_by_petani($id);
+            $petani['status']  = $petani['status_petani'] ?? '-';
+            $petani['foto']    = $petani['foto_profil'] ?? null;
+        }
+
+        return $petani;
     }
 
     // ============================================
-    // GET WILAYAH (jika ada)
+    // WILAYAH
     // ============================================
     public function get_all_wilayah() {
         if ($this->db->table_exists('tb_wilayah')) {
@@ -123,21 +137,54 @@ class Petani_model extends CI_Model {
     }
 
     public function get_wilayah_by_petani($id_petani) {
+        if ($this->db->table_exists('tb_petani_wilayah') && $this->db->table_exists('tb_wilayah')) {
+            $this->db->select('w.*');
+            $this->db->from('tb_wilayah w');
+            $this->db->join('tb_petani_wilayah pw', 'pw.id_wilayah = w.id_wilayah');
+            $this->db->where('pw.id_petani', $id_petani);
+            return $this->db->get()->result_array();
+        }
         return [];
     }
 
     public function simpan_wilayah_petani($id_petani, $id_wilayah_list) {
-        // Tidak digunakan karena pakai tb_user
+        if ($this->db->table_exists('tb_petani_wilayah')) {
+            $this->db->where('id_petani', $id_petani);
+            $this->db->delete('tb_petani_wilayah');
+
+            if (!empty($id_wilayah_list) && is_array($id_wilayah_list)) {
+                $batch = [];
+                foreach ($id_wilayah_list as $id_w) {
+                    $batch[] = [
+                        'id_petani'  => $id_petani,
+                        'id_wilayah' => $id_w
+                    ];
+                }
+                $this->db->insert_batch('tb_petani_wilayah', $batch);
+            }
+        }
         return true;
     }
 
     // ============================================
-    // CRUD PETANI - KE TB_USER
+    // CRUD PETANI - KE TB_PETANI
     // ============================================
     public function insert_petani($data) {
-        // Pastikan role = Petani
-        $data['role'] = 'Petani';
-        $this->db->insert('tb_user', $data);
+        $insert_data = [
+            'nama_petani'    => $data['nama_petani'] ?? '',
+            'nik'            => $data['nik'] ?? NULL,
+            'no_hp'          => $data['no_hp'] ?? NULL,
+            'alamat'         => $data['alamat'] ?? NULL,
+            'domisili'       => $data['domisili'] ?? NULL,
+            'status_petani'  => $data['status_petani'] ?? 'Pending',
+            'tanggal_daftar' => date('Y-m-d')
+        ];
+
+        if (!empty($data['foto_profil'])) {
+            $insert_data['foto_profil'] = $data['foto_profil'];
+        }
+
+        $this->db->insert($this->table, $insert_data);
         return $this->db->insert_id();
     }
 
@@ -145,18 +192,25 @@ class Petani_model extends CI_Model {
         if (empty($id)) {
             return false;
         }
-        $this->db->where('id_user', $id);
-        $this->db->where('role', 'Petani');
-        return $this->db->update('tb_user', $data);
+
+        $this->db->where('id_petani', $id);
+        return $this->db->update($this->table, $data);
     }
 
+    // HAPUS PERMANEN (HARD DELETE) DARI DATABASE
     public function delete_petani($id) {
         if (empty($id)) {
             return false;
         }
-        $this->db->where('id_user', $id);
-        $this->db->where('role', 'Petani');
-        return $this->db->update('tb_user', ['status' => 'Inactive']);
+        
+        // 1. Hapus relasi wilayah terlebih dahulu jika ada
+        if ($this->db->table_exists('tb_petani_wilayah')) {
+            $this->db->where('id_petani', $id);
+            $this->db->delete('tb_petani_wilayah');
+        }
+
+        // 2. Hapus data petani dari database
+        $this->db->where('id_petani', $id);
+        return $this->db->delete($this->table);
     }
 }
-?>
