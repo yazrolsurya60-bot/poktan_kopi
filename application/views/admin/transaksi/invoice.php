@@ -1,8 +1,4 @@
 <?php
-// FIX: view ini dipakai bareng oleh controller admin, guest (transaksi/invoice),
-// dan pembeli (pembeli/transaksi/invoice). Field di $transaksi bisa beda-beda
-// tergantung sumber datanya (terutama transaksi lama), jadi kasih default biar
-// nggak error "Undefined array key" / strtotime(null) deprecation.
 $transaksi['status_pesanan'] = $transaksi['status_pesanan'] ?? 'Pending';
 $transaksi['status_bayar']   = $transaksi['status_bayar'] ?? 'Pending';
 $transaksi['metode_bayar']   = $transaksi['metode_bayar'] ?? '-';
@@ -10,8 +6,6 @@ $transaksi['alamat_kirim']   = $transaksi['alamat_kirim'] ?? '-';
 $transaksi['kota_kirim']     = $transaksi['kota_kirim'] ?? '-';
 $transaksi['kode_pos']       = $transaksi['kode_pos'] ?? '-';
 
-// FIX: Perhitungan ulang untuk memastikan data konsisten
-// Hitung ulang total_harga dari detail produk
 $total_dari_detail = 0;
 if (isset($details) && is_array($details)) {
     foreach ($details as $d) {
@@ -19,23 +13,19 @@ if (isset($details) && is_array($details)) {
     }
 }
 
-// Gunakan total dari detail jika tersedia, tapi tetap pakai dari transaksi sebagai fallback
 $transaksi['total_harga'] = $total_dari_detail > 0 
     ? $total_dari_detail 
     : ($transaksi['total_harga'] ?? 0);
 
 $transaksi['ongkir'] = $transaksi['ongkir'] ?? 0;
-
-// Hitung ulang grand_total untuk memastikan akurat
 $transaksi['grand_total'] = $transaksi['total_harga'] + $transaksi['ongkir'];
 
-// Format tanggal
 $tanggal_transaksi_display = !empty($transaksi['tanggal_transaksi'])
     ? date('d F Y H:i', strtotime($transaksi['tanggal_transaksi']))
     : '-';
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <title>Invoice #<?php echo $transaksi['id_transaksi']; ?></title>
@@ -139,7 +129,6 @@ $tanggal_transaksi_display = !empty($transaksi['tanggal_transaksi'])
         .status-badge.success { background: #D1FAE5; color: #065F46; }
         .status-badge.warning { background: #FEF3C7; color: #92400E; }
         .status-badge.danger { background: #FEE2E2; color: #991B1B; }
-        .status-badge.info { background: #DBEAFE; color: #1E40AF; }
 
         .alamat-box {
             background: #ffffff;
@@ -178,7 +167,6 @@ $tanggal_transaksi_display = !empty($transaksi['tanggal_transaksi'])
             color: #2C1808;
         }
         .product-table tbody tr:nth-child(even) { background: #FAF6F0; }
-        .product-table tbody tr:hover { background: #f0ebe5; }
         .product-table tbody td.text-right { text-align: right; }
         .product-table tbody td.text-center { text-align: center; }
         .product-table tfoot td {
@@ -190,10 +178,6 @@ $tanggal_transaksi_display = !empty($transaksi['tanggal_transaksi'])
             padding: 12px 14px;
             font-size: 14px;
         }
-        .product-table tfoot .total-row .grand-total {
-            color: #4A2C11;
-            font-weight: 700;
-        }
 
         .invoice-footer {
             text-align: center;
@@ -202,12 +186,6 @@ $tanggal_transaksi_display = !empty($transaksi['tanggal_transaksi'])
             padding-top: 20px;
             font-size: 11px;
             color: #70655E;
-        }
-        .invoice-footer .thankyou {
-            font-size: 14px;
-            font-weight: 600;
-            color: #4A2C11;
-            margin-bottom: 4px;
         }
 
         .btn-group {
@@ -228,47 +206,21 @@ $tanggal_transaksi_display = !empty($transaksi['tanggal_transaksi'])
             align-items: center;
             gap: 8px;
             font-size: 13px;
-            transition: all 0.3s ease;
             font-family: 'Arial', sans-serif;
         }
-        .btn-group .btn-print {
-            background: #4A2C11;
-            color: white;
-        }
-        .btn-group .btn-print:hover {
-            background: #2C1808;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(74, 44, 17, 0.25);
-        }
-        .btn-group .btn-back {
-            background: #70655E;
-            color: white;
-        }
-        .btn-group .btn-back:hover {
-            background: #5a4f48;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(112, 101, 94, 0.25);
-        }
+        .btn-group .btn-print { background: #4A2C11; color: white; }
+        .btn-group .btn-back { background: #70655E; color: white; }
 
         @media print {
             .no-print { display: none !important; }
             body { background: #fff; padding: 0; }
             .invoice-wrapper { box-shadow: none; border: none; padding: 20px; border-radius: 0; }
-            .info-grid { background: #f8f5f0; }
-        }
-
-        @media (max-width: 600px) {
-            .invoice-wrapper { padding: 20px; }
-            .info-grid { grid-template-columns: 1fr; gap: 8px; }
-            .alamat-box { flex-direction: column; gap: 6px; }
-            .btn-group .btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
 <div class="invoice-wrapper">
-
     <!-- HEADER -->
     <div class="invoice-header">
         <div class="brand-icon">☕</div>
@@ -284,7 +236,7 @@ $tanggal_transaksi_display = !empty($transaksi['tanggal_transaksi'])
             <span class="value"><?php echo $tanggal_transaksi_display; ?></span>
         </div>
         <div class="info-item" style="text-align:right;">
-            <span class="label">Status</span>
+            <span class="label">Status Pesanan</span>
             <span class="value">
                 <span class="status-badge <?php echo $transaksi['status_pesanan'] == 'Selesai' ? 'success' : ($transaksi['status_pesanan'] == 'Pending' ? 'warning' : 'danger'); ?>">
                     <?php echo $transaksi['status_pesanan']; ?>
@@ -338,10 +290,8 @@ $tanggal_transaksi_display = !empty($transaksi['tanggal_transaksi'])
         </thead>
         <tbody>
             <?php $no = 1; 
-            $total_terhitung = 0;
             foreach ($details as $d): 
                 $subtotal = ($d['harga_satuan'] ?? 0) * ($d['jumlah'] ?? 0);
-                $total_terhitung += $subtotal;
             ?>
             <tr>
                 <td><?php echo $no++; ?></td>
@@ -380,20 +330,18 @@ $tanggal_transaksi_display = !empty($transaksi['tanggal_transaksi'])
 
     <!-- FOOTER -->
     <div class="invoice-footer">
-        <div class="thankyou">☕ Terima kasih telah berbelanja di Liberchain</div>
+        <div style="font-size: 14px; font-weight: 600; color: #4A2C11; margin-bottom: 4px;">☕ Terima kasih telah berbelanja di Liberchain</div>
         <p>&copy; <?php echo date('Y'); ?> Liberchain — Supply Chain Kopi. All rights reserved.</p>
 
-        <!-- TOMBOL -->
         <div class="no-print btn-group">
             <button onclick="window.print()" class="btn btn-print">
                 🖨️ Cetak Invoice
             </button>
             <a href="javascript:history.back()" class="btn btn-back">
-                🔙 Kembali ke Detail
+                🔙 Kembali
             </a>
         </div>
     </div>
-
 </div>
 
 </body>

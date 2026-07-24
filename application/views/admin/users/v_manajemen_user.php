@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="id">
 
@@ -746,384 +747,310 @@
 <body>
 
 	<?php $this->load->view('admin/layout/sidebar'); ?>
+=======
+<!-- STYLES KHUSUS MANAJEMEN USER -->
+<style>
+	:root {
+		--roasted-brown: #4A2C11;
+		--dark-coffee: #2C1808;
+		--amber-cream: #E6A15C;
+		--bg-cream: #FAF6F0;
+		--card-white: #FFFFFF;
+		--text-secondary: #70655E;
+	}
 
-	<!-- MAIN CONTENT -->
-	<div class="main-content">
-		<!-- PAGE HEADER -->
-		<div class="page-header">
-			<div>
-				<button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle" style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
-					<i class="bi bi-list"></i>
+	.btn-custom-primary {
+		background: var(--dark-coffee) !important;
+		color: #ffffff !important;
+		border-radius: 10px;
+		padding: 8px 20px;
+		font-weight: 600;
+		font-size: 0.85rem;
+		border: none;
+		transition: all 0.3s ease;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		text-decoration: none !important;
+	}
+
+	.btn-custom-primary:hover {
+		background: var(--roasted-brown) !important;
+		color: #ffffff !important;
+		transform: translateY(-1px);
+	}
+
+	.btn-icon-round {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		border: 1px solid #E5E7EB;
+		background: #ffffff;
+		color: #6B7280;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.2s ease;
+		text-decoration: none !important;
+		font-size: 0.85rem;
+	}
+
+	.btn-icon-round:hover {
+		background: #F9FAFB;
+		color: var(--dark-coffee);
+		border-color: #D1D5DB;
+	}
+
+	.btn-icon-round-danger {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		border: 1px solid #FCA5A5;
+		background: #ffffff;
+		color: #EF4444;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.2s ease;
+		text-decoration: none !important;
+		font-size: 0.85rem;
+	}
+
+	.btn-icon-round-danger:hover {
+		background: #FEE2E2;
+		color: #DC2626;
+	}
+
+	.badge-role {
+		background: #F3F4F6;
+		color: #4B5563;
+		padding: 4px 14px;
+		border-radius: 20px;
+		font-weight: 500;
+		font-size: 0.78rem;
+		display: inline-block;
+	}
+
+	.badge-status-active {
+		background: #DCFCE7;
+		color: #15803D;
+		padding: 4px 12px;
+		border-radius: 20px;
+		font-weight: 600;
+		font-size: 0.75rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.badge-status-inactive {
+		background: #FEE2E2;
+		color: #B91C1C;
+		padding: 4px 12px;
+		border-radius: 20px;
+		font-weight: 600;
+		font-size: 0.75rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.table-custom-user {
+		width: 100%;
+		border-collapse: separate;
+		border-spacing: 0;
+	}
+
+	.table-custom-user th {
+		background: #FAF8F5;
+		color: #70655E;
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.5px;
+		padding: 12px 16px;
+		border-bottom: 1px solid #F0EBE1;
+		text-transform: uppercase;
+	}
+
+	.table-custom-user td {
+		padding: 14px 16px;
+		border-bottom: 1px solid #F0EBE1;
+		vertical-align: middle;
+		font-size: 0.88rem;
+		color: #2C1808;
+	}
+
+	.custom-card-user {
+		background: #ffffff;
+		border-radius: 16px;
+		border: 1px solid rgba(74, 44, 17, 0.06);
+		box-shadow: 0 4px 20px rgba(44, 24, 8, 0.04);
+		overflow: hidden;
+	}
+</style>
+
+<!-- ALERT MESSAGES -->
+<?php if ($this->session->flashdata('success')): ?>
+	<div class="alert alert-success alert-dismissible fade show mb-3" style="border-radius: 12px;">
+		<i class="bi bi-check-circle-fill mr-2"></i> <?= $this->session->flashdata('success') ?>
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+<?php endif; ?>
+>>>>>>> c50a8c46b5d9744b96ff8d6c8a37c62a316dedd7
+
+<?php if ($this->session->flashdata('error')): ?>
+	<div class="alert alert-danger alert-dismissible fade show mb-3" style="border-radius: 12px;">
+		<i class="bi bi-exclamation-circle-fill mr-2"></i> <?= $this->session->flashdata('error') ?>
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+<?php endif; ?>
+
+<!-- SEARCH & FILTER CARD -->
+<div class="custom-card-user mb-4" style="padding: 24px;">
+	<form method="get" action="<?= site_url('admin/user') ?>">
+		<div class="row align-items-end">
+			<div class="col-md-4">
+				<label for="search" class="form-label" style="font-weight: 600; font-size: 0.85rem; color: #2C1808;">
+					<i class="bi bi-search mr-1"></i> Cari User
+				</label>
+				<input type="text" name="search" id="search" class="form-control" style="border-radius: 8px; height: 42px;"
+					placeholder="Nama, username, atau nomor telepon"
+					value="<?= htmlspecialchars($search ?? '') ?>" />
+			</div>
+			<div class="col-md-3">
+				<label for="role" class="form-label" style="font-weight: 600; font-size: 0.85rem; color: #2C1808;">Role</label>
+				<select name="role" id="role" class="form-control" style="border-radius: 8px; height: 42px;">
+					<option value="">Semua Role</option>
+					<option value="Admin" <?= ($role_filter ?? '') === 'Admin' ? 'selected' : '' ?>>Admin</option>
+					<option value="Petani" <?= ($role_filter ?? '') === 'Petani' ? 'selected' : '' ?>>Petani</option>
+					<option value="Pembeli" <?= ($role_filter ?? '') === 'Pembeli' ? 'selected' : '' ?>>Pembeli</option>
+					<option value="Guest" <?= ($role_filter ?? '') === 'Guest' ? 'selected' : '' ?>>Guest</option>
+				</select>
+			</div>
+			<div class="col-md-3">
+				<label for="status" class="form-label" style="font-weight: 600; font-size: 0.85rem; color: #2C1808;">Status</label>
+				<select name="status" id="status" class="form-control" style="border-radius: 8px; height: 42px;">
+					<option value="">Semua Status</option>
+					<option value="Active" <?= ($status ?? '') === 'Active' ? 'selected' : '' ?>>Aktif</option>
+					<option value="Inactive" <?= ($status ?? '') === 'Inactive' ? 'selected' : '' ?>>Nonaktif</option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<button type="submit" class="btn-custom-primary w-100" style="height: 42px;">
+					<i class="bi bi-search mr-2"></i> Cari
 				</button>
-				<h2 class="d-inline-block align-middle mb-0">Manajemen User</h2>
-				<p class="subtitle mb-0 mt-1">Kelola data user aplikasi</p>
-			</div>
-			<div class="header-right">
-				<!-- NOTIFICATION BELL -->
-				<div style="position: relative;">
-					<button class="notif-btn" id="notifToggle">
-						<i class="bi bi-bell" style="font-size: 1.2rem;"></i>
-						<?php if (isset($unread_count) && $unread_count > 0): ?>
-							<span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
-						<?php else: ?>
-							<span class="notif-dot" id="notifCount" style="display:none;">0</span>
-						<?php endif; ?>
-					</button>
-
-					<!-- NOTIFICATION DROPDOWN -->
-					<div class="notif-dropdown" id="notifDropdown">
-						<div class="notif-dropdown-header">
-							<span>
-								<?= (isset($unread_count) && $unread_count > 0) ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
-							</span>
-							<div>
-								<?php if (isset($unread_count) && $unread_count > 0): ?>
-									<a href="#" id="markAllReadBtn" class="mr-2"
-										style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
-								<?php endif; ?>
-								<a href="<?= base_url('admin/dashboard/history'); ?>"
-									style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
-							</div>
-						</div>
-						<div class="notif-dropdown-list" id="notifList">
-							<?php if (!empty($notifikasi)): ?>
-								<?php foreach ($notifikasi as $n): ?>
-									<a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
-										href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
-										<?php
-										$icon_type = $n['icon'] ?? 'info';
-										$icon_map = [
-											'success' => 'bi-check-circle-fill',
-											'warning' => 'bi-exclamation-triangle-fill',
-											'danger' => 'bi-x-circle-fill',
-											'info' => 'bi-info-circle-fill'
-										];
-										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
-										?>
-										<div class="notif-icon <?= $icon_type; ?>">
-											<i class="bi <?= $icon_class; ?>"></i>
-										</div>
-										<div class="notif-text">
-											<?= htmlspecialchars($n['isi_notifikasi']); ?>
-											<span
-												class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
-										</div>
-										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
-											<span class="notif-badge-new">Baru</span>
-										<?php endif; ?>
-									</a>
-								<?php endforeach; ?>
-							<?php else: ?>
-								<div class="text-center text-muted py-5 px-3">
-									<i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
-									<p class="small mb-0">Tidak ada notifikasi</p>
-								</div>
-							<?php endif; ?>
-						</div>
-						<div class="p-2 text-center border-top"
-							style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
-							<a href="<?= base_url('admin/dashboard/settings'); ?>"
-								class="small text-secondary font-weight-bold text-decoration-none">
-								<i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
-							</a>
-						</div>
-					</div>
-				</div>
-
-				<!-- USER BADGE -->
-				<?php
-				$nama = $this->session->userdata('nama') ?? 'Admin';
-				$role = $this->session->userdata('role') ?? 'Admin';
-				?>
-				<div class="user-badge">
-					<i class="bi bi-person-circle"></i>
-					<div>
-						<div class="user-name"><?= $nama; ?></div>
-						<div class="user-role"><?= $role; ?></div>
-					</div>
-				</div>
 			</div>
 		</div>
-
-		<!-- ALERT MESSAGES -->
-		<?php if ($this->session->flashdata('success')): ?>
-			<div class="alert-custom alert-success">
-				<i class="bi bi-check-circle-fill mr-2"></i> <?= $this->session->flashdata('success') ?>
+		<?php if (!empty($search) || !empty($role_filter) || !empty($status)): ?>
+			<div class="mt-2">
+				<a href="<?= site_url('admin/user') ?>" class="btn btn-sm btn-link text-muted p-0" style="font-size: 0.8rem;">
+					<i class="bi bi-x-circle mr-1"></i> Reset Filter
+				</a>
 			</div>
 		<?php endif; ?>
+	</form>
+</div>
 
-		<?php if ($this->session->flashdata('error')): ?>
-			<div class="alert-custom alert-danger">
-				<i class="bi bi-exclamation-circle-fill mr-2"></i> <?= $this->session->flashdata('error') ?>
-			</div>
-		<?php endif; ?>
-
-		<!-- SEARCH & FILTER -->
-		<div class="custom-card" style="max-width: 100%; margin-bottom: 20px;">
-			<div class="card-body-custom">
-				<form method="get" action="<?= site_url('admin/user') ?>" class="form-custom">
-					<div class="row">
-						<div class="col-md-4">
-							<div class="form-group mb-0">
-								<label for="search">
-									<i class="bi bi-search mr-1"></i> Cari User
-								</label>
-								<input type="text" name="search" id="search" class="form-control"
-									placeholder="Nama, username, atau nomor telepon"
-									value="<?= htmlspecialchars($search ?? '') ?>" />
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="form-group mb-0">
-								<label for="role">Role</label>
-								<select name="role" id="role" class="form-control">
-									<option value="">Semua Role</option>
-									<option value="Admin" <?= ($role ?? '') === 'Admin' ? 'selected' : '' ?>>Admin</option>
-									<option value="Petani" <?= ($role ?? '') === 'Petani' ? 'selected' : '' ?>>Petani</option>
-									<option value="Pembeli" <?= ($role ?? '') === 'Pembeli' ? 'selected' : '' ?>>Pembeli</option>
-									<option value="Guest" <?= ($role ?? '') === 'Guest' ? 'selected' : '' ?>>Guest</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="form-group mb-0">
-								<label for="status">Status</label>
-								<select name="status" id="status" class="form-control">
-									<option value="">Semua Status</option>
-									<option value="Active" <?= ($status ?? '') === 'Active' ? 'selected' : '' ?>>Aktif</option>
-									<option value="Inactive" <?= ($status ?? '') === 'Inactive' ? 'selected' : '' ?>>Nonaktif</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-md-2 d-flex align-items-end">
-							<button type="submit" class="btn-custom-primary" style="width: 100%;">
-								<i class="bi bi-search mr-1"></i> Cari
-							</button>
-						</div>
-					</div>
-					<?php if (!empty($search) || !empty($role) || !empty($status)): ?>
-						<div class="mt-3">
-							<a href="<?= site_url('admin/user') ?>" class="btn-custom-outline" style="font-size: 0.8rem; padding: 6px 14px;">
-								<i class="bi bi-x-circle mr-1"></i> Reset Filter
-							</a>
-						</div>
-					<?php endif; ?>
-				</form>
-			</div>
-		</div>
-
-		<!-- USER TABLE -->
-		<div class="custom-card">
-			<div class="card-header-custom">
-				<h6><i class="bi bi-people-fill text-warning mr-2"></i> Daftar User</h6>
-				<div>
-					<a href="<?= site_url('admin/user/add') ?>" class="btn-custom-primary">
-						<i class="bi bi-plus-circle mr-1"></i> Tambah User
-					</a>
-				</div>
-			</div>
-			<div class="card-body-custom" style="padding:0;">
-				<div class="table-responsive">
-					<table class="table table-custom mb-0">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Nama</th>
-								<th>Username</th>
-								<th>Nomor Telepon</th>
-								<th>Role</th>
-								<th>Status</th>
-								<th class="text-center">Aksi</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php if (!empty($users)): ?>
-								<?php $i = 1;
-								foreach ($users as $user): ?>
-									<tr>
-										<td><?= $i++ ?></td>
-										<td>
-											<span style="font-weight:600;"><?= htmlspecialchars($user['nama'] ?? '-') ?></span>
-										</td>
-										<td><?= htmlspecialchars($user['username']) ?></td>
-										<td><?= htmlspecialchars($user['no_telepon'] ?? '-') ?></td>
-										<td>
-											<span class="badge" style="background: <?= (strtolower($user['role'] ?? '') === 'admin') ? 'var(--amber-cream)' : 'var(--bg-cream)'; ?>; color: <?= (strtolower($user['role'] ?? '') === 'admin') ? 'white' : 'var(--text-secondary)'; ?>; padding: 4px 12px; border-radius: 20px; font-weight:600; font-size:0.7rem;">
-												<?= ucfirst($user['role'] ?? '') ?>
-											</span>
-										</td>
-										<td>
-											<?php if (($user['status'] ?? '') === 'Active'): ?>
-												<span class="status-badge active" style="cursor: default;">
-													<i class="bi bi-check-circle mr-1"></i>Aktif
-												</span>
-											<?php else: ?>
-												<span class="status-badge inactive" style="cursor: default;">
-													<i class="bi bi-x-circle mr-1"></i>Nonaktif
-												</span>
-											<?php endif; ?>
-										</td>
-										<td class="text-center">
-											<a href="<?= site_url('admin/user/edit/' . $user['id_user']) ?>" class="btn-custom-outline me-1" title="Edit">
-												<i class="bi bi-pencil"></i>
-											</a>
-											<?php if (strtolower($user['role'] ?? '') !== 'admin'): ?>
-												<?php if (($user['status'] ?? '') === 'Active'): ?>
-													<a href="<?= site_url('admin/user/deactivate/' . $user['id_user']) ?>"
-														class="btn-custom-outline me-1"
-														title="Nonaktifkan"
-														onclick="return confirm('Apakah Anda yakin ingin menonaktifkan user ini?')">
-														<i class="bi bi-pause-circle"></i>
-													</a>
-												<?php else: ?>
-													<a href="<?= site_url('admin/user/activate/' . $user['id_user']) ?>"
-														class="btn-custom-outline me-1"
-														title="Aktifkan"
-														onclick="return confirm('Apakah Anda yakin ingin mengaktifkan user ini?')">
-														<i class="bi bi-play-circle"></i>
-													</a>
-												<?php endif; ?>
-											<?php endif; ?>
-											<?php if (strtolower($user['role'] ?? '') === 'petani' && isset($user['is_verified']) && $user['is_verified'] === '0'): ?>
-												<a href="<?= site_url('admin/users/verify_petani/' . $user['id_user']) ?>"
-													class="btn-custom-outline me-1"
-													title="Verifikasi Petani"
-													onclick="return confirm('Apakah Anda yakin ingin memverifikasi akun Petani ini?')">
-													<i class="bi bi-patch-check"></i>
-												</a>
-											<?php endif; ?>
-											<a href="javascript:void(0)" class="btn-custom-outline-danger"
-												onclick="if(confirm('Apakah Anda yakin ingin menghapus user ini?')){ window.location.href='<?= site_url('admin/user/delete/' . $user['id_user']) ?>'; }"
-												title="Hapus">
-												<i class="bi bi-trash"></i>
-											</a>
-										</td>
-									</tr>
-								<?php endforeach; ?>
-							<?php else: ?>
-								<tr>
-									<td colspan="7" class="text-center py-4 text-muted">
-										<i class="bi bi-people d-block mb-2" style="font-size:2rem;"></i>
-										<p class="mb-0">Belum ada data user</p>
-									</td>
-								</tr>
-							<?php endif; ?>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
+<!-- USER TABLE CARD -->
+<div class="custom-card-user">
+	<div class="d-flex justify-content-between align-items-center" style="padding: 20px 24px; border-bottom: 1px solid #F0EBE1;">
+		<h6 class="mb-0" style="font-weight: 700; color: #2C1808; display: flex; align-items: center; gap: 8px;">
+			<i class="bi bi-people-fill" style="color: #E6A15C; font-size: 1.1rem;"></i> Daftar User
+		</h6>
+		<a href="<?= site_url('admin/user/add') ?>" class="btn-custom-primary">
+			<i class="bi bi-plus-lg mr-2"></i> Tambah User
+		</a>
 	</div>
 
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-	<script>
-		// ============================================
-		// 1. SIDEBAR TOGGLE
-		// ============================================
-		const sidebar = document.getElementById('sidebarMenu');
-		const overlay = document.getElementById('sidebarOverlay');
-		const toggleBtn = document.getElementById('sidebarToggle');
+	<div class="table-responsive">
+		<table class="table-custom-user mb-0">
+			<thead>
+				<tr>
+					<th style="width: 50px;">#</th>
+					<th>NAMA</th>
+					<th>USERNAME</th>
+					<th>NOMOR TELEPON</th>
+					<th>ROLE</th>
+					<th>STATUS</th>
+					<th class="text-center" style="width: 160px;">AKSI</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php if (!empty($users)): ?>
+					<?php $i = 1; foreach ($users as $user): ?>
+						<tr>
+							<td><?= $i++ ?></td>
+							<td><strong style="color: #2C1808;"><?= htmlspecialchars($user['nama'] ?? '-') ?></strong></td>
+							<td><?= htmlspecialchars($user['username']) ?></td>
+							<td><?= htmlspecialchars($user['no_telepon'] ?? '-') ?></td>
+							<td>
+								<span class="badge-role">
+									<?= ucfirst($user['role'] ?? '-') ?>
+								</span>
+							</td>
+							<td>
+								<?php if (($user['status'] ?? '') === 'Active'): ?>
+									<span class="badge-status-active">
+										<i class="bi bi-check-circle"></i> Aktif
+									</span>
+								<?php else: ?>
+									<span class="badge-status-inactive">
+										<i class="bi bi-x-circle"></i> Nonaktif
+									</span>
+								<?php endif; ?>
+							</td>
+							<td class="text-center">
+								<div class="d-inline-flex gap-1" style="gap: 6px;">
+									<a href="<?= site_url('admin/user/edit/' . $user['id_user']) ?>" class="btn-icon-round" title="Edit">
+										<i class="bi bi-pencil"></i>
+									</a>
 
-		function toggleSidebar() {
-			sidebar.classList.toggle('open');
-			overlay.classList.toggle('active');
-			document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
-		}
+									<?php if (strtolower($user['role'] ?? '') !== 'admin'): ?>
+										<?php if (($user['status'] ?? '') === 'Active'): ?>
+											<a href="<?= site_url('admin/user/deactivate/' . $user['id_user']) ?>"
+												class="btn-icon-round"
+												title="Nonaktifkan"
+												onclick="return confirm('Apakah Anda yakin ingin menonaktifkan user ini?')">
+												<i class="bi bi-pause-circle"></i>
+											</a>
+										<?php else: ?>
+											<a href="<?= site_url('admin/user/activate/' . $user['id_user']) ?>"
+												class="btn-icon-round"
+												title="Aktifkan"
+												onclick="return confirm('Apakah Anda yakin ingin mengaktifkan user ini?')">
+												<i class="bi bi-play-circle"></i>
+											</a>
+										<?php endif; ?>
+									<?php endif; ?>
 
-		if (toggleBtn) {
-			toggleBtn.addEventListener('click', toggleSidebar);
-		}
-		if (overlay) {
-			overlay.addEventListener('click', toggleSidebar);
-		}
+									<?php if (strtolower($user['role'] ?? '') === 'petani' && isset($user['is_verified']) && $user['is_verified'] === '0'): ?>
+										<a href="<?= site_url('admin/users/verify_petani/' . $user['id_user']) ?>"
+											class="btn-icon-round"
+											title="Verifikasi Petani"
+											onclick="return confirm('Apakah Anda yakin ingin memverifikasi akun Petani ini?')">
+											<i class="bi bi-patch-check"></i>
+										</a>
+									<?php endif; ?>
 
-		document.addEventListener('click', function(e) {
-			if (window.innerWidth > 991.98) return;
-			if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
-				if (sidebar.classList.contains('open')) {
-					toggleSidebar();
-				}
-			}
-		});
-
-		// ============================================
-		// 2. NOTIFICATION DROPDOWN
-		// ============================================
-		const notifToggle = document.getElementById('notifToggle');
-		const notifDropdown = document.getElementById('notifDropdown');
-
-		if (notifToggle) {
-			notifToggle.addEventListener('click', function(e) {
-				e.stopPropagation();
-				notifDropdown.classList.toggle('show');
-			});
-		}
-
-		document.addEventListener('click', function(e) {
-			if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
-				notifDropdown.classList.remove('show');
-			}
-		});
-
-		// ============================================
-		// 3. MARK ALL READ
-		// ============================================
-		function markAllRead() {
-			if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
-				$.ajax({
-					url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
-					type: 'POST',
-					dataType: 'json',
-					success: function(response) {
-						if (response.success) location.reload();
-						else alert('Gagal menandai semua notifikasi.');
-					},
-					error: function() {
-						alert('Terjadi kesalahan. Silakan coba lagi.');
-					}
-				});
-			}
-		}
-
-		document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
-			e.preventDefault();
-			markAllRead();
-		});
-
-		// ============================================
-		// 4. STATUS TOGGLE
-		// ============================================
-		$(document).on('click', '.status-toggle', function() {
-			const id = $(this).data('id');
-			const currentStatus = $(this).data('status');
-			const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-			const $this = $(this);
-
-			if (confirm('Ubah status user ini menjadi ' + newStatus + '?')) {
-				$.ajax({
-					url: '<?= site_url('admin/user/toggle/') ?>' + id,
-					type: 'POST',
-					data: {
-						status: newStatus
-					},
-					dataType: 'json',
-					success: function(response) {
-						if (response.success) {
-							location.reload();
-						} else {
-							alert('Gagal mengubah status user.');
-						}
-					},
-					error: function() {
-						alert('Terjadi kesalahan. Silakan coba lagi.');
-					}
-				});
-			}
-		});
-
-		console.log('✅ Manajemen User siap digunakan!');
-	</script>
-</body>
-
-</html>
+									<a href="<?= site_url('admin/user/delete/' . $user['id_user']) ?>" 
+										class="btn-icon-round-danger"
+										onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')"
+										title="Hapus">
+										<i class="bi bi-trash"></i>
+									</a>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				<?php else: ?>
+					<tr>
+						<td colspan="7" class="text-center py-5 text-muted">
+							<i class="bi bi-people d-block mb-2" style="font-size: 2rem; color: #D1D5DB;"></i>
+							Belum ada data user
+						</td>
+					</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
+	</div>
+</div>

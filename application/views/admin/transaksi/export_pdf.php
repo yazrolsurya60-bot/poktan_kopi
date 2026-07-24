@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <title>Laporan Transaksi</title>
@@ -55,12 +55,8 @@
         .table tr:nth-child(even) { 
             background: #FAF6F0; 
         }
-        .text-right { 
-            text-align: right; 
-        }
-        .text-center { 
-            text-align: center; 
-        }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
         .footer { 
             text-align: center; 
             margin-top: 25px; 
@@ -172,7 +168,6 @@
         <p>Laporan ini dibuat secara otomatis oleh sistem.</p>
     </div>
     
-    <!-- Tombol Print (hanya muncul di browser, tidak di PDF) -->
     <div class="text-center no-print" style="margin-top:20px;">
         <button onclick="window.print()" style="padding:10px 30px; background:#4A2C11; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">
             🖨️ Cetak / Save as PDF

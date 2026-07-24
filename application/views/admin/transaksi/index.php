@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="id">
 
@@ -1243,334 +1244,337 @@
 <body>
 
 	<?php $this->load->view('admin/layout/sidebar'); ?>
+=======
+<style>
+	:root {
+		--roasted-brown: #4A2C11;
+		--dark-coffee: #2C1808;
+		--amber-cream: #E6A15C;
+		--amber-light: #FDF5ED;
+		--bg-cream: #FAF6F0;
+		--card-white: #FFFFFF;
+		--text-secondary: #70655E;
+		--shadow-soft: 0 8px 30px rgba(44, 24, 8, 0.08);
+		--shadow-hover: 0 12px 40px rgba(44, 24, 8, 0.15);
+		--radius-card: 16px;
+		--transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
 
-	<!-- MAIN CONTENT -->
-	<div class="main-content">
+	/* QUICK ACTION */
+	.quick-action-btn {
+		padding: 10px 18px;
+		border-radius: 12px;
+		transition: var(--transition-smooth);
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		font-weight: 600;
+		font-size: 0.82rem;
+		cursor: pointer;
+		text-decoration: none;
+		box-shadow: var(--shadow-soft);
+		border: 1px solid rgba(74, 44, 17, 0.06);
+		background: var(--card-white);
+		color: var(--dark-coffee);
+	}
 
-		<!-- PAGE HEADER -->
-		<div class="page-header d-flex justify-content-between align-items-center flex-wrap">
-			<div>
-				<button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
-					style="border-radius:12px; border:1px solid rgba(74,44,17,0.08);">
-					<i class="bi bi-list"></i>
-				</button>
-				<h1 class="page-title d-inline-block align-middle mb-0">
-					<i class="bi bi-wallet2"></i>Manajemen Transaksi
-				</h1>
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb breadcrumb-custom">
-						<li class="breadcrumb-item"><a href="<?= base_url('admin/dashboard'); ?>">Dashboard</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Transaksi</li>
-					</ol>
-				</nav>
-			</div>
-			<div class="d-flex align-items-center gap-3">
+	.quick-action-btn:hover {
+		transform: translateY(-2px);
+		text-decoration: none;
+		color: var(--dark-coffee);
+		box-shadow: var(--shadow-hover);
+	}
 
-				<!-- NOTIFICATION BELL -->
-				<div style="position: relative;">
-					<button class="notif-btn" id="notifToggle">
-						<i class="bi bi-bell" style="font-size: 1.2rem;"></i>
-						<?php if (isset($unread_count) && $unread_count > 0): ?>
-							<span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
-						<?php else: ?>
-							<span class="notif-dot" id="notifCount" style="display:none;">0</span>
-						<?php endif; ?>
-					</button>
+	.quick-action-btn.btn-excel {
+		background: #1B7C3C;
+		color: white;
+		border-color: #1B7C3C;
+	}
 
-					<!-- NOTIFICATION DROPDOWN -->
-					<div class="notif-dropdown" id="notifDropdown">
-						<div class="notif-dropdown-header">
-							<span>
-								<?= (isset($unread_count) && $unread_count > 0) ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
-							</span>
-							<div>
-								<?php if (isset($unread_count) && $unread_count > 0): ?>
-									<a href="#" id="markAllReadBtn" class="mr-2"
-										style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
-								<?php endif; ?>
-								<a href="<?= base_url('admin/dashboard/history'); ?>"
-									style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
-							</div>
-						</div>
-						<div class="notif-dropdown-list" id="notifList">
-							<?php if (!empty($notifikasi)): ?>
-								<?php foreach ($notifikasi as $n): ?>
-									<a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
-										href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
-										<?php
-										$icon_type = $n['icon'] ?? 'info';
-										$icon_map = [
-											'success' => 'bi-check-circle-fill',
-											'warning' => 'bi-exclamation-triangle-fill',
-											'danger' => 'bi-x-circle-fill',
-											'info' => 'bi-info-circle-fill'
-										];
-										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
-										?>
-										<div class="notif-icon <?= $icon_type; ?>">
-											<i class="bi <?= $icon_class; ?>"></i>
-										</div>
-										<div class="notif-text">
-											<?= htmlspecialchars($n['isi_notifikasi']); ?>
-											<span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
-										</div>
-										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
-											<span class="notif-badge-new">Baru</span>
-										<?php endif; ?>
-									</a>
-								<?php endforeach; ?>
-							<?php else: ?>
-								<div class="text-center text-muted py-5 px-3">
-									<i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
-									<p class="small mb-0">Tidak ada notifikasi</p>
-								</div>
-							<?php endif; ?>
-						</div>
-						<div class="p-2 text-center border-top"
-							style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
-							<a href="<?= base_url('admin/dashboard/settings'); ?>"
-								class="small text-secondary font-weight-bold text-decoration-none">
-								<i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
-							</a>
-						</div>
-					</div>
-				</div>
+	.quick-action-btn.btn-excel:hover {
+		background: #14632F;
+		color: white;
+	}
 
-				<!-- USER BADGE -->
-				<?php
-				$nama = $this->session->userdata('nama') ?? 'User';
-				$role = $this->session->userdata('role') ?? 'Member';
-				?>
-				<div class="user-badge">
-					<i class="bi bi-person-circle"></i>
-					<div>
-						<div class="user-name"><?= $nama; ?></div>
-						<div class="user-role"><?= $role; ?></div>
-					</div>
-				</div>
-			</div>
-		</div>
+	.quick-action-btn.btn-pdf {
+		background: #DC143C;
+		color: white;
+		border-color: #DC143C;
+	}
 
-		<!-- QUICK ACTION -->
-		<div class="row mb-4 fade-in">
-			<div class="col-12">
-				<div class="d-flex flex-wrap" style="gap: 10px;">
-					<a href="<?= base_url('admin/transaksi'); ?>" class="quick-action-btn" style="padding: 10px 20px;">
-						<i class="bi bi-arrow-repeat"></i> Refresh
-					</a>
-					<a href="<?= base_url('admin/transaksi/export_excel'); ?>" class="quick-action-btn btn-excel" style="padding: 10px 20px;" onclick="return confirm('Download laporan Excel?')">
-						<i class="bi bi-file-earmark-excel-fill"></i> Export Excel
-					</a>
-					<a href="<?= base_url('admin/transaksi/export_pdf'); ?>" class="quick-action-btn btn-pdf" style="padding: 10px 20px;" onclick="return confirm('Download laporan PDF?')">
-						<i class="bi bi-file-earmark-pdf-fill"></i> Export PDF
-					</a>
-				</div>
-			</div>
-		</div>
+	.quick-action-btn.btn-pdf:hover {
+		background: #B01030;
+		color: white;
+	}
 
-		<!-- STATISTIK CARDS -->
-		<div class="row mb-4">
-			<div class="col-xl-3 col-lg-6 col-6 mb-3">
-				<div class="stat-card fade-in">
-					<div class="stat-icon" style="background: #FEF3C7; color: #92400E;"><i class="bi bi-clock"></i></div>
-					<div class="stat-title">Pending</div>
-					<div class="stat-number"><?= $count_pending ?? 0; ?></div>
-					<div class="stat-footer"><span class="trend-up"><i class="bi bi-arrow-up"></i> <?= $count_pending ?? 0; ?></span> menunggu verifikasi</div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-lg-6 col-6 mb-3">
-				<div class="stat-card fade-in">
-					<div class="stat-icon" style="background: #DBEAFE; color: #1E40AF;"><i class="bi bi-spinner"></i></div>
-					<div class="stat-title">Diproses</div>
-					<div class="stat-number"><?= $count_diproses ?? 0; ?></div>
-					<div class="stat-footer"><span class="trend-up"><i class="bi bi-arrow-up"></i> <?= $count_diproses ?? 0; ?></span> sedang diproses</div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-lg-6 col-6 mb-3">
-				<div class="stat-card fade-in">
-					<div class="stat-icon" style="background: #EDE9FE; color: #5B21B6;"><i class="bi bi-truck"></i></div>
-					<div class="stat-title">Dikirim</div>
-					<div class="stat-number"><?= $count_dikirim ?? 0; ?></div>
-					<div class="stat-footer"><span class="trend-up"><i class="bi bi-arrow-up"></i> <?= $count_dikirim ?? 0; ?></span> dalam perjalanan</div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-lg-6 col-6 mb-3">
-				<div class="stat-card fade-in">
-					<div class="stat-icon" style="background: #D1FAE5; color: #065F46;"><i class="bi bi-check-circle"></i></div>
-					<div class="stat-title">Selesai</div>
-					<div class="stat-number"><?= $count_selesai ?? 0; ?></div>
-					<div class="stat-footer"><span class="trend-up"><i class="bi bi-arrow-up"></i> <?= $count_selesai ?? 0; ?></span> transaksi selesai</div>
-				</div>
-			</div>
-		</div>
+	/* STATISTIK CARDS */
+	.stat-card {
+		background: var(--card-white);
+		border-radius: var(--radius-card);
+		padding: 20px 22px;
+		box-shadow: var(--shadow-soft);
+		transition: var(--transition-smooth);
+		border: 1px solid rgba(74, 44, 17, 0.04);
+		height: 100%;
+		position: relative;
+		overflow: hidden;
+	}
 
-		<!-- TABEL TRANSAKSI -->
-		<div class="custom-card fade-in">
-			<div class="card-header-custom">
-				<h6><i class="bi bi-receipt"></i> Daftar Transaksi</h6>
-				<span class="badge" style="background:var(--bg-cream); color:var(--text-secondary); font-weight:600; padding:6px 14px; border-radius:20px;">
-					<i class="bi bi-database"></i> <?= count($transaksi ?? []); ?> transaksi
-				</span>
-			</div>
-			<div class="card-body-custom">
-				<div class="table-responsive">
-					<table class="table table-custom">
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Pembeli</th>
-								<th>Total</th>
-								<th>Status Pesanan</th>
-								<th>Status Bayar</th>
-								<th>Metode</th>
-								<th>Tanggal</th>
-								<th class="text-center">Aksi</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php if (!empty($transaksi)): ?>
-								<?php foreach ($transaksi as $t): ?>
-									<tr>
-										<td><span class="font-weight-bold" style="color:var(--dark-coffee);">#<?= $t['id_transaksi']; ?></span></td>
-										<td>
-											<div class="d-flex align-items-center gap-2">
-												<div class="avatar-circle"><?= strtoupper(substr($t['nama_pembeli'] ?? 'G', 0, 1)); ?></div>
-												<span><?= $t['nama_pembeli'] ?? 'Guest'; ?></span>
-											</div>
-										</td>
-										<td><span class="font-weight-bold" style="color:var(--roasted-brown);">Rp <?= number_format($t['grand_total'] ?? 0, 0, ',', '.'); ?></span></td>
-										<td>
-											<?php
-											$status = strtolower($t['status_pesanan'] ?? 'pending');
-											$class = 'pending';
-											if ($status == 'selesai' || $status == 'complete') $class = 'complete';
-											elseif ($status == 'dikirim' || $status == 'delivery') $class = 'delivery';
-											elseif ($status == 'diproses' || $status == 'processing') $class = 'processing';
-											elseif ($status == 'batal' || $status == 'cancelled') $class = 'cancelled';
-											?>
-											<span class="status-badge <?= $class; ?>">
-												<?= $t['status_pesanan'] ?? 'Pending'; ?>
-											</span>
-										</td>
-										<td>
-											<?php
-											$bayar = strtolower($t['status_bayar'] ?? 'pending');
-											$bayar_class = ($bayar == 'lunas' || $bayar == 'paid') ? 'complete' : (($bayar == 'batal' || $bayar == 'cancelled') ? 'cancelled' : 'pending');
-											?>
-											<span class="status-badge <?= $bayar_class; ?>">
-												<?= $t['status_bayar'] ?? 'Pending'; ?>
-											</span>
-										</td>
-										<td>
-											<?php
-											// 🔥 FIX: Ganti Transfer Bank menjadi Virtual Account
-											$metode = $t['metode_bayar'] ?? 'Transfer';
-											if ($metode == 'Transfer Bank' || $metode == 'Transfer') {
-												echo 'Virtual Account';
-											} else {
-												echo $metode;
-											}
-											?>
-										</td>
-										<td><span style="font-size:0.8rem; color:var(--text-secondary);"><?= date('d/m/Y', strtotime($t['tanggal_transaksi'] ?? date('Y-m-d'))); ?></span></td>
-										<td class="text-center">
-											<a href="<?= base_url('admin/transaksi/detail/' . $t['id_transaksi']); ?>"
-												class="btn-detail-transaksi">
-												<i class="bi bi-eye"></i> Detail
-											</a>
-										</td>
-									</tr>
-								<?php endforeach; ?>
-							<?php else: ?>
-								<tr>
-									<td colspan="8" class="text-center py-5 text-muted">
-										<i class="bi bi-inbox" style="font-size:3rem; display:block; margin-bottom:12px; opacity:0.3;"></i>
-										<h6 style="font-weight:600;">Belum ada transaksi</h6>
-										<p style="font-size:0.85rem;">Transaksi akan muncul di sini setelah ada pembelian</p>
-									</td>
-								</tr>
-							<?php endif; ?>
-						</tbody>
-					</table>
-				</div>
-			</div>
+	.stat-card::before {
+		content: '';
+		position: absolute;
+		top: 0; left: 0; right: 0; height: 3px;
+		background: linear-gradient(90deg, var(--amber-cream), var(--roasted-brown));
+		opacity: 0;
+		transition: var(--transition-smooth);
+	}
+
+	.stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+	.stat-card:hover::before { opacity: 1; }
+
+	.stat-card .stat-icon {
+		width: 48px;
+		height: 48px;
+		border-radius: 14px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.4rem;
+		margin-bottom: 12px;
+	}
+
+	.stat-card .stat-title {
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		color: var(--text-secondary);
+	}
+
+	.stat-card .stat-number {
+		font-size: 1.8rem;
+		font-weight: 800;
+		color: var(--dark-coffee);
+	}
+
+	/* TABLE & CUSTOM CARD */
+	.custom-card {
+		background: var(--card-white);
+		border-radius: var(--radius-card);
+		box-shadow: var(--shadow-soft);
+		border: 1px solid rgba(74, 44, 17, 0.04);
+		overflow: hidden;
+	}
+
+	.custom-card .card-header-custom {
+		padding: 16px 24px;
+		border-bottom: 1px solid rgba(74, 44, 17, 0.06);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background: rgba(250, 246, 240, 0.3);
+	}
+
+	.table-custom { font-size: 0.85rem; margin-bottom: 0; width: 100%; }
+	.table-custom thead th {
+		background: rgba(250, 246, 240, 0.4);
+		border-bottom: 2px solid rgba(74, 44, 17, 0.06);
+		color: var(--text-secondary);
+		font-weight: 600;
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		padding: 14px 12px;
+	}
+	.table-custom tbody td {
+		padding: 14px 12px;
+		border-bottom: 1px solid rgba(74, 44, 17, 0.04);
+		vertical-align: middle;
+	}
+
+	.status-badge {
+		padding: 5px 14px;
+		border-radius: 20px;
+		font-size: 0.7rem;
+		font-weight: 600;
+		display: inline-block;
+	}
+	.status-badge.pending { background: #FEF3C7; color: #92400E; }
+	.status-badge.processing { background: #DBEAFE; color: #1E40AF; }
+	.status-badge.delivery { background: #EDE9FE; color: #5B21B6; }
+	.status-badge.complete { background: #D1FAE5; color: #065F46; }
+	.status-badge.cancelled { background: #FEE2E2; color: #991B1B; }
+
+	.btn-detail-transaksi {
+		background: var(--amber-cream);
+		color: white;
+		border: none;
+		padding: 6px 14px;
+		border-radius: 8px;
+		font-size: 0.75rem;
+		font-weight: 600;
+		transition: var(--transition-smooth);
+		text-decoration: none;
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+	}
+
+	.btn-detail-transaksi:hover {
+		background: var(--roasted-brown);
+		color: white;
+		text-decoration: none;
+		transform: translateY(-2px);
+		box-shadow: var(--shadow-hover);
+	}
+
+	.avatar-circle {
+		width: 34px;
+		height: 34px;
+		border-radius: 50%;
+		background: var(--amber-light);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--amber-cream);
+		font-weight: 700;
+		font-size: 0.8rem;
+	}
+</style>
+
+<!-- QUICK ACTION -->
+<div class="row mb-4 fade-in">
+	<div class="col-12">
+		<div class="d-flex flex-wrap" style="gap: 10px;">
+			<a href="<?= base_url('admin/transaksi'); ?>" class="quick-action-btn">
+				<i class="bi bi-arrow-repeat"></i> Refresh
+			</a>
+			<a href="<?= base_url('admin/transaksi/export_excel'); ?>" class="quick-action-btn btn-excel" onclick="return confirm('Download laporan Excel?')">
+				<i class="bi bi-file-earmark-excel-fill"></i> Export Excel
+			</a>
+			<a href="<?= base_url('admin/transaksi/export_pdf'); ?>" class="quick-action-btn btn-pdf" onclick="return confirm('Download laporan PDF?')">
+				<i class="bi bi-file-earmark-pdf-fill"></i> Export PDF
+			</a>
 		</div>
 	</div>
+</div>
+>>>>>>> c50a8c46b5d9744b96ff8d6c8a37c62a316dedd7
 
-	<!-- SCRIPTS -->
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-	<script>
-		// ==========================================
-		// 1. SIDEBAR TOGGLE
-		// ==========================================
-		const sidebar = document.getElementById('sidebarMenu');
-		const overlay = document.getElementById('sidebarOverlay');
-		const toggleBtn = document.getElementById('sidebarToggle');
+<!-- STATISTIK CARDS -->
+<div class="row mb-4 fade-in">
+	<div class="col-xl-3 col-lg-6 col-6 mb-3">
+		<div class="stat-card">
+			<div class="stat-icon" style="background: #FEF3C7; color: #92400E;"><i class="bi bi-clock"></i></div>
+			<div class="stat-title">Pending</div>
+			<div class="stat-number"><?= $count_pending ?? 0; ?></div>
+		</div>
+	</div>
+	<div class="col-xl-3 col-lg-6 col-6 mb-3">
+		<div class="stat-card">
+			<div class="stat-icon" style="background: #DBEAFE; color: #1E40AF;"><i class="bi bi-spinner"></i></div>
+			<div class="stat-title">Diproses</div>
+			<div class="stat-number"><?= $count_diproses ?? 0; ?></div>
+		</div>
+	</div>
+	<div class="col-xl-3 col-lg-6 col-6 mb-3">
+		<div class="stat-card">
+			<div class="stat-icon" style="background: #EDE9FE; color: #5B21B6;"><i class="bi bi-truck"></i></div>
+			<div class="stat-title">Dikirim</div>
+			<div class="stat-number"><?= $count_dikirim ?? 0; ?></div>
+		</div>
+	</div>
+	<div class="col-xl-3 col-lg-6 col-6 mb-3">
+		<div class="stat-card">
+			<div class="stat-icon" style="background: #D1FAE5; color: #065F46;"><i class="bi bi-check-circle"></i></div>
+			<div class="stat-title">Selesai</div>
+			<div class="stat-number"><?= $count_selesai ?? 0; ?></div>
+		</div>
+	</div>
+</div>
 
-		function toggleSidebar() {
-			sidebar.classList.toggle('open');
-			overlay.classList.toggle('active');
-			document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
-		}
-
-		if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
-		if (overlay) overlay.addEventListener('click', toggleSidebar);
-
-		document.addEventListener('click', function(e) {
-			if (window.innerWidth > 991.98) return;
-			if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
-				if (sidebar.classList.contains('open')) toggleSidebar();
-			}
-		});
-
-		// ==========================================
-		// 2. NOTIFICATION DROPDOWN
-		// ==========================================
-		const notifToggle = document.getElementById('notifToggle');
-		const notifDropdown = document.getElementById('notifDropdown');
-
-		if (notifToggle) {
-			notifToggle.addEventListener('click', function(e) {
-				e.stopPropagation();
-				notifDropdown.classList.toggle('show');
-			});
-		}
-
-		document.addEventListener('click', function(e) {
-			if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
-				notifDropdown.classList.remove('show');
-			}
-		});
-
-		// ==========================================
-		// 3. MARK ALL READ
-		// ==========================================
-		function markAllRead() {
-			if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
-				$.ajax({
-					url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
-					type: 'POST',
-					dataType: 'json',
-					success: function(response) {
-						if (response.success) location.reload();
-						else alert('Gagal menandai semua notifikasi.');
-					},
-					error: function() {
-						alert('Terjadi kesalahan. Silakan coba lagi.');
-					}
-				});
-			}
-		}
-
-		document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
-			e.preventDefault();
-			markAllRead();
-		});
-
-		console.log('✅ Halaman Manajemen Transaksi siap digunakan!');
-		console.log('📋 Data transaksi dari database real-time');
-	</script>
-</body>
-
-</html>
+<!-- TABEL TRANSAKSI -->
+<div class="custom-card fade-in">
+	<div class="card-header-custom">
+		<h6 class="mb-0"><i class="bi bi-receipt"></i> Daftar Transaksi</h6>
+		<span class="badge" style="background:var(--bg-cream); color:var(--text-secondary); font-weight:600; padding:6px 14px; border-radius:20px;">
+			Total: <?= count($transaksi ?? []); ?> transaksi
+		</span>
+	</div>
+	<div class="card-body p-0">
+		<div class="table-responsive">
+			<table class="table table-custom">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Pembeli</th>
+						<th>Total</th>
+						<th>Status Pesanan</th>
+						<th>Status Bayar</th>
+						<th>Metode</th>
+						<th>Tanggal</th>
+						<th class="text-center">Aksi</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php if (!empty($transaksi)): ?>
+						<?php foreach ($transaksi as $t): ?>
+							<tr>
+								<td><span class="font-weight-bold" style="color:var(--dark-coffee);">#<?= $t['id_transaksi']; ?></span></td>
+								<td>
+									<div class="d-flex align-items-center gap-2">
+										<div class="avatar-circle"><?= strtoupper(substr($t['nama_pembeli'] ?? 'G', 0, 1)); ?></div>
+										<span><?= $t['nama_pembeli'] ?? 'Guest'; ?></span>
+									</div>
+								</td>
+								<td><span class="font-weight-bold" style="color:var(--roasted-brown);">Rp <?= number_format($t['grand_total'] ?? 0, 0, ',', '.'); ?></span></td>
+								<td>
+									<?php
+									$status = strtolower($t['status_pesanan'] ?? 'pending');
+									$class = 'pending';
+									if ($status == 'selesai' || $status == 'complete') $class = 'complete';
+									elseif ($status == 'dikirim' || $status == 'delivery') $class = 'delivery';
+									elseif ($status == 'diproses' || $status == 'processing') $class = 'processing';
+									elseif ($status == 'batal' || $status == 'cancelled') $class = 'cancelled';
+									?>
+									<span class="status-badge <?= $class; ?>">
+										<?= $t['status_pesanan'] ?? 'Pending'; ?>
+									</span>
+								</td>
+								<td>
+									<?php
+									$bayar = strtolower($t['status_bayar'] ?? 'pending');
+									$bayar_class = ($bayar == 'lunas' || $bayar == 'paid') ? 'complete' : (($bayar == 'batal' || $bayar == 'cancelled') ? 'cancelled' : 'pending');
+									?>
+									<span class="status-badge <?= $bayar_class; ?>">
+										<?= $t['status_bayar'] ?? 'Pending'; ?>
+									</span>
+								</td>
+								<td>
+									<?php
+									$metode = $t['metode_bayar'] ?? 'Transfer';
+									if ($metode == 'Transfer Bank' || $metode == 'Transfer') {
+										echo 'Virtual Account';
+									} else {
+										echo $metode;
+									}
+									?>
+								</td>
+								<td><span style="font-size:0.8rem; color:var(--text-secondary);"><?= date('d/m/Y', strtotime($t['tanggal_transaksi'] ?? date('Y-m-d'))); ?></span></td>
+								<td class="text-center">
+									<a href="<?= base_url('admin/transaksi/detail/' . $t['id_transaksi']); ?>" class="btn-detail-transaksi">
+										<i class="bi bi-eye"></i> Detail
+									</a>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+					<?php else: ?>
+						<tr>
+							<td colspan="8" class="text-center py-5 text-muted">
+								<i class="bi bi-inbox" style="font-size:3rem; display:block; margin-bottom:12px; opacity:0.3;"></i>
+								Belum ada transaksi
+							</td>
+						</tr>
+					<?php endif; ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

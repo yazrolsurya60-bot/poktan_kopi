@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="id">
 
@@ -869,273 +870,123 @@
 						<?php else: ?>
 							<span class="notif-dot" id="notifCount" style="display:none;">0</span>
 						<?php endif; ?>
+=======
+<!-- M04-F06: Filter Panen -->
+<div class="custom-card mb-4 d-print-none" style="background: #fff; border-radius: 14px; border: 1px solid rgba(74, 44, 17, 0.06); box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+	<div class="card-body-custom" style="padding: 20px 24px;">
+		<form method="GET" action="<?= base_url('admin/panen'); ?>" class="filter-form">
+			<div class="row align-items-end" style="margin: 0 -8px;">
+				<div class="col-md-3" style="padding: 0 8px;">
+					<label style="font-size: 0.72rem; font-weight: 700; color: #70655E; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block;">MULAI TANGGAL</label>
+					<input type="date" name="start_date" class="form-control form-control-sm py-2 px-3"
+						value="<?= $this->input->get('start_date'); ?>" style="border-radius: 8px; border: 1px solid #E5E0DB; background-color: #FAF6F0; font-size: 0.85rem;">
+				</div>
+				<div class="col-md-3" style="padding: 0 8px;">
+					<label style="font-size: 0.72rem; font-weight: 700; color: #70655E; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block;">SAMPAI TANGGAL</label>
+					<input type="date" name="end_date" class="form-control form-control-sm py-2 px-3"
+						value="<?= $this->input->get('end_date'); ?>" style="border-radius: 8px; border: 1px solid #E5E0DB; background-color: #FAF6F0; font-size: 0.85rem;">
+				</div>
+				<div class="col-md-3" style="padding: 0 8px;">
+					<label style="font-size: 0.72rem; font-weight: 700; color: #70655E; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block;">KUALITAS</label>
+					<input type="text" name="kualitas" class="form-control form-control-sm py-2 px-3"
+						placeholder="Contoh: Grade A" value="<?= $this->input->get('kualitas'); ?>" style="border-radius: 8px; border: 1px solid #E5E0DB; background-color: #FAF6F0; font-size: 0.85rem;">
+				</div>
+				<div class="col-md-3" style="padding: 0 8px;">
+					<button type="submit" class="btn w-100 py-2 border-0 font-weight-bold"
+						style="background-color: #D9D2C9; color: #4A2C11; border-radius: 8px; font-size: 0.85rem; transition: all 0.2s ease;">
+						<i class="bi bi-funnel-fill mr-1"></i> Terapkan Filter
+>>>>>>> c50a8c46b5d9744b96ff8d6c8a37c62a316dedd7
 					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
 
-					<!-- NOTIFICATION DROPDOWN -->
-					<div class="notif-dropdown" id="notifDropdown">
-						<div class="notif-dropdown-header">
-							<span>
-								<?= (isset($unread_count) && $unread_count > 0) ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
-							</span>
-							<div>
-								<?php if (isset($unread_count) && $unread_count > 0): ?>
-									<a href="#" id="markAllReadBtn" class="mr-2"
-										style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
-								<?php endif; ?>
-								<a href="<?= base_url('admin/dashboard/history'); ?>"
-									style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
-							</div>
-						</div>
-						<div class="notif-dropdown-list" id="notifList">
-							<?php if (!empty($notifikasi)): ?>
-								<?php foreach ($notifikasi as $n): ?>
-									<a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>"
-										href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
-										<?php
-										$icon_type = $n['icon'] ?? 'info';
-										$icon_map = [
-											'success' => 'bi-check-circle-fill',
-											'warning' => 'bi-exclamation-triangle-fill',
-											'danger' => 'bi-x-circle-fill',
-											'info' => 'bi-info-circle-fill'
-										];
-										$icon_class = $icon_map[$icon_type] ?? 'bi-info-circle-fill';
-										?>
-										<div class="notif-icon <?= $icon_type; ?>">
-											<i class="bi <?= $icon_class; ?>"></i>
-										</div>
-										<div class="notif-text">
-											<?= htmlspecialchars($n['isi_notifikasi']); ?>
-											<span
-												class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
-										</div>
-										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
-											<span class="notif-badge-new">Baru</span>
-										<?php endif; ?>
+<!-- Tombol Export & Print -->
+<div class="d-flex justify-content-end mb-3 d-print-none" style="gap: 10px;">
+	<a href="<?= base_url('admin/panen/export_excel?' . $_SERVER['QUERY_STRING']); ?>"
+		class="btn text-white px-3 py-2 font-weight-bold d-inline-flex align-items-center"
+		style="background-color: #10B981; border-radius: 8px; font-size: 0.85rem; border: none;">
+		<i class="bi bi-file-earmark-excel mr-1"></i> Export Excel
+	</a>
+	<button onclick="window.print()" class="btn text-white px-3 py-2 font-weight-bold d-inline-flex align-items-center"
+		style="background-color: #6B7280; border-radius: 8px; font-size: 0.85rem; border: none;">
+		<i class="bi bi-printer mr-1"></i> Cetak / PDF
+	</button>
+</div>
+
+<!-- TABLE DATA -->
+<div class="custom-card" style="background: #fff; border-radius: 14px; border: 1px solid rgba(74, 44, 17, 0.06); box-shadow: 0 4px 12px rgba(0,0,0,0.03); overflow: hidden;">
+	<div class="card-header-custom d-flex justify-content-between align-items-center" style="padding: 18px 24px; border-bottom: 1px solid rgba(74, 44, 17, 0.06);">
+		<span class="font-weight-bold text-dark" style="font-size: 0.95rem;">
+			<i class="bi bi-list-ul mr-2" style="color: #E6A15C;"></i>Data Panen Semua Petani
+		</span>
+		<span class="badge px-3 py-1 font-weight-normal" style="background: #FAF6F0; color: #70655E; border-radius: 20px; font-size: 0.75rem;">
+			<?= count($panen_list); ?> Data
+		</span>
+	</div>
+	<div class="card-body-custom p-0">
+		<div class="table-responsive">
+			<table class="table mb-0" style="font-size: 0.85rem;">
+				<thead>
+					<tr style="background-color: #FAF6F0; border-bottom: 2px solid rgba(74, 44, 17, 0.06);">
+						<th class="border-0 text-muted py-3" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding-left: 24px; width: 6%;">NO</th>
+						<th class="border-0 text-muted py-3" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; width: 15%;">TANGGAL PANEN</th>
+						<th class="border-0 text-muted py-3" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; width: 20%;">NAMA PETANI</th>
+						<th class="border-0 text-muted py-3" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; width: 20%;">LAHAN</th>
+						<th class="border-0 text-muted py-3" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; width: 14%;">JUMLAH (KG)</th>
+						<th class="border-0 text-muted py-3" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; width: 13%;">KUALITAS</th>
+						<th class="border-0 text-muted py-3 text-center d-print-none" style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding-right: 24px; width: 12%;">AKSI</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php if (empty($panen_list)): ?>
+						<tr>
+							<td colspan="7" class="text-center py-5 border-0 text-muted">
+								<i class="bi bi-inbox d-block mb-3" style="font-size: 2.5rem; color: #A8988A;"></i>
+								<p class="mb-0" style="font-size: 0.9rem; color: #70655E;">Belum ada data panen dari petani.</p>
+							</td>
+						</tr>
+					<?php else: ?>
+						<?php $no = 1; foreach ($panen_list as $p): ?>
+							<tr style="border-bottom: 1px solid rgba(74, 44, 17, 0.04);">
+								<td class="align-middle py-3" style="padding-left: 24px; color: #2C1808;"><?= $no++; ?></td>
+								<td class="align-middle py-3" style="color: #2C1808;"><?= date('d M Y', strtotime($p['tanggal_panen'])); ?></td>
+								<td class="align-middle py-3 font-weight-bold" style="color: #2C1808;">
+									<?= htmlspecialchars($p['nama_petani'] ?? 'Unknown Petani'); ?>
+								</td>
+								<td class="align-middle py-3" style="color: #70655E;"><?= htmlspecialchars($p['nama_lahan'] ?? '-'); ?></td>
+								<td class="align-middle py-3 font-weight-bold" style="color: #10B981;">
+									<?= number_format($p['jumlah_panen'], 0, ',', '.'); ?> Kg
+								</td>
+								<td class="align-middle py-3">
+									<span class="badge font-weight-bold px-3 py-1" style="border: 1px solid #D9D2C9; background: #F8F9FA; color: #70655E; border-radius: 20px; font-size: 0.75rem;">
+										<?= htmlspecialchars($p['kualitas'] ?? '-'); ?>
+									</span>
+								</td>
+								<td class="align-middle py-3 text-center d-print-none" style="padding-right: 24px;">
+									<a href="<?= base_url('admin/panen/detail/' . $p['id_panen']); ?>"
+										class="btn btn-sm text-primary font-weight-bold"
+										style="background-color: #DBEAFE; border-radius: 6px; padding: 4px 12px; font-size: 0.8rem;" title="Detail Panen">
+										<i class="bi bi-eye mr-1"></i> Detail
 									</a>
-								<?php endforeach; ?>
-							<?php else: ?>
-								<div class="text-center text-muted py-5 px-3">
-									<i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
-									<p class="small mb-0">Tidak ada notifikasi</p>
-								</div>
-							<?php endif; ?>
-						</div>
-						<div class="p-2 text-center border-top"
-							style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
-							<a href="<?= base_url('admin/dashboard/settings'); ?>"
-								class="small text-secondary font-weight-bold text-decoration-none">
-								<i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
-							</a>
-						</div>
-					</div>
-				</div>
-
-				<!-- USER BADGE - SAMA DENGAN DASHBOARD -->
-				<?php
-				$nama = $this->session->userdata('nama') ?? 'Admin';
-				$role = $this->session->userdata('role') ?? 'Admin';
-				?>
-				<div class="user-badge">
-					<i class="bi bi-person-circle"></i>
-					<div>
-						<div class="user-name"><?= $nama; ?></div>
-						<div class="user-role"><?= $role; ?></div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- M04-F06: Filter Panen -->
-		<div class="custom-card mb-4 d-print-none">
-			<div class="card-body-custom" style="padding: 16px 24px;">
-				<form method="GET" action="<?= base_url('admin/panen'); ?>" class="filter-form">
-					<div class="row align-items-end" style="margin:0 -8px;">
-						<div class="col-md-3" style="padding:0 8px;">
-							<label>Mulai Tanggal</label>
-							<input type="date" name="start_date" class="form-control form-control-sm"
-								value="<?= $this->input->get('start_date'); ?>">
-						</div>
-						<div class="col-md-3" style="padding:0 8px;">
-							<label>Sampai Tanggal</label>
-							<input type="date" name="end_date" class="form-control form-control-sm"
-								value="<?= $this->input->get('end_date'); ?>">
-						</div>
-						<div class="col-md-3" style="padding:0 8px;">
-							<label>Kualitas</label>
-							<input type="text" name="kualitas" class="form-control form-control-sm"
-								placeholder="Contoh: Grade A" value="<?= $this->input->get('kualitas'); ?>">
-						</div>
-						<div class="col-md-3" style="padding:0 8px;">
-							<button type="submit" class="btn btn-custom btn-custom-secondary w-100 mt-2"
-								style="padding:6px 12px;">
-								<i class="bi bi-funnel-fill"></i> Terapkan Filter
-							</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-
-		<!-- Tombol Export & Print -->
-		<div class="d-flex justify-content-end mb-3 gap-2 flex-wrap d-print-none">
-			<a href="<?= base_url('admin/panen/export_excel?' . $_SERVER['QUERY_STRING']); ?>"
-				class="btn btn-custom btn-custom-success">
-				<i class="bi bi-file-earmark-excel"></i> Export Excel
-			</a>
-			<button onclick="window.print()" class="btn btn-custom btn-custom-print">
-				<i class="bi bi-printer"></i> Cetak / PDF
-			</button>
-		</div>
-
-		<!-- TABLE DATA -->
-		<div class="custom-card">
-			<div class="card-header-custom">
-				<span><i class="bi bi-list-ul mr-2"></i>Data Panen Semua Petani</span>
-				<span class="badge" style="background: var(--bg-cream); color: var(--text-secondary); font-weight:500;">
-					<?= count($panen_list); ?> Data
-				</span>
-			</div>
-			<div class="card-body-custom" style="padding:0;">
-				<div class="table-responsive">
-					<table class="table table-custom">
-						<thead>
-							<tr>
-								<th style="width:5%;">No</th>
-								<th style="width:13%;">Tanggal Panen</th>
-								<th style="width:18%;">Nama Petani</th>
-								<th style="width:18%;">Lahan</th>
-								<th style="width:12%;">Jumlah (Kg)</th>
-								<th style="width:14%;">Kualitas</th>
-								<th style="width:20%;" class="text-center d-print-none">Aksi</th>
+								</td>
 							</tr>
-						</thead>
-						<tbody>
-							<?php if (empty($panen_list)): ?>
-								<tr>
-									<td colspan="7" class="text-center py-4 text-muted">
-										<i class="bi bi-inbox d-block mb-2" style="font-size:2rem;"></i>
-										Belum ada data panen dari petani.
-									</td>
-								</tr>
-							<?php else: ?>
-								<?php $no = 1;
-								foreach ($panen_list as $p): ?>
-									<tr>
-										<td><?= $no++; ?></td>
-										<td><?= date('d M Y', strtotime($p['tanggal_panen'])); ?></td>
-										<td class="font-weight-bold">
-											<?= htmlspecialchars($p['nama_petani'] ?? 'Unknown Petani'); ?>
-										</td>
-										<td><?= htmlspecialchars($p['nama_lahan'] ?? '-'); ?></td>
-										<td class="text-success font-weight-bold">
-											<?= number_format($p['jumlah_panen'], 0, ',', '.'); ?> Kg
-										</td>
-										<td>
-											<span class="badge-kualitas">
-												<?= htmlspecialchars($p['kualitas'] ?? '-'); ?>
-											</span>
-										</td>
-										<td class="text-center d-print-none">
-											<a href="<?= base_url('admin/panen/detail/' . $p['id_panen']); ?>"
-												class="btn btn-custom btn-custom-info" title="Detail Panen">
-												<i class="bi bi-eye"></i> Detail
-											</a>
-										</td>
-									</tr>
-								<?php endforeach; ?>
-							<?php endif; ?>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<?php if (!empty($panen_list)): ?>
-				<div class="p-3 border-top" style="border-color:rgba(74,44,17,0.05);">
-					<small class="text-muted">
-						<i class="bi bi-info-circle"></i> Menampilkan <strong><?= count($panen_list); ?></strong> data panen
-						<?php if (!empty($this->input->get('start_date')) || !empty($this->input->get('end_date')) || !empty($this->input->get('kualitas'))): ?>
-							(hasil filter)
-						<?php endif; ?>
-					</small>
-				</div>
-			<?php endif; ?>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</tbody>
+			</table>
 		</div>
 	</div>
-
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-	<script>
-		// ============================================
-		// 1. SIDEBAR TOGGLE
-		// ============================================
-		const sidebar = document.getElementById('sidebarMenu');
-		const overlay = document.getElementById('sidebarOverlay');
-		const toggleBtn = document.getElementById('sidebarToggle');
-
-		function toggleSidebar() {
-			sidebar.classList.toggle('open');
-			overlay.classList.toggle('active');
-			document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
-		}
-
-		if (toggleBtn) {
-			toggleBtn.addEventListener('click', toggleSidebar);
-		}
-		if (overlay) {
-			overlay.addEventListener('click', toggleSidebar);
-		}
-
-		document.addEventListener('click', function (e) {
-			if (window.innerWidth > 991.98) return;
-			if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
-				if (sidebar.classList.contains('open')) {
-					toggleSidebar();
-				}
-			}
-		});
-
-		// ============================================
-		// 2. NOTIFICATION DROPDOWN
-		// ============================================
-		const notifToggle = document.getElementById('notifToggle');
-		const notifDropdown = document.getElementById('notifDropdown');
-
-		if (notifToggle) {
-			notifToggle.addEventListener('click', function (e) {
-				e.stopPropagation();
-				notifDropdown.classList.toggle('show');
-			});
-		}
-
-		document.addEventListener('click', function (e) {
-			if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
-				notifDropdown.classList.remove('show');
-			}
-		});
-
-		// ============================================
-		// 3. MARK ALL READ
-		// ============================================
-		document.getElementById('markAllReadBtn')?.addEventListener('click', function (e) {
-			e.preventDefault();
-			if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
-				$.ajax({
-					url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
-					type: 'POST',
-					dataType: 'json',
-					success: function (response) {
-						if (response.success) location.reload();
-						else alert('Gagal menandai semua notifikasi.');
-					},
-					error: function () {
-						alert('Terjadi kesalahan. Silakan coba lagi.');
-					}
-				});
-			}
-		});
-
-		console.log('✅ Halaman Rekap Panen siap digunakan!');
-	</script>
-</body>
-
-</html>
+	<?php if (!empty($panen_list)): ?>
+		<div class="p-3 border-top" style="border-color: rgba(74,44,17,0.05); background-color: #fff;">
+			<small class="text-muted">
+				<i class="bi bi-info-circle mr-1"></i> Menampilkan <strong><?= count($panen_list); ?></strong> data panen
+				<?php if (!empty($this->input->get('start_date')) || !empty($this->input->get('end_date')) || !empty($this->input->get('kualitas'))): ?>
+					(hasil filter)
+				<?php endif; ?>
+			</small>
+		</div>
+	<?php endif; ?>
+</div>

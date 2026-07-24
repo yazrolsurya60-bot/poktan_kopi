@@ -5,24 +5,29 @@ class Mitra extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        // Cek login dan role Admin (Sesuai Modul 1 & Modul 11)
+        // Cek login dan role Admin
         if (!$this->session->userdata('id_user') || $this->session->userdata('role') !== 'Admin') {
             redirect('auth/login');
         }
         $this->load->model('Mitra_model');
-        $this->load->model('Notifikasi_model'); // Untuk badge notif di header
+        $this->load->model('Notifikasi_model');
         $this->load->helper(['url', 'form']);
         $this->load->library('upload');
     }
 
     public function index() {
         $id_user = $this->session->userdata('id_user');
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        
+        $data['title']        = 'Manajemen Mitra - Sistem Supply Chain Kopi';
+        $data['title_page']   = 'Manajemen Mitra';
+        $data['subtitle']     = 'Kelola mitra, reseller, cafe, dan partner bisnis LiberChain';
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role']         = 'Admin';
 
-        $search = $this->input->get('search');
+        $search   = $this->input->get('search');
         $kategori = $this->input->get('kategori');
-        $status = $this->input->get('status');
+        $status   = $this->input->get('status');
 
         $data['mitra'] = $this->Mitra_model->get_all_mitra($search, $kategori, $status);
         
@@ -35,21 +40,24 @@ class Mitra extends CI_Controller {
         }
         $data['kategori_list'] = $kategori_list;
 
+        $this->load->view('templates/admin/header', $data);
+        $this->load->view('templates/admin/sidebar', $data);
         $this->load->view('admin/mitra/v_mitra_index', $data);
+        $this->load->view('templates/admin/footer');
     }
 
     public function add() {
         if ($this->input->post()) {
             $data = [
-                'nama_mitra' => $this->input->post('nama_mitra'),
+                'nama_mitra'     => $this->input->post('nama_mitra'),
                 'kategori_mitra' => $this->input->post('kategori_mitra'),
-                'email' => $this->input->post('email'),
-                'no_telepon' => $this->input->post('no_telepon'),
-                'website' => $this->input->post('website'),
-                'alamat' => $this->input->post('alamat'),
-                'deskripsi' => $this->input->post('deskripsi'),
-                'urutan_tampil' => $this->input->post('urutan_tampil') ?? 1,
-                'status_mitra' => ($this->input->post('status_mitra') === 'Inactive') ? 'Inactive' : 'Active',
+                'email'          => $this->input->post('email'),
+                'no_telepon'     => $this->input->post('no_telepon'),
+                'website'        => $this->input->post('website'),
+                'alamat'         => $this->input->post('alamat'),
+                'deskripsi'      => $this->input->post('deskripsi'),
+                'urutan_tampil'  => $this->input->post('urutan_tampil') ?? 1,
+                'status_mitra'   => ($this->input->post('status_mitra') === 'Inactive') ? 'Inactive' : 'Active',
             ];
 
             // Handle file upload
@@ -70,9 +78,18 @@ class Mitra extends CI_Controller {
             redirect('admin/mitra');
         } else {
             $id_user = $this->session->userdata('id_user');
-            $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+            
+            $data['title']        = 'Tambah Mitra - Sistem Supply Chain Kopi';
+            $data['title_page']   = 'Tambah Mitra Baru';
+            $data['subtitle']     = 'Daftarkan mitra, reseller, atau partner bisnis baru';
+            $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
             $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+            $data['role']         = 'Admin';
+
+            $this->load->view('templates/admin/header', $data);
+            $this->load->view('templates/admin/sidebar', $data);
             $this->load->view('admin/mitra/v_mitra_add', $data);
+            $this->load->view('templates/admin/footer');
         }
     }
 
@@ -82,14 +99,14 @@ class Mitra extends CI_Controller {
 
         if ($this->input->post()) {
             $data = [
-                'nama_mitra' => $this->input->post('nama_mitra'),
+                'nama_mitra'     => $this->input->post('nama_mitra'),
                 'kategori_mitra' => $this->input->post('kategori_mitra'),
-                'email' => $this->input->post('email'),
-                'no_telepon' => $this->input->post('no_telepon'),
-                'website' => $this->input->post('website'),
-                'alamat' => $this->input->post('alamat'),
-                'deskripsi' => $this->input->post('deskripsi'),
-                'urutan_tampil' => $this->input->post('urutan_tampil') ?? 1,
+                'email'          => $this->input->post('email'),
+                'no_telepon'     => $this->input->post('no_telepon'),
+                'website'        => $this->input->post('website'),
+                'alamat'         => $this->input->post('alamat'),
+                'deskripsi'      => $this->input->post('deskripsi'),
+                'urutan_tampil'  => $this->input->post('urutan_tampil') ?? 1,
             ];
 
             // Handle file upload
@@ -97,7 +114,6 @@ class Mitra extends CI_Controller {
                 $upload = $this->_do_upload();
                 if ($upload['status']) {
                     $data['logo_mitra'] = $upload['filename'];
-                    // Option: remove old logo if not default
                 } else {
                     $this->session->set_flashdata('error', $upload['error']);
                     redirect('admin/mitra/edit/'.$id);
@@ -109,10 +125,19 @@ class Mitra extends CI_Controller {
             redirect('admin/mitra');
         } else {
             $id_user = $this->session->userdata('id_user');
-            $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+            
+            $data['title']        = 'Edit Mitra - Sistem Supply Chain Kopi';
+            $data['title_page']   = $mitra['nama_mitra'];
+            $data['subtitle']     = 'ID #' . $mitra['id_mitra'] . ' — ' . $mitra['kategori_mitra'];
+            $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
             $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-            $data['mitra'] = $mitra;
+            $data['role']         = 'Admin';
+            $data['mitra']        = $mitra;
+
+            $this->load->view('templates/admin/header', $data);
+            $this->load->view('templates/admin/sidebar', $data);
             $this->load->view('admin/mitra/v_mitra_edit', $data);
+            $this->load->view('templates/admin/footer');
         }
     }
 
@@ -120,7 +145,6 @@ class Mitra extends CI_Controller {
         $mitra = $this->Mitra_model->get_by_id($id);
         if (!$mitra) show_404();
 
-        // Hapus file logo fisik dari server jika bukan default
         if (!empty($mitra['logo_mitra']) && $mitra['logo_mitra'] !== 'default.png') {
             $logo_path = './assets/uploads/mitra/' . $mitra['logo_mitra'];
             if (file_exists($logo_path)) {

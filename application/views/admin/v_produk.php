@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="id">
 
@@ -975,256 +976,309 @@
 								<div class="text-center text-muted py-5 px-3">
 									<i class="bi bi-bell-slash d-block mb-2" style="font-size:2rem;"></i>
 									<p class="small mb-0">Tidak ada notifikasi</p>
+=======
+<style>
+	:root {
+		--roasted-brown: #4A2C11;
+		--dark-coffee: #2C1808;
+		--amber-cream: #E6A15C;
+		--bg-cream: #FAF6F0;
+		--card-white: #FFFFFF;
+		--text-secondary: #70655E;
+		--shadow-soft: 0 8px 30px rgba(16, 9, 3, 0.08);
+		--shadow-hover: 0 12px 40px rgba(44, 24, 8, 0.15);
+		--radius-card: 14px;
+		--transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	/* SEARCH & BUTTONS TOP */
+	.search-input {
+		border: 1px solid rgba(74, 44, 17, 0.12);
+		border-radius: 10px;
+		padding: 10px 16px;
+		font-size: 0.85rem;
+		transition: var(--transition-smooth);
+		background: var(--card-white);
+	}
+
+	.search-input:focus {
+		border-color: var(--amber-cream);
+		box-shadow: 0 0 0 3px rgba(230, 161, 92, 0.15);
+		outline: none;
+	}
+
+	.btn-search {
+		background: var(--dark-coffee);
+		color: #FFFFFF;
+		border: none;
+		padding: 10px 22px;
+		border-radius: 10px;
+		font-weight: 600;
+		font-size: 0.85rem;
+		transition: var(--transition-smooth);
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		text-decoration: none !important;
+	}
+
+	.btn-search:hover {
+		background: var(--roasted-brown);
+		color: #FFFFFF;
+	}
+
+	.btn-reset {
+		background: var(--card-white);
+		color: var(--dark-coffee);
+		border: 1px solid rgba(74, 44, 17, 0.12);
+		padding: 10px 22px;
+		border-radius: 10px;
+		font-weight: 500;
+		font-size: 0.85rem;
+		transition: var(--transition-smooth);
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		text-decoration: none !important;
+	}
+
+	.btn-reset:hover {
+		background: var(--bg-cream);
+		color: var(--dark-coffee);
+	}
+
+	.btn-tambah {
+		background: #E6A15C;
+		color: #FFFFFF;
+		border: none;
+		padding: 10px 22px;
+		border-radius: 10px;
+		font-weight: 600;
+		font-size: 0.85rem;
+		transition: var(--transition-smooth);
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		text-decoration: none !important;
+	}
+
+	.btn-tambah:hover {
+		background: var(--roasted-brown);
+		color: #FFFFFF;
+		box-shadow: var(--shadow-hover);
+	}
+
+	/* TABLE STYLING */
+	.table-custom {
+		font-size: 0.85rem;
+		width: 100%;
+		background: var(--card-white);
+		border-radius: var(--radius-card);
+		overflow: hidden;
+		box-shadow: var(--shadow-soft);
+		border: 1px solid rgba(74, 44, 17, 0.06);
+	}
+
+	.table-custom thead th {
+		background: var(--bg-cream);
+		border-bottom: 2px solid rgba(74, 44, 17, 0.06);
+		color: var(--text-secondary);
+		font-weight: 700;
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		padding: 14px 12px;
+		text-align: center;
+		white-space: nowrap;
+	}
+
+	.table-custom tbody td {
+		padding: 14px 12px;
+		border-bottom: 1px solid rgba(74, 44, 17, 0.04);
+		vertical-align: middle;
+		background: var(--card-white);
+		text-align: center;
+		color: var(--dark-coffee);
+	}
+
+	.table-custom tbody tr:hover td {
+		background: rgba(250, 246, 240, 0.4);
+	}
+
+	/* STATUS BADGE */
+	.status-badge {
+		padding: 5px 14px;
+		border-radius: 20px;
+		font-size: 0.72rem;
+		font-weight: 600;
+		display: inline-block;
+	}
+
+	.status-badge.aktif {
+		background: #D1FAE5;
+		color: #065F46;
+	}
+
+	.status-badge.nonaktif {
+		background: #FEE2E2;
+		color: #991B1B;
+	}
+
+	/* ACTION BUTTONS IN TABLE */
+	.btn-detail {
+		background: #DBEAFE;
+		color: #1E40AF;
+		border: none;
+		padding: 5px 10px;
+		border-radius: 6px;
+		font-size: 0.72rem;
+		font-weight: 600;
+		transition: var(--transition-smooth);
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		text-decoration: none !important;
+	}
+
+	.btn-detail:hover {
+		background: #1E40AF;
+		color: #FFFFFF;
+	}
+
+	.btn-edit {
+		background: #FEF3C7;
+		color: #92400E;
+		border: none;
+		padding: 5px 10px;
+		border-radius: 6px;
+		font-size: 0.72rem;
+		font-weight: 600;
+		transition: var(--transition-smooth);
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		text-decoration: none !important;
+	}
+
+	.btn-edit:hover {
+		background: #92400E;
+		color: #FFFFFF;
+	}
+
+	.btn-hapus {
+		background: #FEE2E2;
+		color: #991B1B;
+		border: none;
+		padding: 5px 10px;
+		border-radius: 6px;
+		font-size: 0.72rem;
+		font-weight: 600;
+		transition: var(--transition-smooth);
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		text-decoration: none !important;
+	}
+
+	.btn-hapus:hover {
+		background: #991B1B;
+		color: #FFFFFF;
+	}
+
+	.stok-unit {
+		font-size: 0.65rem;
+		color: var(--text-secondary);
+	}
+</style>
+
+<!-- SEARCH & TAMBAH -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap" style="gap: 15px;">
+	<form method="get" action="<?= base_url('admin/produk'); ?>" class="d-flex align-items-center" style="gap: 10px; flex-grow: 1; max-width: 600px;">
+		<input type="text" name="keyword" class="search-input form-control" placeholder="Cari nama produk, jenis kopi..." value="<?= $this->input->get('keyword'); ?>" style="flex:1;">
+		<button type="submit" class="btn-search">
+			<i class="bi bi-search"></i> Cari
+		</button>
+		<a href="<?= base_url('admin/produk'); ?>" class="btn-reset">
+			Reset
+		</a>
+	</form>
+	<a href="<?= base_url('admin/produk/tambah'); ?>" class="btn-tambah">
+		<i class="bi bi-plus-lg"></i> Tambah Produk
+	</a>
+</div>
+
+<!-- TABLE PRODUK -->
+<div class="table-responsive">
+	<table class="table-custom">
+		<thead>
+			<tr>
+				<th style="width:40px;">NO</th>
+				<th style="width:70px;">FOTO</th>
+				<th style="width:160px; text-align:center;">NAMA PRODUK</th>
+				<th style="width:110px;">JENIS KOPI</th>
+				<th style="width:180px;">PROSES PENGOLAHAN</th>
+				<th style="width:130px;">HARGA</th>
+				<th style="width:80px;">STOK</th>
+				<th style="width:90px;">STATUS</th>
+				<th style="width:220px;">AKSI</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php if (!empty($produk)): ?>
+				<?php $no = 1; foreach ($produk as $row): ?>
+					<tr>
+						<td><?= $no++; ?></td>
+						<td>
+							<?php if (!empty($row->foto_utama)) : ?>
+								<img src="<?= base_url('uploads/produk/' . $row->foto_utama); ?>"
+									width="45" height="45" style="object-fit:cover; border-radius:10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+							<?php else : ?>
+								<div style="width:45px; height:45px; background:var(--bg-cream); border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--text-secondary); font-size:0.6rem; margin:0 auto;">
+									No Image
+>>>>>>> c50a8c46b5d9744b96ff8d6c8a37c62a316dedd7
 								</div>
 							<?php endif; ?>
-						</div>
-						<div class="p-2 text-center border-top"
-							style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
-							<a href="<?= base_url('admin/dashboard/settings'); ?>"
-								class="small text-secondary font-weight-bold text-decoration-none">
-								<i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
-							</a>
-						</div>
-					</div>
-				</div>
-
-				<!-- USER BADGE -->
-				<?php
-				$nama = $this->session->userdata('nama') ?? 'Admin';
-				$role = $this->session->userdata('role') ?? 'Administrator';
-				?>
-				<div class="user-badge">
-					<i class="bi bi-person-circle"></i>
-					<div>
-						<div class="user-name"><?= $nama; ?></div>
-						<div class="user-role"><?= $role; ?></div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- SEARCH & TAMBAH -->
-		<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap" style="gap: 15px;">
-			<form method="get" action="<?= base_url('admin/produk'); ?>" class="d-flex align-items-center" style="gap: 10px; flex-grow: 1; max-width: 600px;">
-				<input type="text" name="keyword" class="search-input form-control" placeholder="Cari nama produk, jenis kopi..." value="<?= $this->input->get('keyword'); ?>" style="flex:1;">
-				<button type="submit" class="btn-search">
-					<i class="bi bi-search"></i> Cari
-				</button>
-				<a href="<?= base_url('admin/produk'); ?>" class="btn-reset">
-					Reset
-				</a>
-			</form>
-			<a href="<?= base_url('admin/produk/tambah'); ?>" class="btn-tambah">
-				<i class="bi bi-plus-lg"></i> Tambah Produk
-			</a>
-		</div>
-
-		<!-- TABLE -->
-		<div class="table-responsive">
-			<table class="table-custom">
-				<thead>
-					<tr>
-						<th style="width:35px;">No</th>
-						<th style="width:60px;">Foto</th>
-						<th style="width:170px; text-align:center;">Nama Produk</th>
-						<th style="width:110px;">Jenis Kopi</th>
-						<th style="width:160px;">Proses Pengolahan</th>
-						<th style="width:130px;">Harga</th>
-						<th style="width:80px;">Stok</th>
-						<th style="width:90px;">Status</th>
-						<th style="width:220px;">Aksi</th>
+						</td>
+						<td style="text-align:center; font-weight:700; color:var(--dark-coffee);"><?= $row->nama_produk; ?></td>
+						<td><?= $row->jenis_kopi; ?></td>
+						<td style="max-width: 200px; line-height: 1.4; text-align: center;"><?= !empty($row->proses) ? $row->proses : '<span style="color:#999; font-style:italic;">-</span>'; ?></td>
+						<td style="font-weight:700; color:var(--dark-coffee);">Rp <?= number_format($row->harga, 0, ',', '.'); ?></td>
+						<td>
+							<span style="font-weight: 600;"><?= $row->stok_produk; ?></span>
+							<small class="stok-unit">kg</small>
+						</td>
+						<td>
+							<?php
+							$status_class = 'aktif';
+							$status_text = $row->status_produk ?? 'Aktif';
+							if (strtolower($status_text) == 'nonaktif') $status_class = 'nonaktif';
+							?>
+							<span class="status-badge <?= $status_class; ?>"><?= $status_text; ?></span>
+						</td>
+						<td>
+							<div class="d-flex flex-wrap justify-content-center" style="gap: 4px;">
+								<a class="btn-detail" href="<?= base_url('admin/produk/detail/' . $row->id_produk); ?>">
+									<i class="bi bi-eye"></i> Detail
+								</a>
+								<a class="btn-edit" href="<?= base_url('admin/produk/edit/' . $row->id_produk); ?>">
+									<i class="bi bi-pencil-square"></i> Edit
+								</a>
+								<a class="btn-hapus" href="<?= base_url('admin/produk/hapus/' . $row->id_produk); ?>"
+									onclick="return confirm('Yakin ingin menghapus produk ini?')">
+									<i class="bi bi-trash"></i> Hapus
+								</a>
+							</div>
+						</td>
 					</tr>
-				</thead>
-				<tbody>
-					<?php if (!empty($produk)): ?>
-						<?php $no = 1;
-						foreach ($produk as $row): ?>
-							<tr>
-								<td><?= $no++; ?></td>
-								<td>
-									<?php if (!empty($row->foto_utama)) : ?>
-										<img src="<?= base_url('uploads/produk/' . $row->foto_utama); ?>"
-											width="45" height="45" style="object-fit:cover; border-radius:10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-									<?php else : ?>
-										<div style="width:45px; height:45px; background:var(--bg-cream); border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--text-secondary); font-size:0.6rem; margin:0 auto;">
-											No Image
-										</div>
-									<?php endif; ?>
-								</td>
-								<td style="text-align:center; font-weight:600; color:var(--dark-coffee);"><?= $row->nama_produk; ?></td>
-								<td><?= $row->jenis_kopi; ?></td>
-								<td><?= !empty($row->proses) ? $row->proses : '<span style="color:#999; font-style:italic;">-</span>'; ?></td>
-								<td style="font-weight:600; color:var(--dark-coffee);">Rp <?= number_format($row->harga, 0, ',', '.'); ?></td>
-								<td>
-									<?= $row->stok_produk; ?>
-									<small class="stok-unit">kg</small>
-								</td>
-								<td>
-									<?php
-									$status_class = 'aktif';
-									$status_text = $row->status_produk ?? 'Aktif';
-									if (strtolower($status_text) == 'nonaktif') $status_class = 'nonaktif';
-									?>
-									<span class="status-badge <?= $status_class; ?>"><?= $status_text; ?></span>
-								</td>
-								<td>
-									<div class="d-flex flex-wrap justify-content-center" style="gap: 3px;">
-										<a class="btn-detail" href="<?= base_url('admin/produk/detail/' . $row->id_produk); ?>">
-											<i class="bi bi-eye"></i> Detail
-										</a>
-										<a class="btn-edit" href="<?= base_url('admin/produk/edit/' . $row->id_produk); ?>">
-											<i class="bi bi-pencil-square"></i> Edit
-										</a>
-										<a class="btn-hapus" href="<?= base_url('admin/produk/hapus/' . $row->id_produk); ?>"
-											onclick="return confirm('Yakin ingin menghapus produk ini?')">
-											<i class="bi bi-trash"></i> Hapus
-										</a>
-									</div>
-								</td>
-							</tr>
-						<?php endforeach; ?>
-					<?php else: ?>
-						<tr>
-							<td colspan="9" class="text-center py-4 text-muted">
-								<i class="bi bi-box" style="font-size:2rem; display:block; margin-bottom:8px; opacity:0.3;"></i>
-								Belum ada produk. <a href="<?= base_url('admin/produk/tambah'); ?>" style="color: var(--amber-cream); font-weight:600;">Tambah produk pertama</a>
-							</td>
-						</tr>
-					<?php endif; ?>
-				</tbody>
-			</table>
-		</div>
-
-	</div>
-
-	<!-- SCRIPTS -->
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-	<script>
-		// ============================================
-		// 1. SIDEBAR TOGGLE
-		// ============================================
-		const sidebar = document.getElementById('sidebarMenu');
-		const overlay = document.getElementById('sidebarOverlay');
-		const toggleBtn = document.getElementById('sidebarToggle');
-
-		function toggleSidebar() {
-			sidebar.classList.toggle('open');
-			overlay.classList.toggle('active');
-			document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
-		}
-
-		if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
-		if (overlay) overlay.addEventListener('click', toggleSidebar);
-
-		document.addEventListener('click', function(e) {
-			if (window.innerWidth > 991.98) return;
-			if (!sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
-				if (sidebar.classList.contains('open')) toggleSidebar();
-			}
-		});
-
-		// ============================================
-		// 2. NOTIFICATION DROPDOWN
-		// ============================================
-		const notifToggle = document.getElementById('notifToggle');
-		const notifDropdown = document.getElementById('notifDropdown');
-
-		if (notifToggle) {
-			notifToggle.addEventListener('click', function(e) {
-				e.stopPropagation();
-				notifDropdown.classList.toggle('show');
-			});
-		}
-
-		document.addEventListener('click', function(e) {
-			if (notifDropdown && !notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
-				notifDropdown.classList.remove('show');
-			}
-		});
-
-		// ============================================
-		// 3. MARK ALL READ
-		// ============================================
-		function markAllRead() {
-			if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
-				$.ajax({
-					url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
-					type: 'POST',
-					dataType: 'json',
-					success: function(response) {
-						if (response.success) location.reload();
-						else alert('Gagal menandai semua notifikasi.');
-					},
-					error: function() {
-						alert('Terjadi kesalahan. Silakan coba lagi.');
-					}
-				});
-			}
-		}
-
-		document.getElementById('markAllReadBtn')?.addEventListener('click', function(e) {
-			e.preventDefault();
-			markAllRead();
-		});
-
-		// ============================================
-		// 4. CURRENT DATE TIME
-		// ============================================
-		function updateDateTime() {
-			const now = new Date();
-			const options = {
-				weekday: 'long',
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric',
-				hour: '2-digit',
-				minute: '2-digit'
-			};
-			const el = document.getElementById('currentDateTime');
-			if (el) {
-				el.textContent = now.toLocaleDateString('id-ID', options);
-			}
-		}
-		updateDateTime();
-
-		// ============================================
-		// 5. AUTO FILL PROSES PENGOLAHAN
-		// ============================================
-		document.addEventListener('DOMContentLoaded', function() {
-			const namaProduk = document.getElementById('nama_produk');
-			const proses = document.getElementById('proses');
-
-			if (namaProduk && proses) {
-				namaProduk.addEventListener('change', function() {
-					const value = this.value;
-					switch (value) {
-						case 'Ceri':
-							proses.value = '';
-							break;
-						case 'Biji Kopi':
-							proses.value = 'Pengupasan, Penjemuran';
-							break;
-						case 'Kopi Bubuk':
-							proses.value = 'Pengupasan, Penjemuran, Penggilingan, Pengemasan';
-							break;
-						default:
-							proses.value = '';
-					}
-				});
-			}
-		});
-
-		console.log('✅ Manajemen Produk siap digunakan!');
-		console.log('📋 Fitur yang tersedia:');
-		console.log('   - Tabel Produk dengan Data Real');
-		console.log('   - Search & Filter Produk');
-		console.log('   - CRUD Produk (Tambah, Edit, Hapus, Detail)');
-		console.log('   - Notifikasi Real-time');
-		console.log('   - Status Produk');
-		console.log('   - Stok Ketersediaan');
-		console.log('   - Auto fill Proses Pengolahan berdasarkan Nama Produk');
-	</script>
-</body>
-
-</html>
+				<?php endforeach; ?>
+			<?php else: ?>
+				<tr>
+					<td colspan="9" class="text-center py-4 text-muted">
+						<i class="bi bi-box" style="font-size:2rem; display:block; margin-bottom:8px; opacity:0.3;"></i>
+						Belum ada produk. <a href="<?= base_url('admin/produk/tambah'); ?>" style="color: var(--amber-cream); font-weight:600;">Tambah produk pertama</a>
+					</td>
+				</tr>
+			<?php endif; ?>
+		</tbody>
+	</table>
+</div>

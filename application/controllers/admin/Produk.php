@@ -3,12 +3,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Produk extends CI_Controller
 {
-
 	public function __construct()
 	{
 		parent::__construct();
 
-		// 🔴 CEK LOGIN & ROLE
+		// CEK LOGIN & ROLE ADMIN
 		if (!$this->session->userdata('id_user')) {
 			redirect('auth/login');
 		}
@@ -18,9 +17,9 @@ class Produk extends CI_Controller
 		}
 
 		$this->load->model('Produk_model');
-		$this->load->model('Notifikasi_model'); // 🔴 TAMBAHKAN INI!
+		$this->load->model('Notifikasi_model');
 		$this->load->helper('url');
-		$this->load->helper('notifikasi'); // 🔴 TAMBAHKAN INI!
+		$this->load->helper('notifikasi');
 	}
 
 	// Halaman utama produk
@@ -28,10 +27,12 @@ class Produk extends CI_Controller
 	{
 		$id_user = $this->session->userdata('id_user');
 
-		// 🔴 AMBIL NOTIFIKASI - 3 BARIS
-		$data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+		$data['title']        = 'Manajemen Produk - Sistem Supply Chain Kopi';
+		$data['title_page']   = 'Manajemen Produk';
+		$data['subtitle']     = 'Kelola data produk komoditas kopi Anda di sini';
+		$data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
 		$data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-		$data['role'] = 'Admin';
+		$data['role']         = 'Admin';
 
 		$keyword = $this->input->get('keyword');
 
@@ -46,7 +47,11 @@ class Produk extends CI_Controller
 			$data['produk'] = $this->Produk_model->getAll();
 		}
 
+		// Load Template Partial
+		$this->load->view('templates/admin/header', $data);
+		$this->load->view('templates/admin/sidebar', $data);
 		$this->load->view('admin/v_produk', $data);
+		$this->load->view('templates/admin/footer');
 	}
 
 	// Form tambah produk
@@ -54,22 +59,24 @@ class Produk extends CI_Controller
 	{
 		$id_user = $this->session->userdata('id_user');
 
-		// 🔴 AMBIL NOTIFIKASI - 3 BARIS
-		$data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+		$data['title']        = 'Tambah Produk Baru - Admin';
+		$data['title_page']   = 'Tambah Produk Baru';
+		$data['subtitle']     = 'Silakan lengkapi spesifikasi produk komoditas kopi';
+		$data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
 		$data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-		$data['role'] = 'Admin';
+		$data['role']         = 'Admin';
+		$data['produk']       = $this->Produk_model->getAll();
 
-		$data['produk'] = $this->Produk_model->getAll();
-
+		$this->load->view('templates/admin/header', $data);
+		$this->load->view('templates/admin/sidebar', $data);
 		$this->load->view('admin/produk_tambah', $data);
+		$this->load->view('templates/admin/footer');
 	}
 
 	// Simpan produk baru
 	public function simpan()
 	{
-		// 🔴 AMBIL ID USER DARI SESSION
 		$id_user = $this->session->userdata('id_user');
-
 		$foto = '';
 
 		if (!empty($_FILES['foto_utama']['name'])) {
@@ -90,7 +97,7 @@ class Produk extends CI_Controller
 		}
 
 		$data = array(
-			'id_user'       => $id_user,  // ✅ AMBIL DARI SESSION
+			'id_user'       => $id_user,
 			'nama_produk'   => $this->input->post('nama_produk'),
 			'jenis_kopi'    => $this->input->post('jenis_kopi'),
 			'grade'         => $this->input->post('grade'),
@@ -106,12 +113,8 @@ class Produk extends CI_Controller
 
 		$insert_id = $this->Produk_model->insert($data);
 
-		// ... kode galeri ...
-
-		// Kirim notifikasi ke admin (yang sedang login)
-		$this->load->helper('notifikasi');
 		send_notifikasi(
-			$id_user,  // ✅ ID ADMIN DARI SESSION
+			$id_user,
 			'Admin',
 			'📦 Produk Baru Ditambahkan',
 			'Produk ' . $data['nama_produk'] . ' telah ditambahkan ke katalog.',
@@ -128,15 +131,20 @@ class Produk extends CI_Controller
 	{
 		$id_user = $this->session->userdata('id_user');
 
-		// 🔴 AMBIL NOTIFIKASI - 3 BARIS
-		$data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+		$data['title']        = 'Detail Produk - Admin';
+		$data['title_page']   = 'Detail Produk';
+		$data['subtitle']     = 'Informasi detail spesifikasi produk kopi';
+		$data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
 		$data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-		$data['role'] = 'Admin';
+		$data['role']         = 'Admin';
 
 		$data['produk'] = $this->Produk_model->getById($id);
 		$data['galeri'] = $this->Produk_model->getGaleriByProduk($id);
 
+		$this->load->view('templates/admin/header', $data);
+		$this->load->view('templates/admin/sidebar', $data);
 		$this->load->view('admin/produk_detail', $data);
+		$this->load->view('templates/admin/footer');
 	}
 
 	// Form edit produk
@@ -144,32 +152,35 @@ class Produk extends CI_Controller
 	{
 		$id_user = $this->session->userdata('id_user');
 
-		// 🔴 AMBIL NOTIFIKASI - 3 BARIS
-		$data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+		$data['title']        = 'Edit Produk - Admin';
+		$data['title_page']   = 'Edit Produk';
+		$data['subtitle']     = 'Edit spesifikasi produk komoditas kopi';
+		$data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
 		$data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-		$data['role'] = 'Admin';
+		$data['role']         = 'Admin';
 
 		$data['produk'] = $this->Produk_model->getById($id);
 		$data['galeri'] = $this->Produk_model->getGaleriByProduk($id);
 
+		$this->load->view('templates/admin/header', $data);
+		$this->load->view('templates/admin/sidebar', $data);
 		$this->load->view('admin/produk_edit', $data);
+		$this->load->view('templates/admin/footer');
 	}
 
 	// Update produk
 	public function update($id)
 	{
-		// 🔴 METHOD INI REDIRECT, TIDAK PERLU NOTIFIKASI
-
 		$data = array(
-			'nama_produk' => $this->input->post('nama_produk'),
-			'jenis_kopi' => $this->input->post('jenis_kopi'),
-			'grade' => $this->input->post('grade'),
-			'harga' => $this->input->post('harga'),
-			'stok_produk' => $this->input->post('stok_produk'),
-			'altitude' => $this->input->post('altitude'),
-			'proses' => $this->input->post('proses'),
-			'flavor_notes' => $this->input->post('flavor_notes'),
-			'deskripsi' => $this->input->post('deskripsi'),
+			'nama_produk'   => $this->input->post('nama_produk'),
+			'jenis_kopi'    => $this->input->post('jenis_kopi'),
+			'grade'         => $this->input->post('grade'),
+			'harga'         => $this->input->post('harga'),
+			'stok_produk'   => $this->input->post('stok_produk'),
+			'altitude'      => $this->input->post('altitude'),
+			'proses'        => $this->input->post('proses'),
+			'flavor_notes'  => $this->input->post('flavor_notes'),
+			'deskripsi'     => $this->input->post('deskripsi'),
 			'status_produk' => $this->input->post('status_produk')
 		);
 
@@ -188,32 +199,6 @@ class Produk extends CI_Controller
 
 		$this->Produk_model->update($id, $data);
 
-		if (!empty($_FILES['galeri']['name'][0])) {
-			$filesCount = count($_FILES['galeri']['name']);
-			for ($i = 0; $i < $filesCount; $i++) {
-				$_FILES['file']['name']     = $_FILES['galeri']['name'][$i];
-				$_FILES['file']['type']     = $_FILES['galeri']['type'][$i];
-				$_FILES['file']['tmp_name'] = $_FILES['galeri']['tmp_name'][$i];
-				$_FILES['file']['error']     = $_FILES['galeri']['error'][$i];
-				$_FILES['file']['size']     = $_FILES['galeri']['size'][$i];
-
-				$config2['upload_path']   = './uploads/produk/';
-				$config2['allowed_types'] = 'jpg|jpeg|png';
-				$config2['max_size']      = 2048;
-				$config2['encrypt_name']  = TRUE;
-
-				$this->load->library('upload', $config2);
-				$this->upload->initialize($config2);
-				if ($this->upload->do_upload('file')) {
-					$fileData = $this->upload->data();
-					$this->Produk_model->insert_galeri([
-						'id_produk' => $id,
-						'foto' => $fileData['file_name']
-					]);
-				}
-			}
-		}
-
 		$this->session->set_flashdata('success', 'Produk berhasil diperbarui!');
 		redirect('admin/produk');
 	}
@@ -221,38 +206,8 @@ class Produk extends CI_Controller
 	// Hapus produk
 	public function hapus($id)
 	{
-		// 🔴 METHOD INI REDIRECT, TIDAK PERLU NOTIFIKASI
-
 		$this->Produk_model->delete($id);
 		$this->session->set_flashdata('success', 'Produk berhasil dihapus!');
 		redirect('admin/produk');
-	}
-
-	// ── UPDATE STOK ──────────────────────────────────────────────────
-	public function update_stok($id)
-	{
-		// 🔴 METHOD INI AJAX/REDIRECT, TIDAK PERLU NOTIFIKASI
-
-		$stok = $this->input->post('stok_produk');
-		$this->Produk_model->update($id, ['stok_produk' => $stok]);
-
-		// Cek stok menipis (< 20)
-		if ($stok < 20) {
-			$produk = $this->Produk_model->getById($id);
-			send_notifikasi(
-				1, // ID Admin
-				'Admin',
-				'⚠️ Stok Menipis',
-				'Stok produk ' . $produk['nama_produk'] . ' tersisa ' . $stok . ' kg. Segera isi ulang!',
-				'warning',
-				base_url('admin/produk')
-			);
-		}
-
-		if ($this->input->is_ajax_request()) {
-			echo json_encode(['success' => true]);
-		} else {
-			redirect('admin/produk');
-		}
 	}
 }

@@ -4,19 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Kurir_model
  * ============================================
- * Model ini dipakai BERSAMA oleh 2 modul karena keduanya butuh akses
- * ke tabel `tb_kurir`:
- *   - Modul 07: Tracking Pengiriman (Acep)
- *   - Modul 08: Manajemen Kurir (Anisya)
- *
- * Supaya tidak saling menimpa lagi saat git pull, SEMUA method dari
- * kedua modul digabung di SATU file ini. Kalau salah satu modul butuh
- * method tambahan, tambahkan di file ini juga, jangan buat file baru
- * dengan nama yang sama.
+ * Model gabungan Modul 07 (Tracking) & Modul 08 (Manajemen Kurir)
  * ============================================
- * Kolom tb_kurir (sesuai liberchain.sql):
- * id_kurir, nama_kurir, no_telepon, email, status (Active/Inactive/Offline),
- * lokasi_terakhir, lat_terakhir, lng_terakhir, created_at, updated_at
  */
 class Kurir_model extends CI_Model
 {
@@ -41,6 +30,7 @@ class Kurir_model extends CI_Model
     public function get_available_kurir()
     {
         $this->db->where('status', 'Active');
+        $this->db->where('deleted_at', null);
         $this->db->order_by('nama_kurir');
         return $this->db->get($this->table)->result();
     }
@@ -140,11 +130,14 @@ class Kurir_model extends CI_Model
 
     public function insert($data)
     {
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['updated_at'] = date('Y-m-d H:i:s');
         return $this->db->insert($this->table, $data);
     }
 
     public function update($id_kurir, $data)
     {
+        $data['updated_at'] = date('Y-m-d H:i:s');
         $this->db->where('id_kurir', $id_kurir);
         return $this->db->update($this->table, $data);
     }
@@ -161,11 +154,13 @@ class Kurir_model extends CI_Model
             ->update($this->table, ['deleted_at' => null]);
     }
 
-    public function count_by_status($status)
+    public function count_by_status($status = null)
     {
-        return $this->db->where('status', $status)
-            ->where('deleted_at', null)
-            ->count_all_results($this->table);
+        $this->db->where('deleted_at', null);
+        if ($status) {
+            $this->db->where('status', $status);
+        }
+        return $this->db->count_all_results($this->table);
     }
 
     public function count_all()
@@ -201,8 +196,8 @@ class Kurir_model extends CI_Model
                 t.kota_kirim,
                 t.nama_penerima,
                 t.no_hp,
-                u.nama AS nama_pembeli,
-                u.email
+                COALESCE(u.nama, t.nama_penerima) AS nama_pembeli,
+                t.email_pembeli as email
             ')
             ->from('tb_transaksi t')
             ->join('tb_user u', 'u.id_user = t.id_user', 'left')
@@ -259,8 +254,8 @@ class Kurir_model extends CI_Model
                 t.kota_kirim,
                 t.nama_penerima,
                 t.no_hp,
-                u.nama AS nama_pembeli,
-                u.email
+                COALESCE(u.nama, t.nama_penerima) AS nama_pembeli,
+                t.email_pembeli as email
             ')
             ->from('tb_transaksi t')
             ->join('tb_user u', 'u.id_user = t.id_user', 'left')
@@ -289,7 +284,7 @@ class Kurir_model extends CI_Model
 
             $k['selesai'] = $this->db
                 ->where('id_kurir', $id_kurir)
-                ->where_in('status_pengiriman', ['delivered', 'diterima'])
+                ->where_in('status_pengiriman', ['delivered', 'diterima', 'selesai'])
                 ->count_all_results('tb_tracking');
 
             $k['dibatalkan'] = $this->db
@@ -297,7 +292,7 @@ class Kurir_model extends CI_Model
                 ->where('status_pengiriman', 'dibatalkan')
                 ->count_all_results('tb_tracking');
 
-            $k['sedang_berjalan'] = $k['total_pengiriman'] - $k['selesai'] - $k['dibatalkan'];
+            $k['sedang_berjalan'] = max(0, $k['total_pengiriman'] - $k['selesai'] - $k['dibatalkan']);
 
             $avg = $this->db->select('AVG(TIMESTAMPDIFF(HOUR, tanggal_kirim, tanggal_terima)) AS avg_jam', false)
                 ->where('id_kurir', $id_kurir)
@@ -328,6 +323,7 @@ class Kurir_model extends CI_Model
             'status'      => 'diproses',
             'lokasi'      => $kurir['lokasi_terakhir'] ?? null,
             'keterangan'  => 'Kurir ' . ($kurir['nama_kurir'] ?? '') . ' ditugaskan untuk pengiriman ini',
+            'created_at'  => date('Y-m-d H:i:s')
         ]);
 
         // Kirim Notifikasi ke Pembeli dan Kurir
@@ -341,29 +337,33 @@ class Kurir_model extends CI_Model
             $CI =& get_instance();
             $CI->load->helper('notifikasi');
             
-            // 1. Notifikasi ke pembeli
-            notifikasi_tracking(
-                $tracking->pembeli_id,
-                $tracking->invoice,
-                'Kurir Ditugaskan',
-                "Kurir " . ($kurir['nama_kurir'] ?? 'Kurir') . " telah ditugaskan untuk mengantar pesanan Anda."
-            );
+            // 1. Notifikasi ke pembeli (jika user terdaftar)
+            if (!empty($tracking->pembeli_id)) {
+                notifikasi_tracking(
+                    $tracking->pembeli_id,
+                    $tracking->invoice,
+                    'Kurir Ditugaskan',
+                    "Kurir " . ($kurir['nama_kurir'] ?? 'Kurir') . " telah ditugaskan untuk mengantar pesanan Anda."
+                );
+            }
 
             // 2. Notifikasi ke kurir
-            $user_kurir = $this->db
-                ->where('email', $kurir['email'])
-                ->where('role', 'Kurir')
-                ->get('tb_user')->row();
+            if (!empty($kurir['email'])) {
+                $user_kurir = $this->db
+                    ->where('email', $kurir['email'])
+                    ->where('role', 'Kurir')
+                    ->get('tb_user')->row();
 
-            if ($user_kurir) {
-                send_notifikasi(
-                    $user_kurir->id_user,
-                    'Kurir',
-                    'Penugasan Pengiriman Baru',
-                    "Anda ditugaskan mengantar pesanan #{$tracking->invoice}. Segera upload bukti pengiriman.",
-                    'info',
-                    base_url('kurir/tracking')
-                );
+                if ($user_kurir) {
+                    send_notifikasi(
+                        $user_kurir->id_user,
+                        'Kurir',
+                        'Penugasan Pengiriman Baru',
+                        "Anda ditugaskan mengantar pesanan #{$tracking->invoice}. Segera upload bukti pengiriman.",
+                        'info',
+                        base_url('kurir/tracking')
+                    );
+                }
             }
         }
 
@@ -371,4 +371,3 @@ class Kurir_model extends CI_Model
         return $this->db->trans_status();
     }
 }
-?>
