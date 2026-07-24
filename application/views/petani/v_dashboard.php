@@ -7,10 +7,26 @@
 	<title>Panel Produksi - Petani Kopi</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="LiberChain">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LiberChain">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#4A2C11">
+    <meta name="msapplication-TileColor" content="#FAF6F0">
+    <meta name="msapplication-TileImage" content="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    <link rel="manifest" href="<?= base_url('pwa/manifest') ?>">
+    <link rel="icon" type="image/png" sizes="192x192" href="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    <link rel="icon" type="image/png" sizes="512x512" href="<?= base_url('assets/images/pwa/icon-512x512.png') ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('assets/images/pwa/apple-touch-icon.png') ?>">
+    <link rel="apple-touch-icon" sizes="192x192" href="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    
+    <style>
 		:root {
 			--roasted-brown: #4A2C11;
 			--dark-coffee: #2C1808;
@@ -1636,6 +1652,22 @@
 		<div class="toast-container" id="toastContainer"></div>
 
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+		
+		<!-- PWA Service Worker Registration -->
+		<script>
+		if ('serviceWorker' in navigator) {
+			window.addEventListener('load', function() {
+				navigator.serviceWorker.register('<?= base_url('pwa/service_worker') ?>')
+					.then(function(registration) {
+						console.log('[LiberChain PWA] ServiceWorker registered:', registration.scope);
+					})
+					.catch(function(error) {
+						console.warn('[LiberChain PWA] ServiceWorker registration failed:', error);
+					});
+			});
+		}
+		</script>
+		
 		<script>
 			// ============================================
 			// 1. SIDEBAR TOGGLE

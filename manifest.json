@@ -1,0 +1,53 @@
+{
+  "name": "LiberChain",
+  "short_name": "LiberChain",
+  "description": "Platform Rantai Pasok Kopi Terintegrasi - Revolusi rantai pasok kopi Indonesia yang berkelanjutan, transparan, dan adil bagi petani",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#FAF6F0",
+  "theme_color": "#4A2C11",
+  "orientation": "portrait-primary",
+  "lang": "id-ID",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "assets/images/pwa/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/images/pwa/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "food", "agriculture"],
+  "screenshots": [],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Beranda",
+      "short_name": "Beranda",
+      "description": "Halaman utama LiberChain",
+      "url": "./",
+      "icons": [{ "src": "assets/images/pwa/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Produk",
+      "short_name": "Produk",
+      "description": "Lihat produk kopi",
+      "url": "./produk",
+      "icons": [{ "src": "assets/images/pwa/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Login",
+      "short_name": "Login",
+      "description": "Masuk ke akun",
+      "url": "./auth/login",
+      "icons": [{ "src": "assets/images/pwa/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}
