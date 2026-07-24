@@ -28,7 +28,7 @@ class Profil extends CI_Controller {
     /**
      * INDEX - Menampilkan halaman profil pembeli
      */
-    public function index() {
+public function index() {
         $id_user = $this->session->userdata('id_user');
 
         // AMBIL DATA USER
@@ -42,6 +42,9 @@ class Profil extends CI_Controller {
         }
 
         $data['user'] = $user;
+        $data['title'] = 'Profil Saya';
+        $data['title_page'] = 'Profil Saya';
+        $data['subtitle'] = 'Kelola informasi profil akun Anda';
 
         // DATA NOTIFIKASI
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
@@ -51,6 +54,7 @@ class Profil extends CI_Controller {
         $kpi = $this->Notifikasi_model->get_pembeli_kpi($id_user);
         $data['total_transaksi'] = $kpi['total_transaksi'] ?? 0;
         $data['pesanan_dikirim'] = $kpi['pesanan_dikirim'] ?? 0;
+        $data['pesanan_selesai'] = $kpi['pesanan_selesai'] ?? 0;
 
         // UPDATE SESSION
         $this->session->set_userdata([
@@ -59,7 +63,11 @@ class Profil extends CI_Controller {
             'email' => $user->email
         ]);
 
+        // RENDER MENGGUNAKAN TEMPLATE MODULAR PEMBELI
+        $this->load->view('templates/pembeli/header', $data);
+        $this->load->view('templates/pembeli/sidebar', $data);
         $this->load->view('auth/v_profile', $data);
+        $this->load->view('templates/pembeli/footer', $data);
     }
 
     /**

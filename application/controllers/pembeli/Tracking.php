@@ -22,6 +22,10 @@ class Tracking extends CI_Controller {
     public function index() {
         $id_user = $this->session->userdata('id_user');
         
+        $data['title'] = 'Tracking Pesanan';
+        $data['title_page'] = 'Tracking Pesanan Aktif';
+        $data['subtitle'] = 'Pantau proses pengiriman pesanan Anda';
+        
         $data['trackings'] = $this->Tracking_model->get_user_tracking($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user, 5);
@@ -34,9 +38,11 @@ class Tracking extends CI_Controller {
             $track->estimasi = $this->Tracking_model->get_estimasi_tiba($track->id_tracking);
         }
         
-        $this->load->view('template/header', ['title' => 'Tracking Pesanan']);
+        // RENDER DENGAN TEMPLATE MODULAR PEMBELI
+        $this->load->view('templates/pembeli/header', $data);
+        $this->load->view('templates/pembeli/sidebar', $data);
         $this->load->view('pembeli/tracking_list', $data);
-        $this->load->view('template/footer');
+        $this->load->view('templates/pembeli/footer', $data);
     }
     
     public function detail($id_tracking) {
@@ -56,15 +62,20 @@ class Tracking extends CI_Controller {
         $tracking->status_icon = $status_info['icon'];
         $tracking->estimasi = $this->Tracking_model->get_estimasi_tiba($id_tracking);
         
+        $data['title'] = 'Detail Tracking #' . $tracking->invoice;
+        $data['title_page'] = 'Detail Tracking';
+        $data['subtitle'] = 'Informasi riwayat dan status pengiriman';
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user, 5);
         $data['tracking'] = $tracking;
         $data['history'] = $history;
         $data['status_list'] = $this->get_status_step($tracking->status_pengiriman);
         
-        $this->load->view('template/header', ['title' => 'Detail Tracking #' . $tracking->invoice]);
+        // RENDER DENGAN TEMPLATE MODULAR PEMBELI
+        $this->load->view('templates/pembeli/header', $data);
+        $this->load->view('templates/pembeli/sidebar', $data);
         $this->load->view('pembeli/tracking_detail', $data);
-        $this->load->view('template/footer');
+        $this->load->view('templates/pembeli/footer', $data);
     }
     
     public function approve($id_tracking) {
@@ -101,6 +112,9 @@ class Tracking extends CI_Controller {
     public function history() {
         $id_user = $this->session->userdata('id_user');
         
+        $data['title'] = 'History Tracking';
+        $data['title_page'] = 'History Tracking';
+        $data['subtitle'] = 'Riwayat pengiriman pesanan Anda';
         $data['history'] = $this->Tracking_model->get_user_tracking($id_user, 20);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user, 5);
@@ -112,9 +126,11 @@ class Tracking extends CI_Controller {
             $track->status_icon = $status_info['icon'];
         }
         
-        $this->load->view('template/header', ['title' => 'History Tracking']);
+        // RENDER DENGAN TEMPLATE MODULAR PEMBELI
+        $this->load->view('templates/pembeli/header', $data);
+        $this->load->view('templates/pembeli/sidebar', $data);
         $this->load->view('pembeli/tracking_history', $data);
-        $this->load->view('template/footer');
+        $this->load->view('templates/pembeli/footer', $data);
     }
     
     private function get_status_step($current_status) {
