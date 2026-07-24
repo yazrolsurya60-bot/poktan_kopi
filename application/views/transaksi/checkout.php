@@ -607,7 +607,7 @@
                                             Estimasi Pengiriman: <span id="estimasi_hari">-</span> hari
                                         </div>
                                         <div style="font-size: 0.78rem; color: var(--text-secondary);">Kota asal:
-                                            Pontianak</div>
+                                            <span id="kota_asal_display"><?= $kota_asal; ?></span></div>
                                     </div>
                                     <div style="font-weight: 800; color: var(--roasted-brown); font-size: 1rem;"
                                         id="ongkir_display">Rp 0</div>
@@ -616,44 +616,21 @@
                             </div>
                         </div>
 
-                        <!-- 🔥 Metode Pembayaran - Virtual Account -->
+                        <!-- 🔥 Metode Pembayaran - COD Only -->
                         <div class="form-card">
                             <div class="card-section-title">
                                 <i class="bi bi-credit-card" style="color: var(--roasted-brown);"></i>
                                 Metode Pembayaran
                             </div>
 
-                            <!-- 🔥 Virtual Account (pengganti Transfer Bank) -->
-                            <div class="payment-option" onclick="selectPayment('Virtual Account', this)">
-                                <input type="radio" name="metode_bayar" value="Virtual Account" required>
-                                <div class="payment-icon" style="background: #EEF2FF; color: #4F46E5;">
-                                    <i class="bi bi-qr-code"></i>
-                                </div>
-                                <div>
-                                    <p class="payment-label">Virtual Account</p>
-                                    <p class="payment-desc">BCA, Mandiri, BNI, BRI (Otomatis terverifikasi)</p>
-                                </div>
-                            </div>
-
-                            <div class="payment-option" onclick="selectPayment('COD', this)">
-                                <input type="radio" name="metode_bayar" value="COD">
+                            <div class="payment-option selected" onclick="selectPayment('COD', this)">
+                                <input type="radio" name="metode_bayar" value="COD" checked required>
                                 <div class="payment-icon" style="background: #F0FDF4; color: #16A34A;">
                                     <i class="bi bi-cash-coin"></i>
                                 </div>
                                 <div>
                                     <p class="payment-label">COD (Bayar di Tempat)</p>
                                     <p class="payment-desc">Bayar saat barang tiba</p>
-                                </div>
-                            </div>
-
-                            <div class="payment-option" onclick="selectPayment('E-Wallet', this)">
-                                <input type="radio" name="metode_bayar" value="E-Wallet">
-                                <div class="payment-icon" style="background: #FFF7ED; color: #EA580C;">
-                                    <i class="bi bi-phone"></i>
-                                </div>
-                                <div>
-                                    <p class="payment-label">E-Wallet</p>
-                                    <p class="payment-desc">GoPay, OVO, DANA, ShopeePay</p>
                                 </div>
                             </div>
                         </div>
@@ -752,7 +729,7 @@
         $(el).find('input[type="radio"]').prop('checked', true);
     }
 
-    // Hitung ongkir - Kota asal PONTIANAK
+    // Hitung ongkir - Kota asal SAMBAS
     $('#kota_kirim').on('change', function() {
         var kota = $(this).val();
         if (!kota) return;
@@ -761,7 +738,7 @@
             url: '<?= base_url("transaksi/hitung_ongkir"); ?>',
             type: 'POST',
             data: {
-                kota_asal: 'Pontianak',
+                kota_asal: '<?= $kota_asal; ?>',
                 kota_tujuan: kota
             },
             dataType: 'json',
@@ -773,6 +750,9 @@
                     $('#ongkir_val').val(ongkir);
                     $('#ongkir_display').text(res.tarif_formatted);
                     $('#estimasi_hari').text(res.estimasi);
+                    if (res.kota_asal) {
+                        $('#kota_asal_display').text(res.kota_asal);
+                    }
                     $('#ongkir-result').addClass('show');
                     $('#ongkir_summary').text(res.tarif_formatted).css({
                         color: 'var(--dark-coffee)',

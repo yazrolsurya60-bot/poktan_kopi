@@ -2,8 +2,26 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'Sistem Supply Chain Kopi' ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title><?= $title ?? 'LiberChain - Platform Rantai Pasok Kopi' ?></title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="LiberChain">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LiberChain">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#4A2C11">
+    <meta name="msapplication-TileColor" content="#FAF6F0">
+    <meta name="msapplication-TileImage" content="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    <link rel="manifest" href="<?= base_url('pwa/manifest') ?>">
+    <link rel="icon" type="image/png" sizes="192x192" href="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    <link rel="icon" type="image/png" sizes="512x512" href="<?= base_url('assets/images/pwa/icon-512x512.png') ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('assets/images/pwa/apple-touch-icon.png') ?>">
+    <link rel="apple-touch-icon" sizes="192x192" href="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    
+    <!-- iOS Splash Screen -->
+    <link rel="apple-touch-startup-image" href="<?= base_url('assets/images/pwa/icon-512x512.png') ?>">
 
     <!-- Bootstrap 4 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
@@ -56,6 +74,7 @@
             box-shadow: 4px 0 25px rgba(44, 24, 8, 0.2);
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         .sidebar-brand {

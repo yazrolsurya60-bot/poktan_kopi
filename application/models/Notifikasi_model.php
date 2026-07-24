@@ -14,16 +14,20 @@ class Notifikasi_model extends CI_Model
     // NOTIFIKASI CRUD
     // ============================================
 
+// ============================================
+    // NOTIFIKASI CRUD
+    // ============================================
+
     public function insert_notification($data)
     {
         $notif_data = [
-            'id_user' => $data['id_user'],
-            'judul' => $data['judul'] ?? 'Notifikasi',
+            'id_user'        => $data['id_user'],
+            'judul'          => $data['judul'] ?? 'Notifikasi',
             'isi_notifikasi' => $data['pesan'] ?? $data['isi_notifikasi'] ?? '',
-            'link' => $data['link'] ?? null,
-            'icon' => $data['tipe'] ?? $data['icon'] ?? 'info',
-            'status_baca' => $data['is_read'] ?? 0,
-            'tanggal_buat' => $data['created_at'] ?? date('Y-m-d H:i:s')
+            'link'           => $data['link'] ?? null,
+            'icon'           => $data['tipe'] ?? $data['icon'] ?? 'info',
+            'status_baca'    => $data['status_baca'] ?? $data['is_read'] ?? 0, // 👈 DIBETULKAN: Utamakan status_baca = 0
+            'tanggal_buat'   => $data['created_at'] ?? $data['tanggal_buat'] ?? date('Y-m-d H:i:s')
         ];
 
         $this->db->insert('tb_notifikasi', $notif_data);
@@ -41,7 +45,7 @@ class Notifikasi_model extends CI_Model
             'status_baca' => $data['status_baca'] ?? 0,
             'tanggal_buat' => $data['tanggal_buat'] ?? date('Y-m-d H:i:s')
         ];
-        return $this->db->insert('tb_notifikasi', $insert_data);
+         return $this->insert_notification($data); // Redirect ke insert_notification biar seragam
     }
 
     public function get_unread_notif($id_user, $limit = null)

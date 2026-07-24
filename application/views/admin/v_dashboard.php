@@ -8,9 +8,25 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
 		rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-	<style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="LiberChain">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LiberChain">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#4A2C11">
+    <meta name="msapplication-TileColor" content="#FAF6F0">
+    <meta name="msapplication-TileImage" content="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    <link rel="manifest" href="<?= base_url('pwa/manifest') ?>">
+    <link rel="icon" type="image/png" sizes="192x192" href="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    <link rel="icon" type="image/png" sizes="512x512" href="<?= base_url('assets/images/pwa/icon-512x512.png') ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('assets/images/pwa/apple-touch-icon.png') ?>">
+    <link rel="apple-touch-icon" sizes="192x192" href="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    
+    <style>
 		:root {
 			--roasted-brown: #4A2C11;
 			--dark-coffee: #2C1808;
@@ -50,7 +66,7 @@
 			left: 0;
 			background: linear-gradient(180deg, var(--dark-coffee) 0%, #1a0e04 100%);
 			color: var(--bg-cream);
-			z-index: 100;
+			z-index: 1000;
 			transition: var(--transition-smooth);
 			box-shadow: 4px 0 25px rgba(44, 24, 8, 0.2);
 			display: flex;
@@ -179,8 +195,9 @@
 			display: none;
 			position: fixed;
 			inset: 0;
-			background: rgba(0, 0, 0, 0.4);
-			z-index: 99;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 999;
+			backdrop-filter: blur(2px);
 		}
 
 		.sidebar-overlay.active {
@@ -210,6 +227,7 @@
 			justify-content: space-between;
 			align-items: center;
 			flex-wrap: wrap;
+			gap: 16px;
 		}
 
 		.page-header h2 {
@@ -233,6 +251,7 @@
 			align-items: center;
 			gap: 12px;
 			flex-shrink: 0;
+			position: relative;
 		}
 
 		/* ============================================ */
@@ -273,7 +292,7 @@
 		}
 
 		/* ============================================ */
-		/* NOTIFICATION BELL & DROPDOWN */
+		/* NOTIFICATION BELL & DROPDOWN RESPONSIF */
 		/* ============================================ */
 
 		.notif-btn {
@@ -317,14 +336,14 @@
 			right: 0;
 			top: calc(100% + 10px);
 			width: 380px;
-			max-height: 400px;
+			max-height: 420px;
 			background: var(--card-white);
 			border-radius: var(--radius-card);
 			box-shadow: var(--shadow-hover);
-			border: 1px solid rgba(74, 44, 17, 0.06);
+			border: 1px solid rgba(74, 44, 17, 0.08);
 			overflow: hidden;
 			display: none;
-			z-index: 50;
+			z-index: 9999;
 		}
 
 		.notif-dropdown.show {
@@ -351,6 +370,7 @@
 			justify-content: space-between;
 			align-items: center;
 			font-weight: 600;
+			font-size: 0.85rem;
 		}
 
 		.notif-dropdown-header a {
@@ -394,34 +414,17 @@
 			font-size: 0.9rem;
 		}
 
-		.notif-item .notif-icon.success {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.notif-item .notif-icon.warning {
-			background: #FEF3C7;
-			color: #92400E;
-		}
-
-		.notif-item .notif-icon.info {
-			background: #DBEAFE;
-			color: #1E40AF;
-		}
-
-		.notif-item .notif-icon.danger {
-			background: #FEE2E2;
-			color: #991B1B;
-		}
-
-		.notif-item .notif-icon.primary {
-			background: #EDE9FE;
-			color: #5B21B6;
-		}
+		.notif-item .notif-icon.success { background: #D1FAE5; color: #065F46; }
+		.notif-item .notif-icon.warning { background: #FEF3C7; color: #92400E; }
+		.notif-item .notif-icon.info { background: #DBEAFE; color: #1E40AF; }
+		.notif-item .notif-icon.danger { background: #FEE2E2; color: #991B1B; }
+		.notif-item .notif-icon.primary { background: #EDE9FE; color: #5B21B6; }
 
 		.notif-item .notif-text {
 			flex: 1;
 			font-size: 0.85rem;
+			min-width: 0;
+			word-break: break-word;
 		}
 
 		.notif-item .notif-text .notif-time {
@@ -446,6 +449,19 @@
 			padding: 2px 8px;
 			border-radius: 10px;
 			align-self: center;
+			flex-shrink: 0;
+		}
+
+		/* ANIMASI BERGETAR PADA LONCENG */
+		@keyframes bellRing {
+			0%, 100% { transform: rotate(0); }
+			25% { transform: rotate(12deg); }
+			50% { transform: rotate(-12deg); }
+			75% { transform: rotate(6deg); }
+		}
+
+		.notif-btn.ring {
+			animation: bellRing 0.5s ease 1;
 		}
 
 		/* ============================================ */
@@ -540,25 +556,10 @@
 			transform: scale(1.05) rotate(-3deg);
 		}
 
-		.kpi-card .kpi-badge.amber {
-			background: var(--amber-cream);
-			color: white;
-		}
-
-		.kpi-card .kpi-badge.green {
-			background: #059669;
-			color: white;
-		}
-
-		.kpi-card .kpi-badge.dark {
-			background: var(--dark-coffee);
-			color: white;
-		}
-
-		.kpi-card .kpi-badge.blue {
-			background: #3B82F6;
-			color: white;
-		}
+		.kpi-card .kpi-badge.amber { background: var(--amber-cream); color: white; }
+		.kpi-card .kpi-badge.green { background: #059669; color: white; }
+		.kpi-card .kpi-badge.dark { background: var(--dark-coffee); color: white; }
+		.kpi-card .kpi-badge.blue { background: #3B82F6; color: white; }
 
 		.kpi-card .kpi-number {
 			font-size: 1.6rem;
@@ -568,6 +569,7 @@
 			line-height: 1.2;
 			padding-right: 10px;
 			letter-spacing: -0.5px;
+			word-break: break-word;
 		}
 
 		.kpi-card .kpi-number.rupiah {
@@ -713,12 +715,14 @@
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
 			padding: 10px 8px;
+			white-space: nowrap;
 		}
 
 		.table-custom tbody td {
 			padding: 10px 8px;
 			border-bottom: 1px solid rgba(74, 44, 17, 0.04);
 			vertical-align: middle;
+			white-space: nowrap;
 		}
 
 		.table-custom tbody tr:hover {
@@ -734,42 +738,16 @@
 			border-radius: 20px;
 			font-size: 0.7rem;
 			font-weight: 600;
+			display: inline-block;
 		}
 
-		.status-badge.pending {
-			background: #FEF3C7;
-			color: #92400E;
-		}
-
-		.status-badge.processing {
-			background: #DBEAFE;
-			color: #1E40AF;
-		}
-
-		.status-badge.delivery {
-			background: #EDE9FE;
-			color: #5B21B6;
-		}
-
-		.status-badge.complete {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.status-badge.cancelled {
-			background: #FEE2E2;
-			color: #991B1B;
-		}
-
-		.status-badge.verified {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.status-badge.review {
-			background: #FEF3C7;
-			color: #92400E;
-		}
+		.status-badge.pending { background: #FEF3C7; color: #92400E; }
+		.status-badge.processing { background: #DBEAFE; color: #1E40AF; }
+		.status-badge.delivery { background: #EDE9FE; color: #5B21B6; }
+		.status-badge.complete { background: #D1FAE5; color: #065F46; }
+		.status-badge.cancelled { background: #FEE2E2; color: #991B1B; }
+		.status-badge.verified { background: #D1FAE5; color: #065F46; }
+		.status-badge.review { background: #FEF3C7; color: #92400E; }
 
 		/* ============================================ */
 		/* CUSTOM SWITCH */
@@ -823,7 +801,7 @@
 		}
 
 		/* ============================================ */
-		/* RESPONSIVE */
+		/* OPTIMATED RESPONSIVE CSS */
 		/* ============================================ */
 
 		@media (max-width: 991.98px) {
@@ -850,9 +828,10 @@
 				font-size: 1.3rem;
 			}
 
+			/* Fix Notif Dropdown Tablet */
 			.notif-dropdown {
-				width: calc(100vw - 32px);
-				right: -60px;
+				width: 340px;
+				right: 0;
 			}
 
 			.user-badge {
@@ -865,11 +844,11 @@
 			}
 
 			.user-badge .user-name {
-				font-size: 0.7rem;
+				font-size: 0.75rem;
 			}
 
 			.user-badge .user-role {
-				font-size: 0.5rem;
+				font-size: 0.55rem;
 			}
 
 			.header-right {
@@ -882,23 +861,32 @@
 				padding: 16px 12px 20px;
 			}
 
+			/* Notif Dropdown Mobile - Full Width Pass */
 			.notif-dropdown {
+				position: fixed;
+				top: 70px;
+				left: 12px;
+				right: 12px;
 				width: calc(100vw - 24px);
-				right: -70px;
+				max-height: 80vh;
+			}
+
+			.notif-dropdown-list {
+				max-height: 55vh;
 			}
 
 			.user-badge {
 				padding: 4px 8px;
-				min-width: 60px;
+				min-width: auto;
 				gap: 5px;
 			}
 
 			.user-badge i {
-				font-size: 0.9rem;
+				font-size: 1rem;
 			}
 
 			.user-badge .user-name {
-				font-size: 0.6rem;
+				font-size: 0.68rem;
 			}
 
 			.user-badge .user-role {
@@ -909,14 +897,55 @@
 				gap: 6px;
 			}
 
+			.page-header {
+				margin-bottom: 20px;
+				padding-bottom: 14px;
+			}
+
 			.page-header .subtitle {
 				font-size: 0.75rem;
+			}
+
+			.kpi-card .kpi-number {
+				font-size: 1.25rem;
+			}
+
+			.kpi-card .kpi-number.rupiah {
+				font-size: 1.05rem;
+			}
+
+			.custom-card .card-header-custom {
+				padding: 14px 16px;
+			}
+
+			.custom-card .card-body-custom {
+				padding: 16px;
+			}
+
+			.chart-container {
+				height: 200px;
+			}
+		}
+
+		@media (max-width: 380px) {
+			.quick-actions-grid {
+				grid-template-columns: 1fr;
+			}
+			
+			.kpi-grid {
+				grid-template-columns: 1fr;
 			}
 		}
 	</style>
 </head>
 
 <body>
+
+	<!-- 🔔 AUDIO NOTIFIKASI REAL-TIME -->
+	<audio id="notifSound" preload="auto">
+		<source src="<?= base_url('assets/sounds/notifikasi.wav'); ?>" type="audio/wav">
+		<source src="<?= base_url('assets/sounds/notifikasi.mp3'); ?>" type="audio/mpeg">
+	</audio>
 
 	<!-- SIDEBAR -->
 	<div class="sidebar" id="sidebarMenu">
@@ -1469,8 +1498,24 @@
 	</div>
 
 	<!-- SCRIPTS -->
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+	
+	<!-- PWA Service Worker Registration -->
+	<script>
+	if ('serviceWorker' in navigator) {
+		window.addEventListener('load', function() {
+			navigator.serviceWorker.register('<?= base_url('pwa/service_worker') ?>')
+				.then(function(registration) {
+					console.log('[LiberChain PWA] ServiceWorker registered:', registration.scope);
+				})
+				.catch(function(error) {
+					console.warn('[LiberChain PWA] ServiceWorker registration failed:', error);
+				});
+		});
+	}
+	</script>
+	
 	<script>
 		// ============================================
 		// 1. SIDEBAR TOGGLE
@@ -1520,7 +1565,7 @@
 		function markAllRead() {
 			if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
 				$.ajax({
-					url: '<?= base_url('admin/dashboard/mark_all_read_ajax'); ?>',
+					url: '<?= base_url('api/notifikasi/mark_all_read'); ?>',
 					type: 'POST',
 					dataType: 'json',
 					success: function (response) {
@@ -1672,7 +1717,93 @@
 		});
 
 		// ============================================
-		// 7. INITIALIZE
+		// 7. REAL-TIME NOTIFICATION & SOUND EFFECT
+		// ============================================
+		let currentUnreadCount = <?= isset($unread_count) ? (int)$unread_count : 0; ?>;
+
+		function playNotifSound() {
+			const audio = document.getElementById('notifSound');
+			if (audio) {
+				audio.currentTime = 0;
+				let promise = audio.play();
+				if (promise !== undefined) {
+					promise.catch(function(e) {
+						console.log('🔇 Autoplay ditahan browser sampai ada interaksi klik pertama user.');
+					});
+				}
+			}
+		}
+
+		function fetchRealtimeNotifications() {
+			$.ajax({
+				url: '<?= base_url("api/notifikasi/get"); ?>',
+				type: 'GET',
+				dataType: 'json',
+				success: function(response) {
+					if (response.success) {
+						const newCount = parseInt(response.unread) || 0;
+						const countEl = $('#notifCount');
+						const notifBtn = $('#notifToggle');
+
+						// 🔔 Bunyikan suara & animasi jika ada notifikasi baru
+						if (newCount > currentUnreadCount) {
+							playNotifSound();
+							notifBtn.addClass('ring');
+							setTimeout(function() {
+								notifBtn.removeClass('ring');
+							}, 1000);
+						}
+
+						// Update badge counter
+						currentUnreadCount = newCount;
+						if (newCount > 0) {
+							countEl.text(newCount).show();
+						} else {
+							countEl.text(0).hide();
+						}
+
+						// Update item list dropdown secara dinamis
+						if (response.notifikasi && response.notifikasi.length > 0) {
+							let htmlList = '';
+							$.each(response.notifikasi, function(i, n) {
+								let iconType = n.icon || 'info';
+								let iconMap = {
+									'success': 'bi-check-circle-fill',
+									'warning': 'bi-exclamation-triangle-fill',
+									'danger': 'bi-x-circle-fill',
+									'info': 'bi-info-circle-fill',
+									'primary': 'bi-star-fill'
+								};
+								let iconClass = iconMap[iconType] || 'bi-info-circle-fill';
+
+								htmlList += `
+									<a class="notif-item ${n.status_baca == '0' ? 'unread' : ''}" href="<?= base_url('admin/dashboard/read/'); ?>${n.id_notifikasi}">
+										<div class="notif-icon ${iconType}">
+											<i class="bi ${iconClass}"></i>
+										</div>
+										<div class="notif-text">
+											${n.isi_notifikasi || n.judul || 'Notifikasi'}
+											<span class="notif-time">${n.tanggal_buat}</span>
+										</div>
+										${n.status_baca == '0' ? '<span class="notif-badge-new">Baru</span>' : ''}
+									</a>
+								`;
+							});
+							$('#notifList').html(htmlList);
+						}
+					}
+				},
+				error: function(err) {
+					console.warn('⚠️ Gagal memuat notifikasi real-time');
+				}
+			});
+		}
+
+		// Run real-time polling every 5 seconds
+		setInterval(fetchRealtimeNotifications, 5000);
+
+		// ============================================
+		// 8. INITIALIZE
 		// ============================================
 		document.addEventListener('DOMContentLoaded', function () {
 			initChart();
@@ -1686,7 +1817,7 @@
 		console.log('   - Pesanan Terbaru (M11-F01) - Data Real');
 		console.log('   - Petani Baru (M11-F01) - Data Real');
 		console.log('   - Quick Action (M11-F04) - 5 Aksi Rapi');
-		console.log('   - Notifikasi Real-time (M11-F01)');
+		console.log('   - Notifikasi Real-time & Audio Sound via API (Auto 5 detik)');
 		console.log('   - Setting Notifikasi (M11-F03) - 6 Opsi (Tanpa Laporan Bulanan)');
 	</script>
 </body>

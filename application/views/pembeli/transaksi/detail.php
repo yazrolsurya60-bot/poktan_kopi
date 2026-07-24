@@ -128,9 +128,6 @@
         
         .instruction-alert { border-radius: 10px; border: none; }
         .instruction-alert i { font-size: 1.1rem; }
-
-        /* Virtual Account style */
-        .va-number { font-size: 1.3rem; font-weight: 700; letter-spacing: 3px; color: var(--roasted-brown); background: var(--bg-cream); padding: 8px 16px; border-radius: 10px; display: inline-block; }
     </style>
 </head>
 <body>
@@ -283,7 +280,7 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-5 detail-label">Metode Bayar</div>
-                        <div class="col-7"><?= $transaksi['metode_bayar'] ?? '-'; ?></div>
+                        <div class="col-7">COD (Bayar di Tempat)</div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-5 detail-label">Status Bayar</div>
@@ -380,14 +377,14 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- 🔥 INFORMASI PEMBAYARAN - VIRTUAL ACCOUNT                    -->
+    <!-- 🔥 INFORMASI PEMBAYARAN - COD ONLY                           -->
     <!-- ============================================================ -->
     <div class="row">
         <div class="col-12">
             <div class="custom-card">
                 <div class="card-header-custom" style="background: <?= $status_bayar == 'Lunas' ? '#D1FAE5' : ($status_bayar == 'Ditolak' ? '#FEE2E2' : '#FEF3C7'); ?>;">
                     <h6>
-                        <i class="bi bi-credit-card mr-2"></i> 
+                        <i class="bi bi-cash-coin mr-2"></i> 
                         Informasi Pembayaran
                         <span class="status-badge <?= $bayar_class; ?> ml-2">
                             <?= $status_bayar; ?>
@@ -397,27 +394,19 @@
                 <div class="card-body-custom">
 
                     <?php if ($status_bayar == 'Belum Bayar' || $status_bayar == 'Pending' || $status_bayar == 'Menunggu Pembayaran'): ?>
-                        <!-- 🔥 STATUS: BELUM BAYAR / PENDING - VIRTUAL ACCOUNT -->
+                        <!-- 🔥 STATUS: BELUM BAYAR / PENDING - COD -->
                         <div class="alert alert-warning instruction-alert">
                             <div class="d-flex align-items-start">
                                 <i class="bi bi-info-circle mr-3 mt-1" style="font-size:1.3rem;"></i>
                                 <div>
-                                    <h6 class="mb-2" style="font-weight:700;">⏳ Menunggu Pembayaran</h6>
-                                    <p class="mb-2">Silakan lakukan pembayaran melalui Virtual Account berikut:</p>
-                                    
+                                    <h6 class="mb-2" style="font-weight:700;">🚚 Bayar di Tempat (COD)</h6>
+                                    <p class="mb-2">Pesanan Anda akan dikirim dan dibayar tunai saat barang diterima. Mohon siapkan uang pas sesuai total pembayaran berikut:</p>
+
                                     <div class="payment-info-box">
                                         <table class="table table-sm table-borderless mb-0">
                                             <tr>
-                                                <td width="160"><strong>Virtual Account</strong></td>
-                                                <td>: <span class="va-number">8888-1234-5678-<?= str_pad($transaksi['id_transaksi'], 4, '0', STR_PAD_LEFT); ?></span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Bank</strong></td>
-                                                <td>: <span class="bank-name">BCA</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Atas Nama</strong></td>
-                                                <td>: <span class="bank-name">POKTAN Liberchain</span></td>
+                                                <td width="160"><strong>Metode Bayar</strong></td>
+                                                <td>: <span class="bank-name">COD (Bayar di Tempat)</span></td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Total Pembayaran</strong></td>
@@ -425,13 +414,13 @@
                                             </tr>
                                         </table>
                                     </div>
-                                    
+
                                     <small class="text-muted mt-2 d-block">
-                                        <i class="bi bi-clock mr-1"></i> 
-                                        Pembayaran akan terverifikasi otomatis setelah Anda transfer ke Virtual Account di atas.
+                                        <i class="bi bi-clock mr-1"></i>
+                                        Status pembayaran akan diperbarui oleh kurir/admin setelah uang diterima saat pengiriman.
                                         <br>
                                         <i class="bi bi-info-circle mr-1"></i>
-                                        Pastikan nominal transfer sesuai dengan total pembayaran.
+                                        Pastikan ada orang yang dapat menerima pesanan dan melakukan pembayaran di alamat tujuan.
                                     </small>
                                 </div>
                             </div>
@@ -444,7 +433,7 @@
                                 <i class="bi bi-hourglass-split mr-3 mt-1" style="font-size:1.3rem;"></i>
                                 <div>
                                     <h6 class="mb-2" style="font-weight:700;">🔄 Pembayaran Sedang Diverifikasi</h6>
-                                    <p class="mb-0">Admin sedang memverifikasi pembayaran Anda. Mohon tunggu sebentar.</p>
+                                    <p class="mb-0">Admin sedang memverifikasi pembayaran COD Anda. Mohon tunggu sebentar.</p>
                                     <small class="text-muted mt-2 d-block">
                                         <i class="bi bi-clock mr-1"></i> Proses verifikasi maksimal 1x24 jam.
                                     </small>
@@ -459,7 +448,7 @@
                                 <i class="bi bi-check-circle-fill mr-3 mt-1" style="font-size:1.3rem;"></i>
                                 <div>
                                     <h6 class="mb-2" style="font-weight:700;">✅ Pembayaran Lunas</h6>
-                                    <p class="mb-0">Pembayaran Anda telah dikonfirmasi. Pesanan akan segera diproses.</p>
+                                    <p class="mb-0">Pembayaran COD Anda telah dikonfirmasi diterima. Pesanan akan segera diproses.</p>
                                     <small class="text-muted mt-2 d-block">
                                         <i class="bi bi-truck mr-1"></i> Status pesanan akan berubah menjadi "Diproses" setelah admin mengkonfirmasi.
                                     </small>
@@ -498,33 +487,22 @@
                         </div>
                     <?php endif; ?>
 
-                    <!-- 🔥 TAMPILKAN BUKTI YANG SUDAH DIUPLOAD (JIKA ADA) -->
+                    <!-- 🔥 TAMPILKAN BUKTI/KETERANGAN COD (JIKA ADA) -->
                     <?php if (!empty($bukti) && $bukti['status_verifikasi'] != 'Ditolak'): ?>
                     <div class="mt-3 p-3" style="background: var(--bg-cream); border-radius:10px;">
                         <div class="row">
                             <div class="col-md-6">
-                                <small class="text-muted">Bank</small>
-                                <div class="font-weight-bold"><?= $bukti['nama_bank'] ?? '-'; ?></div>
-                            </div>
-                            <div class="col-md-6">
-                                <small class="text-muted">Nama Pengirim</small>
+                                <small class="text-muted">Nama Penerima</small>
                                 <div class="font-weight-bold"><?= $bukti['nama_pengirim'] ?? '-'; ?></div>
                             </div>
                             <div class="col-md-6">
-                                <small class="text-muted">Tanggal Transfer</small>
+                                <small class="text-muted">Tanggal Diterima</small>
                                 <div class="font-weight-bold"><?= date('d/m/Y', strtotime($bukti['tanggal_transfer'] ?? date('Y-m-d'))); ?></div>
                             </div>
                             <div class="col-md-6">
-                                <small class="text-muted">Jumlah Transfer</small>
+                                <small class="text-muted">Jumlah Diterima</small>
                                 <div class="font-weight-bold">Rp <?= number_format($bukti['jumlah_transfer'] ?? 0, 0, ',', '.'); ?></div>
                             </div>
-                            <?php if (!empty($bukti['file_bukti'])): ?>
-                            <div class="col-12 mt-2">
-                                <a href="<?= base_url('uploads/bukti/' . $bukti['file_bukti']); ?>" target="_blank" class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-eye"></i> Lihat Bukti
-                                </a>
-                            </div>
-                            <?php endif; ?>
                         </div>
                     </div>
                     <?php endif; ?>
@@ -551,7 +529,7 @@
                     <div class="mt-3 pt-3 border-top" style="border-color: rgba(74,44,17,0.08);">
                         <small class="text-muted">
                             <i class="bi bi-info-circle mr-1"></i>
-                            <strong>Catatan:</strong> Pembayaran via Virtual Account akan terverifikasi otomatis. 
+                            <strong>Catatan:</strong> Pembayaran dilakukan secara tunai saat barang diterima (COD). 
                             Jika ada kendala, silakan hubungi customer service.
                         </small>
                     </div>
@@ -632,7 +610,7 @@
         markAllRead();
     });
 
-    console.log('✅ Halaman Detail Transaksi Pembeli siap digunakan!');
+    console.log('✅ Halaman Detail Transaksi Pembeli (COD) siap digunakan!');
 </script>
 </body>
 </html>

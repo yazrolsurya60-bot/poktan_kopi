@@ -4,9 +4,25 @@
 <!-- ============================================
      SCRIPTS
      ============================================ -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('<?= base_url('pwa/service_worker') ?>')
+                .then(function(registration) {
+                    console.log('[LiberChain PWA] ServiceWorker registered:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.warn('[LiberChain PWA] ServiceWorker registration failed:', error);
+                });
+        });
+    }
+    </script>
 
 <script>
     $(document).ready(function() {

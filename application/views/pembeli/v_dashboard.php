@@ -9,6 +9,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="LiberChain">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LiberChain">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#4A2C11">
+    <meta name="msapplication-TileColor" content="#FAF6F0">
+    <meta name="msapplication-TileImage" content="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    <link rel="manifest" href="<?= base_url('pwa/manifest') ?>">
+    <link rel="icon" type="image/png" sizes="192x192" href="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    <link rel="icon" type="image/png" sizes="512x512" href="<?= base_url('assets/images/pwa/icon-512x512.png') ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('assets/images/pwa/apple-touch-icon.png') ?>">
+    <link rel="apple-touch-icon" sizes="192x192" href="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    
     <style>
         :root {
             --roasted-brown: #4A2C11;
@@ -31,9 +47,24 @@
             overflow-x: hidden;
         }
 
-        /* ============================================
-           SIDEBAR
-           ============================================ */
+        /* ANIMASI GETAR LONCENG NOTIFIKASI */
+        @keyframes ring {
+            0% { transform: rotate(0); }
+            10% { transform: rotate(15deg); }
+            20% { transform: rotate(-10deg); }
+            30% { transform: rotate(12deg); }
+            40% { transform: rotate(-8deg); }
+            50% { transform: rotate(6deg); }
+            60% { transform: rotate(-4deg); }
+            70% { transform: rotate(0); }
+            100% { transform: rotate(0); }
+        }
+        .notif-btn.ring i {
+            animation: ring 0.8s ease-in-out infinite;
+            color: var(--amber-cream);
+        }
+
+        /* SIDEBAR */
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -42,7 +73,7 @@
             left: 0;
             background: linear-gradient(180deg, var(--dark-coffee) 0%, #1a0e04 100%);
             color: var(--bg-cream);
-            z-index: 100;
+            z-index: 1000;
             transition: var(--transition-smooth);
             box-shadow: 4px 0 25px rgba(44, 24, 8, 0.2);
             display: flex;
@@ -167,9 +198,7 @@
             border-color: rgba(230, 161, 92, 0.2);
         }
 
-        /* ============================================
-           MAIN CONTENT
-           ============================================ */
+        /* MAIN CONTENT */
         .main-content {
             margin-left: var(--sidebar-width);
             padding: 30px 40px 40px;
@@ -181,6 +210,7 @@
             border-bottom: 1px solid rgba(74, 44, 17, 0.08);
             padding-bottom: 20px;
             margin-bottom: 30px;
+            gap: 16px;
         }
 
         .page-header h2 {
@@ -195,9 +225,7 @@
             margin-top: 2px;
         }
 
-        /* ============================================
-           USER AVATAR - RAPI
-           ============================================ */
+        /* USER AVATAR */
         .user-avatar-wrapper {
             display: flex;
             align-items: center;
@@ -232,7 +260,7 @@
             font-weight: 600;
             font-size: 0.85rem;
             color: var(--dark-coffee);
-            max-width: 100px;
+            max-width: 120px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -247,9 +275,7 @@
             font-weight: 600;
         }
 
-        /* ============================================
-           NOTIFICATION BELL
-           ============================================ */
+        /* NOTIFICATION BELL & DROPDOWN */
         .notif-btn {
             position: relative;
             background: var(--card-white);
@@ -286,22 +312,19 @@
             border: 2px solid white;
         }
 
-        /* ============================================
-           NOTIFICATION DROPDOWN
-           ============================================ */
         .notif-dropdown {
             position: absolute;
             right: 0;
             top: calc(100% + 10px);
             width: 380px;
-            max-height: 400px;
+            max-height: 420px;
             background: var(--card-white);
             border-radius: var(--radius-card);
             box-shadow: var(--shadow-hover);
-            border: 1px solid rgba(74, 44, 17, 0.06);
+            border: 1px solid rgba(74, 44, 17, 0.08);
             overflow: hidden;
             display: none;
-            z-index: 50;
+            z-index: 9999;
         }
 
         .notif-dropdown.show {
@@ -327,6 +350,7 @@
             justify-content: space-between;
             align-items: center;
             font-weight: 600;
+            font-size: 0.85rem;
         }
 
         .notif-dropdown-header a {
@@ -367,30 +391,17 @@
             font-size: 0.9rem;
         }
 
-        .notif-item .notif-icon.success {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-        .notif-item .notif-icon.warning {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-        .notif-item .notif-icon.info {
-            background: #DBEAFE;
-            color: #1E40AF;
-        }
-        .notif-item .notif-icon.danger {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-        .notif-item .notif-icon.primary {
-            background: #EDE9FE;
-            color: #5B21B6;
-        }
+        .notif-item .notif-icon.success { background: #D1FAE5; color: #065F46; }
+        .notif-item .notif-icon.warning { background: #FEF3C7; color: #92400E; }
+        .notif-item .notif-icon.info { background: #DBEAFE; color: #1E40AF; }
+        .notif-item .notif-icon.danger { background: #FEE2E2; color: #991B1B; }
+        .notif-item .notif-icon.primary { background: #EDE9FE; color: #5B21B6; }
 
         .notif-item .notif-text {
             flex: 1;
             font-size: 0.85rem;
+            min-width: 0;
+            word-break: break-word;
         }
 
         .notif-item .notif-text .notif-time {
@@ -415,11 +426,10 @@
             padding: 2px 8px;
             border-radius: 10px;
             align-self: center;
+            flex-shrink: 0;
         }
 
-        /* ============================================
-           QUICK ACTION BUTTONS
-           ============================================ */
+        /* QUICK ACTION BUTTONS */
         .quick-action-btn {
             padding: 10px 16px;
             border: 1px solid rgba(74, 44, 17, 0.06);
@@ -429,18 +439,21 @@
             transition: var(--transition-smooth);
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.85rem;
             cursor: pointer;
             width: 100%;
             text-decoration: none;
+            text-align: center;
         }
 
         .quick-action-btn:hover {
             background: var(--bg-cream);
             border-color: var(--amber-cream);
-            transform: translateX(4px);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
             text-decoration: none;
             color: var(--dark-coffee);
         }
@@ -450,20 +463,21 @@
             color: var(--amber-cream);
         }
 
-        /* ============================================
-           KPI CARDS - RAPI & TIDAK DEMPET
-           ============================================ */
+        /* KPI CARDS */
         .stat-box {
             background: var(--card-white);
             border: 1px solid rgba(74, 44, 17, 0.06);
             border-radius: var(--radius-card);
-            padding: 24px 28px;
+            padding: 22px 24px;
             position: relative;
             box-shadow: var(--shadow-soft);
             transition: var(--transition-smooth);
             overflow: hidden;
             height: 100%;
-            min-height: 140px;
+            min-height: 130px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .stat-box:hover {
@@ -492,15 +506,13 @@
         }
 
         .stat-number {
-            font-size: 2rem;
+            font-size: 1.6rem;
             font-weight: 700;
             margin: 4px 0 2px;
             color: var(--dark-coffee);
             line-height: 1.2;
-        }
-
-        .stat-number-sm {
-            font-size: 1.5rem;
+            word-break: break-word;
+            padding-right: 10px;
         }
 
         .stat-change {
@@ -509,25 +521,21 @@
             margin-top: 4px;
         }
 
-        .stat-change.up {
-            color: #10b981;
-        }
-        .stat-change.down {
-            color: #EF4444;
-        }
+        .stat-change.up { color: #10b981; }
+        .stat-change.down { color: #EF4444; }
 
         .stat-badge {
             position: absolute;
             right: 20px;
             top: 20px;
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 12px;
             background: var(--bg-cream);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--roasted-brown);
             transition: var(--transition-smooth);
         }
@@ -536,9 +544,7 @@
             transform: scale(1.05) rotate(-3deg);
         }
 
-        /* ============================================
-           CUSTOM CARD
-           ============================================ */
+        /* CUSTOM CARD */
         .custom-card {
             background: var(--card-white);
             border: 1px solid rgba(74, 44, 17, 0.06);
@@ -572,18 +578,14 @@
             padding: 24px;
         }
 
-        /* ============================================
-           CHART
-           ============================================ */
+        /* CHART */
         .chart-container {
             position: relative;
-            height: 200px;
+            height: 220px;
             width: 100%;
         }
 
-        /* ============================================
-           TABLE
-           ============================================ */
+        /* TABLE RESPONSIF */
         .table-custom {
             font-size: 0.85rem;
         }
@@ -596,21 +598,21 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             padding: 12px 10px;
+            white-space: nowrap;
         }
 
         .table-custom tbody td {
             padding: 10px 10px;
             border-bottom: 1px solid rgba(74, 44, 17, 0.04);
             vertical-align: middle;
+            white-space: nowrap;
         }
 
         .table-custom tbody tr:hover {
             background: rgba(250, 246, 240, 0.3);
         }
 
-        /* ============================================
-           STATUS BADGE
-           ============================================ */
+        /* STATUS BADGE */
         .status-badge {
             padding: 4px 14px;
             border-radius: 20px;
@@ -619,30 +621,13 @@
             display: inline-block;
         }
 
-        .status-badge.pending {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-        .status-badge.processing {
-            background: #DBEAFE;
-            color: #1E40AF;
-        }
-        .status-badge.shipped, .status-badge.dikirim {
-            background: #EDE9FE;
-            color: #5B21B6;
-        }
-        .status-badge.complete, .status-badge.selesai {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-        .status-badge.cancelled, .status-badge.dibatalkan {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
+        .status-badge.pending { background: #FEF3C7; color: #92400E; }
+        .status-badge.processing { background: #DBEAFE; color: #1E40AF; }
+        .status-badge.shipped, .status-badge.dikirim { background: #EDE9FE; color: #5B21B6; }
+        .status-badge.complete, .status-badge.selesai { background: #D1FAE5; color: #065F46; }
+        .status-badge.cancelled, .status-badge.dibatalkan { background: #FEE2E2; color: #991B1B; }
 
-        /* ============================================
-           RECOMMENDATION PRODUCTS
-           ============================================ */
+        /* RECOMMENDATION PRODUCTS */
         .rec-product-card {
             background: #FFF;
             border: 1px solid rgba(74, 44, 17, 0.08);
@@ -651,6 +636,9 @@
             height: 100%;
             padding: 16px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .rec-product-card:hover {
@@ -724,6 +712,7 @@
             display: inline-block;
             text-decoration: none;
             border: none;
+            width: 100%;
         }
 
         .btn-beli-rec:hover {
@@ -732,18 +721,15 @@
             text-decoration: none;
         }
 
-        /* ============================================
-           HEADER RIGHT - RAPI
-           ============================================ */
+        /* HEADER RIGHT */
         .header-right {
             display: flex;
             align-items: center;
             gap: 16px;
+            position: relative;
         }
 
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
+        /* RESPONSIVE OPTIMIZED */
         @media (max-width: 991.98px) {
             .sidebar {
                 left: calc(-1 * var(--sidebar-width));
@@ -761,24 +747,28 @@
                 font-size: 1.3rem;
             }
             .stat-number {
-                font-size: 1.5rem;
+                font-size: 1.4rem;
             }
             .stat-box {
                 min-height: 120px;
                 padding: 18px 20px;
             }
             .rec-product-img-box {
-                height: 100px;
+                height: 120px;
             }
             .header-right {
                 gap: 10px;
             }
             .user-avatar-name {
-                max-width: 60px;
-                font-size: 0.75rem;
+                max-width: 90px;
+                font-size: 0.8rem;
             }
             .user-avatar-role {
                 display: none;
+            }
+            .notif-dropdown {
+                width: 340px;
+                right: 0;
             }
         }
 
@@ -787,45 +777,56 @@
                 padding: 16px 12px 20px;
             }
             .stat-box {
-                padding: 14px 16px;
-                min-height: 100px;
+                padding: 16px;
+                min-height: 110px;
             }
             .stat-number {
-                font-size: 1.2rem;
+                font-size: 1.25rem;
             }
             .stat-badge {
-                width: 32px;
-                height: 32px;
-                font-size: 0.9rem;
+                width: 34px;
+                height: 34px;
+                font-size: 0.95rem;
                 right: 14px;
                 top: 14px;
+            }
+            .custom-card .card-header-custom {
+                padding: 14px 16px;
             }
             .custom-card .card-body-custom {
                 padding: 16px;
             }
             .notif-dropdown {
+                position: fixed;
+                top: 70px;
+                left: 12px;
+                right: 12px;
                 width: calc(100vw - 24px);
-                right: -70px;
+                max-height: 80vh;
+            }
+            .notif-dropdown-list {
+                max-height: 55vh;
             }
             .rec-product-img-box {
-                height: 80px;
+                height: 100px;
             }
             .rec-product-name {
-                font-size: 0.75rem;
-                height: 32px;
+                font-size: 0.78rem;
+                height: 34px;
             }
             .rec-product-price {
-                font-size: 0.75rem;
+                font-size: 0.78rem;
             }
             .user-avatar-wrapper {
                 padding: 4px 10px 4px 6px;
+                gap: 6px;
             }
             .user-avatar-icon {
                 font-size: 1.4rem;
             }
             .user-avatar-name {
-                max-width: 50px;
-                font-size: 0.7rem;
+                max-width: 60px;
+                font-size: 0.72rem;
             }
             .header-right {
                 gap: 6px;
@@ -835,23 +836,20 @@
             }
         }
 
-        /* ============================================
-           SIDEBAR OVERLAY
-           ============================================ */
+        /* SIDEBAR OVERLAY */
         .sidebar-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 99;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            backdrop-filter: blur(2px);
         }
         .sidebar-overlay.active {
             display: block;
         }
 
-        /* ============================================
-           SCROLLBAR
-           ============================================ */
+        /* SCROLLBAR */
         .sidebar-menu-wrapper::-webkit-scrollbar,
         .notif-dropdown-list::-webkit-scrollbar {
             width: 3px;
@@ -865,26 +863,16 @@
             background: rgba(230, 161, 92, 0.3);
             border-radius: 10px;
         }
-
-        /* ============================================
-           UTILITY
-           ============================================ */
-        .text-amber {
-            color: var(--amber-cream);
-        }
-        .bg-amber-soft {
-            background: #FDF5ED;
-        }
-        .gap-2 {
-            gap: 8px;
-        }
-        .gap-3 {
-            gap: 16px;
-        }
     </style>
 </head>
 
 <body>
+
+    <!-- ELEMEN AUDIO NOTIFIKASI -->
+    <audio id="notifSound" preload="auto">
+        <source src="<?= base_url('assets/sounds/notifikasi.wav'); ?>" type="audio/wav">
+        <source src="<?= base_url('assets/sounds/notifikasi.mp3'); ?>" type="audio/mpeg">
+    </audio>
 
     <!-- SIDEBAR OVERLAY -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -938,9 +926,7 @@
     <!-- MAIN CONTENT -->
     <div class="main-content">
 
-        <!-- ==========================================
-        PAGE HEADER
-        ========================================== -->
+        <!-- PAGE HEADER -->
         <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
             <div>
                 <button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
@@ -972,7 +958,7 @@
 
                     <div class="notif-dropdown" id="notifDropdown">
                         <div class="notif-dropdown-header">
-                            <span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
+                            <span id="notifHeaderTitle"><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
                             <div>
                                 <?php if (isset($unread_count) && $unread_count > 0): ?>
                                     <a href="#" id="markAllReadBtn" class="mr-2" style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
@@ -1024,7 +1010,7 @@
                     </div>
                 </div>
 
-                <!-- USER AVATAR - RAPI & TIDAK DEMPET -->
+                <!-- USER AVATAR -->
                 <div class="user-avatar-wrapper" onclick="window.location.href='<?= base_url('pembeli/profil'); ?>'">
                     <?php 
                     $user_foto = $this->session->userdata('foto');
@@ -1042,9 +1028,7 @@
             </div>
         </div>
 
-        <!-- ==========================================
-        QUICK ACTION BUTTONS
-        ========================================== -->
+        <!-- QUICK ACTION BUTTONS -->
         <h5 class="font-weight-bold mb-3"
             style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
             <i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
@@ -1072,9 +1056,7 @@
             </div>
         </div>
 
-        <!-- ==========================================
-        KPI CARDS - RAPI & TIDAK DEMPET
-        ========================================== -->
+        <!-- KPI CARDS -->
         <div class="row mb-4">
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="stat-box">
@@ -1111,9 +1093,7 @@
             </div>
         </div>
 
-        <!-- ==========================================
-        REKOMENDASI PRODUK
-        ========================================== -->
+        <!-- REKOMENDASI PRODUK -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="custom-card">
@@ -1172,9 +1152,7 @@
             </div>
         </div>
 
-        <!-- ==========================================
-        RIWAYAT TRANSAKSI & GRAFIK
-        ========================================== -->
+        <!-- RIWAYAT TRANSAKSI & GRAFIK -->
         <div class="row">
             <div class="col-lg-8 mb-4">
                 <div class="custom-card">
@@ -1236,9 +1214,7 @@
             </div>
         </div>
 
-        <!-- ==========================================
-        SETTING NOTIFIKASI
-        ========================================== -->
+        <!-- SETTING NOTIFIKASI -->
         <div class="row">
             <div class="col-12">
                 <div class="custom-card">
@@ -1311,15 +1287,42 @@
 
     </div>
 
-    <!-- ==========================================
-    SCRIPTS
-    ========================================== -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <!-- SCRIPTS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- PWA Service Worker Registration -->
     <script>
-        // ============================================
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('<?= base_url('pwa/service_worker') ?>')
+                .then(function(registration) {
+                    console.log('[LiberChain PWA] ServiceWorker registered:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.warn('[LiberChain PWA] ServiceWorker registration failed:', error);
+                });
+        });
+    }
+    </script>
+    
+    <script>
+        // UNLOCK AUDIO BROWSER AUTOPLAY
+        let audioUnlocked = false;
+        document.addEventListener('click', function unlockAudio() {
+            if (!audioUnlocked) {
+                const sound = document.getElementById('notifSound');
+                if (sound) {
+                    sound.play().then(() => {
+                        sound.pause();
+                        sound.currentTime = 0;
+                        audioUnlocked = true;
+                    }).catch(() => {});
+                }
+            }
+        }, { once: true });
+
         // 1. SIDEBAR TOGGLE
-        // ============================================
         const sidebar = document.getElementById('sidebarMenu');
         const overlay = document.getElementById('sidebarOverlay');
         const toggleBtn = document.getElementById('sidebarToggle');
@@ -1330,12 +1333,8 @@
             document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
         }
 
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', toggleSidebar);
-        }
-        if (overlay) {
-            overlay.addEventListener('click', toggleSidebar);
-        }
+        if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+        if (overlay) overlay.addEventListener('click', toggleSidebar);
 
         document.addEventListener('click', function(e) {
             if (window.innerWidth > 991.98) return;
@@ -1346,9 +1345,7 @@
             }
         });
 
-        // ============================================
-        // 2. NOTIFICATION DROPDOWN
-        // ============================================
+        // 2. NOTIFICATION DROPDOWN TOGGLE
         const notifToggle = document.getElementById('notifToggle');
         const notifDropdown = document.getElementById('notifDropdown');
 
@@ -1365,9 +1362,7 @@
             }
         });
 
-        // ============================================
         // 3. MARK ALL READ
-        // ============================================
         function markAllRead() {
             if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
                 $.ajax({
@@ -1393,11 +1388,89 @@
             markAllRead();
         });
 
-        // ============================================
-        // 4. CHART.JS - GRAFIK BELANJA
-        // ============================================
-        let shoppingChart;
+        // 4. PLAY SOUND
+        function playNotifSound() {
+            const sound = document.getElementById('notifSound');
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(err => console.log('Autoplay prevented:', err));
+            }
+        }
 
+        // 5. REAL-TIME POLLING NOTIFIKASI (5 DETIK)
+        let lastUnreadCount = <?= $unread_count ?? 0; ?>;
+
+        function checkNotifications() {
+            $.ajax({
+                url: '<?= base_url('api/notifikasi/get'); ?>',
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    if (res.success) {
+                        const count = res.unread_count;
+                        const countEl = $('#notifCount');
+                        const notifBtn = $('#notifToggle');
+                        const headerTitle = $('#notifHeaderTitle');
+
+                        // Update Badge Angka
+                        if (count > 0) {
+                            countEl.text(count).show();
+                            if (headerTitle.length) headerTitle.text(count + ' Notifikasi Belum Dibaca');
+                        } else {
+                            countEl.hide();
+                            if (headerTitle.length) headerTitle.text('Semua Notifikasi');
+                        }
+
+                        // Jika ada notifikasi baru masuk
+                        if (count > lastUnreadCount) {
+                            playNotifSound();
+                            notifBtn.addClass('ring');
+                            setTimeout(() => notifBtn.removeClass('ring'), 2500);
+
+                            // Auto Render/Update isi Dropdown Notifikasi
+                            if (res.notifikasi && res.notifikasi.length > 0) {
+                                let html = '';
+                                const iconMap = {
+                                    'success': 'bi-check-circle-fill',
+                                    'warning': 'bi-exclamation-triangle-fill',
+                                    'danger': 'bi-x-circle-fill',
+                                    'info': 'bi-info-circle-fill',
+                                    'primary': 'bi-star-fill'
+                                };
+
+                                res.notifikasi.forEach(n => {
+                                    const iconType = n.icon || 'info';
+                                    const iconClass = iconMap[iconType] || 'bi-info-circle-fill';
+                                    const isUnread = (n.status_baca == 0 || n.status_baca == '0');
+
+                                    html += `
+                                        <a class="notif-item ${isUnread ? 'unread' : ''}" 
+                                           href="<?= base_url('pembeli/dashboard/read/'); ?>${n.id_notifikasi}">
+                                            <div class="notif-icon ${iconType}">
+                                                <i class="bi ${iconClass}"></i>
+                                            </div>
+                                            <div class="notif-text">
+                                                ${n.isi_notifikasi || n.judul || 'Notifikasi'}
+                                                <span class="notif-time">${n.tanggal_buat}</span>
+                                            </div>
+                                            ${isUnread ? '<span class="notif-badge-new">Baru</span>' : ''}
+                                        </a>
+                                    `;
+                                });
+                                $('#notifList').html(html);
+                            }
+                        }
+                        lastUnreadCount = count;
+                    }
+                }
+            });
+        }
+
+        // Jalankan Polling setiap 5 detik
+        setInterval(checkNotifications, 5000);
+
+        // 6. CHART.JS - GRAFIK BELANJA
+        let shoppingChart;
         function initChart() {
             const ctx = document.getElementById('shoppingChart')?.getContext('2d');
             if (!ctx) return;
@@ -1446,9 +1519,7 @@
             });
         }
 
-        // ============================================
-        // 5. CURRENT DATE TIME
-        // ============================================
+        // 7. CURRENT DATE TIME
         function updateDateTime() {
             const now = new Date();
             const options = {
@@ -1464,92 +1535,18 @@
                 el.textContent = '• ' + now.toLocaleDateString('id-ID', options);
             }
         }
-        updateDateTime();
-        setInterval(updateDateTime, 60000);
 
-        // ============================================
-        // 6. AUTO-REFRESH NOTIFICATION
-        // ============================================
-        let lastUnreadCount = <?= $unread_count ?? 0; ?>;
-
-        function refreshNotificationCount() {
-            $.get('<?= base_url('pembeli/dashboard/get_notifications_ajax'); ?>', function(response) {
-                if (response.success) {
-                    const currentCount = response.unread;
-                    const countEl = document.getElementById('notifCount');
-                    const notifBtn = document.getElementById('notifToggle');
-
-                    if (countEl) {
-                        if (currentCount > 0) {
-                            countEl.textContent = currentCount;
-                            countEl.style.display = 'flex';
-
-                            if (currentCount > lastUnreadCount) {
-                                playNotifSound();
-                                if (notifBtn) {
-                                    notifBtn.classList.add('ring');
-                                    setTimeout(function() {
-                                        notifBtn.classList.remove('ring');
-                                    }, 600);
-                                }
-                            }
-                        } else {
-                            countEl.style.display = 'none';
-                        }
-                    }
-                    lastUnreadCount = currentCount;
-                }
-            }).fail(function() {
-                console.log('⚠️ Gagal refresh notifikasi');
-            });
-        }
-
-        // ============================================
-        // 7. PLAY NOTIFICATION SOUND
-        // ============================================
-        function playNotifSound() {
-            const audio = document.getElementById('notifSound');
-            if (audio) {
-                audio.currentTime = 0;
-                audio.play().catch(function(e) {
-                    console.log('🔇 Sound play error:', e.message);
-                });
-            }
-        }
-
-        // Add audio element
-        const audioHtml = `
-            <audio id="notifSound" preload="auto">
-                <source src="<?= base_url('assets/sounds/notifikasi.wav'); ?>" type="audio/wav">
-            </audio>
-        `;
-        document.body.insertAdjacentHTML('beforeend', audioHtml);
-
-        // ============================================
         // 8. INITIALIZE ALL
-        // ============================================
         document.addEventListener('DOMContentLoaded', function() {
             initChart();
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
 
             const memberNameEl = document.getElementById('memberName');
             if (memberNameEl) {
                 memberNameEl.textContent = '<?= $this->session->userdata('nama') ?? 'Pembeli' ?>';
             }
         });
-
-        // Refresh notifikasi setiap 30 detik
-        setInterval(refreshNotificationCount, 30000);
-
-        console.log('✅ Dashboard Pembeli siap digunakan!');
-        console.log('📋 Fitur yang tersedia:');
-        console.log('   - KPI Cards (Rapi & Tidak Dempet)');
-        console.log('   - Rekomendasi Produk');
-        console.log('   - Riwayat Transaksi');
-        console.log('   - Grafik Belanja');
-        console.log('   - Quick Action');
-        console.log('   - Notifikasi Real-time');
-        console.log('   - Setting Notifikasi');
-        console.log('   - User Avatar (Rapi)');
     </script>
 
 </body>

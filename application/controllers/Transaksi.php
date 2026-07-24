@@ -144,13 +144,19 @@ class Transaksi extends CI_Controller {
         
         $data['subtotal'] = $this->Keranjang_model->total_harga($id_user, $session_id);
         $data['user'] = $id_user ? $this->User_model->get_by_id($id_user) : null;
-        $data['kota'] = ['Pontianak', 'Sambas'];
+        
+        // 🔥 FIX: Ambil kota tujuan dari database (Sambas sebagai kota asal)
+        $data['kota'] = $this->Transaksi_model->get_kota_tujuan_dari_sambas();
+        
+        // 🔥 FIX: Kirim kota asal ke view
+        $data['kota_asal'] = 'Sambas';
         
         $this->load->view('transaksi/checkout', $data);
     }
 
     public function hitung_ongkir() {
-        $kota_asal = $this->input->post('kota_asal');
+        // 🔥 FIX: Hardcode kota asal = SAMBAS
+        $kota_asal = 'Sambas';  // <-- UBAH DARI 'Pontianak' KE 'Sambas'
         $kota_tujuan = $this->input->post('kota_tujuan');
 
         $hasil = $this->Transaksi_model->hitung_ongkir_server($kota_asal, $kota_tujuan);
@@ -160,6 +166,7 @@ class Transaksi extends CI_Controller {
                 'status' => 'success',
                 'tarif' => $hasil['ongkir'],
                 'estimasi' => $hasil['estimasi'],
+                'kota_asal' => 'Sambas', // 🔥 KIRIM KOTA ASAL
                 'tarif_formatted' => 'Rp ' . number_format($hasil['ongkir'], 0, ',', '.')
             ]);
         } else {
@@ -206,15 +213,14 @@ class Transaksi extends CI_Controller {
         // ============================================
         $subtotal = 0;
         foreach ($cart_items as $item) {
-            // Pastikan harga_satuan selalu ada (fallback ke harga_produk)
             $harga = isset($item['harga_satuan']) ? $item['harga_satuan'] : ($item['harga_produk'] ?? 0);
             $subtotal += $harga * $item['jumlah'];
         }
 
         // ============================================
-        // HITUNG ONGKIR
+        // 🔥 FIX: HITUNG ONGKIR DARI SAMBAS
         // ============================================
-        $kota_asal = 'Pontianak';
+        $kota_asal = 'Sambas';  // <-- UBAH DARI 'Pontianak' KE 'Sambas'
         $kota_tujuan = $this->input->post('kota_kirim');
         $hasil_ongkir = $this->Transaksi_model->hitung_ongkir_server($kota_asal, $kota_tujuan);
 
