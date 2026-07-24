@@ -6,7 +6,7 @@ class Laporan extends CI_Controller {
     public function __construct() {
         parent::__construct();
 
-        // Cek login (Modul 1 Auth)
+        // Cek login & role Admin
         if (!$this->session->userdata('id_user')) {
             redirect('auth/login');
         }
@@ -31,8 +31,12 @@ class Laporan extends CI_Controller {
     public function index() {
         $id_user = $this->session->userdata('id_user');
 
+        $data['title']        = 'Analisis & Laporan - Sistem Supply Chain Kopi';
+        $data['title_page']   = 'Analisis & Laporan';
+        $data['subtitle']     = 'Ringkasan data bisnis dan analitik Poktan Liberchain';
         $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role']         = 'Admin';
 
         $data['kpi']        = $this->Laporan_model->get_kpi_laporan();
         $data['penjualan']  = $this->Laporan_model->get_laporan_penjualan();
@@ -50,15 +54,22 @@ class Laporan extends CI_Controller {
 
         $data['filter_status'] = '';
 
+        $this->load->view('templates/admin/header', $data);
+        $this->load->view('templates/admin/sidebar', $data);
         $this->load->view('admin/v_laporan', $data);
+        $this->load->view('templates/admin/footer');
     }
 
     public function filter() {
         $id_user = $this->session->userdata('id_user');
         $filter  = ['status' => $this->input->post('status') ?? 'semua'];
 
+        $data['title']        = 'Analisis & Laporan - Sistem Supply Chain Kopi';
+        $data['title_page']   = 'Analisis & Laporan';
+        $data['subtitle']     = 'Ringkasan data bisnis dan analitik Poktan Liberchain';
         $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role']         = 'Admin';
 
         $data['kpi']        = $this->Laporan_model->get_kpi_laporan();
         $data['penjualan']  = $this->Laporan_model->get_laporan_penjualan($filter);
@@ -75,7 +86,11 @@ class Laporan extends CI_Controller {
         $data['produk_terlaris'] = $this->Laporan_model->get_produk_terlaris(0);
 
         $data['filter_status'] = $filter['status'];
+
+        $this->load->view('templates/admin/header', $data);
+        $this->load->view('templates/admin/sidebar', $data);
         $this->load->view('admin/v_laporan', $data);
+        $this->load->view('templates/admin/footer');
     }
 
     public function export_excel() {
@@ -101,9 +116,8 @@ class Laporan extends CI_Controller {
 
     public function print_pdf() {
         $tab    = $this->input->get('tab') ?? 'penjualan';
-        $poktan = (int)($this->input->get('poktan') ?? 0); // 1 = Harum Manis, 2 = Batu Layar
+        $poktan = (int)($this->input->get('poktan') ?? 0);
 
-        // Tanggal realtime format Indonesia
         $nm_bulan = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',
                      7=>'Juli',8=>'Agustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
         $nm_hari  = ['Sunday'=>'Minggu','Monday'=>'Senin','Tuesday'=>'Selasa',
@@ -111,7 +125,6 @@ class Laporan extends CI_Controller {
         $data['tanggal'] = $nm_hari[date('l')] . ', ' . date('d') . ' ' . $nm_bulan[(int)date('m')] . ' ' . date('Y');
         $data['jam']     = date('H:i') . ' WIB';
 
-        // Info Poktan
         $poktan_list = [
             0 => ['nama' => 'Poktan Liberchain', 'nama_singkat' => 'POKTAN LIBERCHAIN',
                   'alamat' => 'Sistem Manajemen Supply Chain Kopi Terpadu', 'lokasi' => 'Sambas'],

@@ -57,7 +57,7 @@
 			left: 0;
 			background: linear-gradient(180deg, var(--dark-coffee) 0%, #1a0e04 100%);
 			color: var(--bg-cream);
-			z-index: 100;
+			z-index: 1000;
 			transition: var(--transition-smooth);
 			box-shadow: 4px 0 25px rgba(44, 24, 8, 0.2);
 			display: flex;
@@ -130,20 +130,9 @@
 			transition: var(--transition-smooth);
 		}
 
-		.menu-item a .menu-badge.danger {
-			background: #EF4444;
-			color: white;
-		}
-
-		.menu-item a .menu-badge.warning {
-			background: #F59E0B;
-			color: white;
-		}
-
-		.menu-item a .menu-badge.success {
-			background: #10B981;
-			color: white;
-		}
+		.menu-item a .menu-badge.danger { background: #EF4444; color: white; }
+		.menu-item a .menu-badge.warning { background: #F59E0B; color: white; }
+		.menu-item a .menu-badge.success { background: #10B981; color: white; }
 
 		.menu-item.active a,
 		.menu-item a:hover {
@@ -213,6 +202,7 @@
 			justify-content: space-between;
 			align-items: center;
 			flex-wrap: wrap;
+			gap: 16px;
 		}
 
 		.page-header h2 {
@@ -236,6 +226,7 @@
 			align-items: center;
 			gap: 12px;
 			flex-shrink: 0;
+			position: relative;
 		}
 
 		/* ============================================ */
@@ -276,6 +267,7 @@
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
+			max-width: 110px;
 		}
 
 		.user-badge .user-role {
@@ -323,20 +315,20 @@
 			border: 2px solid white;
 		}
 
-		/* --- NOTIFICATION DROPDOWN --- */
+		/* --- NOTIFICATION DROPDOWN RESPONSIF --- */
 		.notif-dropdown {
 			position: absolute;
 			right: 0;
 			top: calc(100% + 10px);
 			width: 380px;
-			max-height: 400px;
+			max-height: 420px;
 			background: var(--card-white);
 			border-radius: var(--radius-card);
 			box-shadow: var(--shadow-hover);
-			border: 1px solid rgba(74, 44, 17, 0.06);
+			border: 1px solid rgba(74, 44, 17, 0.08);
 			overflow: hidden;
 			display: none;
-			z-index: 50;
+			z-index: 9999;
 		}
 
 		.notif-dropdown.show {
@@ -345,15 +337,8 @@
 		}
 
 		@keyframes slideDown {
-			from {
-				opacity: 0;
-				transform: translateY(-10px);
-			}
-
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
+			from { opacity: 0; transform: translateY(-10px); }
+			to { opacity: 1; transform: translateY(0); }
 		}
 
 		.notif-dropdown-header {
@@ -363,6 +348,7 @@
 			justify-content: space-between;
 			align-items: center;
 			font-weight: 600;
+			font-size: 0.85rem;
 		}
 
 		.notif-dropdown-header a {
@@ -406,29 +392,16 @@
 			font-size: 0.9rem;
 		}
 
-		.notif-item .notif-icon.success {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.notif-item .notif-icon.warning {
-			background: #FEF3C7;
-			color: #92400E;
-		}
-
-		.notif-item .notif-icon.info {
-			background: #DBEAFE;
-			color: #1E40AF;
-		}
-
-		.notif-item .notif-icon.danger {
-			background: #FEE2E2;
-			color: #991B1B;
-		}
+		.notif-item .notif-icon.success { background: #D1FAE5; color: #065F46; }
+		.notif-item .notif-icon.warning { background: #FEF3C7; color: #92400E; }
+		.notif-item .notif-icon.info { background: #DBEAFE; color: #1E40AF; }
+		.notif-item .notif-icon.danger { background: #FEE2E2; color: #991B1B; }
 
 		.notif-item .notif-text {
 			flex: 1;
 			font-size: 0.85rem;
+			min-width: 0;
+			word-break: break-word;
 		}
 
 		.notif-item .notif-text .notif-time {
@@ -453,23 +426,7 @@
 			padding: 2px 8px;
 			border-radius: 10px;
 			align-self: center;
-		}
-
-		/* ============================================ */
-		/* SCROLLBAR NOTIFIKASI */
-		/* ============================================ */
-
-		.notif-dropdown-list::-webkit-scrollbar {
-			width: 3px;
-		}
-
-		.notif-dropdown-list::-webkit-scrollbar-track {
-			background: transparent;
-		}
-
-		.notif-dropdown-list::-webkit-scrollbar-thumb {
-			background: rgba(230, 161, 92, 0.3);
-			border-radius: 10px;
+			flex-shrink: 0;
 		}
 
 		/* --- ACTION CARDS --- */
@@ -557,6 +514,11 @@
 			box-shadow: var(--shadow-soft);
 			transition: var(--transition-smooth);
 			overflow: hidden;
+			height: 100%;
+			min-height: 130px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
 		}
 
 		.stat-box:hover {
@@ -581,14 +543,18 @@
 			text-transform: uppercase;
 			color: var(--text-secondary);
 			letter-spacing: 0.7px;
+			line-height: 1.3;
 		}
 
 		.stat-num {
-			font-size: 1.7rem;
+			font-size: 1.6rem;
 			font-weight: 700;
-			margin-top: 6px;
+			margin-top: 4px;
 			margin-bottom: 0;
 			color: var(--dark-coffee);
+			word-break: break-word;
+			padding-right: 10px;
+			line-height: 1.2;
 		}
 
 		.stat-change {
@@ -597,26 +563,21 @@
 			margin-top: 4px;
 		}
 
-		.stat-change.up {
-			color: #10b981;
-		}
-
-		.stat-change.down {
-			color: #EF4444;
-		}
+		.stat-change.up { color: #10b981; }
+		.stat-change.down { color: #EF4444; }
 
 		.stat-badge {
 			position: absolute;
 			right: 20px;
 			top: 20px;
-			width: 44px;
-			height: 44px;
+			width: 42px;
+			height: 42px;
 			border-radius: 12px;
 			background: var(--bg-cream);
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: 1.2rem;
+			font-size: 1.1rem;
 			color: var(--roasted-brown);
 			transition: var(--transition-smooth);
 		}
@@ -633,6 +594,7 @@
 			box-shadow: var(--shadow-soft);
 			transition: var(--transition-smooth);
 			overflow: hidden;
+			height: 100%;
 		}
 
 		.custom-card:hover {
@@ -665,7 +627,7 @@
 			width: 100%;
 		}
 
-		/* --- TABEL --- */
+		/* --- TABEL RESPONSIF --- */
 		.table-custom {
 			font-size: 0.85rem;
 		}
@@ -678,12 +640,14 @@
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
 			padding: 10px 8px;
+			white-space: nowrap;
 		}
 
 		.table-custom tbody td {
 			padding: 10px 8px;
 			border-bottom: 1px solid rgba(74, 44, 17, 0.04);
 			vertical-align: middle;
+			white-space: nowrap;
 		}
 
 		.table-custom tbody tr:hover {
@@ -696,47 +660,17 @@
 			border-radius: 20px;
 			font-size: 0.7rem;
 			font-weight: 600;
+			display: inline-block;
 		}
 
-		.status-badge.pending {
-			background: #FEF3C7;
-			color: #92400E;
-		}
-
-		.status-badge.processing {
-			background: #DBEAFE;
-			color: #1E40AF;
-		}
-
-		.status-badge.delivery {
-			background: #EDE9FE;
-			color: #5B21B6;
-		}
-
-		.status-badge.complete {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.status-badge.cancelled {
-			background: #FEE2E2;
-			color: #991B1B;
-		}
-
-		.status-badge.stok_aman {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.status-badge.stok_tipis {
-			background: #FEF3C7;
-			color: #92400E;
-		}
-
-		.status-badge.stok_habis {
-			background: #FEE2E2;
-			color: #991B1B;
-		}
+		.status-badge.pending { background: #FEF3C7; color: #92400E; }
+		.status-badge.processing { background: #DBEAFE; color: #1E40AF; }
+		.status-badge.delivery { background: #EDE9FE; color: #5B21B6; }
+		.status-badge.complete { background: #D1FAE5; color: #065F46; }
+		.status-badge.cancelled { background: #FEE2E2; color: #991B1B; }
+		.status-badge.stok_aman { background: #D1FAE5; color: #065F46; }
+		.status-badge.stok_tipis { background: #FEF3C7; color: #92400E; }
+		.status-badge.stok_habis { background: #FEE2E2; color: #991B1B; }
 
 		/* --- QUICK ACTION BUTTONS --- */
 		.quick-action-btn {
@@ -777,6 +711,7 @@
 			font-size: 1.1rem;
 			color: var(--amber-cream);
 			transition: var(--transition-smooth);
+			flex-shrink: 0;
 		}
 
 		.quick-action-btn:hover .q-icon {
@@ -786,6 +721,9 @@
 
 		.quick-action-btn .q-text {
 			flex: 1;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 
 		.quick-action-btn .q-arrow {
@@ -876,26 +814,12 @@
 			opacity: 1;
 		}
 
-		.toast-item.success {
-			background: #065F46;
-		}
+		.toast-item.success { background: #065F46; }
+		.toast-item.error { background: #991B1B; }
+		.toast-item.warning { background: #92400E; }
+		.toast-item.info { background: #1E40AF; }
 
-		.toast-item.error {
-			background: #991B1B;
-		}
-
-		.toast-item.warning {
-			background: #92400E;
-		}
-
-		.toast-item.info {
-			background: #1E40AF;
-		}
-
-		/* ============================================ */
-		/* RESPONSIVE */
-		/* ============================================ */
-
+		/* RESPONSIVE OPTIMIZATION */
 		@media (max-width: 991.98px) {
 			.sidebar {
 				left: calc(-1 * var(--sidebar-width));
@@ -917,7 +841,7 @@
 			}
 
 			.stat-num {
-				font-size: 1.3rem;
+				font-size: 1.35rem;
 			}
 
 			.action-card {
@@ -937,8 +861,8 @@
 			}
 
 			.notif-dropdown {
-				width: calc(100vw - 32px);
-				right: -60px;
+				width: 340px;
+				right: 0;
 			}
 
 			.user-badge {
@@ -951,11 +875,11 @@
 			}
 
 			.user-badge .user-name {
-				font-size: 0.7rem;
+				font-size: 0.75rem;
 			}
 
 			.user-badge .user-role {
-				font-size: 0.5rem;
+				font-size: 0.55rem;
 			}
 
 			.header-right {
@@ -963,7 +887,7 @@
 			}
 
 			.quick-action-btn {
-				padding: 10px 14px;
+				padding: 10px 12px;
 				font-size: 0.8rem;
 			}
 
@@ -971,10 +895,6 @@
 				width: 32px;
 				height: 32px;
 				font-size: 0.9rem;
-			}
-
-			.sidebar-overlay.active {
-				display: block;
 			}
 		}
 
@@ -984,19 +904,24 @@
 			}
 
 			.stat-box {
-				padding: 16px 18px;
+				padding: 16px;
+				min-height: 110px;
 			}
 
 			.stat-num {
-				font-size: 1.1rem;
+				font-size: 1.15rem;
 			}
 
 			.stat-badge {
-				width: 36px;
-				height: 36px;
-				font-size: 1rem;
+				width: 34px;
+				height: 34px;
+				font-size: 0.95rem;
 				right: 14px;
 				top: 14px;
+			}
+
+			.custom-card .card-header-custom {
+				padding: 14px 16px;
 			}
 
 			.custom-card .card-body-custom {
@@ -1004,13 +929,21 @@
 			}
 
 			.notif-dropdown {
+				position: fixed;
+				top: 70px;
+				left: 12px;
+				right: 12px;
 				width: calc(100vw - 24px);
-				right: -70px;
+				max-height: 80vh;
+			}
+
+			.notif-dropdown-list {
+				max-height: 55vh;
 			}
 
 			.user-badge {
 				padding: 4px 8px;
-				min-width: 60px;
+				min-width: auto;
 				gap: 5px;
 			}
 
@@ -1019,7 +952,8 @@
 			}
 
 			.user-badge .user-name {
-				font-size: 0.6rem;
+				font-size: 0.65rem;
+				max-width: 60px;
 			}
 
 			.user-badge .user-role {
@@ -1031,7 +965,7 @@
 			}
 
 			.quick-action-btn {
-				padding: 8px 12px;
+				padding: 8px 10px;
 				font-size: 0.75rem;
 				gap: 8px;
 			}
@@ -1041,6 +975,16 @@
 				height: 28px;
 				font-size: 0.8rem;
 			}
+
+			.toast-container {
+				left: 12px;
+				right: 12px;
+				bottom: 12px;
+			}
+
+			.toast-item {
+				max-width: 100%;
+			}
 		}
 
 		/* SIDEBAR OVERLAY */
@@ -1048,8 +992,9 @@
 			display: none;
 			position: fixed;
 			inset: 0;
-			background: rgba(0, 0, 0, 0.4);
-			z-index: 99;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 999;
+			backdrop-filter: blur(2px);
 		}
 
 		.sidebar-overlay.active {
@@ -1073,58 +1018,29 @@
 			border-radius: 10px;
 		}
 
-		/* ============================================ */
 		/* 🔔 NOTIFIKASI ANIMASI */
-		/* ============================================ */
-
-		@keyframes notifPulse {
-
-			0%,
-			100% {
-				transform: scale(1);
-			}
-
-			30% {
-				transform: scale(1.5);
-				background: #EF4444;
-			}
-
-			60% {
-				transform: scale(0.9);
-			}
-		}
-
 		@keyframes bellRing {
-
-			0%,
-			100% {
-				transform: rotate(0);
-			}
-
-			25% {
-				transform: rotate(10deg);
-			}
-
-			50% {
-				transform: rotate(-10deg);
-			}
-
-			75% {
-				transform: rotate(5deg);
-			}
+			0%, 100% { transform: rotate(0); }
+			20% { transform: rotate(15deg); }
+			40% { transform: rotate(-10deg); }
+			60% { transform: rotate(8deg); }
+			80% { transform: rotate(-4deg); }
 		}
 
-		.notif-dot.pulse {
-			animation: notifPulse 0.6s ease 3;
-		}
-
-		.notif-btn.ring {
-			animation: bellRing 0.5s ease 1;
+		.notif-btn.ring i {
+			animation: bellRing 0.8s ease-in-out infinite;
+			color: var(--amber-cream);
 		}
 	</style>
 </head>
 
 <body>
+
+	<!-- ELEMEN AUDIO NOTIFIKASI -->
+	<audio id="notifSound" preload="auto">
+		<source src="<?= base_url('assets/sounds/notifikasi.wav'); ?>" type="audio/wav">
+		<source src="<?= base_url('assets/sounds/notifikasi.mp3'); ?>" type="audio/mpeg">
+	</audio>
 
 	<!-- SIDEBAR OVERLAY -->
 	<div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -1205,7 +1121,7 @@
 					</button>
 					<div class="notif-dropdown" id="notifDropdown">
 						<div class="notif-dropdown-header">
-							<span><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
+							<span id="notifHeaderTitle"><?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?></span>
 							<a href="<?= base_url('petani/dashboard/history'); ?>"
 								style="font-size:0.75rem; color: var(--amber-cream); font-weight:500; text-decoration:none;">Lihat
 								Semua</a>
@@ -1229,9 +1145,8 @@
 											<i class="bi <?= $icon_class; ?>"></i>
 										</div>
 										<div class="notif-text">
-											<?= htmlspecialchars($n['isi_notifikasi']); ?>
-											<span
-												class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
+											<?= htmlspecialchars($n['isi_notifikasi'] ?? $n['judul'] ?? 'Notifikasi'); ?>
+											<span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
 										</div>
 										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
 											<span class="notif-badge-new">Baru</span>
@@ -1270,7 +1185,7 @@
 			</div>
 		</div>
 
-		<!-- QUICK ACTION BUTTONS - TANPA TUGASKAN KURIR -->
+		<!-- QUICK ACTION BUTTONS -->
 		<h5 class="font-weight-bold mb-3"
 			style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.7px; text-transform: uppercase;">
 			<i class="bi bi-lightning-fill text-warning mr-1"></i> Aksi Cepat
@@ -1306,7 +1221,7 @@
 			</div>
 		</div>
 
-		<!-- KPI CARDS - DATA REAL -->
+		<!-- KPI CARDS -->
 		<div class="row mb-4">
 			<div class="col-xl-3 col-md-6 mb-4">
 				<div class="stat-box">
@@ -1351,7 +1266,6 @@
 
 		<!-- GRAFIK & PRODUK -->
 		<div class="row">
-			<!-- GRAFIK PANEN - DATA REAL -->
 			<div class="col-lg-8 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1373,7 +1287,6 @@
 				</div>
 			</div>
 
-			<!-- TOP PRODUK TERJUAL - DATA REAL -->
 			<div class="col-lg-4 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1408,7 +1321,6 @@
 
 		<!-- PESANAN MASUK & STOK -->
 		<div class="row">
-			<!-- PESANAN MASUK TERBARU - DATA REAL -->
 			<div class="col-lg-6 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1448,7 +1360,6 @@
 				</div>
 			</div>
 
-			<!-- PERINGATAN STOK - DATA REAL -->
 			<div class="col-lg-6 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1506,7 +1417,6 @@
 
 		<!-- RINGKASAN PRODUK & SETTING NOTIFIKASI -->
 		<div class="row">
-			<!-- RINGKASAN PRODUK - PENGGANTI JADWAL PANEN -->
 			<div class="col-lg-6 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1515,7 +1425,6 @@
 					</div>
 					<div class="card-body-custom">
 						<?php
-						// Ambil 3 produk terbaru dari database
 						$this->db->where('id_user', $id_user);
 						$this->db->limit(3);
 						$this->db->order_by('id_produk', 'DESC');
@@ -1565,7 +1474,6 @@
 				</div>
 			</div>
 
-			<!-- SETTING NOTIFIKASI -->
 			<div class="col-lg-6 mb-4">
 				<div class="custom-card">
 					<div class="card-header-custom">
@@ -1574,18 +1482,16 @@
 					</div>
 					<div class="card-body-custom">
 						<?php
-						// 🔴 DEFAULT SETTINGS UNTUK PETANI - LENGKAP 7 ITEM
 						$default_settings = [
-							'notif_transaksi' => 1,   // Pesanan Baru
-							'notif_pembayaran' => 1,  // Konfirmasi Bayar
-							'notif_stok' => 1,        // Peringatan Stok
-							'notif_kurir' => 1,       // Status Kiriman
-							'notif_panen' => 0,       // 🔴 JADWAL PANEN DINONAKTIFKAN
-							'notif_laporan' => 0,     // Laporan Bulanan
-							'notif_sistem' => 1       // Update Sistem
+							'notif_transaksi' => 1,
+							'notif_pembayaran' => 1,
+							'notif_stok' => 1,
+							'notif_kurir' => 1,
+							'notif_panen' => 0,
+							'notif_laporan' => 0,
+							'notif_sistem' => 1
 						];
 
-						// 🔴 GABUNGKAN DENGAN DATA DARI DATABASE
 						if (!empty($settings)) {
 							foreach ($default_settings as $key => $value) {
 								if (isset($settings[$key])) {
@@ -1596,7 +1502,6 @@
 						?>
 						<form method="POST" action="<?= base_url('petani/dashboard/settings'); ?>" id="settingsForm">
 							<div class="row">
-								<!-- Pesanan Baru -->
 								<div class="col-md-6 col-6 mb-2">
 									<div class="custom-control custom-switch">
 										<input type="checkbox" class="custom-control-input" id="notif_transaksi" name="notif_transaksi"
@@ -1604,7 +1509,6 @@
 										<label class="custom-control-label" for="notif_transaksi" style="font-size:0.85rem;">Pesanan Baru</label>
 									</div>
 								</div>
-								<!-- Konfirmasi Bayar -->
 								<div class="col-md-6 col-6 mb-2">
 									<div class="custom-control custom-switch">
 										<input type="checkbox" class="custom-control-input" id="notif_pembayaran" name="notif_pembayaran"
@@ -1612,7 +1516,6 @@
 										<label class="custom-control-label" for="notif_pembayaran" style="font-size:0.85rem;">Konfirmasi Bayar</label>
 									</div>
 								</div>
-								<!-- Peringatan Stok -->
 								<div class="col-md-6 col-6 mb-2">
 									<div class="custom-control custom-switch">
 										<input type="checkbox" class="custom-control-input" id="notif_stok" name="notif_stok"
@@ -1620,7 +1523,6 @@
 										<label class="custom-control-label" for="notif_stok" style="font-size:0.85rem;">Peringatan Stok</label>
 									</div>
 								</div>
-								<!-- Status Kiriman -->
 								<div class="col-md-6 col-6 mb-2">
 									<div class="custom-control custom-switch">
 										<input type="checkbox" class="custom-control-input" id="notif_kurir" name="notif_kurir"
@@ -1628,7 +1530,6 @@
 										<label class="custom-control-label" for="notif_kurir" style="font-size:0.85rem;">Status Kiriman</label>
 									</div>
 								</div>
-								<!-- Update Sistem -->
 								<div class="col-md-6 col-6 mb-2">
 									<div class="custom-control custom-switch">
 										<input type="checkbox" class="custom-control-input" id="notif_sistem" name="notif_sistem"
@@ -1669,9 +1570,22 @@
 		</script>
 		
 		<script>
-			// ============================================
+			// UNLOCK AUDIO BROWSER AUTOPLAY
+			let audioUnlocked = false;
+			document.addEventListener('click', function unlockAudio() {
+				if (!audioUnlocked) {
+					const sound = document.getElementById('notifSound');
+					if (sound) {
+						sound.play().then(() => {
+							sound.pause();
+							sound.currentTime = 0;
+							audioUnlocked = true;
+						}).catch(() => {});
+					}
+				}
+			}, { once: true });
+
 			// 1. SIDEBAR TOGGLE
-			// ============================================
 			const sidebar = document.getElementById('sidebarMenu');
 			const overlay = document.getElementById('sidebarOverlay');
 			const toggleBtn = document.getElementById('sidebarToggle');
@@ -1682,12 +1596,8 @@
 				document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
 			}
 
-			if (toggleBtn) {
-				toggleBtn.addEventListener('click', toggleSidebar);
-			}
-			if (overlay) {
-				overlay.addEventListener('click', toggleSidebar);
-			}
+			if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+			if (overlay) overlay.addEventListener('click', toggleSidebar);
 
 			document.addEventListener('click', function(e) {
 				if (window.innerWidth > 991.98) return;
@@ -1698,9 +1608,7 @@
 				}
 			});
 
-			// ============================================
 			// 2. NOTIFICATION DROPDOWN
-			// ============================================
 			const notifToggle = document.getElementById('notifToggle');
 			const notifDropdown = document.getElementById('notifDropdown');
 
@@ -1717,9 +1625,7 @@
 				}
 			});
 
-			// ============================================
 			// 3. TOAST NOTIFICATION
-			// ============================================
 			function showToast(message, type = 'success') {
 				const container = document.getElementById('toastContainer');
 				if (!container) return;
@@ -1729,21 +1635,15 @@
 				toast.textContent = message;
 				container.appendChild(toast);
 
-				setTimeout(() => {
-					toast.classList.add('show');
-				}, 100);
+				setTimeout(() => toast.classList.add('show'), 100);
 
 				setTimeout(() => {
 					toast.classList.remove('show');
-					setTimeout(() => {
-						toast.remove();
-					}, 400);
+					setTimeout(() => toast.remove(), 400);
 				}, 3000);
 			}
 
-			// ============================================
 			// 4. MARK ALL READ
-			// ============================================
 			function markAllRead() {
 				if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
 					$.ajax({
@@ -1764,9 +1664,84 @@
 				}
 			}
 
-			// ============================================
-			// 5. CHART.JS - GRAFIK PANEN (DATA REAL)
-			// ============================================
+			// 5. PLAY SOUND NOTIFIKASI
+			function playNotifSound() {
+				const sound = document.getElementById('notifSound');
+				if (sound) {
+					sound.currentTime = 0;
+					sound.play().catch(err => console.log('Autoplay prevented:', err));
+				}
+			}
+
+			// 6. REAL-TIME POLLING NOTIFIKASI (5 DETIK)
+			let lastUnreadCount = <?= $unread_count ?? 0; ?>;
+
+			function checkNotifications() {
+				$.ajax({
+					url: '<?= base_url('api/notifikasi/get'); ?>',
+					type: 'GET',
+					dataType: 'json',
+					success: function(res) {
+						if (res.success) {
+							const count = res.unread_count;
+							const countEl = $('#notifCount');
+							const notifBtn = $('#notifToggle');
+							const headerTitle = $('#notifHeaderTitle');
+
+							if (count > 0) {
+								countEl.text(count).show();
+								if (headerTitle.length) headerTitle.text(count + ' Notifikasi Belum Dibaca');
+							} else {
+								countEl.hide();
+								if (headerTitle.length) headerTitle.text('Semua Notifikasi');
+							}
+
+							if (count > lastUnreadCount) {
+								playNotifSound();
+								notifBtn.addClass('ring');
+								setTimeout(() => notifBtn.removeClass('ring'), 2500);
+
+								if (res.notifikasi && res.notifikasi.length > 0) {
+									let html = '';
+									const iconMap = {
+										'success': 'bi-check-circle-fill',
+										'warning': 'bi-exclamation-triangle-fill',
+										'danger': 'bi-x-circle-fill',
+										'info': 'bi-info-circle-fill'
+									};
+
+									res.notifikasi.forEach(n => {
+										const iconType = n.icon || 'info';
+										const iconClass = iconMap[iconType] || 'bi-info-circle-fill';
+										const isUnread = (n.status_baca == 0 || n.status_baca == '0');
+
+										html += `
+											<a class="notif-item ${isUnread ? 'unread' : ''}" 
+											   href="<?= base_url('petani/dashboard/read/'); ?>${n.id_notifikasi}">
+												<div class="notif-icon ${iconType}">
+													<i class="bi ${iconClass}"></i>
+												</div>
+												<div class="notif-text">
+													${n.isi_notifikasi || n.judul || 'Notifikasi'}
+													<span class="notif-time">${n.tanggal_buat}</span>
+												</div>
+												${isUnread ? '<span class="notif-badge-new">Baru</span>' : ''}
+											</a>
+										`;
+									});
+									$('#notifList').html(html);
+								}
+							}
+							lastUnreadCount = count;
+						}
+					}
+				});
+			}
+
+			// Jalankan polling setiap 5 detik
+			setInterval(checkNotifications, 5000);
+
+			// 7. CHART.JS - GRAFIK PANEN
 			let harvestChart;
 
 			function initChart() {
@@ -1794,9 +1769,7 @@
 						responsive: true,
 						maintainAspectRatio: false,
 						plugins: {
-							legend: {
-								display: false
-							},
+							legend: { display: false },
 							tooltip: {
 								backgroundColor: '#2C1808',
 								titleColor: '#E6A15C',
@@ -1818,10 +1791,7 @@
 									drawBorder: false,
 								},
 								ticks: {
-									font: {
-										size: 10,
-										family: 'Plus Jakarta Sans'
-									},
+									font: { size: 10, family: 'Plus Jakarta Sans' },
 									color: '#70655E',
 									stepSize: 50,
 									callback: function(value) {
@@ -1830,14 +1800,9 @@
 								}
 							},
 							x: {
-								grid: {
-									display: false
-								},
+								grid: { display: false },
 								ticks: {
-									font: {
-										size: 10,
-										family: 'Plus Jakarta Sans'
-									},
+									font: { size: 10, family: 'Plus Jakarta Sans' },
 									color: '#70655E',
 								}
 							}
@@ -1860,13 +1825,7 @@
 				}
 			}
 
-			document.addEventListener('DOMContentLoaded', function() {
-				initChart();
-			});
-
-			// ============================================
-			// 6. CURRENT DATE TIME
-			// ============================================
+			// 8. CURRENT DATE TIME
 			function updateDateTime() {
 				const now = new Date();
 				const options = {
@@ -1882,12 +1841,8 @@
 					el.textContent = '• ' + now.toLocaleDateString('id-ID', options);
 				}
 			}
-			updateDateTime();
-			setInterval(updateDateTime, 60000);
 
-			// ============================================
-			// 7. SWITCH HANDLING - UPDATE VIA AJAX (REAL-TIME)
-			// ============================================
+			// 9. SWITCH HANDLING VIA AJAX
 			document.querySelectorAll('.custom-control-input').forEach(function(switchEl) {
 				switchEl.removeEventListener('change', handleSwitchChange);
 				switchEl.addEventListener('change', handleSwitchChange);
@@ -1898,50 +1853,36 @@
 				const value = this.checked ? 1 : 0;
 
 				const allowedFields = ['notif_transaksi', 'notif_pembayaran', 'notif_stok', 'notif_kurir', 'notif_panen', 'notif_laporan', 'notif_sistem'];
-				if (!allowedFields.includes(field)) {
-					return;
-				}
+				if (!allowedFields.includes(field)) return;
 
 				const label = this.closest('.custom-control').querySelector('.custom-control-label');
-				if (label) {
-					label.style.opacity = '0.5';
-				}
+				if (label) label.style.opacity = '0.5';
 
 				$.ajax({
 					url: '<?= base_url('petani/dashboard/update_settings_ajax'); ?>',
 					type: 'POST',
-					data: {
-						field: field,
-						value: value
-					},
+					data: { field: field, value: value },
 					dataType: 'json',
 					success: function(response) {
-						if (label) {
-							label.style.opacity = '1';
-						}
+						if (label) label.style.opacity = '1';
 
 						if (response.success) {
 							const labelText = label ? label.textContent.trim() : field;
 							showToast('✅ ' + labelText + ' ' + (value === 1 ? 'diaktifkan' : 'dinonaktifkan'), 'success');
-							console.log('✅ Setting ' + field + ' updated to ' + value);
 						} else {
 							this.checked = !this.checked;
 							showToast('❌ Gagal memperbarui pengaturan', 'error');
 						}
 					}.bind(this),
 					error: function() {
-						if (label) {
-							label.style.opacity = '1';
-						}
+						if (label) label.style.opacity = '1';
 						this.checked = !this.checked;
 						showToast('❌ Terjadi kesalahan. Silakan coba lagi.', 'error');
 					}.bind(this)
 				});
 			}
 
-			// ============================================
-			// 8. FORM SETTINGS - SUBMIT VIA AJAX
-			// ============================================
+			// 10. FORM SETTINGS SUBMIT VIA AJAX
 			const settingsForm = document.getElementById('settingsForm');
 			if (settingsForm) {
 				settingsForm.addEventListener('submit', function(e) {
@@ -1971,9 +1912,7 @@
 								showToast('✅ Pengaturan notifikasi berhasil diperbarui!', 'success');
 								Object.keys(data).forEach(key => {
 									const el = document.getElementById(key);
-									if (el) {
-										el.checked = data[key] === 1;
-									}
+									if (el) el.checked = data[key] === 1;
 								});
 							} else {
 								showToast('❌ Gagal memperbarui pengaturan', 'error');
@@ -1988,40 +1927,12 @@
 				});
 			}
 
-			// ============================================
-			// 9. AUTO-REFRESH NOTIFICATION COUNT
-			// ============================================
-			function refreshNotificationCount() {
-				$.get('<?= base_url('petani/dashboard/get_notifications_ajax'); ?>', function(response) {
-					if (response.success) {
-						const countEl = document.getElementById('notifCount');
-						if (countEl) {
-							if (response.unread > 0) {
-								countEl.textContent = response.unread;
-								countEl.style.display = 'flex';
-							} else {
-								countEl.style.display = 'none';
-							}
-						}
-					}
-				});
-			}
-
-			setInterval(refreshNotificationCount, 30000);
-
-			console.log('✅ Dashboard Petani siap digunakan!');
-			console.log('📋 Fitur yang tersedia:');
-			console.log('   - KPI Cards - Data Real');
-			console.log('   - Grafik Panen - Data Real');
-			console.log('   - Produk Terjual - Data Real');
-			console.log('   - Pesanan Masuk - Data Real');
-			console.log('   - Peringatan Stok - Data Real');
-			console.log('   - Jadwal Panen - Data Real');
-			console.log('   - Quick Action');
-			console.log('   - Notifikasi Real-time');
-			console.log('   - Setting Notifikasi (selaras dengan database)');
-			console.log('   - Switch update via AJAX (real-time)');
-			console.log('   - Form settings submit via AJAX');
+			// 11. INITIALIZE ALL
+			document.addEventListener('DOMContentLoaded', function() {
+				initChart();
+				updateDateTime();
+				setInterval(updateDateTime, 60000);
+			});
 		</script>
 
 </body>

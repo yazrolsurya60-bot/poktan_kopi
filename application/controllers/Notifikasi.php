@@ -11,7 +11,7 @@ class Notifikasi extends CI_Controller
 		parent::__construct();
 		$this->load->model('Notifikasi_model');
 
-		// 🔴 PERBAIKI: Gunakan 'id_user' bukan 'logged_in'
+		// Cek Login User
 		if (!$this->session->userdata('id_user')) {
 			redirect('auth/login');
 		}
@@ -24,12 +24,10 @@ class Notifikasi extends CI_Controller
 	{
 		$id_user = $this->session->userdata('id_user');
 
-		// 🔴 TAMBAHKAN: Data notifikasi
-		$data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
-		$data['history'] = $this->Notifikasi_model->get_all_notif($id_user);
+		$data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
+		$data['history']      = $this->Notifikasi_model->get_all_notif($id_user);
 		$data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
 
-		// 🔴 PERBAIKI: Langsung load view tanpa header/footer
 		$this->load->view('template/v_notif_history', $data);
 	}
 
@@ -40,44 +38,71 @@ class Notifikasi extends CI_Controller
 	{
 		$id_user = $this->session->userdata('id_user');
 
-		// 🔴 TAMBAHKAN: Proses submit form
 		if ($this->input->post()) {
 			$this->Notifikasi_model->update_settings($id_user, $this->input->post());
 			$this->session->set_flashdata('success', 'Preferensi notifikasi berhasil diperbarui.');
 			redirect('notifikasi/setting');
 		}
 
-		// 🔴 TAMBAHKAN: Data notifikasi
-		$data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
-		$data['settings'] = $this->Notifikasi_model->get_settings($id_user);
+		$data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
+		$data['settings']     = $this->Notifikasi_model->get_settings($id_user);
 		$data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
 
-		// 🔴 PERBAIKI: Langsung load view tanpa header/footer
 		$this->load->view('template/v_notif_setting', $data);
 	}
 
 	/**
-	 * Tandai notifikasi sebagai dibaca
+	 * Tandai notifikasi sebagai dibaca & Redirect
 	 */
 	public function read($id_notif)
 	{
 		$id_user = $this->session->userdata('id_user');
 
-		// Tandai sebagai dibaca
+		// 1. Tandai sebagai dibaca di Database (status_baca = 1)
 		$this->Notifikasi_model->mark_as_read($id_notif, $id_user);
 
-		// Dapatkan link
+		// 2. Cek apakah ada parameter redirect GET dari URL
+		$redirect_get = $this->input->get('redirect');
+
+		// 3. Dapatkan link bawaan dari database
 		$this->db->select('link');
 		$this->db->where('id_notifikasi', $id_notif);
 		$query = $this->db->get('tb_notifikasi');
 		$notif = $query->row_array();
 
-		// Redirect
-		if (!empty($notif['link']) && $notif['link'] != '#') {
-			redirect($notif['link']);
+		$target_link = $redirect_get ?? $notif['link'] ?? null;
+
+		// 4. Redirect ke halaman tujuan
+		if (!empty($target_link) && $target_link != '#') {
+			redirect($target_link);
 		} else {
-			$role = $this->session->userdata('role');
-			redirect($role . '/dashboard/history');
+			// ✅ PERBAIKAN: Jika link kosong, kembalikan ke halaman history notifikasi ini lagi
+			redirect('notifikasi/history');
 		}
+	}
+
+	/**
+	 * AJAX: Mengambil count dan daftar notifikasi unread real-time
+	 */
+	public function get_notifications_ajax()
+	{
+		// Pastikan response berupa JSON
+		header('Content-Type: application/json');
+
+		$id_user = $this->session->userdata('id_user');
+
+		if (!$id_user) {
+			echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+			return;
+		}
+
+		$unread_count = $this->Notifikasi_model->count_unread($id_user);
+		$notifikasi   = $this->Notifikasi_model->get_unread_notif($id_user, 10);
+
+		echo json_encode([
+			'success'      => true,
+			'unread'       => (int) $unread_count,
+			'notifications' => $notifikasi
+		]);
 	}
 }

@@ -177,19 +177,14 @@ class Auth extends CI_Controller
                         if ($userId) {
                             log_message('debug', 'OTP Verification - User created with ID: ' . $userId);
                             
-                            // ============================================
-                            // 🔴 TAMBAHAN KODE NOTIFIKASI
-                            // ============================================
                             $this->load->helper('notifikasi');
                             
-                            // Dapatkan semua admin
                             $admins = $this->User_model->get_users_by_role('Admin');
                             
                             $role_text = ($userData['role'] === 'Petani') ? 'Petani (Menunggu verifikasi)' : 'Pembeli';
                             $nama = $userData['nama'];
                             $username = $userData['username'];
                             
-                            // Kirim notifikasi ke semua admin
                             foreach ($admins as $admin) {
                                 send_notifikasi(
                                     $admin['id_user'],
@@ -201,7 +196,6 @@ class Auth extends CI_Controller
                                 );
                             }
                             
-                            // Jika user adalah Petani, kirim notifikasi ke petani
                             if ($userData['role'] === 'Petani') {
                                 send_notifikasi(
                                     $userId,
@@ -212,11 +206,7 @@ class Auth extends CI_Controller
                                     base_url('auth/login')
                                 );
                             }
-                            // ============================================
-                            // 🔴 AKHIR TAMBAHAN KODE NOTIFIKASI
-                            // ============================================
                             
-                            // Clear session registrasi
                             $this->session->unset_userdata([
                                 'register_nama',
                                 'register_username',
@@ -269,29 +259,6 @@ class Auth extends CI_Controller
 
         $data['register_step'] = $this->session->userdata('register_step');
         $this->load->view('auth/v_register', $data);
-    }
-
-    public function verify($token = null)
-    {
-        if (!empty($token)) {
-            $user = $this->User_model->verify_token($token, 'verification');
-
-            if ($user) {
-                $this->User_model->update_user($user['id_user'], [
-                    'status' => 'Active',
-                    'verification_token' => NULL,
-                    'token_expiry' => NULL
-                ]);
-
-                $this->session->set_flashdata('success', 'Email berhasil diverifikasi! Silakan login.');
-                redirect('auth/login');
-            } else {
-                $this->session->set_flashdata('error', 'Token verifikasi tidak valid atau telah kedaluwarsa.');
-                redirect('auth/login');
-            }
-        } else {
-            redirect('auth/login');
-        }
     }
 
     public function forgot_password()
@@ -435,10 +402,8 @@ class Auth extends CI_Controller
         if ($this->input->post('action') === 'update_profile') {
             $this->form_validation->set_rules('nama', 'Nama Lengkap', 'required|trim|max_length[100]');
             $this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[4]|max_length[50]');
-            $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email');
 
             $username = strtolower($this->input->post('username', TRUE));
-            $email = $this->input->post('email', TRUE);
 
             $existing_user = $this->User_model->get_by_username($username);
             if ($existing_user && $existing_user['id_user'] != $id_user) {
@@ -446,17 +411,10 @@ class Auth extends CI_Controller
                 $this->form_validation->set_rules('username', 'Username', 'is_unique[tb_user.username]');
             }
 
-            $existing_email = $this->User_model->get_by_email($email);
-            if ($existing_email && $existing_email['id_user'] != $id_user) {
-                $this->form_validation->set_message('email', 'Email sudah digunakan.');
-                $this->form_validation->set_rules('email', 'Email', 'is_unique[tb_user.email]');
-            }
-
             if ($this->form_validation->run() == TRUE) {
                 $updateData = [
                     'nama' => $this->input->post('nama', TRUE),
-                    'username' => $username,
-                    'email' => $email
+                    'username' => $username
                 ];
 
                 if (!empty($_FILES['foto']['name'])) {
@@ -489,8 +447,7 @@ class Auth extends CI_Controller
                 if ($this->User_model->update_user($id_user, $updateData)) {
                     $this->session->set_userdata([
                         'nama' => $updateData['nama'],
-                        'username' => $updateData['username'],
-                        'email' => $updateData['email']
+                        'username' => $updateData['username']
                     ]);
 
                     $this->session->set_flashdata('success', 'Profil Anda berhasil diperbarui.');
@@ -567,10 +524,8 @@ class Auth extends CI_Controller
         }
     }
 
-    // Go back to registration form from OTP step, preserve form data
     public function back_to_form()
     {
-        // Keep register data but clear the OTP step so form shows again
         $this->session->unset_userdata('register_step');
         $this->session->set_flashdata('info', 'Data formulir masih tersimpan. Silakan periksa kembali.');
         redirect('auth/register');

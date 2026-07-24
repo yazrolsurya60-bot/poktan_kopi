@@ -6,16 +6,11 @@ class Panen extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        // Cek login
+        // Cek login & proteksi role Admin
         if (!$this->session->userdata('id_user')) {
-            $this->session->set_userdata([
-                'id_user' => 1,
-                'role' => 'Admin',
-                'nama' => 'Test Admin'
-            ]);
+            redirect('auth/login');
         }
 
-        // Cek role Admin
         $current_role = $this->session->userdata('role');
         if ($current_role != 'Admin') {
             if ($current_role == 'Petani') {
@@ -41,17 +36,49 @@ class Panen extends CI_Controller
         $filters = [
             'start_date' => $this->input->get('start_date'),
             'end_date'   => $this->input->get('end_date'),
-            'id_lahan'   => $this->input->get('id_lahan'), // Jika admin ingin filter lahan spesifik (opsional)
+            'id_lahan'   => $this->input->get('id_lahan'),
             'kualitas'   => $this->input->get('kualitas')
         ];
 
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['title']        = 'Rekap Hasil Panen - Sistem Supply Chain Kopi';
+        $data['title_page']   = 'Rekap Hasil Panen';
+        $data['subtitle']     = 'Laporan rekapitulasi data panen dari seluruh petani.';
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role']         = 'Admin';
         
-        // Admin bisa melihat semua panen dengan filter
-        $data['panen_list'] = $this->Panen_model->get_all_panen(null, $filters);
+        // Admin melihat semua data panen dengan filter
+        $data['panen_list']   = $this->Panen_model->get_all_panen(null, $filters);
         
+        // Load Template Partials
+        $this->load->view('templates/admin/header', $data);
+        $this->load->view('templates/admin/sidebar', $data);
         $this->load->view('admin/panen/v_panen_index', $data);
+        $this->load->view('templates/admin/footer');
+    }
+
+    public function detail($id_panen)
+    {
+        $id_user = $this->session->userdata('id_user');
+        $panen = $this->Panen_model->get_panen_by_id($id_panen);
+        
+        if (!$panen) {
+            show_404();
+        }
+
+        $data['title']        = 'Detail Panen - Sistem Supply Chain Kopi';
+        $data['title_page']   = 'Detail Panen';
+        $data['subtitle']     = 'Informasi lengkap hasil panen Petani.';
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['role']         = 'Admin';
+        $data['panen']        = $panen;
+        
+        // Load Template Partials
+        $this->load->view('templates/admin/header', $data);
+        $this->load->view('templates/admin/sidebar', $data);
+        $this->load->view('admin/panen/v_panen_detail', $data);
+        $this->load->view('templates/admin/footer');
     }
 
     public function export_excel()
@@ -82,21 +109,5 @@ class Panen extends CI_Controller
             echo "</tr>";
         }
         echo "</table>";
-    }
-
-    public function detail($id_panen)
-    {
-        $id_user = $this->session->userdata('id_user');
-        $panen = $this->Panen_model->get_panen_by_id($id_panen);
-        
-        if (!$panen) {
-            show_404();
-        }
-
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
-        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['panen'] = $panen;
-        
-        $this->load->view('admin/panen/v_panen_detail', $data);
     }
 }
