@@ -23,13 +23,15 @@ class Transaksi extends CI_Controller {
     // ============================================================
     // HISTORY - DENGAN NOTIFIKASI
     // ============================================================
-    public function history() {
+ public function history() {
         $data['title'] = 'Riwayat Transaksi';
+        $data['title_page'] = 'Riwayat Transaksi';
+        $data['subtitle'] = 'Kelola dan lihat semua pesanan Anda';
         $id_user = $this->session->userdata('id_user');
         
-        // 🔴 AMBIL DATA NOTIFIKASI
+        // AMBIL DATA NOTIFIKASI
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
-        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['unread_count'] = (int) $this->Notifikasi_model->count_unread($id_user);
         
         // AMBIL DATA TRANSAKSI
         $data['transaksi'] = $this->Transaksi_model->get_transaksi_by_user_with_products($id_user);
@@ -71,19 +73,25 @@ class Transaksi extends CI_Controller {
             }
         }
         
+        // RENDER MENGGUNAKAN TEMPLATE MODULAR (ADMIN STYLE)
+        $this->load->view('templates/pembeli/header', $data);
+        $this->load->view('templates/pembeli/sidebar', $data);
         $this->load->view('pembeli/transaksi/history', $data);
+        $this->load->view('templates/pembeli/footer', $data);
     }
 
     // ============================================================
     // DETAIL TRANSAKSI - DENGAN NOTIFIKASI
     // ============================================================
-    public function detail($id_transaksi) {
+ public function detail($id_transaksi) {
         $data['title'] = 'Detail Transaksi';
+        $data['title_page'] = 'Detail Transaksi';
+        $data['subtitle'] = 'Informasi lengkap pesanan Anda';
         $id_user = $this->session->userdata('id_user');
         
-        // 🔴 AMBIL DATA NOTIFIKASI
+        // AMBIL DATA NOTIFIKASI
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
-        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['unread_count'] = (int) $this->Notifikasi_model->count_unread($id_user);
         
         // Ambil data transaksi
         $data['transaksi'] = $this->Transaksi_model->get_transaksi($id_transaksi);
@@ -116,7 +124,6 @@ class Transaksi extends CI_Controller {
         // Ambil ongkir dari database atau default 0
         $ongkir = floatval($data['transaksi']['ongkir'] ?? 0);
         
-        // Gunakan total dari detail jika lebih akurat
         if ($total_dari_detail > 0) {
             $data['transaksi']['total_harga'] = $total_dari_detail;
         } else {
@@ -144,7 +151,11 @@ class Transaksi extends CI_Controller {
             $data['bukti'] = null;
         }
         
+        // RENDER MENGGUNAKAN TEMPLATE MODULAR (ADMIN STYLE)
+        $this->load->view('templates/pembeli/header', $data);
+        $this->load->view('templates/pembeli/sidebar', $data);
         $this->load->view('pembeli/transaksi/detail', $data);
+        $this->load->view('templates/pembeli/footer', $data);
     }
 
     // ============================================================

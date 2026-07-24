@@ -7,10 +7,12 @@ class Dashboard extends CI_Controller
     {
         parent::__construct();
 
+        // 1. Cek sesi login
         if (!$this->session->userdata('id_user')) {
             redirect('auth/login');
         }
 
+        // 2. Cek Role Pembeli
         $current_role = $this->session->userdata('role');
         if ($current_role != 'Pembeli') {
             if ($current_role == 'Admin') {
@@ -23,6 +25,7 @@ class Dashboard extends CI_Controller
             }
         }
 
+        // Load Model
         $this->load->model('Notifikasi_model');
         $this->load->model('Transaksi_model');
         $this->load->model('Produk_model');
@@ -32,37 +35,67 @@ class Dashboard extends CI_Controller
     {
         $id_user = $this->session->userdata('id_user');
 
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
-        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['role'] = 'Pembeli';
+        // ============================================
+        // 1. DATA NOTIFIKASI & HEADER
+        // ============================================
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['unread_count'] = (int) $this->Notifikasi_model->count_unread($id_user);
+        $data['role']         = 'Pembeli';
+        $data['title']        = 'Ruang Member - Pembeli Kopi';
 
+        // JUDUL DAN SUBTITLE DINAMIS TOPBAR (PERSIS ADMIN)[cite: 20]
+        $nama_user = $this->session->userdata('nama') ?? 'Pembeli';
+        $data['title_page'] = 'Ruang Belanja Member';
+        $data['subtitle']   = 'Selamat datang, <span style="color: var(--amber-cream); font-weight:600;">' . htmlspecialchars($nama_user) . '</span>! <span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span>';
+
+        // ============================================
+        // 2. KPI CARDS PEMBELI
+        // ============================================
         $kpi = $this->Notifikasi_model->get_pembeli_kpi($id_user);
         $data['kpi_total_transaksi'] = $kpi['total_transaksi'] ?? 0;
-        $data['kpi_total_belanja'] = $kpi['total_belanja'] ?? 0;
+        $data['kpi_total_belanja']   = $kpi['total_belanja'] ?? 0;
         $data['kpi_pesanan_dikirim'] = $kpi['pesanan_dikirim'] ?? 0;
 
+        // ============================================
+        // 3. DATA PESANAN TERBARU
+        // ============================================
         $this->db->where('id_user', $id_user);
         $this->db->order_by('id_transaksi', 'DESC');
         $this->db->limit(5);
         $data['pesanan_terbaru'] = $this->db->get('tb_transaksi')->result_array();
 
+        // ============================================
+        // 4. DATA TAMBAHAN (REKOMENDASI & GRAFIK)
+        // ============================================
         $data['rekomendasi_produk'] = $this->Notifikasi_model->get_recommendations($id_user, 4);
-        $data['grafik_belanja'] = $this->Notifikasi_model->get_shopping_chart($id_user);
-        $data['settings'] = $this->Notifikasi_model->get_settings($id_user);
+        $data['grafik_belanja']     = $this->Notifikasi_model->get_shopping_chart($id_user);
+        $data['settings']           = $this->Notifikasi_model->get_settings($id_user);
 
+        // ============================================
+        // 5. RENDER VIEW MODULAR (ADMIN STYLE)[cite: 20]
+        // ============================================
+        $this->load->view('templates/pembeli/header', $data);
+        $this->load->view('templates/pembeli/sidebar', $data);
         $this->load->view('pembeli/v_dashboard', $data);
+        $this->load->view('templates/pembeli/footer', $data);
     }
 
     public function history()
     {
         $id_user = $this->session->userdata('id_user');
 
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
-        $data['history'] = $this->Notifikasi_model->get_all_notif($id_user);
-        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['role'] = 'Pembeli';
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['history']      = $this->Notifikasi_model->get_all_notif($id_user);
+        $data['unread_count'] = (int) $this->Notifikasi_model->count_unread($id_user);
+        $data['role']         = 'Pembeli';
+        $data['title']        = 'Riwayat Notifikasi - Pembeli';
+        $data['title_page']   = 'Riwayat Notifikasi';
+        $data['subtitle']     = 'Daftar seluruh riwayat pemberitahuan aktivitas akun Anda';
 
+        $this->load->view('templates/pembeli/header', $data);
+        $this->load->view('templates/pembeli/sidebar', $data);
         $this->load->view('template/v_notif_history', $data);
+        $this->load->view('templates/pembeli/footer', $data);
     }
 
     public function settings()
@@ -71,22 +104,28 @@ class Dashboard extends CI_Controller
 
         if ($this->input->post()) {
             $this->Notifikasi_model->update_settings($id_user, [
-                'notif_pesanan' => $this->input->post('notif_pesanan') ? 1 : 0,
-                'notif_kurir' => $this->input->post('notif_kurir') ? 1 : 0,
+                'notif_pesanan'    => $this->input->post('notif_pesanan') ? 1 : 0,
+                'notif_kurir'      => $this->input->post('notif_kurir') ? 1 : 0,
                 'notif_pembayaran' => $this->input->post('notif_pembayaran') ? 1 : 0,
-                'notif_sistem' => $this->input->post('notif_sistem') ? 1 : 0
+                'notif_sistem'     => $this->input->post('notif_sistem') ? 1 : 0
             ]);
 
             $this->session->set_flashdata('success', 'Preferensi notifikasi berhasil diperbarui.');
             redirect('pembeli/dashboard/settings');
         }
 
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
-        $data['settings'] = $this->Notifikasi_model->get_settings($id_user);
-        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['role'] = 'Pembeli';
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['settings']     = $this->Notifikasi_model->get_settings($id_user);
+        $data['unread_count'] = (int) $this->Notifikasi_model->count_unread($id_user);
+        $data['role']         = 'Pembeli';
+        $data['title']        = 'Pengaturan Notifikasi - Pembeli';
+        $data['title_page']   = 'Pengaturan Notifikasi';
+        $data['subtitle']     = 'Atur preferensi pemberitahuan pesan dan sistem Anda';
 
+        $this->load->view('templates/pembeli/header', $data);
+        $this->load->view('templates/pembeli/sidebar', $data);
         $this->load->view('template/v_notif_setting', $data);
+        $this->load->view('templates/pembeli/footer', $data);
     }
 
     public function read($id_notif)
@@ -121,14 +160,14 @@ class Dashboard extends CI_Controller
             show_404();
         }
 
-        $id_user = $this->session->userdata('id_user');
+        $id_user    = $this->session->userdata('id_user');
         $notifikasi = $this->Notifikasi_model->get_unread_notif($id_user, 5);
-        $unread = $this->Notifikasi_model->count_unread($id_user);
+        $unread     = (int) $this->Notifikasi_model->count_unread($id_user);
 
         echo json_encode([
-            'success' => true,
+            'success'    => true,
             'notifikasi' => $notifikasi,
-            'unread' => $unread
+            'unread'     => $unread
         ]);
     }
 
@@ -139,7 +178,7 @@ class Dashboard extends CI_Controller
         }
 
         $id_user = $this->session->userdata('id_user');
-        $result = $this->Notifikasi_model->mark_all_read($id_user);
+        $result  = $this->Notifikasi_model->mark_all_read($id_user);
 
         echo json_encode(['success' => $result]);
     }
@@ -151,11 +190,11 @@ class Dashboard extends CI_Controller
         }
 
         $id_user = $this->session->userdata('id_user');
-        $data = $this->Notifikasi_model->get_shopping_chart($id_user);
+        $data    = $this->Notifikasi_model->get_shopping_chart($id_user);
 
         echo json_encode([
             'success' => true,
-            'values' => $data['values'] ?? array_fill(0, 12, 0)
+            'values'  => $data['values'] ?? array_fill(0, 12, 0)
         ]);
     }
 }
