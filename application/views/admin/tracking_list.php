@@ -1,13 +1,5 @@
 <style>
-:root {
-    --roasted-brown: #4A2C11;
-    --dark-coffee:   #2C1808;
-    --amber-cream:   #E6A15C;
-    --bg-cream:      #FAF6F0;
-    --card-white:    #FFFFFF;
-}
-body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream); color: var(--dark-coffee); }
-
+/* Style khusus modul Tracking (Jangan ubah variabel template global) */
 .list-card {
     border: none;
     border-radius: 16px;
@@ -95,16 +87,16 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
 }
 </style>
 
-<div class="container-fluid">
+<div class="container-fluid p-0">
 
     <?php if ($this->session->flashdata('success')): ?>
-        <div class="alert alert-success alert-dismissible fade show" style="border-radius:12px;">
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius:12px;">
             <i class="bi bi-check-circle-fill mr-2"></i><?= $this->session->flashdata('success') ?>
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
         </div>
     <?php endif; ?>
     <?php if ($this->session->flashdata('error')): ?>
-        <div class="alert alert-danger alert-dismissible fade show" style="border-radius:12px;">
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" style="border-radius:12px;">
             <i class="bi bi-exclamation-triangle-fill mr-2"></i><?= $this->session->flashdata('error') ?>
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
         </div>
@@ -115,10 +107,10 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
             <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap:10px;">
                 <div class="d-flex align-items-center" style="gap:12px;">
                     <div style="width:42px;height:42px;background:rgba(230,161,92,.18);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--amber-cream);">
-                        <i class="bi bi-truck"></i>
+                        <i class="bi bi-list-ul"></i>
                     </div>
                     <div>
-                        <h5 class="mb-0 font-weight-bold">Tracking Pengiriman</h5>
+                        <h5 class="mb-0 font-weight-bold">Daftar Pengiriman</h5>
                         <small class="text-muted">Kelola status &amp; penugasan kurir</small>
                     </div>
                 </div>
@@ -129,7 +121,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
                         $no_kurir   = $total - $with_kurir;
                     ?>
                     <div class="d-flex" style="gap:8px;">
-                        <span class="stat-chip"><i class="bi bi-list-check"></i> <?= $total ?> Pengiriman</span>
+                        <span class="stat-chip"><i class="bi bi-list-check"></i> <?= $total ?> Total</span>
                         <span class="stat-chip"><i class="bi bi-person-check"></i> <?= $with_kurir ?> Assigned</span>
                         <?php if ($no_kurir > 0): ?>
                             <span class="stat-chip" style="background:rgba(230,161,92,.18);border-color:rgba(230,161,92,.3);">
@@ -191,8 +183,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
                                         </small>
                                     </td>
                                     <td class="text-center">
-                                        <a href="<?= base_url('admin/tracking/update/' . $track->id_tracking) ?>"
-                                           class="btn-update">
+                                        <a href="<?= base_url('admin/tracking/update/' . $track->id_tracking) ?>" class="btn-update">
                                             <i class="bi bi-pencil-square"></i> Kelola
                                         </a>
                                     </td>

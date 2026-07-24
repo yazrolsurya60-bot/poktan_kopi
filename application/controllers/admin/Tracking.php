@@ -31,7 +31,7 @@ class Tracking extends CI_Controller
     }
 
     // ============================================================
-    // INDEX — Daftar semua 
+    // INDEX — Daftar semua Tracking
     // ============================================================
     public function index()
     {
@@ -40,10 +40,16 @@ class Tracking extends CI_Controller
 
         $id_user = $this->session->userdata('id_user');
 
-        $data['trackings']    = $this->Tracking_model->get_tracking_by_status(null, 50);
+        // Data khusus Template Header Modular
+        $data['title']        = 'Tracking Pengiriman - Sistem Supply Chain Kopi';
+        $data['title_page']   = 'Tracking Pengiriman';
+        $data['subtitle']     = 'Kelola dan pantau status pengiriman pesanan';
+        $data['role']         = 'Admin';
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
         $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user, 5);
-        $data['role']         = 'Admin';
+
+        // Data fungsional modul tracking
+        $data['trackings']    = $this->Tracking_model->get_tracking_by_status(null, 50);
 
         foreach ($data['trackings'] as &$track) {
             $info = $this->Tracking_model->get_status_label($track->status_pengiriman);
@@ -52,9 +58,11 @@ class Tracking extends CI_Controller
             $track->status_icon  = $info['icon'];
         }
 
-        $this->load->view('template/header', ['title' => 'Tracking Pengiriman - Admin', 'role' => 'Admin']);
-        $this->load->view('admin/tracking_list', $data);
-        $this->load->view('template/footer');
+        // Load partial views secara berurutan
+        $this->load->view('templates/admin/header', $data);
+        $this->load->view('templates/admin/sidebar', $data);
+        $this->load->view('admin/tracking_list', $data); // View utama
+        $this->load->view('templates/admin/footer');
     }
 
     // ============================================================
@@ -77,18 +85,26 @@ class Tracking extends CI_Controller
         // ---- Re-fetch setelah kemungkinan update ----
         $tracking = $this->Tracking_model->get_tracking_by_id($id_tracking);
 
+        // Data khusus Template Header Modular
+        $data['title']        = 'Update Tracking - Sistem Supply Chain Kopi';
+        $data['title_page']   = 'Detail & Update Pengiriman';
+        $data['subtitle']     = 'Tugaskan kurir dan update status pesanan';
+        $data['role']         = 'Admin';
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user, 5);
+
+        // Data fungsional modul tracking
         $this->load->model('Transaksi_model');
         $data['tracking']      = $tracking;
         $data['bukti_bayar']   = $this->Transaksi_model->get_bukti_by_transaksi($tracking->id_transaksi);
         $data['status_options']= $this->_get_status_options($tracking->status_pengiriman);
         $data['kurir_list']    = $this->Kurir_model->get_available_kurir();
-        $data['unread_count']  = $this->Notifikasi_model->count_unread($id_user);
-        $data['notifikasi']    = $this->Notifikasi_model->get_unread_notif($id_user, 5);
-        $data['role']          = 'Admin';
 
-        $this->load->view('template/header', ['title' => 'Update Tracking - Admin', 'role' => 'Admin']);
-        $this->load->view('admin/tracking_update', $data);
-        $this->load->view('template/footer');
+        // Load partial views secara berurutan
+        $this->load->view('templates/admin/header', $data);
+        $this->load->view('templates/admin/sidebar', $data);
+        $this->load->view('admin/tracking_update', $data); // View utama
+        $this->load->view('templates/admin/footer');
     }
 
     // ============================================================
@@ -168,7 +184,7 @@ class Tracking extends CI_Controller
                 "Kurir {$kurir->nama_kurir} telah ditugaskan untuk mengantar pesanan Anda."
             );
 
-            // Notifikasi ke user kurir (jika ada email yang cocok di tb_user)
+            // Notifikasi ke user kurir
             $user_kurir = $this->db
                 ->where('email', $kurir->email)
                 ->where('role', 'Kurir')
@@ -197,8 +213,6 @@ class Tracking extends CI_Controller
     // ============================================================
     private function _get_status_options($current_status)
     {
-        // ALUR SEDERHANA UNTUK PENGIRIMAN INTERNAL
-        // TIDAK ADA: tiba_di_kota_tujuan, out_for_delivery
         $flow = [
             'pending'   => ['dikirim', 'dibatalkan'],
             'diproses'  => ['dikirim', 'dibatalkan'],
