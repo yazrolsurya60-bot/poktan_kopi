@@ -567,7 +567,7 @@
 					<i class="bi bi-list"></i>
 				</button>
 				<h2 class="d-inline-block align-middle mb-0">
-					<?= $title_page ?? 'Dashboard'; ?>
+					<?= $title_page ?? 'Halaman'; ?>
 				</h2>
 				<?php if (!empty($subtitle)): ?>
 					<p class="subtitle mb-0 mt-1"><?= $subtitle; ?></p>

@@ -92,10 +92,8 @@ class Dashboard extends CI_Controller
         $data['title_page']   = 'Riwayat Notifikasi';
         $data['subtitle']     = 'Daftar seluruh riwayat pemberitahuan aktivitas akun Anda';
 
-        $this->load->view('templates/pembeli/header', $data);
-        $this->load->view('templates/pembeli/sidebar', $data);
+ 
         $this->load->view('template/v_notif_history', $data);
-        $this->load->view('templates/pembeli/footer', $data);
     }
 
     public function settings()
@@ -122,10 +120,8 @@ class Dashboard extends CI_Controller
         $data['title_page']   = 'Pengaturan Notifikasi';
         $data['subtitle']     = 'Atur preferensi pemberitahuan pesan dan sistem Anda';
 
-        $this->load->view('templates/pembeli/header', $data);
-        $this->load->view('templates/pembeli/sidebar', $data);
         $this->load->view('template/v_notif_setting', $data);
-        $this->load->view('templates/pembeli/footer', $data);
+
     }
 
     public function read($id_notif)

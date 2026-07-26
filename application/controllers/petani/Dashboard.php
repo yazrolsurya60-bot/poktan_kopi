@@ -50,9 +50,18 @@ class Dashboard extends CI_Controller
     public function index()
     {
         $id_user = $this->session->userdata('id_user');
+        $nama_user = $this->session->userdata('nama') ?? 'Petani';
 
         // ============================================
-        // 🔴 1. AMBIL SETTINGS NOTIFIKASI
+        // 🔴 DATA TEMPLATE (HEADER & SIDEBAR)
+        // ============================================
+        $data['title']        = 'Panel Produksi - Petani Kopi';
+        $data['title_page']   = 'Panel Produksi';
+        $data['subtitle']     = 'Selamat datang, <span style="color: var(--amber-cream); font-weight:600;">' . htmlspecialchars($nama_user) . '</span> <span id="currentDateTime" style="color: var(--text-secondary); font-size:0.85rem;"></span>';
+        $data['role']         = 'Petani';
+
+        // ============================================
+        // 1. AMBIL SETTINGS NOTIFIKASI
         // ============================================
         $data['settings'] = $this->Notifikasi_model->get_settings($id_user);
 
@@ -61,48 +70,86 @@ class Dashboard extends CI_Controller
         // ============================================
         $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['role'] = 'Petani'; // 🔴 UNTUK SOUND
 
         // ============================================
-        // 3. KPI CARDS
+        // 3. KPI CARDS (DIUBAH KE DATA REAL DATABASE)
         // ============================================
-        $kpi = $this->Notifikasi_model->get_petani_kpi($id_user);
-        $data['kpi_total_panen'] = $kpi['total_panen'] ?? 0;
-        $data['kpi_omset_penjualan'] = $kpi['omset_penjualan'] ?? 0;
-        $data['kpi_lahan_aktif'] = $kpi['lahan_aktif'] ?? 0;
-        $data['kpi_pesanan_masuk'] = $kpi['pesanan_masuk'] ?? 0;
+        // Total Panen
+        $this->db->select_sum('jumlah_panen');
+        $this->db->where('id_user', $id_user);
+        $data['kpi_total_panen'] = $this->db->get('tb_panen')->row()->jumlah_panen ?? 0;
+
+        // Omset Penjualan (Pesanan Selesai) - FIX NAMA KOLOM id_petani
+        $this->db->select_sum('total_harga'); 
+        $this->db->where('id_petani', $id_user);
+        $this->db->where('status_pesanan', 'Selesai');
+        $data['kpi_omset_penjualan'] = $this->db->get('tb_transaksi')->row()->total_harga ?? 0;
+
+        // Lahan Aktif
+        $data['kpi_lahan_aktif'] = $this->db->where(['id_user' => $id_user, 'status_lahan' => 'Active'])->count_all_results('tb_lahan');
+
+        // Pesanan Masuk (Baru/Pending/Diproses) - FIX NAMA KOLOM id_petani
+        $data['kpi_pesanan_masuk'] = $this->db->where('id_petani', $id_user)
+                                              ->where_in('status_pesanan', ['Pending', 'Diproses', 'Baru'])
+                                              ->count_all_results('tb_transaksi');
 
         // ============================================
-        // 4. PESANAN MASUK TERBARU
+        // 4. PESANAN MASUK TERBARU (DIUBAH KE DATA REAL)
         // ============================================
-        $data['pesanan_masuk'] = $this->db->order_by('id_transaksi', 'DESC')
+        // FIX NAMA KOLOM id_petani
+        $data['pesanan_masuk'] = $this->db->where('id_petani', $id_user)
+            ->order_by('id_transaksi', 'DESC')
             ->limit(5)
             ->get('tb_transaksi')
             ->result_array();
 
         // ============================================
-        // 5. STOK MENIPIS
+        // 5. STOK MENIPIS (DIUBAH KE DATA REAL)
         // ============================================
-        $data['notif_stok_tipis'] = $this->db->where('stok_produk <', 20)
+        $data['notif_stok_tipis'] = $this->db->where('id_user', $id_user)
+            ->where('stok_produk <', 20)
             ->limit(5)
             ->get('tb_produk')
             ->result_array();
 
         // ============================================
-        // 6. GRAFIK PANEN
+        // 6. GRAFIK PANEN (DIUBAH KE DATA REAL)
         // ============================================
-        $data['grafik_panen'] = $this->Notifikasi_model->get_harvest_chart($id_user);
+        $grafik_values = array_fill(0, 12, 0); 
+        $this->db->select('MONTH(tanggal_panen) as bulan, SUM(jumlah_panen) as total');
+        $this->db->where('id_user', $id_user);
+        $this->db->where('YEAR(tanggal_panen)', date('Y'));
+        $this->db->group_by('MONTH(tanggal_panen)');
+        $panen_chart = $this->db->get('tb_panen')->result_array();
+        
+        foreach ($panen_chart as $row) {
+            $grafik_values[(int)$row['bulan'] - 1] = (int)$row['total'];
+        }
+        $data['grafik_panen']['values'] = $grafik_values;
 
         // ============================================
-        // 7. PRODUK TERJUAL
+        // 7. PRODUK TERJUAL (DIUBAH KE DATA REAL)
         // ============================================
-        $data['produk_terjual'] = $this->Notifikasi_model->get_petani_top_products($id_user, 5);
+        // FIX: tb_detail_transaksi & d.jumlah
+        $this->db->select('p.nama_produk, SUM(d.jumlah) as total_terjual, SUM(d.subtotal) as pendapatan');
+        $this->db->from('tb_detail_transaksi d');
+        $this->db->join('tb_produk p', 'p.id_produk = d.id_produk');
+        $this->db->join('tb_transaksi t', 't.id_transaksi = d.id_transaksi');
+        $this->db->where('p.id_user', $id_user);
+        $this->db->where('t.status_pesanan', 'Selesai');
+        $this->db->group_by('p.id_produk');
+        $this->db->order_by('total_terjual', 'DESC');
+        $this->db->limit(5);
+        $query_top = $this->db->get();
+        $data['produk_terjual'] = $query_top ? $query_top->result_array() : [];
 
-
         // ============================================
-        // 9. LOAD VIEW
+        // 8. LOAD VIEW (MODULAR)
         // ============================================
+        $this->load->view('templates/petani/header', $data);
+        $this->load->view('templates/petani/sidebar', $data);
         $this->load->view('petani/v_dashboard', $data);
+        $this->load->view('templates/petani/footer');
     }
 
     // ============================================
@@ -113,12 +160,19 @@ class Dashboard extends CI_Controller
     {
         $id_user = $this->session->userdata('id_user');
         
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
-        $data['history'] = $this->Notifikasi_model->get_all_notif($id_user);
-        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['role'] = 'Petani';
+        $data['title']        = 'Riwayat Notifikasi - Petani Kopi';
+        $data['title_page']   = 'Riwayat Notifikasi';
+        $data['subtitle']     = 'Daftar seluruh aktivitas dan notifikasi Anda';
+        $data['role']         = 'Petani';
 
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['history']      = $this->Notifikasi_model->get_all_notif($id_user);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
+
+        // Load View Modular
+  
         $this->load->view('template/v_notif_history', $data);
+ 
     }
 
     // ============================================
@@ -150,12 +204,19 @@ class Dashboard extends CI_Controller
         }
 
         // 🔴 GET REQUEST - TAMPILKAN HALAMAN SETTING
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
-        $data['settings'] = $this->Notifikasi_model->get_settings($id_user);
+        $data['title']        = 'Pengaturan Notifikasi - Petani Kopi';
+        $data['title_page']   = 'Pengaturan Notifikasi';
+        $data['subtitle']     = 'Sesuaikan preferensi sistem notifikasi Anda';
+        $data['role']         = 'Petani';
+
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['settings']     = $this->Notifikasi_model->get_settings($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['role'] = 'Petani';
+
+        // Load View Modular
 
         $this->load->view('template/v_notif_setting', $data);
+
     }
 
     // ============================================
@@ -280,7 +341,7 @@ class Dashboard extends CI_Controller
     }
 
     // ============================================
-    // AJAX - GET CHART DATA
+    // AJAX - GET CHART DATA (DIUBAH KE DATA REAL)
     // ============================================
     public function get_chart_data()
     {
@@ -289,11 +350,21 @@ class Dashboard extends CI_Controller
         }
 
         $id_user = $this->session->userdata('id_user');
-        $data = $this->Notifikasi_model->get_harvest_chart($id_user);
+        
+        $grafik_values = array_fill(0, 12, 0); 
+        $this->db->select('MONTH(tanggal_panen) as bulan, SUM(jumlah_panen) as total');
+        $this->db->where('id_user', $id_user);
+        $this->db->where('YEAR(tanggal_panen)', date('Y'));
+        $this->db->group_by('MONTH(tanggal_panen)');
+        $panen_chart = $this->db->get('tb_panen')->result_array();
+        
+        foreach ($panen_chart as $row) {
+            $grafik_values[(int)$row['bulan'] - 1] = (int)$row['total'];
+        }
         
         echo json_encode([
             'success' => true,
-            'values' => $data['values'] ?? array_fill(0, 12, 0)
+            'values' => $grafik_values
         ]);
     }
 }

@@ -287,7 +287,6 @@
 				border-radius: 8px;
 			}
 
-			/* Header responsif */
 			.d-flex.justify-content-between.align-items-center {
 				flex-direction: column;
 				align-items: flex-start !important;
@@ -307,7 +306,6 @@
 				padding: 8px 12px;
 			}
 
-			/* Statistik Badge responsif */
 			.d-flex.flex-wrap.gap-3.mb-4 {
 				gap: 8px !important;
 			}
@@ -418,21 +416,21 @@
 						<i class="bi bi-inbox mr-1"></i> Total: <?= $total; ?>
 					</span>
 
-					<!-- SUDAH DIBACA (KUNING) -->
+					<!-- SUDAH DIBACA -->
 					<?php if ($unread > 0): ?>
 						<span class="badge" style="background: #FFFFFF; color: #92400E; padding: 8px 16px; font-weight:600; font-size:0.8rem; border: 1px solid #EFEAE2;">
 							<i class="bi bi-envelope mr-1"></i> Sudah Dibaca: <?= $unread; ?>
 						</span>
 					<?php endif; ?>
 
-					<!-- BELUM DIBACA (PUTIH) -->
+					<!-- BELUM DIBACA -->
 					<?php if ($read > 0): ?>
 						<span class="badge" style="background: #FEF3C7; color: var(--text-secondary); padding: 8px 16px; font-weight:600; font-size:0.8rem; border: 1px solid #EFEAE2;">
 							<i class="bi bi-check-circle mr-1"></i> Belum Dibaca: <?= $read; ?>
 						</span>
 					<?php endif; ?>
 
-					<!-- KONDISI SEMUA BELUM DIBACA (PUTIH) -->
+					<!-- KONDISI SEMUA BELUM DIBACA -->
 					<?php if ($unread == $total && $total > 0): ?>
 						<span class="badge" style="background: #FFFFFF; color: var(--text-secondary); padding: 8px 16px; font-weight:600; font-size:0.8rem; border: 1px solid #EFEAE2;">
 							<i class="bi bi-envelope mr-1"></i> Semua Sudah Dibaca
@@ -476,7 +474,6 @@
 						$role = $this->session->userdata('role');
 						$read_url = base_url($role . '/dashboard/read/' . $id_notif . '?redirect=' . urlencode($link));
 					?>
-						<!-- LOGIKA: status_baca == 0 -> unread (Kuning), status_baca == 1 -> read (Putih) -->
 						<a class="notif-item <?= $is_read == 0 ? 'unread' : 'read'; ?>"
 							href="<?= $read_url; ?>">
 							<div class="d-flex align-items-center" style="flex: 1; min-width: 0; gap: 12px;">
@@ -489,7 +486,6 @@
 										<div class="notif-judul">
 											<?= htmlspecialchars($judul); ?>
 
-											<!-- BADGE ITEM: BELUM DIBACA = KUNING, SUDAH DIBACA = PUTIH -->
 											<?php if ($is_read == 0): ?>
 												<span class="badge" style="font-size:0.5rem; padding:2px 8px; background: #FFFFFF; color: #92400E; border: 1px solid #EFEAE2;  border-radius:10px; font-weight:600;">
 													Sudah Dibaca
@@ -538,11 +534,13 @@
 		</div>
 	</div>
 
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+	<!-- MENGGUNAKAN JQUERY LENGKAP (BUKAN SLIM) AGAR PERINTAH AJAX BERJALAN DENGAN SEMPURNA -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	<script>
 		$(document).ready(function() {
-			$('#markAllReadBtn').on('click', function() {
+			$('#markAllReadBtn').on('click', function(e) {
+				e.preventDefault();
 				if (confirm('Tandai semua notifikasi sebagai sudah dibaca?')) {
 					$.ajax({
 						url: '<?= base_url('api/notifikasi/mark_all_read'); ?>',
@@ -555,8 +553,9 @@
 								alert('Gagal menandai semua notifikasi.');
 							}
 						},
-						error: function() {
-							alert('Terjadi kesalahan. Silakan coba lagi.');
+						error: function(xhr, status, error) {
+							console.error(error);
+							alert('Terjadi kesalahan koneksi ke server. Silakan coba lagi.');
 						}
 					});
 				}
