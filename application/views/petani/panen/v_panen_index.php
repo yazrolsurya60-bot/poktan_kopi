@@ -52,14 +52,13 @@
                         <th>Tanggal Panen</th>
                         <th>Lahan</th>
                         <th>Jumlah (Kg)</th>
-                        <th>Kualitas</th>
                         <th class="text-center d-print-none" width="15%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($panen_list)): ?>
                         <tr>
-                            <td colspan="6" class="text-center py-5 text-muted">
+                            <td colspan="5" class="text-center py-5 text-muted">
                                 <i class="bi bi-folder-x" style="font-size: 2rem;"></i><br>
                                 Belum ada data panen dicatat.
                             </td>
@@ -71,7 +70,6 @@
                                 <td class="font-weight-bold text-dark"><?= date('d M Y', strtotime($p['tanggal_panen'])); ?></td>
                                 <td><?= htmlspecialchars($p['nama_lahan'] ?? '-'); ?></td>
                                 <td class="font-weight-bold text-success"><?= number_format($p['jumlah_panen'], 0, ',', '.'); ?> Kg</td>
-                                <td><span class="badge border text-dark py-1 px-2" style="background: #f8f9fa; font-size:0.75rem; font-weight:500;"><?= htmlspecialchars($p['kualitas'] ?? '-'); ?></span></td>
                                 <td class="text-center d-print-none">
                                     <a href="<?= base_url('petani/panen/detail/' . $p['id_panen']); ?>" class="btn btn-sm btn-info text-white" style="border-radius:6px;" title="Detail"><i class="bi bi-eye"></i></a>
                                     <a href="<?= base_url('petani/panen/edit/' . $p['id_panen']); ?>" class="btn btn-sm btn-warning text-white" style="border-radius:6px;" title="Edit"><i class="bi bi-pencil"></i></a>

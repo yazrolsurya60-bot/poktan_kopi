@@ -49,13 +49,9 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 form-group mb-3">
+                <div class="col-md-12 form-group mb-3">
                     <label>Jumlah Panen (Kg) <span class="text-danger">*</span></label>
                     <input type="number" name="jumlah_panen" class="form-control" min="1" value="<?= isset($panen) ? $panen['jumlah_panen'] : ''; ?>" required placeholder="Contoh: 150">
-                </div>
-                <div class="col-md-6 form-group mb-3">
-                    <label>Kualitas / Grade <span class="text-danger">*</span></label>
-                    <input type="text" name="kualitas" class="form-control" value="<?= isset($panen) ? $panen['kualitas'] : ''; ?>" required placeholder="Contoh: Grade A / Campur">
                 </div>
             </div>
 

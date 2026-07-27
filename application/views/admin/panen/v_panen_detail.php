@@ -73,12 +73,7 @@
 					<div class="detail-value text-success" style="font-size: 1.3rem;">
 						<?= number_format($panen['jumlah_panen'], 0, ',', '.'); ?> Kg</div>
 				</div>
-				<div class="detail-row">
-					<div class="detail-label">Kualitas / Grade</div>
-					<div class="detail-value"><span class="badge badge-light"
-							style="font-size:0.9rem; border:1px solid #ccc; padding:6px 12px;"><?= htmlspecialchars($panen['kualitas'] ?? '-'); ?></span>
-					</div>
-				</div>
+
 				<div class="detail-row">
 					<div class="detail-label">Catatan Tambahan</div>
 					<div class="detail-value" style="font-weight: 500; font-size: 0.9rem; color: #555;">

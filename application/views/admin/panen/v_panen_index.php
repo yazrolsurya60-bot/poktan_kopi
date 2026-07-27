@@ -20,14 +20,8 @@
 						value="<?= $this->input->get('end_date'); ?>"
 						style="border-radius: 8px; border: 1px solid #E5E0DB; background-color: #FAF6F0; font-size: 0.85rem;">
 				</div>
-				<div class="col-md-3" style="padding: 0 8px;">
-					<label
-						style="font-size: 0.72rem; font-weight: 700; color: #70655E; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block;">KUALITAS</label>
-					<input type="text" name="kualitas" class="form-control form-control-sm py-2 px-3"
-						placeholder="Contoh: Grade A" value="<?= $this->input->get('kualitas'); ?>"
-						style="border-radius: 8px; border: 1px solid #E5E0DB; background-color: #FAF6F0; font-size: 0.85rem;">
-				</div>
-				<div class="col-md-3" style="padding: 0 8px;">
+
+				<div class="col-md-3 ml-auto" style="padding: 0 8px;">
 					<button type="submit" class="btn w-100 py-2 border-0 font-weight-bold"
 						style="background-color: #D9D2C9; color: #4A2C11; border-radius: 8px; font-size: 0.85rem; transition: all 0.2s ease;">
 						<i class="bi bi-funnel-fill mr-1"></i> Terapkan Filter
@@ -84,9 +78,6 @@
 						<th class="border-0 text-muted py-3"
 							style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; width: 14%;">
 							JUMLAH (KG)</th>
-						<th class="border-0 text-muted py-3"
-							style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; width: 13%;">
-							KUALITAS</th>
 						<th class="border-0 text-muted py-3 text-center d-print-none"
 							style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding-right: 24px; width: 12%;">
 							AKSI</th>
@@ -95,7 +86,7 @@
 				<tbody>
 					<?php if (empty($panen_list)): ?>
 						<tr>
-							<td colspan="7" class="text-center py-5 border-0 text-muted">
+							<td colspan="6" class="text-center py-5 border-0 text-muted">
 								<i class="bi bi-inbox d-block mb-3" style="font-size: 2.5rem; color: #A8988A;"></i>
 								<p class="mb-0" style="font-size: 0.9rem; color: #70655E;">Belum ada data panen dari petani.
 								</p>
@@ -116,12 +107,6 @@
 								<td class="align-middle py-3 font-weight-bold" style="color: #10B981;">
 									<?= number_format($p['jumlah_panen'], 0, ',', '.'); ?> Kg
 								</td>
-								<td class="align-middle py-3">
-									<span class="badge font-weight-bold px-3 py-1"
-										style="border: 1px solid #D9D2C9; background: #F8F9FA; color: #70655E; border-radius: 20px; font-size: 0.75rem;">
-										<?= htmlspecialchars($p['kualitas'] ?? '-'); ?>
-									</span>
-								</td>
 								<td class="align-middle py-3 text-center d-print-none" style="padding-right: 24px;">
 									<a href="<?= base_url('admin/panen/detail/' . $p['id_panen']); ?>"
 										class="btn btn-sm text-primary font-weight-bold"
@@ -141,7 +126,7 @@
 		<div class="p-3 border-top" style="border-color: rgba(74,44,17,0.05); background-color: #fff;">
 			<small class="text-muted">
 				<i class="bi bi-info-circle mr-1"></i> Menampilkan <strong><?= count($panen_list); ?></strong> data panen
-				<?php if (!empty($this->input->get('start_date')) || !empty($this->input->get('end_date')) || !empty($this->input->get('kualitas'))): ?>
+				<?php if (!empty($this->input->get('start_date')) || !empty($this->input->get('end_date'))): ?>
 					(hasil filter)
 				<?php endif; ?>
 			</small>
