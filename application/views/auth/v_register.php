@@ -71,127 +71,14 @@
         animation: fadeIn 0.6s ease-out;
     }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-        .register-card {
-            background: var(--card-white);
-            border: 1px solid rgba(74, 44, 17, 0.06);
-            border-radius: var(--radius-card);
-            box-shadow: 0 15px 35px rgba(44, 24, 8, 0.06);
-            padding: 35px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .register-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--roasted-brown), var(--amber-cream));
-        }
-
-        .brand-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .brand-icon {
-            width: 50px;
-            height: 50px;
-            background: rgba(230, 161, 92, 0.12);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            color: var(--amber-cream);
-            margin: 0 auto 12px;
-        }
-
-        .brand-header h4 {
-            font-weight: 700;
-            color: var(--dark-coffee);
-            margin-bottom: 2px;
-            letter-spacing: -0.5px;
-        }
-
-        .brand-header p {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--dark-coffee);
-            margin-bottom: 6px;
-        }
-
-        .input-group-custom {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-group-custom i {
-            position: absolute;
-            left: 16px;
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            transition: var(--transition-smooth);
-            z-index: 10;
-        }
-
-        .form-control-custom {
-            width: 100%;
-            padding: 11px 16px 11px 48px;
-            background-color: #FAF6F0;
-            border: 1px solid rgba(74, 44, 17, 0.08);
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--dark-coffee);
-            transition: var(--transition-smooth);
-        }
-
-        .form-control-custom:focus {
-            background-color: #ffffff;
-            border-color: var(--amber-cream);
-            box-shadow: 0 0 0 4px rgba(230, 161, 92, 0.15);
-            outline: none;
-        }
-
-        .form-control-custom:focus + i {
-            color: var(--amber-cream);
-        }
-
-        .role-selector {
-            display: flex;
-            gap: 15px;
-            margin-top: 5px;
-        }
-
-        .role-option {
-            flex: 1;
-            position: relative;
-        }
-
-        .role-option input {
-            position: absolute;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .register-card {
@@ -285,11 +172,10 @@
         outline: none;
     }
 
-    .form-control-custom:focus+i {
+    .form-control-custom:focus + i {
         color: var(--amber-cream);
     }
 
-    /* Role selector styling */
     .role-selector {
         display: flex;
         gap: 15px;
@@ -330,14 +216,14 @@
         color: var(--text-secondary);
     }
 
-    .role-option input:checked+.role-label {
+    .role-option input:checked + .role-label {
         background-color: #ffffff;
         border-color: var(--amber-cream);
         box-shadow: 0 4px 15px rgba(230, 161, 92, 0.1);
         color: var(--roasted-brown);
     }
 
-    .role-option input:checked+.role-label i {
+    .role-option input:checked + .role-label i {
         color: var(--amber-cream);
     }
 
@@ -360,6 +246,26 @@
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(44, 24, 8, 0.25);
         color: white;
+        text-decoration: none;
+    }
+
+    .btn-secondary-custom {
+        background: transparent;
+        color: var(--amber-cream);
+        border: 2px solid var(--amber-cream);
+        border-radius: 10px;
+        padding: 11px 24px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        width: 100%;
+        transition: var(--transition-smooth);
+        cursor: pointer;
+    }
+
+    .btn-secondary-custom:hover {
+        background: var(--amber-cream);
+        color: white;
+        text-decoration: none;
     }
 
     .login-footer {
@@ -379,7 +285,7 @@
         color: var(--roasted-brown);
     }
 
-    /* Premium Simulation Email Box */
+    /* Simulation Card */
     .simulation-card {
         background: #E0F2FE;
         border: 1px solid #BAE6FD;
@@ -400,172 +306,99 @@
         gap: 6px;
     }
 
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
+    /* OTP Input Styles */
+    .otp-input-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 5px;
+        justify-content: space-between;
+    }
 
-        .role-label i {
-            font-size: 1.4rem;
-            margin-bottom: 4px;
-            color: var(--text-secondary);
-        }
+    .otp-input {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        text-align: center;
+        background-color: #FAF6F0;
+        border: 2px solid rgba(74, 44, 17, 0.08);
+        border-radius: 10px;
+        font-weight: 600;
+        color: var(--dark-coffee);
+        transition: var(--transition-smooth);
+        outline: none;
+    }
 
-        .role-option input:checked + .role-label {
-            background-color: #ffffff;
-            border-color: var(--amber-cream);
-            box-shadow: 0 4px 15px rgba(230, 161, 92, 0.1);
-            color: var(--roasted-brown);
-        }
+    .otp-input:focus {
+        background-color: #ffffff;
+        border-color: var(--amber-cream);
+        box-shadow: 0 0 0 4px rgba(230, 161, 92, 0.15);
+    }
 
-        .role-option input:checked + .role-label i {
-            color: var(--amber-cream);
-        }
+    .step-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
 
-        .btn-custom {
-            background: var(--roasted-brown);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 11px 24px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            width: 100%;
-            transition: var(--transition-smooth);
-            box-shadow: 0 4px 15px rgba(74, 44, 17, 0.15);
-            cursor: pointer;
-        }
+    .step-badge {
+        width: 30px;
+        height: 30px;
+        background: var(--amber-cream);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+    }
 
-        .btn-custom:hover {
-            background: var(--dark-coffee);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(44, 24, 8, 0.25);
-            color: white;
-        }
+    .info-box {
+        background: #E0F2FE;
+        border: 1px solid #BAE6FD;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 20px;
+        font-size: 0.85rem;
+        color: #0369A1;
+    }
 
-        .btn-secondary-custom {
-            background: transparent;
-            color: var(--amber-cream);
-            border: 2px solid var(--amber-cream);
-            border-radius: 10px;
-            padding: 11px 24px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            width: 100%;
-            transition: var(--transition-smooth);
-            cursor: pointer;
-        }
+    .info-box i {
+        margin-right: 8px;
+    }
 
-        .btn-secondary-custom:hover {
-            background: var(--amber-cream);
-            color: white;
-        }
+    .text-muted-sm {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+    }
 
-        .login-footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
+    .btn-link-custom {
+        color: var(--amber-cream);
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
 
-        .login-footer a {
-            font-weight: 700;
-            color: var(--amber-cream);
-            text-decoration: none;
-        }
+    .btn-link-custom:hover {
+        color: var(--roasted-brown);
+        text-decoration: underline;
+    }
 
-        .login-footer a:hover {
-            color: var(--roasted-brown);
-        }
+    .timer {
+        font-weight: 700;
+        color: var(--roasted-brown);
+    }
 
-        .otp-input-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 5px;
-            justify-content: space-between;
-        }
-
-        .otp-input {
-            width: 50px;
-            height: 50px;
-            font-size: 1.5rem;
-            text-align: center;
-            background-color: #FAF6F0;
-            border: 2px solid rgba(74, 44, 17, 0.08);
-            border-radius: 10px;
-            font-weight: 600;
-            color: var(--dark-coffee);
-            transition: var(--transition-smooth);
-        }
-
-        .otp-input:focus {
-            background-color: #ffffff;
-            border-color: var(--amber-cream);
-            box-shadow: 0 0 0 4px rgba(230, 161, 92, 0.15);
-            outline: none;
-        }
-
-        .step-indicator {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .step-badge {
-            width: 30px;
-            height: 30px;
-            background: var(--amber-cream);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
-
-        .info-box {
-            background: #E0F2FE;
-            border: 1px solid #BAE6FD;
-            border-radius: 10px;
-            padding: 12px 16px;
-            margin-bottom: 20px;
-            font-size: 0.85rem;
-            color: #0369A1;
-        }
-
-        .info-box i {
-            margin-right: 8px;
-        }
-
-        .text-muted-sm {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        .btn-link-custom {
-            color: var(--amber-cream);
-            background: none;
-            border: none;
-            padding: 0;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 0.85rem;
-        }
-
-        .btn-link-custom:hover {
-            color: var(--roasted-brown);
-            text-decoration: underline;
-        }
-
-        .timer {
-            font-weight: 700;
-            color: var(--roasted-brown);
-        }
+    @media (max-width: 576px) {
+        .register-card { padding: 24px; }
+        .otp-input { width: 40px; height: 40px; font-size: 1.2rem; }
+        .otp-input-group { gap: 6px; }
     }
     </style>
 </head>
@@ -708,7 +541,7 @@
                     <input type="hidden" name="action" value="verify_otp">
 
                     <div class="form-group">
-                        <label for="otp"><i class="bi bi-shield-check mr-2"></i>Kode OTP</label>
+                        <label for="kode_otp"><i class="bi bi-shield-check mr-2"></i>Kode OTP</label>
                         <div class="otp-input-group">
                             <input type="text" class="otp-input" id="otp1" maxlength="1" inputmode="numeric" />
                             <input type="text" class="otp-input" id="otp2" maxlength="1" inputmode="numeric" />
@@ -797,7 +630,6 @@
         });
 
         // Form submit handler to ensure OTP is combined before submission
-        // Find the form that has the verify_otp action hidden input
         const verifyForms = Array.from(document.querySelectorAll('form')).filter(form => 
             form.querySelector('input[name="action"][value="verify_otp"]')
         );
@@ -809,10 +641,8 @@
                     .join('');
                 document.getElementById('kode_otp').value = otpValue;
                 
-                // Log for debugging
                 console.log('Submitting OTP:', otpValue);
                 
-                // If OTP is empty, prevent submission
                 if (otpValue.length !== 6) {
                     e.preventDefault();
                     alert('Mohon masukkan kode OTP 6 digit yang lengkap.');

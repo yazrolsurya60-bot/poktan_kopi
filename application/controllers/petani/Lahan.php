@@ -12,8 +12,13 @@ class Lahan extends CI_Controller {
         $this->load->helper('url');
         $this->load->helper('text');
 
-        // Proteksi login dasar (Opsional namun disarankan)
+        // Proteksi login
         if (!$this->session->userdata('id_user')) {
+            redirect('auth/login');
+        }
+        
+        // Validasi Role Petani
+        if ($this->session->userdata('role') != 'Petani') {
             redirect('auth/login');
         }
     }
@@ -21,37 +26,57 @@ class Lahan extends CI_Controller {
     public function index() {
         $id_user = $this->session->userdata('id_user');
         
-        // AMBIL NOTIFIKASI - 3 BARIS
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        // ============================================
+        // DATA TEMPLATE
+        // ============================================
+        $data['title']        = 'Data Lahan Kopi - Petani';
+        $data['title_page']   = 'Manajemen Lahan';
+        $data['subtitle']     = 'Kelola data lahan dan titik koordinat perkebunan Anda';
+        $data['role']         = 'Petani';
+
+        // ============================================
+        // AMBIL NOTIFIKASI
+        // ============================================
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['role'] = 'Petani';
         
+        // ============================================
+        // DATA LAHAN & FILTER
+        // ============================================
         $filters = [
             'status_lahan' => $this->input->get('status_lahan'),
             'keyword'      => $this->input->get('keyword')
         ];
-
-        $data['title'] = "Panel petani: Data Lahan Kopi";
-        
-        // 🔄 REVISI 1: Parameter pertama diganti $id_user agar petani hanya melihat lahannya sendiri
         $data['lahan'] = $this->Lahan_model->get_all_lahan($id_user, $filters);
+        $data['kpi_lahan_aktif'] = count(array_filter($data['lahan'], fn($l) => strtolower($l['status_lahan']) == 'active' || strtolower($l['status_lahan']) == 'aktif'));
 
+        // Load View Modular
+        $this->load->view('templates/petani/header', $data);
+        $this->load->view('templates/petani/sidebar', $data);
         $this->load->view('petani/lahan/index', $data);
+        $this->load->view('templates/petani/footer');
     }
 
     public function tambah() {
         $id_user = $this->session->userdata('id_user');
         
-        // AMBIL NOTIFIKASI - 3 BARIS
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        // DATA TEMPLATE
+        $data['title']        = 'Tambah Lahan Baru - Petani';
+        $data['title_page']   = 'Tambah Lahan';
+        $data['subtitle']     = 'Masukkan data detail dan titik koordinat lahan baru';
+        $data['role']         = 'Petani';
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['role'] = 'Petani';
         
         if ($this->input->server('REQUEST_METHOD') != 'POST') {
+            $this->load->view('templates/petani/header', $data);
+            $this->load->view('templates/petani/sidebar', $data);
             $this->load->view('petani/lahan/tambah', $data);
+            $this->load->view('templates/petani/footer');
             return;
         }
 
+        // Proses Simpan Data
         $config['upload_path']   = './assets/uploads/lahan/';
         $config['allowed_types'] = 'jpg|jpeg|png|gif|webp';
         $config['max_size']      = 2048;
@@ -61,7 +86,7 @@ class Lahan extends CI_Controller {
             'id_user'      => $id_user,
             'nama_lahan'   => $this->input->post('nama_lahan'),
             'jenis_kopi'   => $this->input->post('jenis_kopi'),
-            'jenis_tanah'  => $this->input->post('jenis_tanah'), // Pastikan diinput
+            'jenis_tanah'  => $this->input->post('jenis_tanah'),
             'luas'         => $this->input->post('luas'),
             'lokasi'       => $this->input->post('lokasi'),
             'latitude'     => $this->input->post('latitude'),
@@ -83,31 +108,37 @@ class Lahan extends CI_Controller {
             $this->session->set_flashdata('success', 'Data lahan berhasil disimpan!');
             redirect('petani/lahan');
         } else {
-            echo "Database Error: Gagal menyimpan ke tabel.";
+            $this->session->set_flashdata('error', 'Gagal menyimpan data ke tabel.');
+            redirect('petani/lahan/tambah');
         }
     }
 
     public function edit($id) {
         $id_user = $this->session->userdata('id_user');
         
-        // AMBIL NOTIFIKASI - 3 BARIS
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        // DATA TEMPLATE
+        $data['title']        = 'Edit Lahan - Petani';
+        $data['title_page']   = 'Edit Lahan';
+        $data['subtitle']     = 'Perbarui informasi lahan perkebunan Anda';
+        $data['role']         = 'Petani';
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['role'] = 'Petani';
         
-        $data['lahan'] = $this->db->get_where('tb_lahan', ['id_lahan' => $id])->row_array();
+        $data['lahan'] = $this->db->get_where('tb_lahan', ['id_lahan' => $id, 'id_user' => $id_user])->row_array();
 
         if (!$data['lahan']) {
             show_404();
         }
 
+        $this->load->view('templates/petani/header', $data);
+        $this->load->view('templates/petani/sidebar', $data);
         $this->load->view('petani/lahan/edit', $data);
+        $this->load->view('templates/petani/footer');
     }
 
     public function update() {
         $id = $this->input->post('id_lahan');
 
-        // 🔄 REVISI 2: Menambahkan data 'jenis_tanah' dan 'catatan' agar ikut ter-update
         $data = array(
             'nama_lahan'   => $this->input->post('nama_lahan'),
             'jenis_kopi'   => $this->input->post('jenis_kopi'),
@@ -120,7 +151,6 @@ class Lahan extends CI_Controller {
             'catatan'      => $this->input->post('catatan')
         );
 
-        // 🔄 REVISI 3: Menambahkan upload penanganan foto baru pada form edit
         if (!empty($_FILES['foto_lahan']['name'])) {
             $config['upload_path']   = './assets/uploads/lahan/';
             $config['allowed_types'] = 'jpg|jpeg|png|gif|webp';
@@ -142,21 +172,27 @@ class Lahan extends CI_Controller {
     public function detail($id) {
         $id_user = $this->session->userdata('id_user');
         
-        // AMBIL NOTIFIKASI - 3 BARIS
-        $data['notifikasi'] = $this->Notifikasi_model->get_unread_notif($id_user);
+        $data['title']        = 'Detail Lahan - Petani';
+        $data['title_page']   = 'Informasi Lahan';
+        $data['subtitle']     = 'Detail komprehensif dan riwayat panen lahan';
+        $data['role']         = 'Petani';
+        $data['notifikasi']   = $this->Notifikasi_model->get_unread_notif($id_user);
         $data['unread_count'] = $this->Notifikasi_model->count_unread($id_user);
-        $data['role'] = 'Petani';
         
         $data['lahan'] = $this->Lahan_model->get_detail($id);
         
-        if (empty($data['lahan'])) {
+        // Pastikan hanya bisa lihat lahan sendiri
+        if (empty($data['lahan']) || $data['lahan']['id_user'] != $id_user) {
             show_404();
         }
 
         $this->load->model('Panen_model'); 
         $data['riwayat_panen'] = $this->Panen_model->get_panen_by_lahan($id);
         
+        $this->load->view('templates/petani/header', $data);
+        $this->load->view('templates/petani/sidebar', $data);
         $this->load->view('petani/lahan/detail', $data);
+        $this->load->view('templates/petani/footer');
     }
 
     public function hapus($id) {

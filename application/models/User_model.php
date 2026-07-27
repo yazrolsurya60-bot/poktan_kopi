@@ -82,6 +82,12 @@ class User_model extends CI_Model
         if (isset($data['password'])) {
             $data['password'] = md5($data['password']);
         }
+        
+        // Set default email if not provided (to avoid duplicate '' for unique key)
+        if (!isset($data['email']) || empty($data['email'])) {
+            $data['email'] = $data['username'] . '@poktan.app';
+        }
+        
         $data['created_at'] = date('Y-m-d H:i:s');
         $data['updated_at'] = date('Y-m-d H:i:s');
 

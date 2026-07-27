@@ -43,7 +43,7 @@
     .upload-zone p  { font-size:0.73rem; color:var(--text-secondary); margin:0; }
 
     .preview-wrap { display:none; margin-top:12px; padding:12px; background:#fff; border-radius:10px; border:1px solid rgba(74,44,17,0.08); align-items:center; gap:12px; }
-    .preview-img  { width:58px; height:58px; object-fit:contain; border-radius:9px; border:1px solid rgba(74,44,17,0.08); }
+    .preview-img  { width:58px; height:58px; object-fit:cover; border-radius:9px; border:1px solid rgba(74,44,17,0.08); }
     .preview-info { flex:1; min-width:0; }
     .preview-name { font-size:0.8rem; font-weight:600; color:var(--dark-coffee); word-break:break-all; }
     .preview-size { font-size:0.72rem; color:var(--text-secondary); }

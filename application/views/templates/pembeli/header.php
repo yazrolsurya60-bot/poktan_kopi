@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?= $title ?? 'LiberChain - System'; ?></title>
+	<title><?= $title ?? 'Ruang Member - Pembeli Kopi'; ?></title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -99,7 +99,6 @@
 			padding: 15px 0;
 		}
 
-		/* ===== SCROLLBAR (DISAMAKAN DENGAN KONSEP SEBELUMNYA) ===== */
 		.sidebar-menu-wrapper::-webkit-scrollbar,
 		.notif-dropdown-list::-webkit-scrollbar {
 			width: 3px;
@@ -335,15 +334,8 @@
 		}
 
 		@keyframes slideDown {
-			from {
-				opacity: 0;
-				transform: translateY(-10px);
-			}
-
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
+			from { opacity: 0; transform: translateY(-10px); }
+			to { opacity: 1; transform: translateY(0); }
 		}
 
 		.notif-dropdown-header {
@@ -397,25 +389,10 @@
 			font-size: 0.9rem;
 		}
 
-		.notif-item .notif-icon.success {
-			background: #D1FAE5;
-			color: #065F46;
-		}
-
-		.notif-item .notif-icon.warning {
-			background: #FEF3C7;
-			color: #92400E;
-		}
-
-		.notif-item .notif-icon.info {
-			background: #DBEAFE;
-			color: #1E40AF;
-		}
-
-		.notif-item .notif-icon.danger {
-			background: #FEE2E2;
-			color: #991B1B;
-		}
+		.notif-item .notif-icon.success { background: #D1FAE5; color: #065F46; }
+		.notif-item .notif-icon.warning { background: #FEF3C7; color: #92400E; }
+		.notif-item .notif-icon.info { background: #DBEAFE; color: #1E40AF; }
+		.notif-item .notif-icon.danger { background: #FEE2E2; color: #991B1B; }
 
 		.notif-item .notif-text {
 			flex: 1;
@@ -431,13 +408,8 @@
 			margin-top: 2px;
 		}
 
-		.notif-item.unread {
-			background: rgba(230, 161, 92, 0.05);
-		}
-
-		.notif-item.unread .notif-text {
-			font-weight: 600;
-		}
+		.notif-item.unread { background: rgba(230, 161, 92, 0.05); }
+		.notif-item.unread .notif-text { font-weight: 600; }
 
 		.notif-badge-new {
 			background: var(--amber-cream);
@@ -450,81 +422,24 @@
 		}
 
 		@keyframes bellRing {
-
-			0%,
-			100% {
-				transform: rotate(0);
-			}
-
-			25% {
-				transform: rotate(12deg);
-			}
-
-			50% {
-				transform: rotate(-12deg);
-			}
-
-			75% {
-				transform: rotate(6deg);
-			}
+			0%, 100% { transform: rotate(0); }
+			25% { transform: rotate(12deg); }
+			50% { transform: rotate(-12deg); }
+			75% { transform: rotate(6deg); }
 		}
 
-		.notif-btn.ring {
-			animation: bellRing 0.5s ease 1;
-		}
-
-		.btn-coffee-submit {
-			background-color: var(--roasted-brown);
-			color: #f7f5f2;
-			border-radius: 10px;
-		}
-
-		.btn-coffee-submit:hover {
-			background-color: var(--dark-coffee);
-			color: var(--amber-cream);
-		}
-
-		.card-header-coffee {
-			background-color: var(--dark-coffee);
-			color: var(--amber-cream);
-		}
-
-		.badge-table-total {
-			background-color: rgba(230, 161, 92, 0.2);
-			color: var(--amber-cream);
-		}
+		.notif-btn.ring { animation: bellRing 0.5s ease 1; }
 
 		@media (max-width: 991.98px) {
-			.sidebar {
-				left: calc(-1 * var(--sidebar-width));
-				box-shadow: none;
-			}
-
-			.sidebar.open {
-				left: 0;
-				box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
-			}
-
-			.main-content {
-				margin-left: 0;
-				padding: 20px 16px 30px;
-			}
-
-			.page-header h2 {
-				font-size: 1.3rem;
-			}
-
-			.notif-dropdown {
-				width: 340px;
-				right: 0;
-			}
+			.sidebar { left: calc(-1 * var(--sidebar-width)); box-shadow: none; }
+			.sidebar.open { left: 0; box-shadow: 0 0 40px rgba(0, 0, 0, 0.3); }
+			.main-content { margin-left: 0; padding: 20px 16px 30px; }
+			.page-header h2 { font-size: 1.3rem; }
+			.notif-dropdown { width: 340px; right: 0; }
 		}
 
 		@media (max-width: 575.98px) {
-			.main-content {
-				padding: 16px 12px 20px;
-			}
-
+			.main-content { padding: 16px 12px 20px; }
 			.notif-dropdown {
 				position: fixed;
 				top: 70px;
@@ -533,14 +448,8 @@
 				width: calc(100vw - 24px);
 				max-height: 80vh;
 			}
-
-			.notif-dropdown-list {
-				max-height: 55vh;
-			}
-
-			.user-badge .user-role {
-				display: none;
-			}
+			.notif-dropdown-list { max-height: 55vh; }
+			.user-badge .user-role { display: none; }
 		}
 	</style>
 </head>
@@ -552,8 +461,8 @@
 		<source src="<?= base_url('assets/sounds/notifikasi.mp3'); ?>" type="audio/mpeg">
 	</audio>
 
-	<!-- AUTOMATICALLY INCLUDE SIDEBAR RIGHT AFTER BODY -->
-	<?php $this->load->view('templates/admin/sidebar'); ?>
+	<!-- AUTOMATICALLY INCLUDE SIDEBAR PEMBELI -->
+	<?php $this->load->view('templates/pembeli/sidebar'); ?>
 
 	<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -567,7 +476,7 @@
 					<i class="bi bi-list"></i>
 				</button>
 				<h2 class="d-inline-block align-middle mb-0">
-					<?= $title_page ?? 'Halaman'; ?>
+					<?= $title_page ?? 'Dashboard'; ?>
 				</h2>
 				<?php if (!empty($subtitle)): ?>
 					<p class="subtitle mb-0 mt-1"><?= $subtitle; ?></p>
@@ -588,20 +497,20 @@
 
 					<div class="notif-dropdown" id="notifDropdown">
 						<div class="notif-dropdown-header">
-							<span>
+							<span id="notifHeaderTitle">
 								<?= (isset($unread_count) && $unread_count > 0) ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
 							</span>
 							<div>
 								<?php if (isset($unread_count) && $unread_count > 0): ?>
 									<a href="#" id="markAllReadBtn" class="mr-2" style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
 								<?php endif; ?>
-								<a href="<?= base_url('admin/dashboard/history'); ?>" style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
+								<a href="<?= base_url('pembeli/dashboard/history'); ?>" style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
 							</div>
 						</div>
 						<div class="notif-dropdown-list" id="notifList">
 							<?php if (!empty($notifikasi)): ?>
 								<?php foreach ($notifikasi as $n): ?>
-									<a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>" href="<?= base_url('admin/dashboard/read/' . $n['id_notifikasi']); ?>">
+									<a class="notif-item <?= (isset($n['status_baca']) && $n['status_baca'] == '0') ? 'unread' : ''; ?>" href="<?= base_url('pembeli/dashboard/read/' . $n['id_notifikasi']); ?>">
 										<?php
 										$icon_type = $n['icon'] ?? 'info';
 										$icon_map = [
@@ -616,7 +525,7 @@
 											<i class="bi <?= $icon_class; ?>"></i>
 										</div>
 										<div class="notif-text">
-											<?= htmlspecialchars($n['isi_notifikasi']); ?>
+											<?= htmlspecialchars($n['isi_notifikasi'] ?? $n['judul'] ?? 'Notifikasi'); ?>
 											<span class="notif-time"><?= date('d M Y, H:i', strtotime($n['tanggal_buat'])); ?></span>
 										</div>
 										<?php if (isset($n['status_baca']) && $n['status_baca'] == '0'): ?>
@@ -632,7 +541,7 @@
 							<?php endif; ?>
 						</div>
 						<div class="p-2 text-center border-top" style="background:#FAF6F0; border-color:rgba(74,44,17,0.06);">
-							<a href="<?= base_url('admin/dashboard/settings'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
+							<a href="<?= base_url('pembeli/dashboard/settings'); ?>" class="small text-secondary font-weight-bold text-decoration-none">
 								<i class="bi bi-gear-fill mr-1"></i> Pengaturan Notifikasi
 							</a>
 						</div>
@@ -640,8 +549,8 @@
 				</div>
 
 				<?php
-				$nama = $this->session->userdata('nama') ?? 'Ketua Poktan';
-				$role = $this->session->userdata('role') ?? 'ADMIN';
+				$nama = $this->session->userdata('nama') ?? 'Budi Pembeli';
+				$role = $this->session->userdata('role') ?? 'Member';
 				?>
 				<div class="user-badge">
 					<i class="bi bi-person-circle"></i>

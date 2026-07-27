@@ -1,13 +1,5 @@
 <style>
-:root {
-    --roasted-brown: #4A2C11;
-    --dark-coffee:   #2C1808;
-    --amber-cream:   #E6A15C;
-    --bg-cream:      #FAF6F0;
-    --card-white:    #FFFFFF;
-}
-body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream); color: var(--dark-coffee); }
-
+/* Style spesifik Tracking Update */
 .page-card {
     background: var(--card-white);
     border-radius: 16px;
@@ -111,21 +103,18 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
     padding: 6px 12px; border-radius: 8px;
     font-size: 0.8rem; font-weight: 700;
 }
-
-/* Alert overrides */
-.alert { border-radius: 12px; font-size: 0.87rem; }
 </style>
 
-<div class="container-fluid" style="max-width: 960px;">
+<div class="container-fluid p-0" style="max-width: 960px; margin-left: 0;">
 
     <?php if ($this->session->flashdata('success')): ?>
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert" style="border-radius:12px; font-size: 0.87rem;">
             <i class="bi bi-check-circle-fill mr-2"></i><?= $this->session->flashdata('success') ?>
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
         </div>
     <?php endif; ?>
     <?php if ($this->session->flashdata('error')): ?>
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert" style="border-radius:12px; font-size: 0.87rem;">
             <i class="bi bi-exclamation-triangle-fill mr-2"></i><?= $this->session->flashdata('error') ?>
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
         </div>
@@ -137,7 +126,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
             <div class="head-icon brown"><i class="bi bi-box-seam"></i></div>
             <div>
                 <h5 class="mb-0 font-weight-bold" style="color:var(--dark-coffee);">Detail Pengiriman — #<?= $tracking->invoice ?></h5>
-                <small class="text-muted">Update status &amp; assign kurir untuk pesanan ini</small>
+                <small class="text-muted">Rincian status pengiriman saat ini</small>
             </div>
         </div>
         <div class="card-body">
@@ -179,7 +168,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
     <div class="row">
         <!-- ===== ASSIGN KURIR ===== -->
         <div class="col-md-5">
-            <div class="page-card">
+            <div class="page-card h-100 mb-0">
                 <div class="card-head">
                     <div class="head-icon amber"><i class="bi bi-person-badge-fill"></i></div>
                     <div>
@@ -191,7 +180,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
                     <?php if (!empty($kurir_list)): ?>
                         <form method="POST" action="<?= base_url('admin/tracking/update/' . $tracking->id_tracking) ?>">
                             <input type="hidden" name="action" value="assign_kurir">
-                            <div style="max-height: 320px; overflow-y: auto; padding-right: 4px;">
+                            <div style="max-height: 250px; overflow-y: auto; padding-right: 4px;">
                                 <?php foreach ($kurir_list as $k): ?>
                                     <input type="radio" name="id_kurir" id="kurir_<?= $k->id_kurir ?>"
                                            value="<?= $k->id_kurir ?>" class="kurir-radio"
@@ -221,8 +210,8 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
         </div>
 
         <!-- ===== UPDATE STATUS ===== -->
-        <div class="col-md-7">
-            <div class="page-card">
+        <div class="col-md-7 mt-4 mt-md-0">
+            <div class="page-card h-100 mb-0">
                 <div class="card-head">
                     <div class="head-icon blue"><i class="bi bi-arrow-repeat"></i></div>
                     <div>
@@ -279,7 +268,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
 
     <!-- ===== BUKTI PENGIRIMAN & PEMBAYARAN COD ===== -->
     <?php if (!empty($tracking->bukti_pengiriman) || !empty($bukti_bayar)): ?>
-        <div class="page-card mb-4 mt-3">
+        <div class="page-card mb-4 mt-4">
             <div class="card-head" style="background: rgba(74,44,17,0.02);">
                 <div class="head-icon brown"><i class="bi bi-file-earmark-image"></i></div>
                 <div>
@@ -377,7 +366,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-cream)
     <?php endif; ?>
 
     <!-- Back button -->
-    <div class="mb-4">
+    <div class="mb-4 mt-4">
         <a href="<?= base_url('admin/tracking') ?>" class="btn-back">
             <i class="bi bi-arrow-left"></i> Kembali ke Daftar Tracking
         </a>

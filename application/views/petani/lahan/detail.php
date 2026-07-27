@@ -1,189 +1,128 @@
-<!DOCTYPE html>
-<html lang="id">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+    .detail-card { background: #ffffff; border-radius: 20px; padding: 25px; box-shadow: var(--shadow-soft); border: 1px solid rgba(74, 44, 17, 0.06); }
+    .image-wrapper { width: 100%; height: 320px; border-radius: 15px; overflow: hidden; margin-bottom: 25px; border: 1px solid #edf2f7; }
+    .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+    .label-text { color: var(--text-secondary); font-size: 0.85rem; display: block; margin-bottom: 4px; font-weight: 500; }
+    .value-text { color: var(--dark-coffee); font-weight: 700; font-size: 1rem; }
+    .status-pill { background: #d1fae5; color: #065f46; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+    .status-pill.inactive { background: #fff3e0; color: #e65100; }
+    #map-detail { width: 100%; height: 300px; border-radius: 15px; border: 1px solid #e2e8f0; margin-top: 10px; z-index: 1; }
+    
+    .table-panen th { background: #f8f9fa; border-top:none; font-size:0.85rem; text-transform: uppercase; color:var(--text-secondary); }
+    .table-panen td { border-bottom: 1px solid #edf2f7; vertical-align: middle; }
+</style>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Data Lahan</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-    body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f4f7f6;
-    }
-
-    .detail-container {
-        max-width: 850px;
-        margin: 40px auto;
-        background: #ffffff;
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-    }
-
-    .btn-back {
-        display: inline-block;
-        padding: 8px 20px;
-        background: #eef2f3;
-        color: #4a5568;
-        border-radius: 10px;
-        text-decoration: none;
-        font-weight: 600;
-        margin-bottom: 20px;
-    }
-
-    .image-wrapper {
-        width: 100%;
-        height: 280px;
-        border-radius: 15px;
-        overflow: hidden;
-        margin-bottom: 25px;
-    }
-
-    .image-wrapper img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .info-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
-
-    .label-text {
-        color: #718096;
-        font-size: 14px;
-        display: block;
-        margin-bottom: 4px;
-    }
-
-    .value-text {
-        color: #2d3748;
-        font-weight: 600;
-        font-size: 16px;
-    }
-
-    .status-pill {
-        background: #c6f6d5;
-        color: #22543d;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 700;
-        text-transform: uppercase;
-    }
-
-    #map {
-        width: 100%;
-        height: 300px;
-        border-radius: 15px;
-        border: 1px solid #e2e8f0;
-        margin-top: 10px;
-    }
-    </style>
-</head>
-
-<body>
-
-    <div class="detail-container">
-        <a href="<?= base_url('petani/lahan') ?>" class="btn-back">← Kembali</a>
-
-        <div class="image-wrapper">
-            <img src="<?= base_url('assets/uploads/lahan/'.$lahan['foto_lahan']) ?>" alt="Foto Lahan">
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0; color: #1a202c;"><?= htmlspecialchars($lahan['nama_lahan']) ?></h2>
-            <span class="status-pill"><?= htmlspecialchars($lahan['status_lahan']) ?></span>
-        </div>
-
-        <div class="info-grid">
-            <div>
-                <span class="label-text">Jenis Kopi</span>
-                <span class="value-text"><?= htmlspecialchars($lahan['jenis_kopi']) ?></span>
-            </div>
-            <!-- REVISI: Menampilkan data Jenis Tanah -->
-            <div>
-                <span class="label-text">Jenis Tanah</span>
-                <span
-                    class="value-text"><?= !empty($lahan['jenis_tanah']) ? htmlspecialchars($lahan['jenis_tanah']) : '-' ?></span>
-            </div>
-            <div>
-                <span class="label-text">Luas Lahan</span>
-                <span class="value-text"><?= htmlspecialchars($lahan['luas']) ?> Ha</span>
-            </div>
-            <div>
-                <span class="label-text">Lokasi</span>
-                <span class="value-text"><?= htmlspecialchars($lahan['lokasi']) ?></span>
-            </div>
-            <div style="grid-column: span 2;">
-                <span class="label-text">Koordinat</span>
-                <span class="value-text"><?= htmlspecialchars($lahan['latitude']) ?>,
-                    <?= htmlspecialchars($lahan['longitude']) ?></span>
-            </div>
-        </div>
-
-        <div style="margin-top: 25px;">
-            <span class="label-text">Peta Lokasi</span>
-            <div id="map"></div>
-        </div>
-
-        <div style="margin-top: 25px; border-top: 1px solid #edf2f7; padding-top: 20px;">
-            <span class="label-text">Catatan Lahan</span>
-            <p style="color: #4a5568; line-height: 1.6;">
-                <?= !empty($lahan['catatan']) ? htmlspecialchars($lahan['catatan']) : 'Tidak ada catatan tambahan.' ?>
-            </p>
-        </div>
-
-        <div style="margin-top: 30px; border-top: 1px solid #edf2f7; padding-top: 20px;">
-            <h4 style="color: #1a202c; margin-bottom: 15px;">Riwayat Panen</h4>
-            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-                <thead>
-                    <tr style="background: #f7fafc; text-align: left;">
-                        <th style="padding: 12px; border: 1px solid #e2e8f0;">Tanggal</th>
-                        <th style="padding: 12px; border: 1px solid #e2e8f0;">Jumlah (Kg)</th>
-                        <th style="padding: 12px; border: 1px solid #e2e8f0;">Kualitas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if(!empty($riwayat_panen)): ?>
-                    <?php foreach($riwayat_panen as $p): ?>
-                    <tr>
-                        <td style="padding: 12px; border: 1px solid #e2e8f0;">
-                            <?= htmlspecialchars($p->tanggal_panen); ?></td>
-                        <td style="padding: 12px; border: 1px solid #e2e8f0;"><?= htmlspecialchars($p->jumlah_panen); ?>
-                            Kg</td>
-                        <td style="padding: 12px; border: 1px solid #e2e8f0;"><?= htmlspecialchars($p->kualitas); ?>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                    <?php else: ?>
-                    <tr>
-                        <td colspan="3"
-                            style="padding: 20px; text-align: center; border: 1px solid #e2e8f0; color: #718096;">
-                            Belum ada riwayat panen.
-                        </td>
-                    </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
+<div class="row">
+    <div class="col-lg-12">
+        <a href="<?= base_url('petani/lahan') ?>" class="btn btn-light font-weight-bold mb-3 border" style="border-radius:10px;"><i class="bi bi-arrow-left mr-1"></i> Kembali ke Daftar Lahan</a>
     </div>
 
-    <script>
-    var lat = <?= $lahan['latitude'] ?>;
-    var lng = <?= $lahan['longitude'] ?>;
-    var map = L.map('map').setView([lat, lng], 15);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
-    L.marker([lat, lng]).addTo(map).bindPopup("<b><?= htmlspecialchars($lahan['nama_lahan']) ?></b>").openPopup();
-    </script>
+    <div class="col-lg-12">
+        <div class="detail-card mb-4">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="font-weight-bold mb-0 text-coffee-primary"><?= htmlspecialchars($lahan['nama_lahan']) ?></h3>
+                <span class="status-pill <?= strtolower($lahan['status_lahan']) == 'inactive' ? 'inactive' : '' ?>"><?= htmlspecialchars($lahan['status_lahan']) ?></span>
+            </div>
 
-</body>
+            <div class="row">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <div class="image-wrapper">
+                        <?php if(!empty($lahan['foto_lahan'])): ?>
+                            <img src="<?= base_url('assets/uploads/lahan/'.$lahan['foto_lahan']) ?>" alt="Foto Lahan">
+                        <?php else: ?>
+                            <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-light text-muted">
+                                <div><i class="bi bi-image" style="font-size:3rem;"></i><br>Tidak ada foto</div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
 
-</html>
+                <div class="col-lg-7">
+                    <div class="row mb-4">
+                        <div class="col-sm-6 mb-3">
+                            <span class="label-text">Jenis Kopi</span>
+                            <span class="value-text"><i class="bi bi-cup-hot-fill text-warning mr-1"></i> <?= htmlspecialchars($lahan['jenis_kopi']) ?></span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <span class="label-text">Jenis Tanah</span>
+                            <span class="value-text"><?= !empty($lahan['jenis_tanah']) ? htmlspecialchars($lahan['jenis_tanah']) : '-' ?></span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <span class="label-text">Luas Lahan</span>
+                            <span class="value-text"><?= htmlspecialchars($lahan['luas']) ?> Ha</span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <span class="label-text">Koordinat (Lat, Lng)</span>
+                            <span class="value-text text-info"><?= htmlspecialchars($lahan['latitude']) ?>, <?= htmlspecialchars($lahan['longitude']) ?></span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="label-text">Lokasi/Alamat Lengkap</span>
+                            <span class="value-text" style="font-size:0.95rem; font-weight:600;"><?= htmlspecialchars($lahan['lokasi']) ?></span>
+                        </div>
+                    </div>
+
+                    <div class="border-top pt-3">
+                        <span class="label-text">Catatan Tambahan Lahan</span>
+                        <p class="text-muted" style="line-height: 1.6; font-size:0.9rem;">
+                            <?= !empty($lahan['catatan']) ? htmlspecialchars($lahan['catatan']) : '<i class="text-light-muted">Tidak ada catatan tambahan.</i>' ?>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4 border-top pt-4">
+                <div class="col-lg-6 mb-4">
+                    <h5 class="font-weight-bold mb-3"><i class="bi bi-map text-secondary mr-2"></i> Peta Lokasi Lahan</h5>
+                    <div id="map-detail"></div>
+                </div>
+                <div class="col-lg-6">
+                    <h5 class="font-weight-bold mb-3"><i class="bi bi-clock-history text-secondary mr-2"></i> Riwayat Panen Terakhir</h5>
+                    <div class="table-responsive">
+                        <table class="table table-panen">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal Panen</th>
+                                    <th>Hasil (Kg)</th>
+                                    <th>Kualitas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if(!empty($riwayat_panen)): ?>
+                                    <?php foreach($riwayat_panen as $p): ?>
+                                    <tr>
+                                        <td class="font-weight-bold text-dark"><?= date('d M Y', strtotime($p->tanggal_panen)); ?></td>
+                                        <td><span class="badge bg-light text-dark px-2 border"><?= htmlspecialchars($p->jumlah_panen); ?> kg</span></td>
+                                        <td><span class="badge <?= strtolower($p->kualitas) == 'a' ? 'badge-success' : 'badge-warning' ?>"><?= htmlspecialchars($p->kualitas); ?></span></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="3" class="text-center py-4 text-muted border">Belum ada riwayat panen tercatat pada lahan ini.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var lat = <?= !empty($lahan['latitude']) ? $lahan['latitude'] : 0 ?>;
+        var lng = <?= !empty($lahan['longitude']) ? $lahan['longitude'] : 0 ?>;
+        
+        var map = L.map('map-detail').setView([lat, lng], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+        
+        L.marker([lat, lng]).addTo(map).bindPopup("<b><?= htmlspecialchars(addslashes($lahan['nama_lahan'])) ?></b>").openPopup();
+        
+        setTimeout(function() { map.invalidateSize(); }, 300);
+    });
+</script>

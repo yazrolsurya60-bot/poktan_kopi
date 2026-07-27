@@ -163,4 +163,4 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-
 .timeline-content { background: var(--card-white); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(74,44,17,0.06); transition: all 0.3s; }
 .timeline-content:hover { border-color: var(--amber-cream); box-shadow: 0 8px 30px rgba(44,24,8,0.08); }
 .bukti-card { background: #FAF6F0; border-radius: 12px; border: 1px solid rgba(74,44,17,0.08); }
-</style>
+</style>

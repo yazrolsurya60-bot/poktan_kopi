@@ -9,6 +9,7 @@
     .form-group label .required { color: #EF4444; font-weight: 700; }
     .form-control, .form-select { border-radius: 10px; border: 1px solid rgba(74, 44, 17, 0.12); padding: 10px 16px; font-size: 0.88rem; background: var(--card-white); height: 44px; }
     .form-control:focus, .form-select:focus { border-color: var(--amber-cream); box-shadow: 0 0 0 4px rgba(230, 161, 92, 0.1); outline: none; }
+    .form-control[readonly] { background-color: #f8f9fa; color: #6c757d; }
     .file-upload-wrapper input[type="file"] { display: block; width: 100%; padding: 9px 14px; border: 2px dashed rgba(74, 44, 17, 0.12); border-radius: 10px; background: var(--bg-cream); cursor: pointer; font-size: 0.82rem; color: var(--text-secondary); height: 44px; }
     .file-upload-wrapper input[type="file"]::file-selector-button { padding: 5px 16px; border: none; border-radius: 6px; background: var(--amber-cream); color: white; font-weight: 600; font-size: 0.72rem; cursor: pointer; margin-right: 10px; }
     .file-helper { font-size: 0.7rem; color: var(--text-secondary); margin-top: 4px; display: block; }
@@ -20,18 +21,18 @@
     .form-actions { padding-top: 20px; border-top: 1px solid rgba(74, 44, 17, 0.06); display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px; }
 </style>
 
-<!-- FORM CARD -->
+<!-- FORM CARD EDIT -->
 <div class="custom-card">
     <div class="card-header-custom">
         <i class="bi bi-box-seam-fill"></i>
-        Formulir Produk Kopi
+        Formulir Edit Produk Kopi
         <span class="badge-required">
             <i class="bi bi-asterisk text-danger" style="font-size:0.5rem;"></i> Wajib diisi
         </span>
     </div>
 
     <div class="card-body-custom">
-        <form action="<?= base_url('petani/produk/simpan'); ?>" method="post" enctype="multipart/form-data">
+        <form action="<?= base_url('petani/produk/update/' . $produk->id_produk); ?>" method="post" enctype="multipart/form-data">
             <div class="row">
                 <!-- KOLOM KIRI -->
                 <div class="col-lg-6">
@@ -39,9 +40,9 @@
                         <label>Nama Produk <span class="required">*</span></label>
                         <select name="nama_produk" id="nama_produk" class="form-control" required>
                             <option value="">-- Pilih Nama Produk --</option>
-                            <option value="Ceri">Ceri</option>
-                            <option value="Biji Kopi">Biji Kopi</option>
-                            <option value="Kopi Bubuk">Kopi Bubuk</option>
+                            <option value="Ceri" <?= isset($produk) && $produk->nama_produk == 'Ceri' ? 'selected' : ''; ?>>Ceri</option>
+                            <option value="Biji Kopi" <?= isset($produk) && $produk->nama_produk == 'Biji Kopi' ? 'selected' : ''; ?>>Biji Kopi</option>
+                            <option value="Kopi Bubuk" <?= isset($produk) && $produk->nama_produk == 'Kopi Bubuk' ? 'selected' : ''; ?>>Kopi Bubuk</option>
                         </select>
                     </div>
 
@@ -54,23 +55,32 @@
 
                     <div class="form-group">
                         <label>Proses Pengolahan</label>
-                        <input type="text" name="proses" id="proses" class="form-control" placeholder="Otomatis terisi berdasarkan Nama Produk" readonly>
+                        <input type="text" name="proses" id="proses" class="form-control" value="<?= isset($produk) ? ($produk->proses ?? '') : ''; ?>" readonly>
                     </div>
 
                     <div class="form-group">
                         <label>Harga (Rp) / Kg</label>
-                        <input type="number" name="harga" id="harga" class="form-control" placeholder="Otomatis terisi" readonly>
+                        <input type="number" name="harga" id="harga" class="form-control" value="<?= isset($produk) ? $produk->harga : ''; ?>" readonly>
                         <small class="text-muted" style="display:block; margin-top:3px; color:var(--text-secondary);">Harga ditentukan oleh Admin</small>
                     </div>
 
                     <div class="form-group">
                         <label>Stok Ketersediaan (Kg) <span class="required">*</span></label>
-                        <input type="number" name="stok_produk" id="stok" class="form-control" placeholder="Contoh: 50" required>
+                        <input type="number" name="stok_produk" id="stok" class="form-control" value="<?= isset($produk) ? $produk->stok_produk : ''; ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label>Total Pendapatan (Rp)</label>
-                        <input type="text" name="total" id="total" class="form-control" style="font-weight:700; color:var(--roasted-brown);" readonly>
+                        <input type="text" name="total" id="total" class="form-control" style="font-weight:700; color:var(--roasted-brown);" readonly
+                               value="<?php 
+                               if (isset($produk)) {
+                                   $harga = $produk->harga ?? 0;
+                                   $stok = $produk->stok_produk ?? 0;
+                                   echo 'Rp ' . number_format($harga * $stok, 0, ',', '.');
+                               } else {
+                                   echo 'Rp 0';
+                               }
+                               ?>">
                         <small class="text-muted" style="display:block; margin-top:3px; color:var(--text-secondary);">Harga × Stok = Total Pendapatan</small>
                     </div>
                 </div>
@@ -79,14 +89,14 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label>Altitude (Ketinggian Tanam)</label>
-                        <input type="text" name="altitude" class="form-control" placeholder="Contoh: 900 Meter">
+                        <input type="text" name="altitude" class="form-control" placeholder="Contoh: 900 Meter" value="<?= isset($produk) ? $produk->altitude : ''; ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Status Produk <span class="required">*</span></label>
                         <select name="status_produk" class="form-control">
-                            <option value="Aktif">Aktif</option>
-                            <option value="Nonaktif">Nonaktif</option>
+                            <option value="Aktif" <?= isset($produk) && $produk->status_produk == 'Aktif' ? 'selected' : ''; ?>>Aktif</option>
+                            <option value="Nonaktif" <?= isset($produk) && $produk->status_produk == 'Nonaktif' ? 'selected' : ''; ?>>Nonaktif</option>
                         </select>
                     </div>
 
@@ -98,6 +108,12 @@
                                 <i class="bi bi-info-circle"></i> Format: JPG, PNG. Maks 2MB
                             </span>
                         </div>
+                        <?php if (isset($produk) && !empty($produk->foto_utama)): ?>
+                            <div class="mt-2">
+                                <small class="text-muted">Foto saat ini:</small><br>
+                                <img src="<?= base_url('uploads/produk/' . $produk->foto_utama); ?>" width="80" height="80" style="object-fit:cover; border-radius:8px; margin-top:4px; border:1px solid rgba(74,44,17,0.06);">
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -108,7 +124,7 @@
                     <i class="bi bi-arrow-left"></i> Batal
                 </a>
                 <button type="submit" class="btn btn-primary-custom btn-custom">
-                    <i class="bi bi-save"></i> Simpan Produk
+                    <i class="bi bi-save"></i> Simpan Perubahan
                 </button>
             </div>
         </form>

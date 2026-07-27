@@ -213,10 +213,8 @@ class Dashboard extends CI_Controller
 		$data['role']         = 'Admin';
 		$data['title']        = 'Riwayat Notifikasi';
 
-		$this->load->view('templates/admin/header', $data);
-		$this->load->view('templates/admin/sidebar', $data);
 		$this->load->view('template/v_notif_history', $data);
-		$this->load->view('templates/admin/footer', $data);
+		
 	}
 
 	public function settings()
@@ -235,10 +233,9 @@ class Dashboard extends CI_Controller
 		$data['role']         = 'Admin';
 		$data['title']        = 'Pengaturan Notifikasi';
 
-		$this->load->view('templates/admin/header', $data);
-		$this->load->view('templates/admin/sidebar', $data);
+
 		$this->load->view('template/v_notif_setting', $data);
-		$this->load->view('templates/admin/footer', $data);
+
 	}
 
 	public function read($id_notif)
