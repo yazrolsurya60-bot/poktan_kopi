@@ -182,7 +182,7 @@ class Users extends CI_Controller {
                 $userData = [
                     'nama'        => $this->input->post('nama', TRUE),
                     'username'    => strtolower($this->input->post('username', TRUE)),
-                    'password'    => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
+                    'password'    => $this->input->post('password'),
                     'no_telepon'  => $no_telepon,
                     'role'        => $this->input->post('role'),
                     'status'      => 'Active',
