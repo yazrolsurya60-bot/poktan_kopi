@@ -392,7 +392,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 15px;
+            overflow: hidden;
             box-shadow: inset 0 4px 10px rgba(111, 78, 55, 0.07);
             transition: var(--transition-smooth);
         }
@@ -403,7 +403,7 @@
             box-shadow: 0 10px 20px rgba(139, 94, 60, 0.18);
         }
 
-        .mitra-logo { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .mitra-logo { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
         .mitra-category {
             display: inline-flex;

@@ -178,8 +178,15 @@ class Mitra extends CI_Controller {
             mkdir($upload_path, 0777, TRUE);
         }
 
+        // Daftarkan mime WEBP khusus untuk upload logo mitra,
+        // tanpa mengubah file config/mimes.php global (tidak mempengaruhi modul lain).
+        $mimes = &get_mimes();
+        if (!isset($mimes['webp'])) {
+            $mimes['webp'] = 'image/webp';
+        }
+
         $config['upload_path']   = $upload_path;
-        $config['allowed_types'] = 'gif|jpg|jpeg|png';
+        $config['allowed_types'] = 'gif|jpg|jpeg|png|webp';
         $config['max_size']      = 2048; // 2MB
         $config['encrypt_name']  = TRUE;
 

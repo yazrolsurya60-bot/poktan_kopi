@@ -121,12 +121,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 18px;
+            overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.18);
             position: relative;
             z-index: 1;
         }
-        .detail-logo { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .detail-logo { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
         .detail-category {
             display: inline-block;
@@ -154,9 +154,9 @@
         .profile-side-logo {
             width: 110px; height: 110px; margin: 0 auto 14px; border-radius: 50%;
             background: var(--card-white); display: flex; align-items: center; justify-content: center;
-            padding: 14px; box-shadow: var(--shadow-soft); border: 1px solid rgba(111,78,55,0.08);
+            overflow: hidden; box-shadow: var(--shadow-soft); border: 1px solid rgba(111,78,55,0.08);
         }
-        .profile-side-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .profile-side-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
         .profile-side-name { font-size: 1.15rem; font-weight: 800; color: var(--dark-coffee); margin-bottom: 8px; line-height: 1.3; }
         .profile-side-status {
             display: inline-flex; align-items: center; gap: 5px; padding: 4px 14px; border-radius: 50px;
