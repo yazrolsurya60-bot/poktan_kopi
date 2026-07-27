@@ -15,51 +15,6 @@
 
 				<?php echo validation_errors('<div class="alert alert-danger p-2" style="font-size:0.85rem; border-radius:8px;">', '</div>'); ?>
 
-<<<<<<< HEAD
-		<!-- Pindahkan / Biarkan seluruh kode isi dashboard asli kelompokmu berada di sini -->
-		<!-- (Mulai dari KPI Card, Grafik, Ringkasan, Form Notif dll milik timmu) -->
-
-	<?php endif; ?>
-	<?php $this->load->view('admin/layout/sidebar'); ?>
-
-	<!-- MAIN CONTENT -->
-	<div class="main-content">
-		<!-- PAGE HEADER -->
-		<div class="page-header d-flex justify-content-between align-items-center flex-wrap">
-			<div>
-				<button class="btn btn-light d-inline-block d-lg-none mr-2" id="sidebarToggle"
-					style="border-radius:10px; border:1px solid rgba(74,44,17,0.08);">
-					<i class="bi bi-list"></i>
-				</button>
-				<h2 class="d-inline-block align-middle mb-0">Manajemen Petani</h2>
-				<p class="subtitle mb-0 mt-1 text-muted">Dashboard / Manajemen Petani / Verifikasi</p>
-			</div>
-			<div class="d-flex align-items-center gap-3" style="gap: 12px;">
-				<!-- NOTIFICATION BELL -->
-				<div style="position: relative;">
-					<button class="notif-btn" id="notifToggle">
-						<i class="bi bi-bell" style="font-size: 1.2rem;"></i>
-						<?php if (isset($unread_count) && $unread_count > 0): ?>
-							<span class="notif-dot" id="notifCount"><?= $unread_count; ?></span>
-						<?php else: ?>
-							<span class="notif-dot" id="notifCount" style="display:none;">0</span>
-						<?php endif; ?>
-					</button>
-
-					<!-- NOTIFICATION DROPDOWN -->
-					<div class="notif-dropdown" id="notifDropdown">
-						<div class="notif-dropdown-header">
-							<span>
-								<?= isset($unread_count) && $unread_count > 0 ? $unread_count . ' Notifikasi Belum Dibaca' : 'Semua Notifikasi'; ?>
-							</span>
-							<div>
-								<?php if (isset($unread_count) && $unread_count > 0): ?>
-									<a href="#" id="markAllReadBtn" class="mr-2"
-										style="font-size:0.7rem; text-decoration:none;">Tandai semua</a>
-								<?php endif; ?>
-								<a href="<?= base_url('admin/dashboard/history'); ?>"
-									style="font-size:0.7rem; text-decoration:none;">Lihat Semua</a>
-=======
 				<form action="<?= base_url('admin/petani/verifikasi_aksi/' . $petani['id_petani']); ?>" method="POST">
 					<div class="row gx-5">
 						<!-- INFORMASI RINGKAS -->
@@ -70,7 +25,6 @@
 								<p class="mb-1"><strong>NIK:</strong> <?= htmlspecialchars($petani['nik']); ?></p>
 								<p class="mb-1"><strong>No HP:</strong> <?= htmlspecialchars($petani['no_hp']); ?></p>
 								<p class="mb-0"><strong>Status Saat Ini:</strong> <?= htmlspecialchars($petani['status_petani']); ?></p>
->>>>>>> c50a8c46b5d9744b96ff8d6c8a37c62a316dedd7
 							</div>
 						</div>
 
