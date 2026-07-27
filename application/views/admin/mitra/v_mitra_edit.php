@@ -32,7 +32,7 @@
     .form-divider { height:1px; background:rgba(74,44,17,0.06); margin:22px 0; }
 
     .current-logo-box { display:flex; align-items:center; gap:14px; padding:14px 16px; background:rgba(250,246,240,0.6); border:1px solid rgba(74,44,17,0.08); border-radius:11px; margin-bottom:14px; }
-    .current-logo { width:62px; height:62px; object-fit:contain; border-radius:10px; border:1px solid rgba(74,44,17,0.08); background:#fff; padding:4px; }
+    .current-logo { width:62px; height:62px; object-fit:cover; border-radius:10px; border:1px solid rgba(74,44,17,0.08); background:#fff; }
     .current-logo-placeholder { width:62px; height:62px; border-radius:10px; border:1px dashed rgba(74,44,17,0.18); background:#fff; display:flex; align-items:center; justify-content:center; color:var(--text-secondary); font-size:1.4rem; }
     .cl-label { font-size:0.7rem; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px; }
     .cl-name  { font-size:0.82rem; font-weight:600; color:var(--dark-coffee); word-break:break-all; margin-top:2px; }
@@ -46,7 +46,7 @@
     .upload-zone p  { font-size:0.72rem; color:var(--text-secondary); margin:0; }
 
     .preview-wrap { display:none; margin-top:11px; padding:11px; background:#fff; border-radius:10px; border:1px solid rgba(230,161,92,0.22); align-items:center; gap:11px; }
-    .preview-img  { width:54px; height:54px; object-fit:contain; border-radius:9px; border:1px solid rgba(74,44,17,0.08); }
+    .preview-img  { width:54px; height:54px; object-fit:cover; border-radius:9px; border:1px solid rgba(74,44,17,0.08); }
     .preview-info { flex:1; min-width:0; }
     .preview-name { font-size:0.8rem; font-weight:600; color:var(--dark-coffee); word-break:break-all; }
     .preview-size { font-size:0.72rem; color:var(--text-secondary); }
