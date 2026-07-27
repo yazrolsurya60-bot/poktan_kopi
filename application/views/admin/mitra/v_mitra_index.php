@@ -34,6 +34,12 @@
     .filter-form { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; }
     .filter-form input, .filter-form select { padding: 7px 11px; border: 1px solid rgba(74,44,17,0.15); border-radius: 9px; font-size: 0.8rem; color: var(--dark-coffee); background: var(--bg-cream); transition: var(--transition-smooth); height: auto; font-family: inherit; }
     .filter-form input:focus, .filter-form select:focus { border-color: var(--amber-cream); box-shadow: 0 0 0 3px rgba(230,161,92,0.15); outline: none; background: #fff; }
+
+    /* search box with clickable icon */
+    .search-wrap { position: relative; display: inline-flex; align-items: center; }
+    .search-wrap input[name="search"] { padding-right: 34px; }
+    .btn-search-icon { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; border: none; border-radius: 7px; background: transparent; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition-smooth); padding: 0; font-size: 0.85rem; }
+    .btn-search-icon:hover { background: var(--amber-cream); color: #fff; }
     .btn-filter { padding: 7px 15px; border: 1px solid rgba(74,44,17,0.15); border-radius: 9px; background: transparent; color: var(--text-secondary); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: var(--transition-smooth); display: inline-flex; align-items: center; gap: 5px; font-family: inherit; }
     .btn-filter:hover { background: var(--bg-cream); color: var(--roasted-brown); border-color: var(--roasted-brown); }
     .btn-reset { padding: 7px 13px; border: 1px solid rgba(239,68,68,0.2); border-radius: 9px; background: rgba(239,68,68,0.05); color: #dc2626; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: var(--transition-smooth); display: inline-flex; align-items: center; gap: 5px; text-decoration: none; font-family: inherit; }
@@ -148,7 +154,10 @@
         <h5 class="table-title"><i class="bi bi-list-stars"></i> Daftar Mitra Terdaftar</h5>
         <div class="d-flex align-items-center flex-wrap" style="gap:8px;">
             <form action="<?= base_url('admin/mitra'); ?>" method="GET" class="filter-form" id="filterForm">
-                <input type="text" name="search" placeholder="Cari nama mitra..." value="<?= htmlspecialchars($this->input->get('search') ?? ''); ?>">
+                <div class="search-wrap">
+                    <input type="text" name="search" placeholder="Cari nama mitra..." value="<?= htmlspecialchars($this->input->get('search') ?? ''); ?>">
+                    <button type="submit" class="btn-search-icon" title="Cari"><i class="bi bi-search"></i></button>
+                </div>
                 <select name="kategori">
                     <option value="">Semua Kategori</option>
                     <?php foreach ($kategori_list as $kat): ?>
@@ -350,5 +359,13 @@ $(document).ready(function () {
     });
 
     setTimeout(function () { $('.flash-alert').fadeOut('slow'); }, 4500);
+
+    /* Submit filter form saat tekan Enter di kolom pencarian */
+    $('#filterForm input[name="search"]').on('keydown', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            $('#filterForm').trigger('submit');
+        }
+    });
 });
 </script>
