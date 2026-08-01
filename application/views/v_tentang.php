@@ -307,18 +307,21 @@
         /* --- FOOTER --- */
         .footer {
             background: var(--dark-coffee);
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.65);
             padding: 60px 0 30px;
-            border-top: 1px solid rgba(255,255,255,0.05);
         }
-        .footer-brand { color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.5rem; margin-bottom: 20px; }
-        .footer-desc { font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px; }
-        .footer-title { color: white; font-weight: 600; margin-bottom: 20px; font-size: 1.1rem; }
+        .footer-brand {
+            color: white; font-family: 'Outfit', sans-serif; font-weight: 700;
+            font-size: 1.4rem; display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+        }
+        .footer-desc { font-size: 0.9rem; line-height: 1.7; max-width: 300px; }
+        .footer-title { color: white; font-weight: 600; font-size: 1rem; margin-bottom: 20px; }
         .footer-links { list-style: none; padding: 0; margin: 0; }
         .footer-links li { margin-bottom: 12px; }
-        .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; }
+        .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem; transition: var(--transition-smooth); }
         .footer-links a:hover { color: white; padding-left: 5px; }
-        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 50px; padding-top: 25px; text-align: center; font-size: 0.85rem; }
+        .footer-divider { border-top: 1px solid rgba(255,255,255,0.08); margin: 40px 0 25px; }
+        .footer-bottom { font-size: 0.85rem; color: rgba(255,255,255,0.4); text-align: center; }
     </style>
 </head>
 <body>
@@ -448,11 +451,13 @@
     <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 mb-4 mb-lg-0">
-                    <div class="footer-brand"><i class="bi bi-patch-check-fill text-warning"></i> Liberchain</div>
+                <div class="col-lg-4 mb-4">
+                    <div class="footer-brand">
+                        <i class="bi bi-patch-check-fill" style="color: var(--amber-cream);"></i> Liberchain
+                    </div>
                     <p class="footer-desc">Platform ekosistem rantai pasok kopi terintegrasi yang memberdayakan petani lokal melalui transparansi dan teknologi.</p>
                 </div>
-                <div class="col-lg-2 col-md-4 mb-4 mb-md-0 offset-lg-2">
+                <div class="col-lg-2 col-6 mb-4 offset-lg-2">
                     <h5 class="footer-title">Navigasi</h5>
                     <ul class="footer-links">
                         <li><a href="<?= base_url(); ?>">Beranda</a></li>
@@ -461,22 +466,29 @@
                         <li><a href="<?= base_url('tentang'); ?>">Tentang Kami</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-4 col-md-8">
-                    <h5 class="footer-title">Kontak Kami</h5>
+                <div class="col-lg-4 col-12 mb-4">
+                    <h5 class="footer-title">Kontak</h5>
                     <ul class="footer-links">
-                        <li class="d-flex align-items-start gap-2 mb-3">
-                            <i class="bi bi-geo-alt mt-1"></i> 
-                            <span>Jl. Kopi Arabika No. 12, Dataran Tinggi Gayo, Aceh, Indonesia</span>
+                        <li class="d-flex align-items-start mb-3" style="gap:8px;">
+                            <i class="bi bi-geo-alt mt-1"></i>
+                            <span style="word-break: break-word;">Dusun Batu Layar, Desa Sendoyan, Kecamatan Sejangkung, Kab. Sambas, Provinsi Kalbar</span>
                         </li>
-                        <li class="d-flex align-items-center gap-2 mb-3">
-                            <i class="bi bi-envelope"></i> hello@liberchain.id
+                        <li class="d-flex align-items-center mb-3" style="gap:8px;">
+                            <i class="bi bi-whatsapp"></i> 0815-2285-4631
                         </li>
-                        <li class="d-flex align-items-center gap-2">
-                            <i class="bi bi-telephone"></i> +62 811 2233 4455
+                        <li class="d-flex align-items-center mb-3" style="gap:8px;">
+                            <i class="bi bi-instagram"></i> <a href="https://www.instagram.com/poktanbatulayarsejahtera/" target="_blank"><span style="word-break: break-all;">@poktanbatulayarsejahtera</span></a>
+                        </li>
+                        <li class="d-flex align-items-center mb-3" style="gap:8px;">
+                            <i class="bi bi-facebook"></i> <a href="https://www.facebook.com/profile.php?id=100094666534288" target="_blank">Poktan Batu Layar Sejahtera</a>
+                        </li>
+                        <li class="d-flex align-items-center" style="gap:8px;">
+                            <i class="bi bi-youtube"></i> <a href="https://www.youtube.com/@PoktanBatuLayarSejahtera" target="_blank">Poktan Batu Layar Sejahtera</a>
                         </li>
                     </ul>
                 </div>
             </div>
+            <div class="footer-divider"></div>
             <div class="footer-bottom">
                 &copy; <?= date('Y'); ?> POKTAN Liberchain. All Rights Reserved.
             </div>

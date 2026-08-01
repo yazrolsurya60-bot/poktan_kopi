@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title><?= $title ?? 'Panel Produksi - Petani Kopi'; ?></title>
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
@@ -54,6 +54,7 @@
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
+            height: 100dvh;
             position: fixed;
             top: 0;
             left: 0;
@@ -119,7 +120,11 @@
             border-left: 3px solid var(--amber-cream);
         }
         .sidebar-footer {
-            padding: 16px 20px; border-top: 1px solid rgba(250, 246, 240, 0.06); margin-top: auto;
+            padding: 16px 20px;
+            padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+            border-top: 1px solid rgba(250, 246, 240, 0.06);
+            margin-top: auto;
+            flex-shrink: 0;
         }
         .sidebar-footer .btn-logout {
             width: 100%; padding: 10px 16px; border: 1px solid rgba(250, 246, 240, 0.1);
@@ -212,6 +217,17 @@
             .sidebar { left: calc(-1 * var(--sidebar-width)); box-shadow: none; }
             .sidebar.open { left: 0; box-shadow: 0 0 40px rgba(0, 0, 0, 0.3); }
             .main-content { margin-left: 0; padding: 20px 16px 30px; }
+            .page-header {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--bg-cream);
+                padding: 15px 0;
+                margin: 0 -16px 30px;
+                padding-left: 16px;
+                padding-right: 16px;
+                box-shadow: 0 2px 10px rgba(44, 24, 8, 0.06);
+            }
             .notif-dropdown { width: 340px; right: 0; }
         }
         @media (max-width: 575.98px) {

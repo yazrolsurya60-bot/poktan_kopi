@@ -705,18 +705,24 @@
                         <li><a href="<?= base_url('tentang'); ?>">Tentang Kami</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-4 col-6 mb-4">
+                <div class="col-lg-4 col-12 mb-4">
                     <h5 class="footer-title">Kontak</h5>
                     <ul class="footer-links">
                         <li class="d-flex align-items-start mb-3" style="gap:8px;">
                             <i class="bi bi-geo-alt mt-1"></i>
-                            <span>Jl. Kopi Arabika No. 12, Dataran Tinggi Gayo, Aceh</span>
+                            <span>Dusun Batu Layar, Desa Sendoyan, Kecamatan Sejangkung, Kab. Sambas, Provinsi Kalbar</span>
                         </li>
                         <li class="d-flex align-items-center mb-3" style="gap:8px;">
-                            <i class="bi bi-envelope"></i> hello@liberchain.id
+                            <i class="bi bi-whatsapp"></i> 0815-2285-4631
+                        </li>
+                        <li class="d-flex align-items-center mb-3" style="gap:8px;">
+                            <i class="bi bi-instagram"></i> <a href="https://www.instagram.com/poktanbatulayarsejahtera/" target="_blank"><span style="word-break: break-all;">@poktanbatulayarsejahtera</span></a>
+                        </li>
+                        <li class="d-flex align-items-center mb-3" style="gap:8px;">
+                            <i class="bi bi-facebook"></i> <a href="https://www.facebook.com/profile.php?id=100094666534288" target="_blank">Poktan Batu Layar Sejahtera</a>
                         </li>
                         <li class="d-flex align-items-center" style="gap:8px;">
-                            <i class="bi bi-telephone"></i> +62 811 2233 4455
+                            <i class="bi bi-youtube"></i> <a href="https://www.youtube.com/@PoktanBatuLayarSejahtera" target="_blank">Poktan Batu Layar Sejahtera</a>
                         </li>
                     </ul>
                 </div>

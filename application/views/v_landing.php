@@ -504,25 +504,27 @@
         /* --- FOOTER --- */
         .footer {
             background: var(--dark-coffee);
-            color: rgba(255,255,255,0.7);
-            padding: 50px 0 28px;
+            color: rgba(255,255,255,0.65);
+            padding: 60px 0 30px;
         }
         .footer-brand {
             color: white;
             font-family: 'Outfit', sans-serif;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1.4rem;
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
-        .footer-desc { font-size: 0.85rem; color: rgba(255,255,255,0.55); max-width: 320px; line-height: 1.6; }
-        .footer-col-title { color: #fff; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 16px; }
-        .footer-link { display: block; color: rgba(255,255,255,0.6); font-size: 0.85rem; text-decoration: none; margin-bottom: 10px; }
-        .footer-link:hover { color: var(--amber-cream); text-decoration: none; }
-        .footer-divider { border-top: 1px solid rgba(255,255,255,0.08); margin: 32px 0 22px; }
-        .footer-bottom { font-size: 0.8rem; color: rgba(255,255,255,0.45); text-align: center; }
+        .footer-desc { font-size: 0.9rem; line-height: 1.7; max-width: 300px; }
+        .footer-title { color: white; font-weight: 600; font-size: 1rem; margin-bottom: 20px; }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem; transition: var(--transition-smooth); }
+        .footer-links a:hover { color: white; padding-left: 5px; }
+        .footer-divider { border-top: 1px solid rgba(255,255,255,0.08); margin: 40px 0 25px; }
+        .footer-bottom { font-size: 0.85rem; color: rgba(255,255,255,0.4); text-align: center; }
 
         @media (max-width: 767px) {
             .hero-title { font-size: 2.2rem; }
@@ -693,26 +695,47 @@
     <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-md-5 mb-4">
+                <div class="col-lg-4 mb-4">
                     <div class="footer-brand">
-                        <div class="brand-icon"><i class="bi bi-patch-check-fill"></i></div>
-                        POKTAN Liberchain
+                        <i class="bi bi-patch-check-fill" style="color: var(--amber-cream);"></i> Liberchain
                     </div>
-                    <p class="footer-desc">Platform supply chain kopi yang menghubungkan petani, mitra, dan pembeli dalam satu ekosistem yang transparan dan berkelanjutan.</p>
+                    <p class="footer-desc">Platform ekosistem rantai pasok kopi terintegrasi yang memberdayakan petani lokal melalui transparansi dan teknologi.</p>
                 </div>
-                <div class="col-md-3 col-6 mb-4">
-                    <div class="footer-col-title">Navigasi</div>
-                    <a href="<?= base_url(); ?>" class="footer-link">Mitra Kami</a>
-                    <a href="<?= base_url('auth/login'); ?>" class="footer-link">Masuk</a>
+                <div class="col-lg-2 col-6 mb-4 offset-lg-2">
+                    <h5 class="footer-title">Navigasi</h5>
+                    <ul class="footer-links">
+                        <li><a href="<?= base_url(); ?>">Beranda</a></li>
+                        <li><a href="<?= base_url('produk'); ?>">Produk</a></li>
+                        <li><a href="<?= base_url('landing/mitra'); ?>">Mitra</a></li>
+                        <li><a href="<?= base_url('tentang'); ?>">Tentang Kami</a></li>
+                    </ul>
                 </div>
-                <div class="col-md-4 col-6 mb-4">
-                    <div class="footer-col-title">Kontak</div>
-                    <span class="footer-link"><i class="bi bi-envelope mr-1"></i> info@liberchain.id</span>
-                    <span class="footer-link"><i class="bi bi-geo-alt mr-1"></i> Indonesia</span>
+                <div class="col-lg-4 col-12 mb-4">
+                    <h5 class="footer-title">Kontak</h5>
+                    <ul class="footer-links">
+                        <li class="d-flex align-items-start mb-3" style="gap:8px;">
+                            <i class="bi bi-geo-alt mt-1"></i>
+                            <span style="word-break: break-word;">Dusun Batu Layar, Desa Sendoyan, Kecamatan Sejangkung, Kab. Sambas, Provinsi Kalbar</span>
+                        </li>
+                        <li class="d-flex align-items-center mb-3" style="gap:8px;">
+                            <i class="bi bi-whatsapp"></i> 0815-2285-4631
+                        </li>
+                        <li class="d-flex align-items-center mb-3" style="gap:8px;">
+                            <i class="bi bi-instagram"></i> <a href="https://www.instagram.com/poktanbatulayarsejahtera/" target="_blank"><span style="word-break: break-all;">@poktanbatulayarsejahtera</span></a>
+                        </li>
+                        <li class="d-flex align-items-center mb-3" style="gap:8px;">
+                            <i class="bi bi-facebook"></i> <a href="https://www.facebook.com/profile.php?id=100094666534288" target="_blank">Poktan Batu Layar Sejahtera</a>
+                        </li>
+                        <li class="d-flex align-items-center" style="gap:8px;">
+                            <i class="bi bi-youtube"></i> <a href="https://www.youtube.com/@PoktanBatuLayarSejahtera" target="_blank">Poktan Batu Layar Sejahtera</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-divider"></div>
-            <p class="footer-bottom mb-0">&copy; <?= date('Y'); ?> Sistem Supply Chain Kopi Terintegrasi. All rights reserved.</p>
+            <div class="footer-bottom">
+                &copy; <?= date('Y'); ?> POKTAN Liberchain. All Rights Reserved.
+            </div>
         </div>
     </footer>
 
