@@ -231,6 +231,8 @@
 		background: #FDFAF6;
 		flex-wrap: nowrap;
 		overflow-x: auto;
+		scrollbar-width: none; /* Firefox */
+		-ms-overflow-style: none; /* Edge lama */
 	}
 
 	.laporan-tabs .nav-tabs .nav-link {
@@ -378,14 +380,9 @@
 		transition: width 0.5s ease;
 	}
 
-	/* SCROLLBAR */
+	/* SCROLLBAR - disembunyikan visualnya, overflow-x tetap berfungsi untuk swipe di layar kecil */
 	.laporan-tabs .nav-tabs::-webkit-scrollbar {
-		height: 3px;
-	}
-
-	.laporan-tabs .nav-tabs::-webkit-scrollbar-thumb {
-		background: rgba(230, 161, 92, 0.3);
-		border-radius: 10px;
+		display: none;
 	}
 </style>
 
