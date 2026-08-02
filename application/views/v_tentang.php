@@ -197,7 +197,7 @@
 
         /* --- HERO SECTION --- */
         .hero-section {
-            padding: 160px 0 100px;
+            padding: 120px 0 80px;
             position: relative;
             text-align: center;
             background: radial-gradient(circle at top right, rgba(111,78,55,0.05), transparent 40%),
@@ -232,6 +232,59 @@
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.7;
+        }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 100px 0 60px;
+            }
+            .hero-title {
+                font-size: 2.2rem;
+                letter-spacing: -0.5px;
+            }
+            .hero-subtitle {
+                font-size: 1rem;
+                max-width: 100%;
+                padding: 0 15px;
+            }
+            .story-content {
+                padding: 30px 20px;
+            }
+            .story-title {
+                font-size: 1.5rem;
+            }
+            .story-text {
+                font-size: 0.95rem;
+            }
+            .value-card {
+                padding: 30px 20px;
+            }
+            .value-title {
+                font-size: 1.1rem;
+            }
+            .footer {
+                padding: 40px 0 20px;
+            }
+            .footer-brand {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-section {
+                padding: 80px 0 50px;
+            }
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            .hero-badge {
+                font-size: 0.75rem;
+                padding: 5px 12px;
+            }
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
         }
 
         /* --- STORY SECTION --- */
