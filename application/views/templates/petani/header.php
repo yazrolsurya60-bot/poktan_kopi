@@ -19,8 +19,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#4A2C11">
-    <link rel="manifest" href="<?= base_url('pwa/manifest') ?>">
-    <link rel="icon" type="image/png" sizes="192x192" href="<?= base_url('assets/images/pwa/icon-192x192.png') ?>">
+    <link rel="manifest" href="<?= base_url('pwa/manifest'); ?>">
+    <link rel="icon" type="image/png" sizes="192x192" href="<?= base_url('assets/images/pwa/icon-192x192.png'); ?>">
     
     <style>
         :root {

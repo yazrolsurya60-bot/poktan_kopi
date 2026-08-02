@@ -252,8 +252,7 @@ class Transaksi extends CI_Controller {
         
         $update_data = [
             'status_pesanan' => 'Dibatalkan',
-            'alasan_batal' => $alasan,
-            'updated_at' => date('Y-m-d H:i:s')
+            'alasan_batal' => $alasan
         ];
         
         $this->Transaksi_model->update_status($id_transaksi, 'Dibatalkan', $update_data);

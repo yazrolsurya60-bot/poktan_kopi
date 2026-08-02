@@ -1,4 +1,4 @@
-<?php
+ <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['default_controller'] = 'Beranda';
@@ -171,6 +171,13 @@ $route['admin/tracking/update/(:num)'] = 'admin/Tracking/update/$1';
 $route['api/tracking/get'] = 'api/Tracking/get';
 $route['api/tracking/history'] = 'api/Tracking/history';
 $route['api/tracking/estimasi'] = 'api/Tracking/estimasi';
+
+// ============================================================
+// PWA ROUTES
+// ============================================================
+$route['pwa/manifest'] = 'Pwa/manifest';
+$route['pwa/service-worker'] = 'Pwa/service_worker';
+$route['pwa/install'] = 'Pwa/install';
 
 // ============================================================
 // VERIFIKASI OTP (sebelum checkout)

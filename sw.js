@@ -1,110 +1,49 @@
-const CACHE_NAME = 'liberchain-v2';
-
-// Get base path dynamically
-const BASE = self.location.pathname.replace('sw.js', '');
-
-const ASSETS_TO_CACHE = [
-  BASE,
-  BASE + 'manifest.json',
-  BASE + 'assets/images/pwa/icon-192x192.png',
-  BASE + 'assets/images/pwa/icon-512x512.png'
+const CACHE_NAME = 'liberchain-v1';
+const urlsToCache = [
+  '/poktan_kopi/',
+  '/poktan_kopi/index.php',
+  '/poktan_kopi/assets/css/',
+  '/poktan_kopi/assets/js/',
+  '/poktan_kopi/assets/images/',
+  'https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css',
+  'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css',
+  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
+  'https://code.jquery.com/jquery-3.6.0.min.js',
+  'https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js'
 ];
 
-// Install service worker
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('[LiberChain SW] Caching assets');
-        return cache.addAll(ASSETS_TO_CACHE).catch(err => {
-          console.warn('[LiberChain SW] Some assets failed to cache:', err);
-        });
-      })
-      .then(() => {
-        console.log('[LiberChain SW] Skip waiting');
-        return self.skipWaiting();
+      .then((cache) => {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
       })
   );
 });
 
-// Activate service worker
-self.addEventListener('activate', event => {
-  console.log('[LiberChain SW] Activated');
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request)
+      .then((response) => {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request);
+      })
+  );
+});
+
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map(cacheName => {
+        cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('[LiberChain SW] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
-    }).then(() => {
-      return self.clients.claim();
     })
-  );
-});
-
-// Fetch strategy: Network First, fallback to cache
-self.addEventListener('fetch', event => {
-  // Skip non-GET requests
-  if (event.request.method !== 'GET') return;
-
-  // For HTML navigations - Network First
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          const clonedResponse = response.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, clonedResponse);
-          });
-          return response;
-        })
-        .catch(() => {
-          return caches.match(event.request).then(cached => {
-            if (cached) return cached;
-            return caches.match(BASE);
-          });
-        })
-    );
-    return;
-  }
-
-  // For static assets - Cache First
-  event.respondWith(
-    caches.match(event.request)
-      .then(cachedResponse => {
-        if (cachedResponse) {
-          const fetchPromise = fetch(event.request)
-            .then(response => {
-              if (response.ok) {
-                caches.open(CACHE_NAME).then(cache => {
-                  cache.put(event.request, response);
-                });
-              }
-            })
-            .catch(() => {});
-          return cachedResponse;
-        }
-
-        return fetch(event.request)
-          .then(response => {
-            if (response.ok) {
-              const clonedResponse = response.clone();
-              caches.open(CACHE_NAME).then(cache => {
-                cache.put(event.request, clonedResponse);
-              });
-            }
-            return response;
-          })
-          .catch(() => {
-            if (event.request.url.match(/\.(jpg|jpeg|png|gif|svg|ico)$/)) {
-              return caches.match(BASE + 'assets/images/pwa/icon-192x192.png');
-            }
-            return new Response('Offline', { status: 503 });
-          });
-      })
   );
 });
