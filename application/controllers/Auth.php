@@ -32,6 +32,26 @@ class Auth extends CI_Controller
         $this->check_already_logged_in();
 
         if ($this->input->post()) {
+            // 🔴 SECURITY: Rate limiting - max 5 percobaan dalam 15 menit
+            $ip_address = $this->input->ip_address();
+            $attempt_key = 'login_attempts_' . md5($ip_address);
+            $attempt_data = $this->session->userdata($attempt_key);
+            
+            $attempt_count = isset($attempt_data['count']) ? $attempt_data['count'] : 0;
+            $first_attempt = isset($attempt_data['first_attempt']) ? $attempt_data['first_attempt'] : time();
+            
+            // Reset counter jika sudah lewat 15 menit
+            if (time() - $first_attempt > 900) {
+                $attempt_count = 0;
+                $first_attempt = time();
+            }
+            
+            if ($attempt_count >= 5) {
+                $retry_after = 900 - (time() - $first_attempt);
+                $this->session->set_flashdata('error', 'Terlalu banyak percobaan login. Silakan coba lagi dalam ' . ceil($retry_after / 60) . ' menit.');
+                redirect('auth/login');
+            }
+
             $username_or_no_telepon = $this->input->post('username_or_no_telepon', TRUE);
             $password = $this->input->post('password');
 
@@ -40,13 +60,25 @@ class Auth extends CI_Controller
 
             if ($this->form_validation->run() == TRUE) {
                 $user = $this->User_model->login($username_or_no_telepon, $password);
+                
+                // Catat percobaan yang gagal
+                if (!$user) {
+                    $attempt_count++;
+                    $this->session->set_userdata($attempt_key, [
+                        'count' => $attempt_count,
+                        'first_attempt' => $first_attempt
+                    ]);
+                }
 
                 if ($user) {
                     if ($user['status'] === 'Active') {
                         if ($user['role'] === 'Petani' && $user['is_verified'] === '0') {
-                            $this->session->set_flashdata('error', 'Akun Anda sebagai Petani masih menunggu verifikasi dari Administrator. Silakan tunggu.');
-                            redirect('auth/login');
+                        $this->session->set_flashdata('error', 'Akun Anda sebagai Petani masih menunggu verifikasi dari Administrator. Silakan tunggu.');
+                            redirect('masuk');
                         }
+
+                        // 🔐 Session fixation protection - regenerate session ID on login
+                        $this->session->sess_regenerate(TRUE);
 
                         $this->session->set_userdata([
                             'id_user' => $user['id_user'],
@@ -120,11 +152,15 @@ class Auth extends CI_Controller
                     $send_result = send_otp_fonnte($no_telepon_formatted, $otp);
 
                     if ($send_result['status'] === 'success') {
+                        // Simpan password hanya sementara dengan enkripsi (tidak plaintext di session)
+                        $this->load->library('encryption');
+                        $encrypted_password = $this->encryption->encrypt($this->input->post('password'));
+
                         $this->session->set_userdata([
                             'register_nama' => $this->input->post('nama', TRUE),
                             'register_username' => strtolower($this->input->post('username', TRUE)),
                             'register_no_telepon' => $no_telepon_formatted,
-                            'register_password' => $this->input->post('password'),
+                            'register_password_enc' => $encrypted_password,
                             'register_role' => $this->input->post('role'),
                             'register_step' => 'otp_verification'
                         ]);
@@ -166,7 +202,7 @@ class Auth extends CI_Controller
                             'nama' => $this->session->userdata('register_nama'),
                             'username' => $this->session->userdata('register_username'),
                             'no_telepon' => $no_telepon,
-                            'password' => $this->session->userdata('register_password'),
+                            'password' => $this->encryption->decrypt($this->session->userdata('register_password_enc')),
                             'role' => $this->session->userdata('register_role'),
                             'status' => 'Active',
                             'is_verified' => ($this->session->userdata('register_role') === 'Petani') ? '0' : '1'
@@ -211,14 +247,14 @@ class Auth extends CI_Controller
                                 'register_nama',
                                 'register_username',
                                 'register_no_telepon',
-                                'register_password',
+                                'register_password_enc',
                                 'register_role',
                                 'register_step'
                             ]);
 
                             $role_text_display = ($userData['role'] === 'Petani') ? 'Petani (Menunggu verifikasi admin)' : 'Pembeli';
-                            $this->session->set_flashdata('success', 'Akun Anda berhasil dibuat sebagai ' . $role_text_display . '. Silakan login.');
-                            redirect('auth/login');
+                        $this->session->set_flashdata('success', 'Akun Anda berhasil dibuat sebagai ' . $role_text_display . '. Silakan login.');
+                            redirect('masuk');
                         } else {
                             log_message('error', 'OTP Verification - Failed to create user');
                             $this->session->set_flashdata('error', 'Gagal membuat akun. Silakan coba lagi.');
@@ -351,7 +387,7 @@ class Auth extends CI_Controller
                         ]);
 
                         $this->session->set_flashdata('success', 'Password Anda berhasil diperbarui. Silakan login dengan password baru.');
-                        redirect('auth/login');
+                        redirect('masuk');
                     } else {
                         $this->session->set_flashdata('error', 'Gagal memperbarui password.');
                         redirect('auth/forgot_password');
@@ -467,7 +503,13 @@ class Auth extends CI_Controller
                 $current_password = $this->input->post('current_password');
                 $new_password = $this->input->post('new_password');
 
-                if (md5($current_password) === $user['password']) {
+                // Gunakan password_verify untuk kompatibilitas dengan hashing baru
+                $is_password_valid = password_verify($current_password, $user['password']);
+                if (!$is_password_valid && md5($current_password) === $user['password']) {
+                    $is_password_valid = true;
+                }
+
+                if ($is_password_valid) {
                     if ($this->User_model->update_user($id_user, ['password' => $new_password])) {
                         $this->session->set_flashdata('success', 'Password Anda berhasil diperbarui.');
                     } else {
@@ -503,22 +545,30 @@ class Auth extends CI_Controller
             $this->load->view('auth/v_ubah_password');
         } else {
             $id_user = $this->session->userdata('id_user');
-            $password_lama = md5($this->input->post('password_lama'));
-            $password_baru = md5($this->input->post('password_baru'));
+            $password_lama = $this->input->post('password_lama');
 
-            $user = $this->db->get_where('tb_user', [
-                'id_user' => $id_user,
-                'password' => $password_lama
-            ])->row();
+            // Ambil data user dari database
+            $user = $this->db->get_where('tb_user', ['id_user' => $id_user])->row_array();
 
             if ($user) {
-                $this->db->where('id_user', $id_user)
-                    ->update('tb_user', ['password' => $password_baru]);
+                // Verifikasi password lama (mendukung bcrypt baru dan MD5 lama)
+                $is_valid = password_verify($password_lama, $user['password']);
+                if (!$is_valid && md5($password_lama) === $user['password']) {
+                    $is_valid = true;
+                }
 
-                $this->session->set_flashdata('success', 'Password berhasil diubah!');
-                redirect('auth/ubah_password');
+                if ($is_valid) {
+                    $password_baru = $this->input->post('password_baru');
+                    $this->User_model->update_user($id_user, ['password' => $password_baru]);
+
+                    $this->session->set_flashdata('success', 'Password berhasil diubah!');
+                    redirect('auth/ubah_password');
+                } else {
+                    $this->session->set_flashdata('error', 'Password lama salah!');
+                    redirect('auth/ubah_password');
+                }
             } else {
-                $this->session->set_flashdata('error', 'Password lama salah!');
+                $this->session->set_flashdata('error', 'User tidak ditemukan.');
                 redirect('auth/ubah_password');
             }
         }

@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Helper untuk mengirim OTP via WhatsApp menggunakan Fonnte API
  * 
  * @author Muhammad Ragyl
- * @version 1.0
+ * @version 2.0 (SECURITY UPDATE)
  */
 
 if (!function_exists('send_otp_fonnte')) {
@@ -19,8 +19,26 @@ if (!function_exists('send_otp_fonnte')) {
      */
     function send_otp_fonnte($no_telepon, $otp)
     {
-        // Token Fonnte API
-        $token = "Ew545YpDBcWyeeN7GGrG";
+        // 🔴 SECURITY FIX: Token dipindah ke file konfigurasi, tidak hardcoded di source
+        // Dapatkan token dari environment variable atau config
+        $CI =& get_instance();
+        
+        // Cek dari environment variable dulu
+        $token = getenv('FONNTE_API_TOKEN');
+        
+        // Fallback: cek dari config file
+        if (empty($token)) {
+            $token = $CI->config->item('fonnte_api_token');
+        }
+
+        // Jika token tidak dikonfigurasi, gunakan mode simulasi
+        if (empty($token)) {
+            log_message('error', '[FONNTE] API Token belum dikonfigurasi. Gunakan mode simulasi.');
+            return [
+                'status' => 'simulasi',
+                'message' => 'Mode simulasi: OTP tidak dikirim karena API token belum dikonfigurasi'
+            ];
+        }
         
         // URL API Fonnte
         $url = "https://api.fonnte.com/send";
@@ -50,8 +68,9 @@ if (!function_exists('send_otp_fonnte')) {
                 'Authorization: ' . $token,
                 'Content-Type: application/x-www-form-urlencoded'
             ),
-            CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_SSL_VERIFYPEER => 0
+            // 🔴 SECURITY FIX: SSL verification diaktifkan
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_SSL_VERIFYPEER => 1
         );
         
         // Add CURLOPT_FOLLOW_LOCATION only if the constant is defined
@@ -99,11 +118,19 @@ if (!function_exists('generate_otp')) {
     /**
      * Generate OTP random 6 digit
      * 
+     * 🔴 SECURITY FIX: Gunakan random_int() yang cryptographically secure,
+     * bukan rand() yang bisa diprediksi
+     * 
      * @return string OTP 6 digit
      */
     function generate_otp()
     {
-        return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        try {
+            return str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        } catch (Exception $e) {
+            // Fallback jika random_int gagal
+            return str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        }
     }
 }
 

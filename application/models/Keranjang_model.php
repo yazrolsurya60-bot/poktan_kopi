@@ -65,6 +65,15 @@ class Keranjang_model extends CI_Model {
     }
 
     /**
+     * 🔴 SECURITY: Ambil satu item keranjang berdasarkan ID
+     * Digunakan untuk validasi kepemilikan (IDOR prevention)
+     */
+    public function get_by_id($id_keranjang) {
+        $this->db->where('id_keranjang', $id_keranjang);
+        return $this->db->get('tb_keranjang')->row_array();
+    }
+
+    /**
      * Update jumlah item di keranjang
      */
     public function update($id_keranjang, $data) {

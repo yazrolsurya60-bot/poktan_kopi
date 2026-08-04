@@ -75,6 +75,38 @@ class Transaksi extends CI_Controller {
         $id_keranjang = $this->input->post('id_keranjang');
         $jumlah = $this->input->post('jumlah');
         
+        // 🔴 SECURITY FIX: Validasi kepemilikan keranjang (IDOR prevention)
+        $id_user = $this->session->userdata('id_user');
+        $session_id = $this->session->userdata('session_id') ?: session_id();
+        $keranjang = $this->Keranjang_model->get_by_id($id_keranjang);
+        
+        if (!$keranjang) {
+            echo json_encode(['status' => 'error', 'message' => 'Item keranjang tidak ditemukan']);
+            return;
+        }
+        
+        // Cek kepemilikan - user atau session yang sama
+        $is_owner = false;
+        if ($id_user && $keranjang['id_user'] == $id_user) {
+            $is_owner = true;
+        }
+        if (!$id_user && $keranjang['session_id'] == $session_id) {
+            $is_owner = true;
+        }
+        
+        if (!$is_owner) {
+            echo json_encode(['status' => 'error', 'message' => 'Akses ditolak']);
+            return;
+        }
+        
+        // Validasi jumlah tidak melebihi stok
+        $this->load->model('Produk_model');
+        $produk = $this->Produk_model->getById($keranjang['id_produk']);
+        if ($produk && $produk->stok_produk < $jumlah) {
+            echo json_encode(['status' => 'error', 'message' => 'Stok tidak mencukupi']);
+            return;
+        }
+        
         if ($jumlah <= 0) {
             $this->Keranjang_model->hapus($id_keranjang);
         } else {
@@ -93,6 +125,31 @@ class Transaksi extends CI_Controller {
 
     public function hapus_keranjang() {
         $id_keranjang = $this->input->post('id_keranjang');
+        
+        // 🔴 SECURITY FIX: Validasi kepemilikan keranjang (IDOR prevention)
+        $id_user = $this->session->userdata('id_user');
+        $session_id = $this->session->userdata('session_id') ?: session_id();
+        $keranjang = $this->Keranjang_model->get_by_id($id_keranjang);
+        
+        if (!$keranjang) {
+            echo json_encode(['status' => 'error', 'message' => 'Item keranjang tidak ditemukan']);
+            return;
+        }
+        
+        // Cek kepemilikan
+        $is_owner = false;
+        if ($id_user && $keranjang['id_user'] == $id_user) {
+            $is_owner = true;
+        }
+        if (!$id_user && $keranjang['session_id'] == $session_id) {
+            $is_owner = true;
+        }
+        
+        if (!$is_owner) {
+            echo json_encode(['status' => 'error', 'message' => 'Akses ditolak']);
+            return;
+        }
+        
         $this->Keranjang_model->hapus($id_keranjang);
         
         $id_user = $this->session->userdata('id_user');

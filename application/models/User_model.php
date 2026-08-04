@@ -29,7 +29,43 @@ class User_model extends CI_Model
     // AUTHENTICATION & USER MANAGEMENT
     // ============================================
 
-    // Authenticate user by username/phone and md5 password
+    /**
+     * Hash password menggunakan password_hash (bcrypt)
+     * Untuk kompatibilitas dengan data lama, MD5 juga didukung
+     */
+    private function hash_password($password)
+    {
+        return password_hash($password, PASSWORD_BCRYPT);
+    }
+
+    /**
+     * Verifikasi password dengan dukungan MD5 lama dan password_hash baru
+     * Jika password lama (MD5) cocok, otomatis upgrade ke password_hash
+     */
+    private function verify_password($password, $hashed_password, $user_id = null)
+    {
+        // Cek dulu dengan password_hash (bcrypt)
+        if (password_verify($password, $hashed_password)) {
+            return true;
+        }
+
+        // Fallback: cek dengan MD5 (untuk user lama)
+        if (md5($password) === $hashed_password) {
+            // Upgrade otomatis ke bcrypt
+            if ($user_id) {
+                $this->db->where('id_user', $user_id)
+                    ->update('tb_user', [
+                        'password' => $this->hash_password($password),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ]);
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    // Authenticate user by username/phone
     public function login($username_or_phone, $password)
     {
         $this->db->group_start()
@@ -52,7 +88,7 @@ class User_model extends CI_Model
         $this->db->group_end();
         $user = $this->db->get('tb_user')->row_array();
 
-        if ($user && $user['password'] === md5($password)) {
+        if ($user && $this->verify_password($password, $user['password'], $user['id_user'])) {
             return $user;
         }
         return FALSE;
@@ -80,7 +116,7 @@ class User_model extends CI_Model
     public function insert_user($data)
     {
         if (isset($data['password'])) {
-            $data['password'] = md5($data['password']);
+            $data['password'] = $this->hash_password($data['password']);
         }
         
         // Set default email if not provided (to avoid duplicate '' for unique key)
@@ -99,7 +135,7 @@ class User_model extends CI_Model
     public function update_user($id, $data)
     {
         if (isset($data['password']) && !empty($data['password'])) {
-            $data['password'] = md5($data['password']);
+            $data['password'] = $this->hash_password($data['password']);
         } else {
             unset($data['password']);
         }

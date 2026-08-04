@@ -249,7 +249,8 @@ class Users extends CI_Controller {
 
                 $password = $this->input->post('password');
                 if (!empty($password)) { 
-                    $updateData['password'] = password_hash($password, PASSWORD_BCRYPT); 
+                    // Gunakan model method agar konsisten dengan insert_user
+                    $updateData['password'] = $password; 
                 }
 
                 $no_telepon = $this->input->post('no_telepon', TRUE);

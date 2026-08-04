@@ -41,5 +41,33 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 .vscode/
 node_modules/
 vendor/
+
+# 🔴 SECURITY: Jangan commit file sensitif ke repository
+# ======================================================
+# File SQL dump berisi data database (mungkin berisi data user)
+*.sql
+db_liberchain.sql
+liberchain.sql
+modul5_update.sql
+modul9_tb_mitra_update.sql
+
+# Script debug/utility yang bisa membocorkan data
+list_users.php
+repair_db.php
+
+# File temp yang berisi snippet kode
+temp_topbar.txt
+
+# File kredensial user (jangan commit!)
+daftar_user.md
+
+# Environment files (jangan commit API keys)
+.env
+.env.local
+.env.production
+
+# File konfigurasi yang berisi secret
+application/config/database.php
+application/config/config.php
 =======
 

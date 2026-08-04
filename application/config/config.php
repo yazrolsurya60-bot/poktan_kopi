@@ -58,7 +58,7 @@ $config['charset'] = 'UTF-8';
 |--------------------------------------------------------------------------
 |
 */
-$config['enable_hooks'] = FALSE;
+$config['enable_hooks'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
@@ -141,7 +141,7 @@ $config['cache_query_string'] = FALSE;
 |--------------------------------------------------------------------------
 |
 */
-$config['encryption_key'] = 'LiberChainPWA2026SecureKey!@#';
+$config['encryption_key'] = 'L1b3rCh41n@2026!S3cur3K3y#PWA_R3d3f1n3';
 
 /*
 |--------------------------------------------------------------------------
@@ -156,7 +156,7 @@ $config['sess_expiration'] = 7200;
 $config['sess_save_path'] = NULL;
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
-$config['sess_regenerate_destroy'] = FALSE;
+$config['sess_regenerate_destroy'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
@@ -168,7 +168,7 @@ $config['cookie_prefix'] = '';
 $config['cookie_domain'] = '';
 $config['cookie_path'] = '/';
 $config['cookie_secure'] = FALSE;
-$config['cookie_httponly'] = FALSE;
+$config['cookie_httponly'] = TRUE;
 $config['cookie_samesite'] = 'Lax';
 
 /*
@@ -185,7 +185,7 @@ $config['standardize_newlines'] = FALSE;
 |--------------------------------------------------------------------------
 |
 */
-$config['global_xss_filtering'] = FALSE;
+$config['global_xss_filtering'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
@@ -193,12 +193,48 @@ $config['global_xss_filtering'] = FALSE;
 |--------------------------------------------------------------------------
 |
 */
-$config['csrf_protection'] = FALSE;
+$config['csrf_protection'] = TRUE;
 $config['csrf_token_name'] = 'csrf_test_name';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array();
+
+// 🔴 EXCLUSE URI UNTUK AJAX/API ENDPOINTS
+// Endpoint ini tetap dilindungi oleh session auth dan input validation
+// Form-based POST akan tetap dilindungi CSRF
+$config['csrf_exclude_uris'] = array(
+    // API Notifikasi
+    'api/notifikasi/get',
+    'api/notifikasi/mark_read',
+    'api/notifikasi/mark_all_read',
+    'api/notifikasi/update_setting',
+    'api/notifikasi/get_settings',
+    
+    // API Tracking
+    'api/tracking/(.*)',
+    
+    // AJAX Endpoints Transaksi
+    'transaksi/tambah_keranjang',
+    'transaksi/update_keranjang',
+    'transaksi/hapus_keranjang',
+    'transaksi/hitung_ongkir',
+    'transaksi/cart_count',
+    'transaksi/upload_bukti',
+    'transaksi/batalkan/(.*)',
+    
+    // AJAX Endpoints Dashboard
+    'admin/dashboard/get_notifications_ajax',
+    'admin/dashboard/mark_all_read_ajax',
+    'admin/dashboard/get_chart_data',
+    'pembeli/dashboard/update_settings_ajax',
+    'pembeli/dashboard/get_notifications_ajax',
+    'pembeli/dashboard/get_chart_data',
+    'pembeli/dashboard/mark_all_read',
+    
+    // Tracking AJAX
+    'kurir/tracking/api_update_location',
+    'api/tracking/update_location'
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -239,3 +275,16 @@ date_default_timezone_set('Asia/Jakarta');
 |
 */
 $config['proxy_ips'] = '';
+
+/*
+|--------------------------------------------------------------------------
+| Custom Application Settings
+|--------------------------------------------------------------------------
+|
+| Jangan pernah menaruh API key langsung di source code.
+| Gunakan environment variable FONNTE_API_TOKEN jika memungkinkan.
+|
+*/
+// 🔴 SECURITY: Ganti dengan token asli Anda di server production
+// Best practice: set di environment variable, bukan hardcode di sini
+$config['fonnte_api_token'] = getenv('FONNTE_API_TOKEN') ?: '';

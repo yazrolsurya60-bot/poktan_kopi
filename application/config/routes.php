@@ -5,6 +5,15 @@ $route['default_controller'] = 'Beranda';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+// ============================================
+// 🔒 URL BERSIH - SEMBUNYIKAN NAMA CONTROLLER
+// ============================================
+$route['buat-akun'] = 'Auth/register';
+$route['masuk'] = 'Auth/login';
+$route['keluar'] = 'Auth/logout';
+$route['profil-saya'] = 'Auth/profile';
+$route['lupa-password'] = 'Auth/forgot_password';
+
 $route['admin/dashboard'] = 'admin/dashboard/index';
 $route['petani/dashboard'] = 'petani/dashboard/index';
 $route['pembeli/dashboard'] = 'pembeli/dashboard/index';

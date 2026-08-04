@@ -65,7 +65,25 @@ class Notifikasi extends CI_Controller {
         $key = $this->input->post('key');
         $value = $this->input->post('value');
         
-        // 🔴 PERBAIKI: Method update_settings butuh array
+        // 🔴 SECURITY FIX: Whitelist key yang diizinkan untuk mencegah mass assignment
+        $allowed_keys = [
+            'notif_transaksi', 'notif_pembayaran', 'notif_stok', 'notif_kurir',
+            'notif_pesanan', 'notif_panen', 'notif_petani', 'notif_promo',
+            'notif_laporan', 'notif_sistem'
+        ];
+        
+        if (!in_array($key, $allowed_keys)) {
+            echo json_encode(['success' => false, 'message' => 'Invalid setting key']);
+            return;
+        }
+        
+        // 🔴 SECURITY FIX: Validasi value hanya 0 atau 1
+        $value = (int) $value;
+        if ($value !== 0 && $value !== 1) {
+            echo json_encode(['success' => false, 'message' => 'Invalid setting value']);
+            return;
+        }
+        
         $result = $this->Notifikasi_model->update_settings($id_user, [$key => $value]);
         echo json_encode(['success' => $result]);
     }

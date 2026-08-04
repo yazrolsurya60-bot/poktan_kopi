@@ -1,4 +1,67 @@
+# ============================================
+# SECURITY HEADERS
+# ============================================
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "geolocation=(self), microphone=(), camera=()"
+</IfModule>
+
+# ============================================
+# PROTECT SENSITIVE FILES & DIRECTORIES
+# ============================================
+<FilesMatch "\.(sql|md|log|txt|bak|conf|ini|sh|bat)$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^(repair_db\.php|list_users\.php|db_liberchain\.sql|liberchain\.sql|modul5_update\.sql|modul9_tb_mitra_update\.sql)">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^(config\.php|database\.php|index\.html)$">
+    Require all denied
+</FilesMatch>
+
+# Block access to composer.json and package files
+<FilesMatch "^(composer\.(json|lock)|package\.(json|lock)|README\.md|README\.rst|license\.txt)$">
+    Require all denied
+</FilesMatch>
+
+# Protect hidden files
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# ============================================
+# DIRECTORY LISTING OFF
+# ============================================
+Options -Indexes
+
+# ============================================
+# PHP SECURITY SETTINGS
+# ============================================
+<IfModule mod_php7.c>
+    php_flag display_errors Off
+    php_flag display_startup_errors Off
+    php_flag log_errors On
+    php_flag expose_php Off
+    php_value session.cookie_httponly 1
+    php_value session.use_only_cookies 1
+    php_value session.cookie_samesite "Lax"
+</IfModule>
+
+# ============================================
+# REWRITE RULES (CodeIgniter)
+# ============================================
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php/$1 [L]
+
+# Block direct access to application and system directories
+RewriteRule ^(application|system)/ - [F,L]
+
+# Prevent access to uploads of PHP files
+RewriteRule ^uploads/.*\.(php|php\d?|phtml)$ - [F,L]
